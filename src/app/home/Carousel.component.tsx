@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+import React from "react";
 import { useEffect } from "react";
 import Swiper from "swiper";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
@@ -65,7 +66,7 @@ const Carousel = ({ imageIds }: CarouselProps) => {
         prevEl: ".swiper-button-prev",
       },
       modules: [Pagination, Navigation, Autoplay],
-    });
+    });    
 
     return () => swiper.destroy();
   }, []);
