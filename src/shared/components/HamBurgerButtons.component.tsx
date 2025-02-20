@@ -42,10 +42,10 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
             {pathname === "/sales" ? <Tag color="#0865F0" size={24} /> : <Tag size={24} color="black" />}
             <p className="font-semibold">Ofertas </p>
         </Link>
-        <div onClick={handleToggle} className="flex gap-5">
+        <Link href={"/account"} onClick={handleToggle} className="flex gap-5">
             {pathname === "/account" ? <User color="#0865F0" size={24} /> : <User size={24} color="black" />}
             <p className="font-semibold">Mi cuenta</p>
-        </div>
+        </Link>
         <div onClick={handleToggle} className="flex gap-5">
             {pathname === "/help" ? <HelpCircle color="#0865F0" size={24} /> : <HelpCircle size={24} color="black" />}
             <p className="font-semibold">Ayuda</p>
@@ -67,7 +67,9 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
             {pathname === "/magazine" ? <FileText color="#0865F0" size={24} /> : <FileText size={24} color="black" />}
             <p className="font-semibold">Magazine (corregir icono)</p>
         </div>
+
         <Link href={"/categories"} onClick={handleToggle} className="flex gap-5">
+
             {pathname === "/categories" ? <List color="#0865F0" size={24} /> : <List size={24} color="black" />}
             <p className="font-semibold">Categorías</p>
         </Link>

@@ -10,7 +10,7 @@ interface WelcomeProps {
 
 export default function Welcome({ handleToggle }: WelcomeProps) {
 
-    const [logged, setLogged] = useState(true);
+    const [logged, setLogged] = useState(false);
     console.log(logged);
 
     return (
@@ -20,7 +20,7 @@ export default function Welcome({ handleToggle }: WelcomeProps) {
                     
                     {logged ? <div>
                         <p className='text-white'>David Alejandro</p>
-                        <p className='text-gray-500 text-sm'>Mi perfil</p>
+                        <Link href={"/profile"} className='text-gray-500 text-sm'>Mi perfil</Link>
                     </div> : <div>
                         <p className='text-white'>Bienvenido</p>
                         <p className='text-gray-500 text-sm'>Ingresa a tu cuenta para ver tus compras,
