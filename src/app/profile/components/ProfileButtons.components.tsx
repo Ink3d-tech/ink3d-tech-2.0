@@ -1,10 +1,13 @@
+"use client"
+
 import { ChevronRight, IdCard, User2 } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 export default function ProfileButtons() {
     return (
         <div className='bg-white flex-1 w-full'>
-            <div className='flex gap-2 p-4 items-center border-b border-[#D9D9D9]'>
+            <Link href={"/profile/personal"} className='flex gap-2 p-4 items-center border-b border-[#D9D9D9]'>
                 <IdCard color='blue' size={40} className='rounded-full border border-[#D9D9D9] p-1'/> 
                 <div>
                     <h2 className=''>Informacion personal</h2>
@@ -13,8 +16,8 @@ export default function ProfileButtons() {
                 <div className='flex grow justify-end'>
                     <ChevronRight />
                 </div>
-            </div>
-            <div className='flex gap-2 p-4 items-center border-b border-[#D9D9D9]'>
+            </Link>
+            <Link href={"/profile/details"} className='flex gap-2 p-4 items-center border-b border-[#D9D9D9]'>
                 <User2 color='blue' size={40} className='rounded-full border border-[#D9D9D9] p-1'/> 
                 <div>
                     <h2 className=''>Datos de tu cuenta</h2>
@@ -23,7 +26,7 @@ export default function ProfileButtons() {
                 <div className='flex grow justify-end'> 
                     <ChevronRight />
                 </div>
-            </div>
+            </Link>
         </div>
     )
 }

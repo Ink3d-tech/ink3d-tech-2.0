@@ -6,7 +6,12 @@ import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react'
 
-export default function BackButton() {
+interface BackButtonProps {
+    tab: string;
+}
+
+
+export default function BackButton( { tab }: BackButtonProps ) {
 
     const router = useRouter();
 
@@ -15,8 +20,9 @@ export default function BackButton() {
     };
 
     return (
-        <div>
-            <ArrowLeft onClick={handleReturn} color='gray' size={22}/>
+            <div className='bg-black h-12 flex items-center px-3'>
+                <ArrowLeft onClick={handleReturn} color='gray' size={22}/>
+                <h1 className='text-some-gray ml-2 text-base'>{tab}</h1>
         </div>
     )
 }
