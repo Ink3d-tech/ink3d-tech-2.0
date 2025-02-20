@@ -67,10 +67,10 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
             {pathname === "/magazine" ? <FileText color="#0865F0" size={24} /> : <FileText size={24} color="black" />}
             <p className="font-semibold">Magazine (corregir icono)</p>
         </div>
-        <div onClick={handleToggle} className="flex gap-5">
+        <Link href={"/categories"} onClick={handleToggle} className="flex gap-5">
             {pathname === "/categories" ? <List color="#0865F0" size={24} /> : <List size={24} color="black" />}
             <p className="font-semibold">Categorías</p>
-        </div>
+        </Link>
         <div className="flex gap-5 border-b-2 border-gray-300"></div>
         <p className="font-semibold">Acerca de INK3D</p>
         </div>
