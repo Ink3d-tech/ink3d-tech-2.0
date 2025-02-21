@@ -82,7 +82,7 @@ export default function RegisterPage() {
         showConfirmButton: false,
         timer: 2000,
       }).then(() => {
-        router.push("/home"); // 🔥 Redirige al home después del registro exitoso
+        router.push("/login"); 
       });
 
     } catch (error) {
