@@ -1,7 +1,5 @@
 "use client";
 
-import "./Swiper.styles.css";
-
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -10,23 +8,21 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
 
-
 interface IImage {
   id: number;
   name: string;
 }
 
 const images: IImage[] = [
-  { id: 1, name: "/images/carrousel2.png" },
+  { id: 1, name: "/images/carrousel1.png" },
   { id: 2, name: "/images/carrousel1.png" },
-  { id: 3, name: "/images/carrousel2.png" },
-  { id: 4, name: "/images/carrousel3.png" },
+  { id: 3, name: "/images/carrousel1.png" },
+  { id: 4, name: "/images/carrousel1.png" },
   { id: 5, name: "/images/carrousel1.png" },
-  { id: 6, name: "/images/carrousel3.png" },
-  { id: 7, name: "/images/carrousel2.png" },
+  { id: 6, name: "/images/carrousel1.png" },
+  { id: 7, name: "/images/carrousel1.png" },
   { id: 8, name: "/images/carrousel1.png" },
-  { id: 9, name: "/images/carrousel2.png" },
-
+  { id: 9, name: "/images/carrousel1.png" },
 ];
 
 interface CarouselProps {
@@ -34,39 +30,46 @@ interface CarouselProps {
 }
 
 const Carousel = ({ imageIds }: CarouselProps) => {
-  // Filtrar imágenes según los IDs proporcionados
   const filteredImages = images.filter((img) => imageIds.includes(img.id));
 
   return (
     <Swiper
-      className="overflow-hidden relative w-full mx-auto"
+      className="relative w-full mx-auto"
       loop={true}
-      autoplay={{ delay: 4000 }}
-      speed={400}
+      autoplay={{ delay: 40000000 }}
+      speed={500}
       pagination={{ clickable: true }}
-      navigation={false}
-      slidesPerView={1}
-      freeMode={true}
+      navigation={true}
+      slidesPerView={1.6}
+      centeredSlides={true}
+      spaceBetween={20}
       keyboard={{ enabled: true }}
       modules={[Pagination, Navigation, Autoplay]}
+      observer={true}
+      observeParents={true}
+      breakpoints={{
+        640: { slidesPerView: 1 },
+        768: { slidesPerView: 1.6 },
+        1024: { slidesPerView: 2.5 },
+      }}
     >
-      {filteredImages.map((image) => (
-        <SwiperSlide key={image.id} className="relative flex items-center justify-center ">
-          <div className="overlay"></div>
+      {filteredImages.map((image, index) => (
+        <SwiperSlide key={`${image.id}-${index}`} className="relative flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent"></div>
           <figure className="flex justify-center">
             <Image
-              className="object-cover"
+              className="object-cover rounded-lg shadow-lg"
               src={image.name}
-              alt="imagen"
+              alt={`imagen-${image.id}-${index}`}
               width={1920}
               height={500}
               style={{
-                width: "75%",
-                maxHeight: "400px",
+                width: "100%",
+                maxHeight: "500px",
+                minWidth: "300px",
               }}
             />
           </figure>
-
         </SwiperSlide>
       ))}
     </Swiper>
