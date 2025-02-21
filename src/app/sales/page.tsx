@@ -3,6 +3,7 @@ import CategoriesSales from './components/CategoriesSales.component'
 import { ChevronDown } from 'lucide-react'
 import React from 'react'
 import BackButton from '@/shared/components/BackButton.component'
+import NavBar from '@/shared/components/NavBar.component'
 
 export default function Sales() {
     
@@ -10,6 +11,7 @@ export default function Sales() {
 
     return (
         <div>
+            <NavBar />
             <div className='bg-black h-12 flex items-center px-3'>
                 <BackButton />
                 <h1 className='text-some-gray ml-2 text-base'>Ofertas</h1>
