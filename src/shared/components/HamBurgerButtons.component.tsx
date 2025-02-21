@@ -74,7 +74,8 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
             <p className="font-semibold">Categorías</p>
         </Link>
         <div className="flex gap-5 border-b-2 border-gray-300"></div>
-        <p className="font-semibold">Acerca de INK3D</p>
+            <p className="font-semibold">Acerca de INK3D</p>
+            
         </div>
     );
 }

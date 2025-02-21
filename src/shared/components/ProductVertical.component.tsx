@@ -18,7 +18,6 @@ const ProductCardVertical: React.FC<ProductCardProps> = ({
   category = "MOTORSPORT",
   rating = 5.0,
   reviews = 404,
-  installments = "6 cuotas de $6.650",
 }) => {
   return (
     <div className="flex justify-evenly">

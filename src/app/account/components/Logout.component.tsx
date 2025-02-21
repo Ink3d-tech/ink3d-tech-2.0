@@ -1,4 +1,5 @@
 import { LogOut, Settings } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 export default function Logout() {
@@ -9,9 +10,9 @@ export default function Logout() {
                     <Settings className='fill-white'/> 
                 </div>
                 <p className='font-light'>Id de Usuario Completo</p>
-                <div className='flex grow justify-end'> 
+                <Link href={"/login"} className='flex grow justify-end'> 
                     <LogOut />
-                </div>
+                </Link>
             </div>
         </div>
     )
