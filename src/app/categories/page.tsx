@@ -11,10 +11,7 @@ const categoriesData = [
 const Categories = () => {
   return (
     <div>
-      <div className='bg-black h-12 flex items-center px-3'>
-        <BackButton />
-        <h1 className='text-some-gray ml-2 text-base'>Categories</h1>
-      </div>
+      <BackButton tab="Categorias" />
       <div className="flex justify-center items-start min-h-screen py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl px-6">
           {categoriesData.map((category, index) => (

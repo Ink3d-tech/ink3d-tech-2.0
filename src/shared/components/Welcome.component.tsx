@@ -10,8 +10,8 @@ interface WelcomeProps {
 
 export default function Welcome({ handleToggle }: WelcomeProps) {
 
+    // Del contexto 
     const [logged, setLogged] = useState(false);
-    console.log(logged);
 
     return (
         <div className='flex flex-col  bg-black px-5'>
@@ -27,14 +27,14 @@ export default function Welcome({ handleToggle }: WelcomeProps) {
                         favoritos, magazine, etc</p>
                     </div>}
                 </div>
-                <div className='mb-2 grid grid-cols-2 gap-2 w-full'>
+                {logged ? null : <div className='mb-2 grid grid-cols-2 gap-2 w-full'>
                 <Link href={"/login"} onClick={handleToggle} type="button" className="w-full flex justify-center text-white bg-blue-700 hover:bg-blue-800
                     font-medium rounded-md text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700">
                     Iniciar Sesión</Link>
                 <Link href={"/signup"} onClick={handleToggle} type="button" className="w-full flex justify-center text-blue-700 bg-white
                     hover:bg-gray-300 font-medium rounded-md text-sm px-5 py-2.5 me-2 mb-2 ">
                     Crear Cuenta</Link>
-                </div>
+                </div>}
         </div>
     )
 }

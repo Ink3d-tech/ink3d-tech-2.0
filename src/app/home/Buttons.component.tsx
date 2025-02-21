@@ -4,39 +4,30 @@ import React from "react";
 
 const buttons = [
   { label: "Magazine", icon: <Newspaper />, href: "/magazine", highlight: true },
-  { label: "Protected Purchase", icon: <ShieldCheck />, href: "/proteccion" },
-  { label: "Categories", icon: <List />, href: "/categories" },
-  { label: "Payment Methods", icon: <CreditCard />, href: "/pagos" },
+  { label: "Compra protegida", icon: <ShieldCheck />, href: "/proteccion" },
+  { label: "Categorias", icon: <List />, href: "/categories" },
+  { label: "Metodos de pago", icon: <CreditCard />, href: "/pagos" },
 ];
 
 const Buttons = () => {
   return (
-    <div className="w-full bg-black py-6 flex justify-center">
-      <div className="max-w-4xl w-full flex justify-evenly">
-        {buttons.map(({ label, icon, href, highlight }, index) => (
+    <div className="w-full py-6 flex justify-center mt-6 bg-black">
+      <div className="w-full flex justify-evenly gap-6 sm:gap-10 lg:gap-12 px-14 flex-wrap">
+        {buttons.map(({ label, icon, href }, index) => (
           <Link
             key={index}
             href={href}
-            className={`relative flex flex-col items-center text-white transition transform hover:scale-110 ${
-              highlight ? "highlight-button" : ""
-            }`}
+            className={`relative flex items-center justify-center text-red-500 transition-transform transform hover:scale-105 
+              w-full sm:w-1/4 lg:w-1/5 h-32 bg-red-300 border-2 border-gray-600 p-6 rounded-lg`}
           >
-            {/* Círculo gris externo */}
-            <div className="w-20 h-20 flex items-center justify-center rounded-full border-2 border-gray-400 relative">
-              {/* Efecto de brillo SOLO para "Magazine" */}
-              {highlight && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="absolute w-20 h-20 bg-blue-400 opacity-20 rounded-full animate-pulse"></div>
-                  <div className="absolute w-16 h-16 bg-blue-400 opacity-40 rounded-full animate-ping"></div>
-                </div>
-              )}
-              {/* Botón circular interno */}
-              <div className="w-16 h-16 bg-white flex items-center justify-center rounded-full shadow-md relative z-10">
-                {React.cloneElement(icon, { size: 30, className: "text-blue-500" })}
+            <div className="flex items-center justify-center w-full h-full">
+              {/* Ícono */}
+              <div className="w-16 h-16 flex items-center justify-center rounded-lg text-red-500 mr-4">
+                {React.cloneElement(icon, { size: 48 })} {/* Aumentar tamaño del ícono */}
               </div>
+              {/* Texto */}
+              <span className="text-lg font-semibold">{label}</span> {/* Aumentar tamaño del texto */}
             </div>
-            {/* Texto debajo (se oculta en pantallas pequeñas) */}
-            <span className="mt-2 text-sm hidden sm:block">{label}</span>
           </Link>
         ))}
       </div>

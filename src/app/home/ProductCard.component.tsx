@@ -18,37 +18,32 @@ const ProductCard: React.FC<ProductCardProps> = ({
   category = "MOTORSPORT",
   rating = 5.0,
   reviews = 404,
-  installments = "6 installments of $6,650",
+  installments = "6 cuotas de $6,650",
 }) => {
   return (
-    <div className="flex flex-col lg:flex-row bg-white overflow-hidden max-w-full lg:max-w-6xl border-">
-      {/* Imagen del producto */}
-      <div className="flex items-center justify-center overflow-hidden w-full lg:w-1/2">
+    <div className="flex flex-col items-center bg-white overflow-hidden">
+      <div className="w-full overflow-hidden">
         {image ? (
           <Image
             src={image}
             alt={name}
-            width={500}
-            height={500}
-            className="w-full h-auto max-h-96 object-contain"
+            width={800} 
+            height={800} 
+            className="w-full h-auto object-cover"
           />
         ) : (
-          <span className="text-gray-500">Placeholder</span>
+          <span className="text-gray-500">Imagen no disponible</span>
         )}
       </div>
 
-      {/* Información del producto */}
-      <div className="p-2 flex flex-col justify-between w-full lg:w-1/2 space-y-4">
-        {/* Categoría */}
-        <span className="text-xs font-bold text-red-600 bg-red-100 px-2 py-1 uppercase self-start">
+      <div className="p-2 text-center">
+        <span className="text-xs font-bold text-red-600 bg-red-100 px-2 py-1 uppercase">
           {category}
         </span>
 
-        {/* Nombre del producto */}
-        <h3 className="text-lg font-semibold">{name}</h3>
+        <h3 className="text-lg font-semibold mt-2">{name}</h3>
 
-        {/* Rating */}
-        <div className="flex items-center gap-1 text-blue-500 text-sm">
+        <div className="flex justify-center items-center text-blue-500 text-sm mt-1">
           <span className="font-semibold">{rating}</span>
           {[...Array(5)].map((_, i) => (
             <Star key={i} size={16} fill="currentColor" stroke="none" />
@@ -56,11 +51,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <span className="text-gray-400 text-xs">({reviews})</span>
         </div>
 
-        {/* Precio */}
         <p className="text-2xl font-bold">{price}</p>
 
-        {/* Cuotas */}
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-500 text-sm mt-1">
           en <span className="font-semibold">{installments}</span>
         </p>
       </div>
@@ -69,3 +62,76 @@ const ProductCard: React.FC<ProductCardProps> = ({
 };
 
 export default ProductCard;
+
+// import Image from "next/image";
+// import { Star } from "lucide-react";
+
+// interface ProductCardProps {
+//   name: string;
+//   price: number;
+//   image?: string;
+//   category?: string;
+//   rating?: number;
+//   reviews?: number;
+//   installments?: string;
+// }
+
+// const ProductCard: React.FC<ProductCardProps> = ({
+//   name,
+//   price,
+//   image,
+//   category = "MOTORSPORT",
+//   rating = 5.0,
+//   reviews = 404,
+//   installments = "6 cuotas de $6,650",
+// }) => {
+//   Función para formatear el precio como moneda
+//   const formatPrice = (price: number) => {
+//     return price.toLocaleString("es-AR", {
+//       style: "currency",
+//       currency: "ARS",
+//     });
+//   };
+
+//   return (
+//     <div className="flex flex-col items-center bg-white overflow-hidden">
+//       <div className="w-full overflow-hidden">
+//         {image ? (
+//           <Image
+//             src={image}
+//             alt={name}
+//             width={800}
+//             height={800}
+//             className="w-full h-auto object-cover"
+//           />
+//         ) : (
+//           <span className="text-gray-500">Imagen no disponible</span>
+//         )}
+//       </div>
+      
+//       <div className="p-2 text-center">
+//         <span className="text-xs font-bold text-red-600 bg-red-100 px-2 py-1 uppercase">
+//           {category}
+//         </span>
+
+//         <h3 className="text-lg font-semibold mt-2">{name}</h3>
+
+//         <div className="flex justify-center items-center text-blue-500 text-sm mt-1">
+//           <span className="font-semibold">{rating}</span>
+//           {[...Array(5)].map((_, i) => (
+//             <Star key={i} size={16} fill="currentColor" stroke="none" />
+//           ))}
+//           <span className="text-gray-400 text-xs">({reviews})</span>
+//         </div>
+
+//         <p className="text-2xl font-bold">{formatPrice(price)}</p>
+
+//         <p className="text-gray-500 text-sm mt-1">
+//           en <span className="font-semibold">{installments}</span>
+//         </p>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ProductCard;
