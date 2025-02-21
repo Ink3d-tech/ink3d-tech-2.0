@@ -11,11 +11,8 @@ export default function Sales() {
 
     return (
         <div>
-            <NavBar />
-            <div className='bg-black h-12 flex items-center px-3'>
-                <BackButton />
-                <h1 className='text-some-gray ml-2 text-base'>Ofertas</h1>
-            </div>
+            {/* <NavBar /> */}
+            <BackButton tab='Ofertas'/>
             <div className='bg-white h-12 flex justify-between items-center px-3 border-b-2 border-gray-200'>
                 <p className='text-some-gray text-xs'>1000 productos</p>
                 <div className='flex  items-center'>
@@ -26,12 +23,12 @@ export default function Sales() {
             <div>
                 <CategoriesSales />
             </div>
-            <div className='grid grid-cols-2'>
+            <div className='grid grid-cols-2 bg-white'>
             
                         <ProductCardVertical name='exampleName' price='0' image={image}/>
-                        <ProductCardVertical name='exampleName' price='0'/>
-                        <ProductCardVertical name='exampleName' price='0'/>
-                        <ProductCardVertical name='exampleName' price='0'/>
+                        <ProductCardVertical name='exampleName' price='0' image={image}/>
+                        <ProductCardVertical name='exampleName' price='0' image={image}/>
+                        <ProductCardVertical name='exampleName' price='0' image={image}/>
                     </div>
         </div>
     )

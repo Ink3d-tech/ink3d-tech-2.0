@@ -3,13 +3,12 @@
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 
-import { AxiosError } from "axios"
 import { ErrorsInterface } from "../interfaces/Error.interface"
 import { Mixin } from "../components/MixinAlert"
 
 /**
  * Interfaz que define las propiedades requeridas para usar el hook "useForm"
- * 
+ *
  * @param { UseFormProps<T> } props - Propiedades requeridas para configurar el hook.
  * @param { T } props.formInitial - Estado inicial del formulario.
  * @param { string[] } props.requiredFields - Lista de campos requeridos.
@@ -30,10 +29,10 @@ import { Mixin } from "../components/MixinAlert"
 interface UseFormProps<T> {
     formInitial: T
     requiredFields: string[]
-    authAction: (form:  T) => void
-    validateForm: (form:  T, requiredFields: string[]) => ErrorsInterface
+    authAction: (form: T) => void
+    validateForm: (form: T, requiredFields: string[]) => ErrorsInterface
     messageSuccess: string
-    redirectSuccessRoute: string
+    redirectSuccessRoute?: string
 }
 
 export function useForm<T>({
@@ -58,43 +57,37 @@ export function useForm<T>({
      * @param { React.FormEvent<HTMLFormElement> } event - Evento de envío del formulario.
      */
     
-    const handlerSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
+    const handlerSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        const validationErrors = validateForm(form, requiredFields)
+        
+        const validationErrors = validateForm(form, requiredFields) 
         const keyErrors = Object.keys(validationErrors)
 
-        if(keyErrors.length > 0) {
+        if (keyErrors.length > 0) {
             setFormErrors(validationErrors);
             Mixin.fire(`Is required: \n${keyErrors.join(`\n`)}`, "", "error")  
             return
-            
         } else {
             try {
                 setIsLoading(true)
+
                 await authAction(form)
 
-                setTimeout(() => {
-                    Mixin.fire(messageSuccess, "", "success")
-                }, 200)
+                console.log(form);
+   
+                Mixin.fire(messageSuccess, "", "success")
+                router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
+            } catch (error: any) {
+                const errorMessage = error.response?.data?.message
+                const messageToShow = [
+                    "Invalid password", "User does not exist"
+                ].includes(errorMessage)
+                    ? "Invalid credentials" : errorMessage
 
-                router.replace(redirectSuccessRoute)
-            } catch (error: unknown) {
-                if(error instanceof AxiosError) {
-                    const errorMessage = error.response?.data?.message
-                    const messageToShow = [
-                        "Invalid password", "User does not exist"
-                    ].includes(errorMessage)
-                        ? "Invalid credentials" : errorMessage
-    
-                   
-                    Mixin.fire(messageToShow ?? error.response?.data?.message, "", "error")
-                } else {
-                    Mixin.fire("An unexpected error occurred", "", "error");
-                }
+                Mixin.fire(messageToShow ?? error.response?.data?.message, "", "error")
             } finally {
                 setIsLoading(false)
             }
-            
         }
     } 
 
@@ -105,16 +98,19 @@ export function useForm<T>({
      * 
      * @param { React.ChangeEvent<HTMLInputElement> } event - Evento de cambio en un campo de formulario.
      */
-
-
     const handlerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target
+        const { name, value } = event.target;
+
         setForm((prevForm) => ({
-            ...prevForm, 
-            [name]: value}
-        ))
-        setFormErrors(validateForm(form, requiredFields))
-    }
+            ...prevForm,
+            [name]: value
+        }));
+
+        // Validar solo el campo que está cambiando
+        setFormErrors((prevErrors) => ({
+            ...validateForm({ ...form, [name]: value }, [name]) // Solo validamos el campo actual
+        }));
+    };
 
     return {
         isLoading,

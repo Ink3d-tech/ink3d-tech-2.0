@@ -7,10 +7,11 @@ import { Divider } from "../shared/components/Divider.component";
 import { Spacer } from "../shared/components/Spacer";
 import { Routes } from "../shared/enums/Routes";
 
-enum LoginFields {
+export enum LoginFields {
     ENTER = "Entrar",
     GOOGLE = "Inciar sesión con Google",
     PASSWORD = "¿Olvidaste tu contraseña?",
+    ACCOUNT = "¿Ya tienes una contraseña?",
     NEWACCOUNT = "¿No tienes una cuenta?",
     REGISTER = "Registrarte",
     OR = "o"
@@ -29,7 +30,7 @@ export const LoginForm: React.FC<LoginProps> = ({
     handlerChange,
     formErrors,
     handlerSubmit,
-    isLoading,
+    isLoading
 }) => {
     return (
         <form onSubmit={handlerSubmit} className="flex flex-col px-4 mx-auto max-w-[402px]">
@@ -45,7 +46,7 @@ export const LoginForm: React.FC<LoginProps> = ({
 
             <Divider letter={LoginFields.OR}/>
 
-            <ButtonBase name={LoginFields.GOOGLE} isLoading={isLoading} variant={BtnVariant.GOOGLE}/>
+            <ButtonBase name={LoginFields.GOOGLE} variant={BtnVariant.GOOGLE}/>
 
             <Spacer value={34}/>
             

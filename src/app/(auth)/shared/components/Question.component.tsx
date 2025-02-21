@@ -1,8 +1,9 @@
 import Link from "next/link"
 
 export enum VariantQuestion {
-    PRIMARY = "text-blue-500 text-left ",
+    PRIMARY = "text-blue-500 text-left",
     SECONDARY = "text-[#7C7C7C] text-center",
+    TERCIARY = "text-blue-500 text-center"
 }
 
 export interface QuestionInterface {

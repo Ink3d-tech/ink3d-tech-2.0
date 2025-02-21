@@ -30,10 +30,10 @@ export default function Personal() {
                     <div className='border-b border-gray-200'></div>
                 </div>
 
-                <PersonalCard field='Nombre elegido' value='Ignacio Alonso' validated='Validado'/>
+                <PersonalCard field='Nombre elegido' value='Ignacio Alonso' validated='Validado' />
                 <PersonalCard field='Email' value='nachoAlo123@gmail.com' validated='Validado'/>
-                <PersonalCard field='Teléfono' value='+54 9 314 7132' validated='Validado'/>
-                <PersonalCard field='Nombre de usuario' value='nachoAlo123' validated='Validado'/>
+                <PersonalCard field='Teléfono' value='+54 9 314 7132' validated='Validado' change={true}/>
+                <PersonalCard field='Nombre de usuario' value='nachoAlo123' validated='Validado' change={true}/>
             </div>
 
             

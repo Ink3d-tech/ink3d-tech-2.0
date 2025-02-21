@@ -7,9 +7,6 @@ export interface WrapperProps {
     withBottomHr?: boolean
 }
 
-// Inicio    Tienda    Categorías    Noticias    Foro    
-// Contacto    Términos y condiciones 
-// Política de privacidad
 
 
 export const IndexQuestion: QuestionInterface[] = [
@@ -24,10 +21,10 @@ export const IndexQuestion: QuestionInterface[] = [
 export const Wrapper: React.FC<WrapperProps> = ({
     children,
     withTopHr = true,
-    withBottomHr = true
+    withBottomHr = true,
 }) => {
     return (
-        <div className="bg-primary h-screen mx-auto py-14">
+        <div className="bg-primary  mx-auto py-14">
             <figure className="flex justify-center">
                 <img src={"LogoInk3d.png"} alt={"Logo ink3d"} width={145} height={85}/>
             </figure>
