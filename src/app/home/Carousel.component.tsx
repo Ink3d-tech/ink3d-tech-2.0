@@ -6,26 +6,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import React from "react";
-import { useEffect } from "react";
-import Swiper from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
 
-export const SwiperCard = ({ image }: { image: IImage }) => {
-  return (
-    <div className="swiper-slide relative h-full flex items-center">
-      <Image
-        className="object-center rounded-2xl"
-        src={image.name}
-        alt="imagen"
-        width={800}
-        height={200}
-        objectFit="cover"
-      />
-    </div>
-  );
-};
 
 interface IImage {
   id: number;
@@ -42,51 +26,50 @@ const images: IImage[] = [
   { id: 7, name: "/images/carrousel2.png" },
   { id: 8, name: "/images/carrousel1.png" },
   { id: 9, name: "/images/carrousel2.png" },
+
 ];
 
 interface CarouselProps {
-  imageIds: number[]; // Nueva prop para seleccionar imágenes
+  imageIds: number[];
 }
 
 const Carousel = ({ imageIds }: CarouselProps) => {
-  useEffect(() => {
-    const swiper = new Swiper(".swiper-container", {
-      loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      slidesPerView: 1,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      modules: [Pagination, Navigation, Autoplay],
-    });    
-
-    return () => swiper.destroy();
-  }, []);
-
-  // Filtramos solo las imágenes con los IDs proporcionados
+  // Filtrar imágenes según los IDs proporcionados
   const filteredImages = images.filter((img) => imageIds.includes(img.id));
 
   return (
-    <div className="swiper-container overflow-hidden relative h-[250px] md:h-[500px] rounded-lg w-full max-w-3xl mx-auto my-2">
-      <div className="swiper-wrapper h-full">
-        {filteredImages.map((imagen) => (
-          <SwiperCard key={imagen.id} image={imagen} />
-        ))}
-      </div>
+    <Swiper
+      className="overflow-hidden relative w-full mx-auto"
+      loop={true}
+      autoplay={{ delay: 4000 }}
+      speed={400}
+      pagination={{ clickable: true }}
+      navigation={false}
+      slidesPerView={1}
+      freeMode={true}
+      keyboard={{ enabled: true }}
+      modules={[Pagination, Navigation, Autoplay]}
+    >
+      {filteredImages.map((image) => (
+        <SwiperSlide key={image.id} className="relative flex items-center justify-center ">
+          <div className="overlay"></div>
+          <figure className="flex justify-center">
+            <Image
+              className="object-cover"
+              src={image.name}
+              alt="imagen"
+              width={1920}
+              height={500}
+              style={{
+                width: "75%",
+                maxHeight: "400px",
+              }}
+            />
+          </figure>
 
-      <div className="swiper-button-next w-2 h-2 md:w-10 md:h-8 right-2 md:right-2"></div>
-      <div className="swiper-button-prev w-2 h-2 md:w-10 md:h-8 left-2 md:left-2"></div>
-
-      <div className="swiper-pagination"></div>
-    </div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
 };
 
