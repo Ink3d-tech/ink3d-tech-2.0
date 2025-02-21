@@ -1,14 +1,20 @@
 "use client"
 import { useState } from "react";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ResponsiveContainer } from "recharts";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [darkMode, setDarkMode] = useState(false);
+  const salesData = [
+    { month: "Enero", ventas: 4000, devoluciones: 200 },
+    { month: "Febrero", ventas: 3000, devoluciones: 150 },
+    { month: "Marzo", ventas: 5000, devoluciones: 300 },
+    { month: "Abril", ventas: 7000, devoluciones: 250 },]
 
   return (
     <div className={`flex h-screen ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
       {/* Barra lateral */}
-      <nav className={`w-64 p-4 space-y-3 ${darkMode ? "bg-gray-900" : "bg-black"} text-white`}>
+      <nav className={`w-64 p-4 space-y-3 ${darkMode ? "bg-black" : "bg-black"} text-white`}>
         <img src="/Logoink3d.png" alt="Logo" className="w-32 mx-auto mb-4" />
         {[
           { name: "📊 Panel de Control", id: "overview" },
@@ -81,16 +87,56 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Gestión de Pedidos */}
-        {activeTab === "orders" && (
-          <div>
-            <h2 className="text-3xl font-bold mb-4">📦 Gestión de Pedidos</h2>
-            <p>📍 Dirección de Envío</p>
-            <p>🚚 Transportadora</p>
-            <p>⏳ Tiempo estimado de entrega</p>
-            <p>💰 Recargo por domicilio</p>
-          </div>
-        )}
+{activeTab === "orders" && (
+  <div>
+    <h2 className="text-3xl font-bold mb-4">📦 Gestión de Pedidos</h2>
+    <form className="space-y-4">
+      <div>
+        <label className="block text-lg font-semibold">📍 Dirección de Envío</label>
+        <input
+          type="text"
+          placeholder="Ingresa la dirección"
+          className="w-full p-2 border rounded-lg"
+        />
+      </div>
+
+      <div>
+        <label className="block text-lg font-semibold">🚚 Transportadora</label>
+        <select className="w-full p-2 border rounded-lg">
+          <option value="">Selecciona una opción</option>
+          <option value="DHL">DHL</option>
+          <option value="FedEx">FedEx</option>
+          <option value="UPS">UPS</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-lg font-semibold">⏳ Tiempo estimado de entrega</label>
+        <input
+          type="text"
+          placeholder="Ej: 3-5 días hábiles"
+          className="w-full p-2 border rounded-lg"
+        />
+      </div>
+
+      <div>
+        <label className="block text-lg font-semibold">💰 Recargo por domicilio</label>
+        <input
+          type="number"
+          placeholder="Ej: 5000"
+          className="w-full p-2 border rounded-lg"
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
+      >
+        Guardar Pedido
+      </button>
+    </form>
+  </div>
+)}
 
         {/* Gestión de Usuarios */}
         {activeTab === "users" && (
@@ -102,14 +148,41 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Análisis y Reportes */}
-        {activeTab === "analytics" && (
-          <div>
-            <h2 className="text-3xl font-bold mb-4">📊 Análisis y Reportes</h2>
-            <p>📈 Reporte de Ventas</p>
-            <p>🔄 Reporte de Devoluciones</p>
-          </div>
-        )}
+{activeTab === "analytics" && (
+  <div>
+    <h2 className="text-3xl font-bold mb-4">📊 Análisis y Reportes</h2>
+
+    {/* Gráfico de Ventas */}
+    <div className="mb-8">
+      <h3 className="text-xl font-semibold mb-2">📈 Reporte de Ventas</h3>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={salesData}>
+          <XAxis dataKey="month" />
+          <YAxis />
+          <Tooltip />
+          <CartesianGrid stroke="#ccc" />
+          <Line type="monotone" dataKey="ventas" stroke="#4CAF50" strokeWidth={3} />
+          <Legend />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+
+    {/* Gráfico de Devoluciones */}
+    <div>
+      <h3 className="text-xl font-semibold mb-2">🔄 Reporte de Devoluciones</h3>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={salesData}>
+          <XAxis dataKey="month" />
+          <YAxis />
+          <Tooltip />
+          <CartesianGrid stroke="#ccc" />
+          <Bar dataKey="devoluciones" fill="#F44336" />
+          <Legend />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  </div>
+)}
 
         {/* Descuentos y Cupones */}
         {activeTab === "discounts" && (
@@ -119,30 +192,113 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Control de Inventario */}
-        {activeTab === "inventory" && (
-          <div>
-            <h2 className="text-3xl font-bold mb-4">📦 Control de Inventario</h2>
-            <p>🔍 Buscar por referencia</p>
-            <p>🎨 Filtrar por color</p>
-            <p>📏 Filtrar por talla</p>
-          </div>
-        )}
+{activeTab === "inventory" && (
+  <div>
+    <h2 className="text-3xl font-bold mb-4">📦 Control de Inventario</h2>
+
+    {/* Buscar por referencia */}
+    <div className="mb-4">
+      <label className="block text-lg font-semibold">🔍 Buscar por referencia</label>
+      <input
+        type="text"
+        placeholder="Ingresa la referencia"
+        className="w-full p-2 border rounded-lg"
+      />
+    </div>
+
+    {/* Filtrar por color */}
+    <div className="mb-4">
+      <label className="block text-lg font-semibold">🎨 Filtrar por color</label>
+      <select className="w-full p-2 border rounded-lg">
+        <option value="">Selecciona un color</option>
+        <option value="rojo">Rojo</option>
+        <option value="azul">Azul</option>
+        <option value="verde">Verde</option>
+        <option value="negro">Negro</option>
+        <option value="blanco">Blanco</option>
+      </select>
+    </div>
+
+    {/* Filtrar por talla */}
+    <div className="mb-4">
+      <label className="block text-lg font-semibold">📏 Filtrar por talla</label>
+      <select className="w-full p-2 border rounded-lg">
+        <option value="">Selecciona una talla</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+      </select>
+    </div>
+
+    {/* Botón de búsqueda */}
+    <button
+      className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
+    >
+      Aplicar Filtros
+    </button>
+  </div>
+)}
+
 
         {/* Seguridad y Configuración */}
         {activeTab === "settings" && (
-          <div>
-            <h2 className="text-3xl font-bold mb-4">🔐 Seguridad y Configuración</h2>
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={darkMode}
-                onChange={() => setDarkMode(!darkMode)}
-              />
-              <span>🌙 Modo Oscuro</span>
-            </label>
-          </div>
-        )}
+  <div>
+    <h2 className="text-3xl font-bold mb-4">🔐 Seguridad y Configuración</h2>
+
+    {/* Modo Oscuro */}
+    <div className="mb-4">
+      <label className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          checked={darkMode}
+          onChange={() => setDarkMode(!darkMode)}
+        />
+        <span>🌙 Modo Oscuro</span>
+      </label>
+    </div>
+
+    {/* Cambio de Contraseña */}
+    <div className="mb-4">
+      <label className="block text-lg font-semibold">🔑 Cambiar Contraseña</label>
+      <input
+        type="password"
+        placeholder="Nueva Contraseña"
+        className="w-full p-2 border rounded-lg mb-2"
+      />
+      <input
+        type="password"
+        placeholder="Confirmar Contraseña"
+        className="w-full p-2 border rounded-lg"
+      />
+      <button className="bg-blue-500 text-white py-2 px-4 mt-2 rounded-lg hover:bg-blue-600 transition">
+        Guardar Cambios
+      </button>
+    </div>
+
+    {/* Cambio de Correo Electrónico */}
+    <div className="mb-4">
+      <label className="block text-lg font-semibold">📧 Actualizar Correo</label>
+      <input
+        type="email"
+        placeholder="Nuevo Correo Electrónico"
+        className="w-full p-2 border rounded-lg mb-2"
+      />
+      <button className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition">
+        Actualizar Correo
+      </button>
+    </div>
+
+    {/* Autenticación en Dos Pasos */}
+    <div className="mb-4">
+      <label className="flex items-center space-x-2">
+        <input type="checkbox" />
+        <span>🛡️ Activar Autenticación en Dos Pasos</span>
+      </label>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );
