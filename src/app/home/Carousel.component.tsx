@@ -61,7 +61,7 @@ const Carousel = ({ imageIds }: CarouselProps) => {
               width={1920}
               height={500}
               style={{
-                width: "100%",
+                width: "75%",
                 maxHeight: "400px",
               }}
             />

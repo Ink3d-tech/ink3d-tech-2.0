@@ -22,11 +22,11 @@ export default function LoginView() {
 
     return (
         <LoginForm 
-        form={form}
-        formErrors={formErrors}
-        isLoading={isLoading}
-        handlerChange={handlerChange}
-        handlerSubmit={handlerSubmit}
+            form={form}
+            formErrors={formErrors}
+            isLoading={isLoading}
+            handlerChange={handlerChange}
+            handlerSubmit={handlerSubmit}
         />
     );
 }
