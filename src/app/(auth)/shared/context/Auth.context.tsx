@@ -3,14 +3,17 @@
 import React, { useState, useContext, createContext, useEffect } from "react";
 import { LoginInterface } from "../interfaces/Login.interface";
 import Loading from "@/app/loading";
-import { SignupInterface, UserInterface } from "../interfaces/User.interface";
+import { SignupInterface, UserInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
+import { API_BACK } from "@/app/(auth)/shared/helpers/getEnv";
 
 interface AuthContextInterface {
     user: UserInterface | null
     login: (loginForm: LoginInterface) => void
+    signup: (signForm: SignupInterface) => void
     logout: () => void
     isAuthenticated: boolean
+    isAdmin: boolean
     token: string | null
     isLoading: boolean
 }
@@ -19,7 +22,9 @@ const AuthContext = createContext<AuthContextInterface>({
     user: null,
     login: () => {},
     logout: () => {},
+    signup: () => {},
     isAuthenticated: false,
+    isAdmin: false,
     isLoading: true,
     token: null,
 })
@@ -29,22 +34,15 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const [user, setUser] = useState<UserInterface | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const backendURL = process.env.NEXT_PUBLIC_BACKEND;
-
-    if (!backendURL) {
-        throw new Error("La URL del backend no está definida");
-    }
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
     useEffect(() => {
-        const user = localStorage.getItem("user")
         const token = localStorage.getItem("token")
 
-        if(user && token) {
-            setUser(JSON.parse(user))
+        if(token) {
             setToken(token)
             setIsAuthenticated(true)
         } else {
-            setUser(null)
             setToken(null)
             setIsAuthenticated(false)
         }
@@ -64,36 +62,34 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
           }
     };
 
-    const login = async (loginForm: LoginInterface) => {
-        try {
-            const { data } = await axios.post(`${backendURL}/signin`, loginForm);
-            localStorage.setItem("token", data.token);
-            setToken(data.token);
-            setIsAuthenticated(true);
-      
-            const userId = getIdUser(data.token);
-            if (!userId) throw new Error("Error al obtener el ID del usuario");
-      
-            const userResponse = await axios.get(`${backendURL}/users/${userId}`, {
-              headers: { Authorization: `${data.token}` },
-            });
-      
-            setUser(userResponse.data.user);
-            localStorage.setItem("user", JSON.stringify(userResponse.data.user));
-        } catch (error) {
-            console.error("Error en el proceso de login:", error);
-        }
+    interface ResponseInterface {
+        token: string
+        message: string
+    }
+
+    interface TokenInterface {
+        email: string
+        exp: number
+        iat: number
+        role: string
+        userId: string
+    }
+
+    const login = async (loginForm: LoginInterface) => {  
+        const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm)
+
+        setToken(data.token)
+        setIsAuthenticated(true)
+        localStorage.setItem("token", data.token) 
     }
     
 
     const signup = async(signupForm: SignupInterface) => {
-        await axios.post(`${backendURL}/signup`, signupForm)
+        await axios.post(`${API_BACK}/auth/signup`, signupForm)
     }
 
     const logout = async () => {
-        localStorage.removeItem("user")
         localStorage.removeItem("token")
-        setUser(null)
         setIsAuthenticated(false)
         setToken(null)
     }
@@ -101,8 +97,10 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const value = {
         user,
         login,
+        signup,
         logout,
         isAuthenticated,
+        isAdmin,
         isLoading,
         token
     }

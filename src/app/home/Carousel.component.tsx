@@ -1,31 +1,12 @@
 "use client";
 
-import "./Swiper.styles.css";
-
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import React from "react";
-import { useEffect } from "react";
-import Swiper from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
-
-export const SwiperCard = ({ image }: { image: IImage }) => {
-  return (
-    <div className="swiper-slide relative h-full flex items-center">
-      <Image
-        className="object-center rounded-2xl"
-        src={image.name}
-        alt="imagen"
-        width={800}
-        height={200}
-        objectFit="cover"
-      />
-    </div>
-  );
-};
 
 interface IImage {
   id: number;
@@ -33,60 +14,61 @@ interface IImage {
 }
 
 const images: IImage[] = [
-  { id: 1, name: "/images/carrousel2.png" },
+  { id: 1, name: "/images/carrousel1.png" },
   { id: 2, name: "/images/carrousel1.png" },
-  { id: 3, name: "/images/carrousel2.png" },
-  { id: 4, name: "/images/carrousel3.png" },
+  { id: 3, name: "/images/carrousel1.png" },
+  { id: 4, name: "/images/carrousel1.png" },
   { id: 5, name: "/images/carrousel1.png" },
-  { id: 6, name: "/images/carrousel3.png" },
-  { id: 7, name: "/images/carrousel2.png" },
+  { id: 6, name: "/images/carrousel1.png" },
+  { id: 7, name: "/images/carrousel1.png" },
   { id: 8, name: "/images/carrousel1.png" },
-  { id: 9, name: "/images/carrousel2.png" },
+  { id: 9, name: "/images/carrousel1.png" },
 ];
 
 interface CarouselProps {
-  imageIds: number[]; // Nueva prop para seleccionar imágenes
+  imageIds: number[];
 }
 
 const Carousel = ({ imageIds }: CarouselProps) => {
-  useEffect(() => {
-    const swiper = new Swiper(".swiper-container", {
-      loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      slidesPerView: 1,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      modules: [Pagination, Navigation, Autoplay],
-    });    
-
-    return () => swiper.destroy();
-  }, []);
-
-  // Filtramos solo las imágenes con los IDs proporcionados
   const filteredImages = images.filter((img) => imageIds.includes(img.id));
 
   return (
-    <div className="swiper-container overflow-hidden relative h-[250px] md:h-[500px] rounded-lg w-full max-w-3xl mx-auto my-2">
-      <div className="swiper-wrapper h-full">
-        {filteredImages.map((imagen) => (
-          <SwiperCard key={imagen.id} image={imagen} />
-        ))}
-      </div>
-
-      <div className="swiper-button-next w-2 h-2 md:w-10 md:h-8 right-2 md:right-2"></div>
-      <div className="swiper-button-prev w-2 h-2 md:w-10 md:h-8 left-2 md:left-2"></div>
-
-      <div className="swiper-pagination"></div>
-    </div>
+    <Swiper
+      className="relative w-full mx-auto"
+      loop={true}
+      autoplay={{ delay: 4000}}
+      pagination={{ clickable: true }}
+      navigation={true}
+      slidesPerView={1}
+      spaceBetween={20}
+      keyboard={{ enabled: true }}
+      modules={[Pagination, Navigation, Autoplay]}
+      breakpoints={{
+        640: { slidesPerView: 1 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      }}
+    >
+      {filteredImages.map((image, index) => (
+        <SwiperSlide key={`${image.id}-${index}`} className="relative flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent"></div>
+          <figure className="flex justify-center">
+            <Image
+              className="object-contain rounded-lg shadow-lg"
+              src={image.name}
+              alt={`imagen-${image.id}-${index}`}
+              width={1920}
+              height={500}
+              style={{
+                width: "100%",
+                maxHeight: "500px",
+                minWidth: "300px",
+              }}
+            />
+          </figure>
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
 };
 

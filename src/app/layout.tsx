@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/shared/components/NavBar.component";
+import { AuthProvider } from "./(auth)/shared/context/Auth.context";
+import ExcludedPaths from "./(auth)/shared/helpers/ExcludedPath";
+import { ProductsProvider } from "./manager/Products.context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,12 +16,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    
     <html lang="en">
+      
       <body>
-        <main className="bg-[#D9D9D9] min-h-screen">
-          <NavBar />
-          {children}
-        </main>
+        <ProductsProvider>
+          <AuthProvider>
+              <main className="bg-[#D9D9D9]">
+                <ExcludedPaths >
+                  <NavBar /> 
+                </ExcludedPaths>
+                {children}
+              </main>
+          </AuthProvider>
+        </ProductsProvider>
       </body>
     </html>
   );
