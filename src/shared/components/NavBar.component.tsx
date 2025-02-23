@@ -38,11 +38,11 @@ export default function NavBar() {
                     <h2>Estoy buscando...</h2>
                 </div>
 
-                {logged ? (
-                    <Link href={"/cart"} className="my-auto ml-auto mr-4">
-                        <ShoppingCart size="24" color="gray" />
-                    </Link>
-                ) : null}
+                
+                <Link href={"/cart"} className="my-auto ml-auto mr-4">
+                    <ShoppingCart size="24" color="gray" />
+                </Link>
+                
             </div>
 
             {/* Menú desplegable con animación */}

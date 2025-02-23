@@ -3,15 +3,11 @@ import CategoriesSales from './components/CategoriesSales.component'
 import { ChevronDown } from 'lucide-react'
 import React from 'react'
 import BackButton from '@/shared/components/BackButton.component'
-import NavBar from '@/shared/components/NavBar.component'
 
 export default function Sales() {
-    
     const image = "/mazdaimg.png"
-
     return (
         <div>
-            {/* <NavBar /> */}
             <BackButton tab='Ofertas'/>
             <div className='bg-white h-12 flex justify-between items-center px-3 border-b-2 border-gray-200'>
                 <p className='text-some-gray text-xs'>1000 productos</p>
@@ -24,12 +20,11 @@ export default function Sales() {
                 <CategoriesSales />
             </div>
             <div className='grid grid-cols-2 bg-white'>
-            
-                        <ProductCardVertical name='exampleName' price='0' image={image}/>
-                        <ProductCardVertical name='exampleName' price='0' image={image}/>
-                        <ProductCardVertical name='exampleName' price='0' image={image}/>
-                        <ProductCardVertical name='exampleName' price='0' image={image}/>
-                    </div>
+                <ProductCardVertical name='exampleName' price='0' image={image}/>
+                <ProductCardVertical name='exampleName' price='0' image={image}/>
+                <ProductCardVertical name='exampleName' price='0' image={image}/>
+                <ProductCardVertical name='exampleName' price='0' image={image}/>
+            </div>
         </div>
     )
 }

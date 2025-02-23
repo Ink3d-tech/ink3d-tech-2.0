@@ -13,6 +13,7 @@ interface AuthContextInterface {
     signup: (signForm: SignupInterface) => void
     logout: () => void
     isAuthenticated: boolean
+    isAdmin: boolean
     token: string | null
     isLoading: boolean
 }
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextInterface>({
     logout: () => {},
     signup: () => {},
     isAuthenticated: false,
+    isAdmin: false,
     isLoading: true,
     token: null,
 })
@@ -32,18 +34,15 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const [user, setUser] = useState<UserInterface | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(true);
-
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
     useEffect(() => {
-        const user = localStorage.getItem("user")
         const token = localStorage.getItem("token")
 
-        if(user && token) {
-            setUser(JSON.parse(user))
+        if(token) {
             setToken(token)
             setIsAuthenticated(true)
         } else {
-            setUser(null)
             setToken(null)
             setIsAuthenticated(false)
         }
@@ -68,12 +67,20 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         message: string
     }
 
+    interface TokenInterface {
+        email: string
+        exp: number
+        iat: number
+        role: string
+        userId: string
+    }
+
     const login = async (loginForm: LoginInterface) => {  
         const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm)
-        
+
         setToken(data.token)
         setIsAuthenticated(true)
-        localStorage.setItem("token", data.token)  
+        localStorage.setItem("token", data.token) 
     }
     
 
@@ -82,9 +89,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     const logout = async () => {
-        localStorage.removeItem("user")
         localStorage.removeItem("token")
-        setUser(null)
         setIsAuthenticated(false)
         setToken(null)
     }
@@ -95,6 +100,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         signup,
         logout,
         isAuthenticated,
+        isAdmin,
         isLoading,
         token
     }

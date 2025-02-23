@@ -13,7 +13,7 @@ export default function HeaderBackBtn({route, name}: {route: Routes, name: strin
 
     return (
         <div className='bg-black h-12 flex items-center px-3'>
-            <ArrowLeft onClick={handleReturn} color='gray' size={22}/>
+            <ArrowLeft onClick={handleReturn} color='gray' size={22} className='cursor-pointer'/>
             <h1 className='text-some-gray ml-2 text-base'>{name}</h1>
         </div>
     )

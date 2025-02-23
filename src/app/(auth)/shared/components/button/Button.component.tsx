@@ -12,6 +12,7 @@ const Spinner = () => {
 
 export enum BtnVariant {
     PRIMARY = "primary",
+    SECONDARY = "secondary",
     GOOGLE = "google",
 }
 
@@ -35,10 +36,11 @@ export const ButtonBase = ({
 
     const loading = isLoading ? "opacity-50 cursor-not-allowed" : ""
     
-    const btnDefault = "py-2  rounded-md font-medium text-[14px]"
+    const btnDefault = "py-2 rounded-md font-medium text-[14px]"
 
     const btnVariants = {
         primary: "bg-blue-500 hover:bg-blue-600 border border-blue-700 text-white",
+        secondary: "bg-blue-50 hover:bg-blue-100 border border-blue-700 text-[#3483fa]",
         google: "bg-gray-100 hover:bg-gray-300 border-[#DFE0E4] text-[#464A4C]"
     }
 

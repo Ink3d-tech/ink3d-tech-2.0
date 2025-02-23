@@ -8,9 +8,7 @@ import Logout from './components/Logout.component'
 export default function Account() {
     return (
         <div className='flex flex-col h-screen'>
-            <NavBar />
             <BackButton tab='Cuenta'/>
-
             <div className='flex flex-col flex-1 overflow-y-auto bg-white'>
                 <Shopping />
                 <Configuration />

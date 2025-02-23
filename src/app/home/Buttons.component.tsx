@@ -21,12 +21,10 @@ const Buttons = () => {
               w-full sm:w-1/4 lg:w-1/5 h-32 bg-red-300 border-2 border-gray-600 p-6 rounded-lg`}
           >
             <div className="flex items-center justify-center w-full h-full">
-              {/* Ícono */}
               <div className="w-16 h-16 flex items-center justify-center rounded-lg text-red-500 mr-4">
-                {React.cloneElement(icon, { size: 48 })} {/* Aumentar tamaño del ícono */}
+                {React.cloneElement(icon, { size: 48 })}
               </div>
-              {/* Texto */}
-              <span className="text-lg font-semibold">{label}</span> {/* Aumentar tamaño del texto */}
+              <span className="text-lg font-semibold">{label}</span>
             </div>
           </Link>
         ))}

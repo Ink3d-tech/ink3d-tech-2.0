@@ -1,13 +1,10 @@
-
 import BackButton from '@/shared/components/BackButton.component'
-import NavBar from '@/shared/components/NavBar.component'
 import React from 'react'
 import HelpCard from './components/HelpCard'
 
 export default function Help() {
     return (
         <div className="flex flex-col min-h-screen">
-            <NavBar />
             <BackButton tab='Ayuda'/>
 
             <div className='m-4'>

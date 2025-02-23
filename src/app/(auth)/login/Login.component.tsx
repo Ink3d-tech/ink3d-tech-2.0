@@ -6,6 +6,9 @@ import { formFields } from "./Login.config";
 import { Divider } from "../shared/components/Divider.component";
 import { Spacer } from "../shared/components/Spacer";
 import { Routes } from "../shared/enums/Routes";
+import { FcGoogle } from "react-icons/fc";
+import Swal from "sweetalert2";
+
 
 export enum LoginFields {
     ENTER = "Entrar",
@@ -46,7 +49,15 @@ export const LoginForm: React.FC<LoginProps> = ({
 
             <Divider letter={LoginFields.OR}/>
 
-            <ButtonBase name={LoginFields.GOOGLE} variant={BtnVariant.GOOGLE}/>
+            {/* <ButtonBase name={LoginFields.GOOGLE} variant={BtnVariant.GOOGLE}/> */}
+            <button
+                type="button"
+                className="flex items-center justify-center py-2 rounded-md font-medium text-[14px] bg-white text-black border-gray-400"
+                onClick={() => Swal.fire("Función no disponible aún")}
+                >
+                <FcGoogle size={20} /> 
+                <span>Registrarse con Google</span>
+            </button>
 
             <Spacer value={34}/>
             
