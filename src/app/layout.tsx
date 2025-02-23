@@ -3,6 +3,7 @@ import "./globals.css";
 import NavBar from "@/shared/components/NavBar.component";
 import { AuthProvider } from "./(auth)/shared/context/Auth.context";
 import ExcludedPaths from "./(auth)/shared/helpers/ExcludedPath";
+import { ProductsProvider } from "./manager/Products.context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,15 +20,16 @@ export default function RootLayout({
     <html lang="en">
       
       <body>
-        <AuthProvider>
-            <main className="bg-[#D9D9D9]">
-              <ExcludedPaths >
-                <NavBar /> 
-              </ExcludedPaths>
-              
-              {children}
-            </main>
-        </AuthProvider>
+        <ProductsProvider>
+          <AuthProvider>
+              <main className="bg-[#D9D9D9]">
+                <ExcludedPaths >
+                  <NavBar /> 
+                </ExcludedPaths>
+                {children}
+              </main>
+          </AuthProvider>
+        </ProductsProvider>
       </body>
     </html>
   );

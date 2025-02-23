@@ -52,7 +52,7 @@
    const products = allProducts[category] || [];
 
    return (
-     <div className="max-w-9xl my-6 mx-6 bg-white rounded-lg">
+     <div className="max-w-9xl my-6 mx-6 bg-white rounded-lg border">
        <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">Novedades</h2>
        <div className="w-full h-px bg-gray-300 my-4"></div>
 

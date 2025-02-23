@@ -36,21 +36,17 @@ const Carousel = ({ imageIds }: CarouselProps) => {
     <Swiper
       className="relative w-full mx-auto"
       loop={true}
-      autoplay={{ delay: 40000000 }}
-      speed={500}
+      autoplay={{ delay: 4000}}
       pagination={{ clickable: true }}
       navigation={true}
-      slidesPerView={1.6}
-      centeredSlides={true}
+      slidesPerView={1}
       spaceBetween={20}
       keyboard={{ enabled: true }}
       modules={[Pagination, Navigation, Autoplay]}
-      observer={true}
-      observeParents={true}
       breakpoints={{
         640: { slidesPerView: 1 },
-        768: { slidesPerView: 1.6 },
-        1024: { slidesPerView: 2.5 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
       }}
     >
       {filteredImages.map((image, index) => (
@@ -58,7 +54,7 @@ const Carousel = ({ imageIds }: CarouselProps) => {
           <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent"></div>
           <figure className="flex justify-center">
             <Image
-              className="object-cover rounded-lg shadow-lg"
+              className="object-contain rounded-lg shadow-lg"
               src={image.name}
               alt={`imagen-${image.id}-${index}`}
               width={1920}

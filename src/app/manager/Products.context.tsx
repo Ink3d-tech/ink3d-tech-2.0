@@ -66,7 +66,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
     }
 
     const createProduct = async (product: ProductInterface): Promise<void> => {
-        await axios.post<Partial<ProductInterface>>(`${API_BACK}/products`, product)
+        await axios.post(`${API_BACK}/products`, product)
     }
 
     const filteredProducts = (selectedCategory: string): ProductInterface[] | undefined => {
@@ -75,7 +75,10 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
             : products;
     }
 
-    const getAllProducts = (): ProductInterface[] | undefined => {
+    const getAllProducts = (): ProductInterface[] => {
+        console.log('====================================');
+        console.log(products);
+        console.log('====================================');
         return products
     }
 

@@ -1,4 +1,5 @@
 import { HelpCircle, Settings, User } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 export default function Configuration() {
@@ -9,7 +10,10 @@ export default function Configuration() {
                 <div className='rounded-full bg-gray-500 p-2'>
                     <User className='fill-white'/> 
                 </div>
-                <p className='font-light'>Mi perfil</p>
+                <Link href={"/account/profile"}>
+                    <p className='font-light'>Mi perfil</p>
+                </Link>
+                
             </div>
             <div className='flex gap-4 items-center'>
                 <div className='rounded-full bg-gray-500 p-2'>

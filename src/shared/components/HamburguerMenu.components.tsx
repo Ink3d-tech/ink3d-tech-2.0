@@ -9,8 +9,8 @@ interface HamburguerMenuProps {
 export default function HamburguerMenu({ handleToggle }: HamburguerMenuProps) {
     return (
         <div>
-        <WelcomeComponent handleToggle={handleToggle}/>
-        <HamBurgerButtons handleToggle={handleToggle} />
+            <WelcomeComponent handleToggle={handleToggle}/>
+            <HamBurgerButtons handleToggle={handleToggle} />
         </div>
     );
 }
