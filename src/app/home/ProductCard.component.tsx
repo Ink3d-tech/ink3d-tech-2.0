@@ -85,7 +85,6 @@ export default ProductCard;
 //   reviews = 404,
 //   installments = "6 cuotas de $6,650",
 // }) => {
-//   Función para formatear el precio como moneda
 //   const formatPrice = (price: number) => {
 //     return price.toLocaleString("es-AR", {
 //       style: "currency",
