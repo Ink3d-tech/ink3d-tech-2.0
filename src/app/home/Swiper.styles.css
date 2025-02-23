@@ -9,6 +9,10 @@
   opacity: 0;
 }
 
+.swiper-wrapper {
+  direction: rtl !important;
+}
+
 .overlay {
   width: 100%;
   height: 100%;

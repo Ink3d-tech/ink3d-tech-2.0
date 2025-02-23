@@ -23,7 +23,7 @@ const images: IImage[] = [
   { id: 7, name: "/images/carrousel1.png" },
   { id: 8, name: "/images/carrousel1.png" },
   { id: 9, name: "/images/carrousel1.png" },
-];
+]
 
 interface CarouselProps {
   imageIds: number[];
@@ -35,8 +35,9 @@ const Carousel = ({ imageIds }: CarouselProps) => {
   return (
     <Swiper
       className="relative w-full mx-auto"
-      loop={true}
-      autoplay={{ delay: 40000000 }}
+      loop={true} // 🔹 Hace el carrusel infinito
+      loopAdditionalSlides={filteredImages.length} // 🔹 Evita espacios en blanco en el loop
+      autoplay={{ delay: 4000, reverseDirection: true }} // 🔹 Ya no hace falta `reverseDirection`
       speed={500}
       pagination={{ clickable: true }}
       navigation={true}
@@ -61,6 +62,7 @@ const Carousel = ({ imageIds }: CarouselProps) => {
               className="object-cover rounded-lg shadow-lg"
               src={image.name}
               alt={`imagen-${image.id}-${index}`}
+              loading="eager"
               width={1920}
               height={500}
               style={{
