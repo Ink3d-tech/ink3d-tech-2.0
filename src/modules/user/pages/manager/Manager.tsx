@@ -169,7 +169,7 @@ export default function Dashboard() {
           <div>
             <h2 
               className="text-3xl font-bold mb-4 cursor-pointer"
-              onClick={() => router.push("/stock")}
+              onClick={() => router.push("/manager/stock")}
             >
             🏷️ stock
             </h2>
@@ -190,7 +190,7 @@ export default function Dashboard() {
           <div>
             <h2 
               className="text-3xl font-bold mb-4 cursor-pointer"
-              onClick={() => router.push("/mycash")}
+              onClick={() => router.push("/manager/mycash")}
             >
               💲 Mi Dinero
             </h2>

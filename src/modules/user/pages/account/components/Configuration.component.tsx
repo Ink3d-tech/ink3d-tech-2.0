@@ -10,7 +10,7 @@ export default function Configuration() {
                 <div className='rounded-full bg-gray-500 p-2'>
                     <User className='fill-white'/> 
                 </div>
-                <Link href={"/account/profile"}>
+                <Link href={"/profile"}>
                     <p className='font-light'>Mi perfil</p>
                 </Link>
                 
