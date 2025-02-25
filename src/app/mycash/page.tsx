@@ -1,42 +1,59 @@
-"use client";
-import { useState } from "react";
-import { FaTruck, FaCoins } from "react-icons/fa"; // Importamos los íconos
+"use client"
+import { useState, useEffect } from "react";
+import { FaTruck, FaCoins, FaChartLine } from "react-icons/fa";
 
-export default function myCash() {
-  const [sales, setSales] = useState(15000); // Ventas totales
-  const [shippingCost, setShippingCost] = useState(3000); // Costos de envío
+export default function MyCash() {
+  const [financeData, setFinanceData] = useState({
+    totalSales: 0,
+    shippingCosts: 0,
+    netProfit: 0,
+  });
 
-  const netProfit = sales - shippingCost; // Cálculo del balance neto
+  useEffect(() => {
+    fetch("/manager/finance")
+      .then((res) => res.json())
+      .then((data) => setFinanceData(data))
+      .catch((error) => console.error("Error cargando datos:", error));
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">💰 Mi Dinero</h1>
+      <h1 className="text-4xl font-bold text-gray-800 mb-6">💰 Finanzas</h1>
 
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
-        {/* Ingresos Totales */}
-        <div className="flex items-center justify-between border-b pb-4">
-          <span className="text-lg font-semibold">Total de Ventas</span>
-          <div className="flex items-center">
-            <FaCoins className="text-yellow-500 text-2xl mr-2" />
-            <span className="text-xl font-bold text-green-600">${sales}</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+        <div className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">Total de Ventas</h3>
+            <p className="text-2xl font-bold text-green-600">${financeData.totalSales}</p>
           </div>
+          <FaCoins className="text-yellow-500 text-3xl" />
         </div>
 
-        {/* Costos de Envío */}
-        <div className="flex items-center justify-between border-b py-4">
-          <span className="text-lg font-semibold">Costos de Envío</span>
-          <div className="flex items-center">
-            <FaTruck className="text-blue-500 text-2xl mr-2" />
-            <span className="text-xl font-bold text-red-600">-${shippingCost}</span>
+        <div className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">Costos de Envío</h3>
+            <p className="text-2xl font-bold text-red-600">-${financeData.shippingCosts}</p>
           </div>
+          <FaTruck className="text-blue-500 text-3xl" />
         </div>
 
-        {/* Balance Neto */}
-        <div className="flex items-center justify-between pt-4">
-          <span className="text-lg font-semibold">Ganancias Netas</span>
-          <span className="text-2xl font-bold text-gray-900">${netProfit}</span>
+        <div className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">Ganancias Netas</h3>
+            <p className="text-2xl font-bold text-gray-900">${financeData.netProfit}</p>
+          </div>
+          <FaChartLine className="text-green-500 text-3xl" />
         </div>
       </div>
+
+      <button
+        className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700"
+        onClick={() => alert("Descargando Reporte...")}
+      >
+        📊 Descargar Reporte
+      </button>
     </div>
   );
 }
+
+

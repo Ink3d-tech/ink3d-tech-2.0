@@ -1,85 +1,86 @@
-
 "use client"
+
+
+
 import { useState } from "react";
+import { motion } from "framer-motion";
 
-const Inventory = () => {
-  const [products, setProducts] = useState([
-    { id: 1, name: "Camiseta", category: "Ropa", color: "Negro", size: "M", price: 20000, stock: 10, reference: "ABC123" },
-    { id: 2, name: "Jogger", category: "Ropa", color: "Azul Marino", size: "L", price: 30000, stock: 5, reference: "XYZ456" }
+export default function StockManagement() {
+  const [inventory, setInventory] = useState([
+    { id: 1, nombre: "Remera", talla: "M", color: "Blanco", precio: 20, stock: 10, categoria: "Ropa", descripcion: "Remera básica de algodón", imagen: "" },
+    { id: 2, nombre: "Jogger", talla: "L", color: "Negro", precio: 35, stock: 5, categoria: "Ropa Deportiva", descripcion: "Jogger cómodo para entrenar", imagen: "" },
   ]);
-  
-  const [newProduct, setNewProduct] = useState({ name: "", category: "", color: "", size: "", price: "", stock: "", reference: "" });
 
-  const handleChange = (e) => {
-    setNewProduct({ ...newProduct, [e.target.name]: e.target.value });
+  const [newItem, setNewItem] = useState({
+    nombre: "", talla: "XS", color: "Blanco", precio: 0, stock: 1, categoria: "", descripcion: "", imagen: ""
+  });
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewItem({ ...newItem, imagen: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleAddProduct = () => {
-    const updatedProducts = [...products, { ...newProduct, id: products.length + 1 }];
-    setProducts(updatedProducts);
-    setNewProduct({ name: "", category: "", color: "", size: "", price: "", stock: "", reference: "" });
+  const addItem = () => {
+    setInventory([...inventory, { ...newItem, id: Date.now() }]);
+    setNewItem({ nombre: "", talla: "XS", color: "Blanco", precio: 0, stock: 1, categoria: "", descripcion: "", imagen: "" });
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-black text-white rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">🏷️ Gestión de Stock</h1>
-      
-      {/* Tabla de Inventario */}
-      <table className="w-full border-collapse border border-gray-600 text-white">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="border border-gray-600 px-4 py-2">Referencia</th>
-            <th className="border border-gray-600 px-4 py-2">Nombre</th>
-            <th className="border border-gray-600 px-4 py-2">Categoría</th>
-            <th className="border border-gray-600 px-4 py-2">Color</th>
-            <th className="border border-gray-600 px-4 py-2">Talla</th>
-            <th className="border border-gray-600 px-4 py-2">Precio</th>
-            <th className="border border-gray-600 px-4 py-2">Stock</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className="text-center">
-              <td className="border border-gray-600 px-4 py-2">{product.reference}</td>
-              <td className="border border-gray-600 px-4 py-2">{product.name}</td>
-              <td className="border border-gray-600 px-4 py-2">{product.category}</td>
-              <td className="border border-gray-600 px-4 py-2">{product.color}</td>
-              <td className="border border-gray-600 px-4 py-2">{product.size}</td>
-              <td className="border border-gray-600 px-4 py-2">${product.price}</td>
-              <td className="border border-gray-600 px-4 py-2">{product.stock}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="min-h-screen p-6 bg-black text-white">
+      <h1 className="text-3xl font-bold mb-4 text-center">📦 Gestión de Stock</h1>
 
-      {/* Formulario para añadir productos */}
-      <div className="mt-6">
-        <h2 className="text-xl font-bold">➕ Agregar Producto</h2>
-        <input type="text" name="reference" placeholder="🔢 Referencia" onChange={handleChange} value={newProduct.reference} className="w-full p-2 border rounded mb-2 bg-gray-800" />
-        <input type="text" name="name" placeholder="📛 Nombre" onChange={handleChange} value={newProduct.name} className="w-full p-2 border rounded mb-2 bg-gray-800" />
-        <input type="text" name="category" placeholder="📂 Categoría" onChange={handleChange} value={newProduct.category} className="w-full p-2 border rounded mb-2 bg-gray-800" />
-        <select name="color" onChange={handleChange} value={newProduct.color} className="w-full p-2 border rounded mb-2 bg-gray-800">
-          <option value="">🎨 Color</option>
-          <option value="Blanco">Blanco</option>
-          <option value="Negro">Negro</option>
-          <option value="Azul Marino">Azul Marino</option>
-          <option value="Rojo">Rojo</option>
-        </select>
-        <select name="size" onChange={handleChange} value={newProduct.size} className="w-full p-2 border rounded mb-2 bg-gray-800">
-          <option value="">📏 Talla</option>
-          <option value="XS">XS</option>
-          <option value="S">S</option>
-          <option value="M">M</option>
-          <option value="L">L</option>
-          <option value="XL">XL</option>
-        </select>
-        <input type="number" name="price" placeholder="💰 Precio" onChange={handleChange} value={newProduct.price} className="w-full p-2 border rounded mb-2 bg-gray-800" />
-        <input type="number" name="stock" placeholder="📦 Stock" onChange={handleChange} value={newProduct.stock} className="w-full p-2 border rounded mb-2 bg-gray-800" />
-        <button onClick={handleAddProduct} className="bg-red-500 text-white px-4 py-2 rounded w-full">📌 Añadir Producto</button>
+      {/* Formulario para agregar stock */}
+      <motion.div className="bg-gray-800 p-6 rounded-lg shadow-md max-w-lg mx-auto"
+        initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <h2 className="text-xl font-semibold mb-4">➕ Agregar Nuevo Producto</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <input type="text" placeholder="Nombre" value={newItem.nombre} onChange={(e) => setNewItem({ ...newItem, nombre: e.target.value })} className="p-2 border rounded text-black" />
+          <select value={newItem.talla} onChange={(e) => setNewItem({ ...newItem, talla: e.target.value })} className="p-2 border rounded text-black">
+            <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option>
+          </select>
+          <select value={newItem.color} onChange={(e) => setNewItem({ ...newItem, color: e.target.value })} className="p-2 border rounded text-black">
+            <option>Blanco</option><option>Negro</option><option>Azul Marino</option><option>Rojo</option>
+          </select>
+          <input type="number" placeholder="Precio" value={newItem.precio} onChange={(e) => setNewItem({ ...newItem, precio: Number(e.target.value) })} className="p-2 border rounded text-black" />
+          <input type="number" placeholder="Stock" value={newItem.stock} onChange={(e) => setNewItem({ ...newItem, stock: Number(e.target.value) })} className="p-2 border rounded text-black" />
+          <input type="file" accept="image/*" onChange={handleImageUpload} className="p-2 border rounded text-white" />
+        </div>
+        <button onClick={addItem} className="w-full bg-green-500 text-white py-2 rounded mt-4">Agregar al Stock</button>
+      </motion.div>
+
+      {/* Tabla de Inventario */}
+      <div className="overflow-x-auto mt-6">
+        <table className="min-w-full bg-gray-900 text-white">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b">Imagen</th>
+              <th className="py-2 px-4 border-b">Producto</th>
+              <th className="py-2 px-4 border-b">Talla</th>
+              <th className="py-2 px-4 border-b">Color</th>
+              <th className="py-2 px-4 border-b">Precio</th>
+              <th className="py-2 px-4 border-b">Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            {inventory.map((item) => (
+              <tr key={item.id}>
+                <td className="py-2 px-4 border-b">{item.imagen && <img src={item.imagen} alt={item.nombre} className="w-16 h-16 object-cover" />}</td>
+                <td className="py-2 px-4 border-b">{item.nombre}</td>
+                <td className="py-2 px-4 border-b">{item.talla}</td>
+                <td className="py-2 px-4 border-b">{item.color}</td>
+                <td className="py-2 px-4 border-b">${item.precio}</td>
+                <td className="py-2 px-4 border-b">{item.stock}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-};
-
-export default Inventory;
-
+}
