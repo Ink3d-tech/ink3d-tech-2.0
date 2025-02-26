@@ -45,14 +45,14 @@ export default function CartProduct({ ProductProps, setTotalPrice, totalPrice, s
                     </span>
                 </div>
 
-                    <div className='flex flex-col grow ml-auto '>
+                    <div className='flex flex-col grow'>
                         <div className='flex justify-between items-center border border-black px-2 w-24 mx-auto'>
                             {productNumber > 1 ? <Minus size={16} color='blue' onClick={handleProductDecrease}/> : <Minus size={16} color='gray'/>}
                             <h2>{productNumber}</h2>
                             {stock > productNumber ? <Plus size={16} color='blue' onClick={handleProductIncrease}/> :<Plus color='gray' size={16}/>}                            
                         </div>
                         {stock <= productNumber ? 
-                        <p className='text-red-500 text-sm mx-auto max-w-32 text-center'>Supera las unidades disponibles</p> 
+                        <p className='text-red-500 text-sm mx-auto max-w-32 text-center'>No pueden agregarse más unidades </p> 
                         : <p className='text-gray-500 mx-auto'>Stock: {stock}</p>}
                     </div>
             </div>

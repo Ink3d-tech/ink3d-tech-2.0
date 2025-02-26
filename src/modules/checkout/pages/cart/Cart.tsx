@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { tempCartProducts } from './helpers/TempCartProducts';
 import CartProduct from './components/CartProduct';
 import { ICartProduct } from './interfaces/Cart.interface';
+import EmptyCart from './components/EmptyCart';
 
 export default function Cart() {
     const [productsOnCart, setProductsOnCart] = useState<ICartProduct[]>(tempCartProducts);
@@ -27,7 +28,7 @@ export default function Cart() {
         <div className='flex flex-col min-h-screen bg-[#D9D9D9]'>
             <BackButton tab='Carrito' />
             <div className='flex md:mt-8 mt-4 md:mx-32 mx-8 gap-8'>
-                <div className='flex flex-col grow gap-4 mr-8'>
+                {productsOnCart.length > 0 ? <div className='flex flex-col grow gap-4 mr-8'>
                     {productsOnCart.map((product) => (
                         <CartProduct 
                             ProductProps={product} 
@@ -38,12 +39,13 @@ export default function Cart() {
                             key={product.id} 
                         />
                     ))}
-                </div>
-
+                </div> : <EmptyCart />}
+                
+                
                 <div className='w-1/5 h-fit bg-white rounded'>
-                    <h2 className='p-4'>Resumen de la compra</h2>
+                    <h2 className='p-4 font-semibold'>Resumen de la compra</h2>
                     <div className='border-b-2 border-gray-200'/>
-                    <div className='m-4 flex flex-col gap-4'>
+                    {productsOnCart.length > 0 ? <div className='m-4 flex flex-col gap-4'>
                         <div className='flex justify-between'>
                             <p>Productos: ({productsOnCart.length})</p>
                             <p>$ {totalPrice}</p>
@@ -54,7 +56,7 @@ export default function Cart() {
                             <p>$ {totalPrice}</p>
                         </div>
                         <button className='bg-blue-500 text-white py-2 rounded hover:bg-blue-700 duration-200'>Confirmar Compra</button>
-                    </div>
+                    </div> : <p className='p-4 text-sm text-gray-700'>Aqui veras el total de tu compra una vez que hayas agregado productos</p>}
                 </div>
             </div>
         </div>
