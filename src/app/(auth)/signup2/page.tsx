@@ -178,3 +178,7 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+                        // COMPONENTE DEPRECADO 
+                        // ELIMINAMOS ?????
+                        // -nacho 

@@ -1,0 +1,1 @@
+export { default } from "@/modules/catalog/pages/products/pages/pantalones/Pantalones"
