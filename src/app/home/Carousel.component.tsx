@@ -47,7 +47,7 @@ const Carousel = ({ imageIds }: CarouselProps) => {
       <Swiper
         loop={true}
         autoplay={{
-          delay: firstSlide ? 1 : 4000,  // Primer slide con autoplay de 1ms (instantáneo)
+          delay: firstSlide ? 1 : 4000,
           reverseDirection: true,
         }}
         speed={500}
@@ -60,7 +60,7 @@ const Carousel = ({ imageIds }: CarouselProps) => {
         modules={[Pagination, Navigation, Autoplay]}
         observer={true}
         observeParents={true}
-        onSlideChange={handleSlideChange} // Detecta el primer movimiento
+        onSlideChange={handleSlideChange}
         breakpoints={{
           640: { slidesPerView: 1 },
           768: { slidesPerView: 2 },

@@ -32,9 +32,12 @@ const StaticCarousel = ({ imageIds }: CarouselProps) => {
   const filteredImages = images.filter((img) => imageIds.includes(img.id));
 
   return (
+    <div className="flex flex-col items-center mx-12">
     <Swiper
       className="relative w-full mx-6"
+      loop={true}
       pagination={{ clickable: true }}
+      autoplay={{ delay: 4000,}}
       slidesPerView={1}
       spaceBetween={20}
       modules={[Pagination]}
@@ -64,6 +67,7 @@ const StaticCarousel = ({ imageIds }: CarouselProps) => {
         </SwiperSlide>
       ))}
     </Swiper>
+    </div>
   );
 };
 
