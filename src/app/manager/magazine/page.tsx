@@ -13,38 +13,35 @@ interface Article {
 
 const MagazinePage: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setArticles([
-      {
-        id: 1,
-        title: "Las Tendencias Más Hot de la Temporada",
-        author: "Laura Jimenez",
-        date: "15 Feb 2024",
-        image: "/images/01.png",
-        description:
-          "Descubre las últimas tendencias en moda que están dominando las pasarelas y cómo puedes incorporarlas a tu estilo diario.",
-      },
-      {
-        id: 2,
-        title: "Secretos del Estilo Urbano Chic",
-        author: "Nacho",
-        date: "10 Feb 2024",
-        image: "/images/02.png",
-        description:
-          "Los trucos y consejos para dominar el estilo urbano sin perder la elegancia. Inspirado en las grandes ciudades del mundo.",
-      },
-      {
-        id: 3,
-        title: "Colores que Dominarán en Primavera",
-        author: "Laura Jimenez",
-        date: "05 Feb 2024",
-        image: "/images/03.png",
-        description:
-          "Una guía completa sobre los colores que serán tendencia esta primavera y cómo combinarlos para lograr un look espectacular.",
-      },
-    ]);
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch("http://localhost:3002/api/magazine");
+        if (!response.ok) {
+          throw new Error("Error al obtener los artículos");
+        }
+        const data: Article[] = await response.json();
+        setArticles(data);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
   }, []);
+
+  if (loading) {
+    return <p className="text-center text-gray-500">Cargando artículos...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center text-red-500">Error: {error}</p>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

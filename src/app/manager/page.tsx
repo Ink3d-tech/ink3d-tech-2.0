@@ -14,7 +14,10 @@ import {
 } from "recharts";
 import { useRouter } from "next/navigation";
 import React from "react";
+import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
 
+import FormMagazine from "../../shared/components/formMagazine/FormMagazine";
 
 
 export default function Dashboard() {
@@ -229,15 +232,10 @@ export default function Dashboard() {
  
  
 
-        {activeTab === "forum" && (
-          <div>
-            <h2 className="text-3xl font-bold mb-4">💬 Foro Social</h2>
+        {activeTab === "forum" && ( <FormMagazine/>
+ 
 
-
-            
-            <textarea placeholder="Escribe tu post aquí..." className="w-full p-2 border"></textarea>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2">Publicar</button>
-          </div>
+     
         )}
 
         {activeTab === "settings" && (
