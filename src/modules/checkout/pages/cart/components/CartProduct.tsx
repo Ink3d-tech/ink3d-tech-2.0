@@ -1,7 +1,7 @@
 import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
 import React, {useState } from 'react'
-import { ICartProductProps } from '../interfaces/Cart.interface';
+import { ICartProductProps, IProduct } from '../interfaces/Cart.interface';
 
 
 
@@ -24,6 +24,7 @@ export default function CartProduct({ ProductProps, setTotalPrice, totalPrice, s
     const handleProductDelete = () => {
         const newCart = productsOnCart.filter(product => product.id !== id);
         setProductsOnCart(newCart)
+        let auxCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");
         let calcTotal = totalPrice - productNumber*price
         setTotalPrice(calcTotal);
     }

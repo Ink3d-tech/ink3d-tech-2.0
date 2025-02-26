@@ -4,25 +4,39 @@ import BackButton from '@/shared/components/buttons/BackButton.component';
 import React, { useEffect, useState } from 'react';
 import { tempCartProducts } from './helpers/TempCartProducts';
 import CartProduct from './components/CartProduct';
-import { ICartProduct } from './interfaces/Cart.interface';
+import { ICartProduct, IProduct } from './interfaces/Cart.interface';
 import EmptyCart from './components/EmptyCart';
 
 export default function Cart() {
-    const [productsOnCart, setProductsOnCart] = useState<ICartProduct[]>(tempCartProducts);
+    const [productsOnCart, setProductsOnCart] = useState<ICartProduct[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     
     // Obtención del carrito acá. Llamada al back o al localStorage
     
     useEffect(() => {
-        if (productsOnCart) {
+        const localCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]")
+        if (localCart) {
             let calcTotal = 0;
-            productsOnCart?.map((product) => {
+            localCart?.map((product) => {
                 calcTotal = calcTotal + product.price;
             })
-            setProductsOnCart(productsOnCart);
+            setProductsOnCart(localCart);
             setTotalPrice(calcTotal);
         }
     }, []);
+
+
+    ////// TEMPORAL
+        const [tempCont, setTempCont] = useState(0)
+        
+    
+        const handleTempCart = () => {
+            const cart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]")
+            cart.push(tempCartProducts[tempCont])
+            localStorage.setItem("cart", JSON.stringify(cart))
+            setTempCont(tempCont+1)
+        }
+        ////////////
 
     return (
         <div className='flex flex-col min-h-screen bg-[#D9D9D9]'>
@@ -59,6 +73,10 @@ export default function Cart() {
                     </div> : <p className='p-4 text-sm text-gray-700'>Aqui veras el total de tu compra una vez que hayas agregado productos</p>}
                 </div>
             </div>
+
+            {/* TEMPORAL */}
+            <button onClick={handleTempCart}>AGREGADOR TEMPORAL</button>
+            {/* /////////// */}
         </div>
     );
 }
