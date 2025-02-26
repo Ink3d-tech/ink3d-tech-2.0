@@ -8,33 +8,28 @@ import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 interface AuthContextInterface {
-    user: UserInterface | null
     login: (loginForm: LoginInterface) => void
     signup: (signForm: SignupInterface) => void
     logout: () => void
     isAuthenticated: boolean
-    isAdmin: boolean
     token: string | null
     isLoading: boolean
 }
 
 const AuthContext = createContext<AuthContextInterface>({
-    user: null,
     login: () => {},
     logout: () => {},
     signup: () => {},
     isAuthenticated: false,
-    isAdmin: false,
     isLoading: true,
     token: null,
 })
 
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const [token, setToken] = useState<string | null>(null)
-    const [user, setUser] = useState<UserInterface | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+   
 
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -52,15 +47,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
     if(isLoading) return <Loading/>
 
-    const getIdUser = (token: string) => {
-        try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            return payload.userId;
-          } catch (error) {
-            console.error("Error al obtener el userId desde el token:", error);
-            return null;
-          }
-    };
+    
 
     interface ResponseInterface {
         token: string
@@ -95,12 +82,10 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     const value = {
-        user,
         login,
         signup,
         logout,
         isAuthenticated,
-        isAdmin,
         isLoading,
         token
     }

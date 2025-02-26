@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link';
 import { useAuth } from '@/modules/auth/shared/context/Auth.context';
 import Image from 'next/image';
@@ -14,8 +14,7 @@ export default function Welcome({ handleToggle }: WelcomeProps) {
     const logoEx = "/png-clipart-round-multicolored-logo-vanamo-logo-icons-logos-emojis-tech-companies-thumbnail.png"
 
     const { isAuthenticated } = useAuth()
-    // Del contexto 
-    // const [logged, setLogged] = useState(true);
+
 
     return (
         <div className='flex flex-col  bg-black px-5'>

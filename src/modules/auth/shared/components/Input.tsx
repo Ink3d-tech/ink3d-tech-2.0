@@ -17,7 +17,6 @@ export default function Input ({
     id,
     type,
     name,
-    placeholder ="",
     value="",
     onChange,
     error

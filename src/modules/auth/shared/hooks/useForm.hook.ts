@@ -6,6 +6,7 @@ import React, { useState } from "react"
 import { ErrorsInterface } from "../interfaces/Error.interface"
 import { Mixin } from "../components/MixinAlert"
 
+
 /**
  * Interfaz que define las propiedades requeridas para usar el hook "useForm"
  *
@@ -72,19 +73,11 @@ export function useForm<T>({
                 setIsLoading(true)
 
                 await authAction(form)
-
-                console.log(form);
    
                 Mixin.fire(messageSuccess, "", "success")
                 router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
-            } catch (error: any) {
-                const errorMessage = error.response?.data?.message
-                const messageToShow = [
-                    "Invalid password", "User does not exist"
-                ].includes(errorMessage)
-                    ? "Invalid credentials" : errorMessage
-
-                Mixin.fire(messageToShow ?? error.response?.data?.message, "", "error")
+            } catch (error: unknown) {
+                Mixin.fire("Invalid credentials", "", "error") 
             } finally {
                 setIsLoading(false)
             }
