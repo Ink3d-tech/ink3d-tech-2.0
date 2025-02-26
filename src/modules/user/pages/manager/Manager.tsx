@@ -1,6 +1,5 @@
-
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   LineChart,
   Line,
@@ -13,7 +12,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 
 
@@ -171,7 +169,7 @@ export default function Dashboard() {
           <div>
             <h2 
               className="text-3xl font-bold mb-4 cursor-pointer"
-              onClick={() => router.push("/stock")}
+              onClick={() => router.push("/manager/stock")}
             >
             🏷️ stock
             </h2>
@@ -192,7 +190,7 @@ export default function Dashboard() {
           <div>
             <h2 
               className="text-3xl font-bold mb-4 cursor-pointer"
-              onClick={() => router.push("/mycash")}
+              onClick={() => router.push("/manager/mycash")}
             >
               💲 Mi Dinero
             </h2>
@@ -232,9 +230,6 @@ export default function Dashboard() {
         {activeTab === "forum" && (
           <div>
             <h2 className="text-3xl font-bold mb-4">💬 Foro Social</h2>
-
-
-            
             <textarea placeholder="Escribe tu post aquí..." className="w-full p-2 border"></textarea>
             <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2">Publicar</button>
           </div>
