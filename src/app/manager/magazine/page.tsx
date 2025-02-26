@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface Article {
   id: number;
@@ -46,7 +47,7 @@ const MagazinePage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 overflow-y-auto">
+    <div className="min-h-screen bg-gray-100 p-8">
       <h1 className="text-5xl font-bold text-center uppercase tracking-widest mt-10 mb-10">
         Magazine
       </h1>
@@ -65,7 +66,12 @@ const MagazinePage: React.FC = () => {
               <p className="text-gray-500 text-sm">
                 {article.date} · <span className="font-bold">{article.author}</span>
               </p>
-              <h2 className="text-xl font-semibold mt-2">{article.title}</h2>
+              <Link
+                href={`/manager/magazine/${article.id}`}
+                className="text-xl font-semibold mt-2 text-blue-600 hover:underline"
+              >
+                {article.title}
+              </Link>
               <p className="text-gray-600 mt-2 flex-grow">{article.description}</p>
             </div>
           </div>
@@ -76,3 +82,4 @@ const MagazinePage: React.FC = () => {
 };
 
 export default MagazinePage;
+
