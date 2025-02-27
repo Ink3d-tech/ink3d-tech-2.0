@@ -18,6 +18,7 @@ import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 
 import FormMagazine from "../../shared/components/formMagazine/FormMagazine";
+import Stock from "../../shared/components/stock/Stock";
 
 
 export default function Dashboard() {
@@ -162,24 +163,8 @@ export default function Dashboard() {
             </table>
           </div>
         )}
-         <button
-            className={`w-full text-left px-3 py-2 rounded-lg ${
-              activeTab === "invent" ? "bg-gray-700" : ""
-            }`}
-            onClick={() => setActiveTab("invent")}
-          >
-            🏷️ Stock
-          </button>
-        {activeTab === "invent" && (
-          <div>
-            <h2 
-              className="text-3xl font-bold mb-4 cursor-pointer"
-              onClick={() => router.push("/stock")}
-            >
-            🏷️ stock
-            </h2>
-          </div>
-        )}
+       
+        {activeTab === "invent" && (  <Stock/>)}
 
            <button
             
