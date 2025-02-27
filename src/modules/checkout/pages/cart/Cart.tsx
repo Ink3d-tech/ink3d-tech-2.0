@@ -53,7 +53,7 @@ export default function Cart() {
     }
 
 
-    ////// TEMPORAL
+        ////// TEMPORAL
         const [tempCont, setTempCont] = useState(0)
         
     
