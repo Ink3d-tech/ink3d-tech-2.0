@@ -14,12 +14,9 @@ export default function Home() {
       </div>
       <Carousel imageIds={[1, 2, 3]} />
       <ButtonsMini />
-      {/* <Buttons /> */}
       <ProductList category="remeras" />
-
       <StaticCarousel imageIds={[4, 5, 6]} />
       <ProductList category="buzos"/>
-
       <StaticCarousel imageIds={[7, 8, 9]} />
       <ProductList category="pantalones"/>
       <ScrollToTop />
