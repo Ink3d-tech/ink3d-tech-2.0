@@ -4,10 +4,10 @@ import BackButton from '@/shared/components/buttons/BackButton.component';
 import React, { useEffect, useState } from 'react';
 import { tempCartProducts } from './helpers/TempCartProducts';
 import CartProduct from './components/CartProduct';
-import { IFilteredCart, IProduct } from './interfaces/Cart.interface';
+import { IProduct } from './interfaces/Cart.interface';
 import EmptyCart from './components/EmptyCart';
 import { useAuth } from '@/modules/auth/shared/context/Auth.context';
-import { confirmOrderService } from './services/cart.services';
+import { confirmOrderService, paymentCreate } from './services/cart.services';
 
 export default function Cart() {
     const [productsOnCart, setProductsOnCart] = useState<IProduct[]>([]);
@@ -30,9 +30,26 @@ export default function Cart() {
 
     const handleConfirmPurchase = () => {
         const userBuyer = getIdUser(localStorage.getItem("token") || "");
-        const confirmedCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");        
-        const filteredCart: IFilteredCart[] = confirmedCart.map(({ id, units }) => ({ id, units }));
-        confirmOrderService(userBuyer, filteredCart, token)
+        const confirmedCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");   
+
+        confirmOrderService(userBuyer, confirmedCart, token)
+    //         .then(order => {
+    //         const orderId = order.id;
+    //         const products = order.orderDetails;
+
+    //     console.log("ID de la orden:", orderId);
+    //     console.log("Productos de la orden:", products);
+    // })
+    // .catch(error => console.error("Error al crear la orden:", error));
+        
+        const exampleCurrency = "USD";
+
+
+
+        // const paymentData = paymentCreate()
+
+        localStorage.removeItem("cart");
+
     }
 
 
@@ -60,7 +77,7 @@ export default function Cart() {
                             totalPrice={totalPrice} 
                             productsOnCart={productsOnCart}
                             setProductsOnCart={setProductsOnCart}
-                            key={product.id + product.talle} 
+                            key={product.id} 
                         />
                     ))}
                 </div> : <EmptyCart />}
