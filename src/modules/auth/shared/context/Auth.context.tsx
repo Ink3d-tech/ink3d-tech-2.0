@@ -16,6 +16,7 @@ interface AuthContextInterface {
     isAdmin: boolean
     token: string | null
     isLoading: boolean
+    getIdUser: (token: string) => string
 }
 
 const AuthContext = createContext<AuthContextInterface>({
@@ -27,6 +28,7 @@ const AuthContext = createContext<AuthContextInterface>({
     isAdmin: false,
     isLoading: true,
     token: null,
+    getIdUser: () => ""
 })
 
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
@@ -56,10 +58,10 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
             return payload.userId;
-          } catch (error) {
+        } catch (error) {
             console.error("Error al obtener el userId desde el token:", error);
             return null;
-          }
+        }
     };
 
     interface ResponseInterface {
@@ -102,7 +104,8 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         isAuthenticated,
         isAdmin,
         isLoading,
-        token
+        token,
+        getIdUser
     }
 
    return (
