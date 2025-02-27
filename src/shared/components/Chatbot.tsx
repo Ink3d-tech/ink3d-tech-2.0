@@ -103,10 +103,10 @@ export default function Chatbot() {
   }, [isOpen, chatSize]);
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-6 right-5 z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
+        className="bg-blue-500 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110"
       >
         <MessageSquareMoreIcon />
       </button>
