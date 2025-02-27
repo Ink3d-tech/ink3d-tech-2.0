@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/app/(auth)/shared/context/Auth.context";
+import { useAuth } from "../../modules/auth/shared/context/Auth.context";
 import { AuthRequiredComponent } from "./AuthRequiredComponent";
 
 const ProtectedRouteAdmin = ({ children, title }: { children: React.ReactNode; title?: string }) => {
@@ -9,3 +9,4 @@ const ProtectedRouteAdmin = ({ children, title }: { children: React.ReactNode; t
 };
 
 export default ProtectedRouteAdmin;
+

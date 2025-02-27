@@ -1,5 +1,5 @@
-"use client"
-import { useState } from "react";
+"use client";
+import { useState, ChangeEvent } from "react";
 
 const GestionProductos = () => {
   const [step, setStep] = useState(1);
@@ -11,21 +11,23 @@ const GestionProductos = () => {
     price: "",
     stock: "",
     discount: "",
-    images: []
+    images: [] as File[],
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e) => {
-    setFormData({ ...formData, images: [...formData.images, ...e.target.files] });
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFormData({ ...formData, images: [...formData.images, ...Array.from(e.target.files)] });
+    }
   };
 
   return (
     <div className="max-w-lg mx-auto  mt-10 p-6 bg-black text-white rounded-lg">
       <h1 className="text-2xl font-bold mb-4">🛍️ Gestión de Productos</h1>
-      
+
       {step === 1 && (
         <div>
           <h2 className="text-xl font-bold mb-2">1️⃣ Características</h2>
@@ -53,7 +55,7 @@ const GestionProductos = () => {
           <input type="number" name="price" placeholder="💰 Precio" onChange={handleChange} className="w-full p-2 border rounded mb-2" />
         </div>
       )}
-      
+
       {step === 2 && (
         <div>
           <h2 className="text-xl font-bold mb-2">2️⃣ Stock y Descuentos</h2>
@@ -61,14 +63,14 @@ const GestionProductos = () => {
           <input type="number" name="discount" placeholder="🔖 Descuento (%)" onChange={handleChange} className="w-full p-2 border rounded mb-2" />
         </div>
       )}
-      
+
       {step === 3 && (
         <div>
           <h2 className="text-xl font-bold mb-2">3️⃣ Imágenes</h2>
           <input type="file" multiple onChange={handleImageChange} className="w-full p-2 border rounded mb-2" />
         </div>
       )}
-      
+
       <div className="flex justify-between mt-4">
         {step > 1 && <button onClick={() => setStep(step - 1)} className="bg-red-500 text-white px-4 py-2 rounded">⬅️ Atrás</button>}
         {step < 3 ? (

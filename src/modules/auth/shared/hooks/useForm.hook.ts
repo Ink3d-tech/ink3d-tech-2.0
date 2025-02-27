@@ -72,8 +72,6 @@ export function useForm<T>({
                 setIsLoading(true)
 
                 await authAction(form)
-
-                console.log(form);
    
                 Mixin.fire(messageSuccess, "", "success")
                 router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
