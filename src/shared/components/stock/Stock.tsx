@@ -25,7 +25,7 @@ export default function Stock() {
   // Obtener movimientos de stock desde el backend
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:3002/stock-movements")
+    fetch("https://project-ink3d-back-1.onrender.com/stock-movements")
       .then(res => {
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         return res.json();
