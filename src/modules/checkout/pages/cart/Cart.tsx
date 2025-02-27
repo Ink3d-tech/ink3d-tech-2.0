@@ -33,22 +33,6 @@ export default function Cart() {
         const confirmedCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");   
 
         confirmOrderService(userBuyer, confirmedCart, token)
-    //         .then(order => {
-    //         const orderId = order.id;
-    //         const products = order.orderDetails;
-
-    //     console.log("ID de la orden:", orderId);
-    //     console.log("Productos de la orden:", products);
-    // })
-    // .catch(error => console.error("Error al crear la orden:", error));
-        
-        const exampleCurrency = "USD";
-
-
-
-        // const paymentData = paymentCreate()
-
-        localStorage.removeItem("cart");
 
     }
 
