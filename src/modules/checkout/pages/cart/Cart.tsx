@@ -28,13 +28,29 @@ export default function Cart() {
         }
     }, []);
 
-    const handleConfirmPurchase = () => {
+    const handleConfirmPurchase = async () => {
         const userBuyer = getIdUser(localStorage.getItem("token") || "");
-        const confirmedCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");   
+        const confirmedCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    
+        const data = await confirmOrderService(userBuyer, confirmedCart, token)
+            // .then((order) => {
+            //     const orderId = order.id;
+            //     const currency = order.currency;
+            //     const products = order.orderDetails.map((product: any) => ({
+            //         id: product.productId,
+            //         price: product.priceAtPurchase,
+            //         quantity: product.quantity
+            //     }));
 
-        confirmOrderService(userBuyer, confirmedCart, token)
+                console.log(data);
+                
 
-    }
+            // })
+            // .catch((error) => {
+            //     console.error("Error al confirmar la compra:", error);
+            // });
+    };
+    
 
 
         ////// TEMPORAL

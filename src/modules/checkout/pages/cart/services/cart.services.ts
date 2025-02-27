@@ -39,6 +39,9 @@ export const paymentCreate = async (orderId: string, currency: string, confirmed
             }))
         };
 
+        console.log("Enviando pago:", JSON.stringify(body, null, 2));
+        console.log("Llamando a:", `${API_BACK}/payments`);
+
         const { data } = await axios.post(
             `${API_BACK}/payments`, 
             body,
