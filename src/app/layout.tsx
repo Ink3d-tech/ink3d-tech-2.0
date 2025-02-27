@@ -7,8 +7,7 @@ import { ProductsProvider } from "../modules/user/pages/manager/context/Products
 
 import Chatbot from "@/shared/components/Chatbot";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
-import { ColorsProvider } from "@/modules/user/pages/manager/context/Colors.context";
-import { SizesProvider } from "@/modules/user/pages/manager/context/Sizes.context";
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,8 +26,6 @@ export default function RootLayout({
       <body>
         <CategoriesProvider>
           <ProductsProvider>
-            <ColorsProvider>
-              <SizesProvider>
                 <AuthProvider>
                     <ExcludedPaths >
                       <NavBar /> 
@@ -38,8 +35,6 @@ export default function RootLayout({
                     </main>
                     {/* <Chatbot/> */}
                 </AuthProvider>
-              </SizesProvider>
-            </ColorsProvider>
           </ProductsProvider>
         </CategoriesProvider>
       </body>

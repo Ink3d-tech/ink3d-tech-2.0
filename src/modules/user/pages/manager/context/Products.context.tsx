@@ -20,8 +20,8 @@ export interface ProductInterface {
     price: number | ""
     stock: number | ""
     image: string[]
-    size: string[]
-    color: string[]
+    size: string
+    color: string
     discount?: number | ""
     category: string
     isActive?: boolean
