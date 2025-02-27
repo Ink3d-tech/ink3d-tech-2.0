@@ -77,7 +77,7 @@ export default function Cart() {
                             totalPrice={totalPrice} 
                             productsOnCart={productsOnCart}
                             setProductsOnCart={setProductsOnCart}
-                            key={product.id + product.talle} 
+                            key={product.id} 
                         />
                     ))}
                 </div> : <EmptyCart />}
