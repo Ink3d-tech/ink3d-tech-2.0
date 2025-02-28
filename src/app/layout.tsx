@@ -27,9 +27,9 @@ export default function RootLayout({
               <main className="bg-[#D9D9D9]">
                 <Chatbot />
                 
-                <ExcludedPaths >
+                {/* <ExcludedPaths > */}
                   <NavBar /> 
-                </ExcludedPaths>
+                {/* </ExcludedPaths> */}
                 {children}
               </main>
           </AuthProvider>

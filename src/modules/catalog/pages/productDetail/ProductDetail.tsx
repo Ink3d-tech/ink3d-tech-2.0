@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
-import { Heart } from "lucide-react"; // Importamos el ícono de corazón
+import { Heart } from "lucide-react";
 
 interface Product {
   id: string;
@@ -13,6 +13,7 @@ interface Product {
   description: string;
   category: string;
   image: string;
+  size?: string;
 }
 
 export default function ProductDetail() {
@@ -23,7 +24,8 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFavorited, setIsFavorited] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -33,6 +35,7 @@ export default function ProductDetail() {
         const response = await fetch(`https://project-ink3d-back-1.onrender.com/products/${id}`);
         const data = await response.json();
         setProduct(data);
+        setSelectedSize(data.size || null);
       } catch (error) {
         setError((error as Error).message);
       } finally {
@@ -44,13 +47,16 @@ export default function ProductDetail() {
   }, [id]);
 
   const handleFavoriteClick = () => {
-    const newState = !isFavorited;
-    setIsFavorited(newState);
-    setNotificationMessage(newState ? "Se añadió a favoritos!" : "Se quitó de favoritos!");
+    setIsFavorited(!isFavorited);
+    setShowNotification(true);
 
     setTimeout(() => {
-      setNotificationMessage(null);
+      setShowNotification(false);
     }, 2000);
+  };
+
+  const handleSizeSelect = (size: string) => {
+    setSelectedSize(size);
   };
 
   if (loading) return <p className="text-gray-500 text-center mt-10">Cargando producto...</p>;
@@ -62,7 +68,6 @@ export default function ProductDetail() {
       <BackButton tab="Producto" />
       <div className="min-h-screen flex items-center justify-center bg-gray-300 p-6">
         <div className="bg-white shadow-lg rounded-lg p-6 max-w-4xl w-full flex flex-col md:flex-row gap-6 relative">
-
           <button
             className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
             onClick={handleFavoriteClick}
@@ -70,24 +75,21 @@ export default function ProductDetail() {
             <Heart size={20} fill={isFavorited ? "black" : "none"} stroke="black" />
           </button>
 
-          {/* Notificación dinámica */}
-          {notificationMessage && (
+          {showNotification && (
             <div className="absolute -top-9 right-0 bg-black text-white text-sm px-3 py-1 rounded-md shadow-lg animate-fade-in">
-              {notificationMessage}
+              {isFavorited ? "Se añadió a favoritos!" : "Se quitó de favoritos!"}
             </div>
           )}
 
-          {product.image && (
-            <div className="flex-shrink-0">
-              <Image
-                src={product.image}
-                alt={product.name}
-                width={400}
-                height={400}
-                className="rounded-lg object-cover w-full md:w-[400px] h-auto"
-              />
-            </div>
-          )}
+          <div className="flex-shrink-0">
+            <Image
+              src={product.image || "/placeholder-image.png"} // Imagen por defecto si no hay imagen
+              alt={product.name}
+              width={400}
+              height={400}
+              className="rounded-lg object-cover w-full md:w-[400px] h-auto"
+            />
+          </div>
 
           <div className="flex flex-col justify-between flex-grow">
             <div>
@@ -114,13 +116,19 @@ export default function ProductDetail() {
                   {["S", "M", "L", "XL"].map((size) => (
                     <button
                       key={size}
-                      className="px-3 py-2 border rounded-md hover:bg-gray-200 transition"
+                      onClick={() => handleSizeSelect(size)}
+                      className={`px-3 py-2 border rounded-md transition ${
+                        selectedSize === size
+                          ? "bg-black text-white border-black"
+                          : "hover:bg-gray-200"
+                      }`}
                     >
                       {size}
                     </button>
                   ))}
                 </div>
               </div>
+
               <div className="flex gap-4">
                 <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
                   Agregar al carrito 🛒
