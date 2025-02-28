@@ -79,7 +79,7 @@ export default function ProductDetail() {
     <div>
       <BackButton tab="Producto" />
       <div className="min-h-screen flex items-center justify-center bg-gray-300 p-6">
-        <div className="bg-white shadow-lg rounded-lg p-6 max-w-4xl w-full flex flex-col md:flex-row gap-6 relative">
+        <div className="bg-white shadow-lg rounded-lg p-6 max-w-4xl mx-auto pr-10 flex flex-col md:flex-row gap-6 relative">
           <button
             className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
             onClick={handleFavoriteClick}
@@ -103,11 +103,9 @@ export default function ProductDetail() {
             />
           </div>
 
-          <div className="flex flex-col justify-between flex-grow">
+          <div className="flex flex-col justify-center flex-grow">
             <div>
               <h2 className="text-3xl font-bold">{product.name}</h2>
-              <p className="text-gray-500 text-lg mt-2">{product.description}</p>
-
               {typeof product.category === "string" ? (
                 <span className="text-xs font-bold text-blue-700 bg-blue-200 px-2 py-1 uppercase mt-2 inline-block">
                   {product.category}
@@ -117,6 +115,8 @@ export default function ProductDetail() {
                   Asian
                 </span>
               )}
+              <p className="text-gray-500 text-lg mt-2">{product.description}</p>
+
 
               <p className="text-3xl font-bold text-black mt-4">${product.price}</p>
             </div>
