@@ -4,8 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { getAuthHeaders } from "./getAuthHeaders";
-import { Color } from "../pages/management/Managment";
-
 
 
 export interface CategoryInterface {
@@ -51,7 +49,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
     const [products, setProducts] = useState<ProductInterface[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | undefined>();
-
+    console.log(products)
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -71,32 +69,9 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
 
     const createProduct = async (product: ProductInterface): Promise<void> => {      
         try {
-            
-
-            console.log('====================================');
-            console.log('=== PRODUCTO ANTES DE LIMPIEZA ===', product);
-            console.log('====================================');
-            const cleanProduct: ProductInterface = {
-                ...product,
-                price: Number(product.price),
-                stock: Number(product.stock),
-
-            } 
-            console.log('====================================');
-            console.log('=== PRODUCTO LIMPIO PARA API ===', cleanProduct);
-            console.log('====================================');
-            const res = await axios.post<ProductInterface>(`http://localhost:3000/products`, product,  getAuthHeaders());
-            
-            console.log('====================================');
-            console.log("RESPUESTA DESPUES DEL RES", res.data);
-            console.log('====================================');
-
-
+            const res = await axios.post<ProductInterface>(`${API_BACK}/products`, product,  getAuthHeaders());
             setProducts(prev => [...prev, res.data]);
         } catch (error) {
-            console.log('====================================');
-            console.log("SALIO ERROR", error);
-            console.log('====================================');
             setError(error instanceof Error ? error.message : "Error al crear el producto");
         }
     };
