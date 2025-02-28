@@ -52,19 +52,16 @@ export default function ProductsPage() {
           {products.map((product) => (
             <Link key={product.id} href={`/productDetail/${product.id}`} passHref>
               <div className="flex flex-col items-center bg-white overflow-hidden shadow-lg rounded-lg cursor-pointer transition-transform transform hover:scale-105">
-                <div className="w-full overflow-hidden">
-                  {product.image ? (
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={800}
-                      height={800}
-                      className="w-full h-auto object-cover"
-                    />
-                  ) : (
-                    <span className="text-gray-500">Imagen no disponible</span>
-                  )}
-                </div>
+              <div className="w-full overflow-hidden">
+  <Image
+    src={product.image || "/placeholder-image.png"} // Imagen por defecto si no hay imagen
+    alt={product.name}
+    width={800}
+    height={800}
+    className="w-full h-auto object-cover"
+  />
+</div>
+
 
                 <div className="p-4 text-center">
                   {typeof product.category === "string" ? (
