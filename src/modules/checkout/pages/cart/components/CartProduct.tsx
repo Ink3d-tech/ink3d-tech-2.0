@@ -7,24 +7,39 @@ import { ICartProductProps, IProduct } from '../interfaces/Cart.interface';
 
 export default function CartProduct({ ProductProps, setTotalPrice, totalPrice, setProductsOnCart, productsOnCart }: ICartProductProps) {
 
-    const {id, name, image, category, price, stock} = ProductProps;
+    const {id, name, image, category, price, stock, talle, units} = ProductProps;
 
-    const [productNumber, setProductNumber] = useState<number>(1);
+    const [productNumber, setProductNumber] = useState<number>(units);
 
     const handleProductIncrease = () => {
-        setProductNumber(productNumber+1)
+        setProductNumber(productNumber+1);
+        const newCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");
+        newCart.map((product) => {
+            if(product.id === id) {
+                product.units++;
+            }
+        localStorage.setItem("cart", JSON.stringify(newCart));
+        })
         setTotalPrice(totalPrice + price)
     }
 
     const handleProductDecrease = () => {
-        setProductNumber(productNumber-1)
+        setProductNumber(productNumber-1);
+        const newCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");
+        newCart.map((product) => {
+            if(product.id === id) {
+                product.units--;
+            }
+        localStorage.setItem("cart", JSON.stringify(newCart));
+        })
+        setTotalPrice(totalPrice + price)
         setTotalPrice(totalPrice - price)
     }
 
     const handleProductDelete = () => {
         const newCart = productsOnCart.filter(product => product.id !== id);
         setProductsOnCart(newCart)
-        let auxCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");
+        localStorage.setItem("cart", JSON.stringify(newCart));
         let calcTotal = totalPrice - productNumber*price
         setTotalPrice(calcTotal);
     }
@@ -37,7 +52,10 @@ export default function CartProduct({ ProductProps, setTotalPrice, totalPrice, s
                 
                     <Image src={image} alt={`Imagen de ${name}`} width={100} height={64}/>
                 <div className='flex flex-col justify-between w-72'>
-                    <h2>{name}</h2>
+                    <div>
+                        <h2>{name}</h2>
+                        <p className='text-sm text-gray-400'>Talle: {talle}</p>
+                    </div>
                     <button className='text-xs text-blue-400 font-semibold  px-2 py-1 w-fit'
                     onClick={handleProductDelete}
                     >Eliminar</button>

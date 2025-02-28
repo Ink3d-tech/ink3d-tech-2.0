@@ -4,12 +4,15 @@ import BackButton from '@/shared/components/buttons/BackButton.component';
 import React, { useEffect, useState } from 'react';
 import { tempCartProducts } from './helpers/TempCartProducts';
 import CartProduct from './components/CartProduct';
-import { ICartProduct, IProduct } from './interfaces/Cart.interface';
+import { IProduct } from './interfaces/Cart.interface';
 import EmptyCart from './components/EmptyCart';
+import { useAuth } from '@/modules/auth/shared/context/Auth.context';
+import { confirmOrderService, paymentCreate } from './services/cart.services';
 
 export default function Cart() {
-    const [productsOnCart, setProductsOnCart] = useState<ICartProduct[]>([]);
+    const [productsOnCart, setProductsOnCart] = useState<IProduct[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
+    const { getIdUser, token } = useAuth();
     
     // Obtención del carrito acá. Llamada al back o al localStorage
     
@@ -18,15 +21,23 @@ export default function Cart() {
         if (localCart) {
             let calcTotal = 0;
             localCart?.map((product) => {
-                calcTotal = calcTotal + product.price;
+                calcTotal = calcTotal + product.price*product.units;
             })
             setProductsOnCart(localCart);
             setTotalPrice(calcTotal);
         }
     }, []);
 
+    const handleConfirmPurchase = () => {
+        const userBuyer = getIdUser(localStorage.getItem("token") || "");
+        const confirmedCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");   
 
-    ////// TEMPORAL
+        confirmOrderService(userBuyer, confirmedCart, token)
+
+    }
+
+
+        ////// TEMPORAL
         const [tempCont, setTempCont] = useState(0)
         
     
@@ -41,7 +52,7 @@ export default function Cart() {
     return (
         <div className='flex flex-col min-h-screen bg-[#D9D9D9]'>
             <BackButton tab='Carrito' />
-            <div className='flex md:mt-8 mt-4 md:mx-32 mx-8 gap-8'>
+            <div className='flex md:mt-8 mt-4 lg:mx-32 mx-8 gap-8'>
                 {productsOnCart.length > 0 ? <div className='flex flex-col grow gap-4 mr-8'>
                     {productsOnCart.map((product) => (
                         <CartProduct 
@@ -69,7 +80,7 @@ export default function Cart() {
                             <p>Total</p>
                             <p>$ {totalPrice}</p>
                         </div>
-                        <button className='bg-blue-500 text-white py-2 rounded hover:bg-blue-700 duration-200'>Confirmar Compra</button>
+                        <button onClick={handleConfirmPurchase} className='bg-blue-500 text-white py-2 rounded hover:bg-blue-700 duration-200'>Confirmar Compra</button>
                     </div> : <p className='p-4 text-sm text-gray-700'>Aqui veras el total de tu compra una vez que hayas agregado productos</p>}
                 </div>
             </div>
