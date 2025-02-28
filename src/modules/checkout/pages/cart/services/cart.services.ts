@@ -9,6 +9,10 @@ export const confirmOrderService = async (
     token: string | null
 ): Promise<{ orderId: string, currency: string, products: { id: string, price: number, quantity: number }[] }> => {
     try {
+
+        console.log(`id del USER ${userBuyer}`);
+        
+
         const body = {
             userId: userBuyer,
             products: confirmedCart.map(({ id, units }) => ({
@@ -20,7 +24,7 @@ export const confirmOrderService = async (
         // console.log("Body de la request order:", JSON.stringify(body, null, 2));
         
 
-        const { data } = await axios.post<IOrder>(`${API_BACK}/orders`, body, {
+        const { data } = await axios.post<IOrder>(`http://localhost:3000/orders`, body, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,

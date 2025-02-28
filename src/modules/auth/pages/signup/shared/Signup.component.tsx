@@ -26,6 +26,13 @@ export const SignupForm: React.FC<SignupFormProps> = ({
     handlerSubmit,
     isLoading,
 }) => {
+
+    const handleGoogleAuth = () => {
+
+        window.location.href = "http://localhost:3000/auth/google/login";
+    
+    }
+
     return (
         <form onSubmit={handlerSubmit} className="flex flex-col px-4 mx-auto max-w-[402px] h-screen">  
             <FormComponent 
@@ -44,7 +51,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             <button
                 type="button"
                 className="flex items-center justify-center py-2 rounded-md font-medium text-[14px] bg-white text-black border-gray-400"
-                onClick={() => Swal.fire("Función no disponible aún")}
+                onClick={handleGoogleAuth}
                 >
                 <FcGoogle size={20} /> 
                 <span>Registrarse con Google</span>
