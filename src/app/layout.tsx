@@ -5,6 +5,7 @@ import { AuthProvider } from "@/modules/auth/shared/context/Auth.context"
 import ExcludedPaths from "../modules/auth/shared/helpers/ExcludedPath";
 import { ProductsProvider } from "../modules/user/pages/manager/context/Products.context";
 import Chatbot from "@/shared/components/Chatbot";
+import Footer from "@/shared/components/footer/Footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -34,6 +35,8 @@ export default function RootLayout({
               </main>
           </AuthProvider>
         </ProductsProvider>
+        <Footer/>
+
       </body>
     </html>
   );

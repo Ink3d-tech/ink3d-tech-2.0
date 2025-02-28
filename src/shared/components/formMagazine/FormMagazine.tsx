@@ -33,8 +33,8 @@ export default function FormMagazine() {
     };
 
     try {
-      const response = await fetch("http://localhost:3002/api/magazine", {
-        method: "POST",
+      const response = await fetch("https://project-ink3d-back-1.onrender.com/api/magazine", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },

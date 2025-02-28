@@ -14,8 +14,8 @@ import {
 } from "recharts";
 import { useRouter } from "next/navigation";
 import React from "react";
-import "react-quill/dist/quill.snow.css";
-import ReactQuill from "react-quill";
+
+import Stock from "../../shared/components/stock/Stock"
 
 import FormMagazine from "../../shared/components/formMagazine/FormMagazine";
 
@@ -170,15 +170,7 @@ export default function Dashboard() {
           >
             🏷️ Stock
           </button>
-        {activeTab === "invent" && (
-          <div>
-            <h2 
-              className="text-3xl font-bold mb-4 cursor-pointer"
-              onClick={() => router.push("/stock")}
-            >
-            🏷️ stock
-            </h2>
-          </div>
+        {activeTab === "invent" && (<Stock/>
         )}
 
            <button
