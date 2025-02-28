@@ -123,8 +123,6 @@
 //     return context
 // }
 
-
-
 "use client";
 
 import React, { useState, useContext, createContext, useEffect } from "react";
@@ -155,28 +153,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-
-        if (storedToken) {
-            setToken(storedToken);
-            setIsAuthenticated(true);
-
-            const userId = getIdUser(storedToken);
-            if (userId) {
-                setUser({ id: userId });
-            }
-        } else {
-            setToken(null);
-            setIsAuthenticated(false);
-            setUser(null);
-        }
-
-        setIsLoading(false);
-    }, []);
-
-    if (isLoading) return <Loading />;
-
+    // Obtener el userId del token
     const getIdUser = (token: string): string | null => {
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
@@ -187,6 +164,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    // Efecto para verificar si hay un token guardado
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+
+        if (storedToken) {
+            try {
+                const payload = JSON.parse(atob(storedToken.split(".")[1]));
+                const isExpired = payload.exp * 1000 < Date.now();
+
+                if (isExpired) {
+                    logout();
+                } else {
+                    setToken(storedToken);
+                    setIsAuthenticated(true);
+                    setUser({ id: payload.userId, email: payload.email });
+                    setIsAdmin(payload.role === "admin");
+                }
+            } catch (error) {
+                console.error("Error al decodificar el token:", error);
+                logout();
+            }
+        } else {
+            setIsAuthenticated(false);
+            setToken(null);
+            setUser(null);
+        }
+
+        setIsLoading(false);
+    }, []);
+
+    // Actualiza la navbar cuando el usuario cambia
+    useEffect(() => {
+        // Aquí podrías agregar un estado global o evento para notificar a la Navbar
+    }, [isAuthenticated]);
+
+    if (isLoading) return <Loading />;
+
+    // Interfaces de respuesta del backend
     interface ResponseInterface {
         token: string;
         message: string;
@@ -200,13 +215,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userId: string;
     }
 
+    // Función para iniciar sesión
     const login = async (loginForm: LoginInterface): Promise<void> => {
         try {
             const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm);
 
+            localStorage.setItem("token", data.token);
             setToken(data.token);
             setIsAuthenticated(true);
-            localStorage.setItem("token", data.token);
 
             const payload: TokenInterface = JSON.parse(atob(data.token.split(".")[1]));
             setUser({ id: payload.userId, email: payload.email });
@@ -215,9 +231,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             console.error("Error en login:", error);
             setIsAuthenticated(false);
             setToken(null);
+            setUser(null);
         }
     };
 
+   
+    
+
+    // Función para registrarse
     const signup = async (signupForm: SignupInterface): Promise<void> => {
         try {
             await axios.post(`${API_BACK}/auth/signup`, signupForm);
@@ -226,6 +247,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    // Función para cerrar sesión
     const logout = (): void => {
         localStorage.removeItem("token");
         setIsAuthenticated(false);
@@ -249,6 +271,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// Hook personalizado para acceder al contexto
 export const useAuth = (): AuthContextInterface => {
     const context = useContext(AuthContext);
     if (!context) throw new Error("useAuth must be used within an AuthProvider");
