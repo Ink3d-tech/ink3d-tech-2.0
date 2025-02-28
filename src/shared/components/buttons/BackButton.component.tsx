@@ -20,7 +20,7 @@ export default function BackButton( { tab }: BackButtonProps ) {
     };
 
     return (
-        <div className='bg-black h-12 flex items-center px-3'>
+        <div className='bg-black h-12 flex items-center px-3 mt-12'>
             <ArrowLeft onClick={handleReturn} color='gray' size={22} className='cursor-pointer'/>
             <h1 className='text-some-gray ml-2 text-base'>{tab}</h1>
         </div>

@@ -5,7 +5,7 @@ import BackButton from "@/shared/components/buttons/BackButton.component";
 
 const categoriesData = [
   { name: "MOTOSPORTS", image: "/images/LogoMotorsport.png", link: "/comingsoon" },
-  { name: "ASIAN", image: "/images/LogoAsian.png", link: "/comingsoon" },
+  { name: "ASIAN", image: "/images/LogoAsian.png", link: "/products" },
   { name: "STREETWEAR", image: "/images/LogoMotorsport.png", link: "/comingsoon" },
 ];
 const Categories = () => {
