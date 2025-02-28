@@ -414,8 +414,6 @@ export const ManagmentProductForm = () => {
                     )}   
                 </div> 
 
-
-
                 {/* ########################### COLORES ########################### */}
                     
                 <div className="relative w-full">
@@ -448,12 +446,7 @@ export const ManagmentProductForm = () => {
                     )}
                 </div>
             </div> 
-         
-                
-
-
-
-
+      
 
             {/* ############################### MAS OPCIONES ############################### */}
 
