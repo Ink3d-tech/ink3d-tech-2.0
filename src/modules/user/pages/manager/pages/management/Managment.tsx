@@ -8,6 +8,7 @@ import { ProductInterface, useProducts } from "../../context/Products.context";
 import { Plus, X } from "lucide-react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
+
 import { PlusOption } from "./components/PlusOption.component";
 
 interface Size {
@@ -53,17 +54,8 @@ const FORM_PRODUCT_INTIAL: ProductInterface = {
 
 
 export const ManagmentProductForm = () => {
-    const [formProduct, setFormProduct] = useState<ProductInterface>({
-        name: "",
-        description: "",
-        image: [],
-        price: "",
-        stock: "",
-        category: "",
-        size: "",
-        isActive: false,
-        color: ""
-    })
+    const [formProduct, setFormProduct] = useState<ProductInterface>(FORM_PRODUCT_INTIAL)
+
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 
@@ -74,10 +66,6 @@ export const ManagmentProductForm = () => {
 
     const [cloudinary, setCloudinary] = useState<string[]>([])
 
-
-  
-
-  
     
     const handleCloudinary = async (file: File) => {
         const formData = new FormData();
@@ -101,11 +89,12 @@ export const ManagmentProductForm = () => {
         }
     };
 
-    console.log(formProduct)
+    
 
 
     const handleChangeProduct = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value  } = e.target;
+        console.log(formProduct)
         setFormProduct({
           ...formProduct,
           [name]: value
@@ -181,8 +170,11 @@ export const ManagmentProductForm = () => {
 
         try {
             createProduct(formData)
+            
             setFormProduct(FORM_PRODUCT_INTIAL); 
-    
+            setCloudinary([]);
+            setImages(Array(MAX_IMAGES).fill(null));
+
             Mixin.fire("Producto creado con éxito", "", "success");
         } catch (error) {
             Mixin.fire("Error al crear el producto", "", "error");
