@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 interface Article {
   id: number;
@@ -56,25 +57,29 @@ const articles: Article[] = [
 
 const ArticleDetail = () => {
   const { id } = useParams();
+  const articleId = Number(id);
   const [article, setArticle] = useState<Article | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [author, setAuthor] = useState("");
 
   useEffect(() => {
-    const foundArticle = articles.find((a) => a.id === Number(id));
+    const foundArticle = articles.find((a) => a.id === articleId);
     setArticle(foundArticle || null);
-  }, [id]);
+  }, [articleId]);
 
   const handleAddComment = () => {
     if (newComment.trim() === "" || author.trim() === "") return;
+
+    const newId = comments.length > 0 ? comments[comments.length - 1].id + 1 : 1;
     const comment: Comment = {
-      id: comments.length + 1,
-      articleId: Number(id),
+      id: newId,
+      articleId: articleId,
       author,
       text: newComment,
     };
-    setComments([...comments, comment]);
+
+    setComments((prevComments) => [...prevComments, comment]);
     setNewComment("");
     setAuthor("");
   };
@@ -86,7 +91,13 @@ const ArticleDetail = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        <img src={article.image} alt={article.title} className="w-full h-64 object-cover" />
+        <Image
+          src={article.image}
+          alt={article.title}
+          width={800}
+          height={400}
+          className="w-full h-64 object-cover"
+        />
         <div className="p-6">
           <h1 className="text-3xl font-bold">{article.title}</h1>
           <p className="text-gray-500 text-sm mt-2">
@@ -111,12 +122,14 @@ const ArticleDetail = () => {
           <input
             type="text"
             placeholder="Tu nombre"
+            aria-label="Tu nombre"
             className="border p-2 w-full rounded mb-2"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
           />
           <textarea
             placeholder="Escribe tu comentario..."
+            aria-label="Escribe tu comentario"
             className="border p-2 w-full rounded"
             rows={3}
             value={newComment}

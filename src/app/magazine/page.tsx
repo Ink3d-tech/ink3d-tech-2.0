@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -25,18 +25,32 @@ const MagazinePage: React.FC = () => {
     image: "/images/02.png",
     description:
       "Los trucos y consejos para dominar el estilo urbano sin perder la elegancia. Inspirado en las grandes ciudades del mundo.",
-  
-  }
+  };
+
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/magazine");
+        console.log("📡 Haciendo solicitud a la API...");
+
+        // Aquí hacemos una solicitud GET sin body
+        const response = await fetch("http://localhost:3000/api/magazine", {
+          method: "GET", // Aseguramos que sea GET
+          headers: {
+            "Content-Type": "application/json", // Este header es opcional para GET
+          },
+        });
+
+        // Verificamos si la respuesta fue exitosa
         if (!response.ok) {
-          throw new Error("Error al obtener los artículos");
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
+
         const data: Article[] = await response.json();
+        console.log("✅ Artículos recibidos:", data);
+
         setArticles([hardcodedArticle, ...data]); // Agrega el artículo fijo al inicio
       } catch (err) {
+        console.error("❌ Error al obtener los artículos:", err);
         setError((err as Error).message);
       } finally {
         setLoading(false);

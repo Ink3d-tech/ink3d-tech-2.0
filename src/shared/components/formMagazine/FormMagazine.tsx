@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import axios from "axios";
 
 interface FormData {
   author: string;
@@ -22,39 +23,38 @@ export default function FormMagazine() {
   };
 
   // Enviar formulario (POST)
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
 
-    const formDataToSend = {
-      title: formData.title,
-      content: formData.description, // Ajustado para coincidir con tu JSON
-      image: formData.image, // Ahora es una URL
-      author: formData.author,
-    };
 
-    try {
-      const response = await fetch("https://project-ink3d-back-1.onrender.com/api/magazine", {
-        method: "GET",
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const formDataToSend = {
+    title: formData.title,
+    content: formData.description, // Ajustado para coincidir con tu JSON
+    image: formData.image, // Ahora es una URL
+    author: formData.author,
+  };
+
+  try {
+    const { data } = await axios.post(
+      "http://localhost:3000/api/magazine",
+      formDataToSend, // Axios convierte el JSON automáticamente
+      {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formDataToSend),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
+    );
 
-      const data = await response.json();
-      console.log("Artículo publicado:", data);
+    console.log("Artículo publicado:", data);
 
-      // Resetear formulario después de enviar
-      setFormData({ author: "", title: "", description: "", image: "" });
+    // Resetear formulario después de enviar
+    setFormData({ author: "", title: "", description: "", image: "" });
 
-    } catch (error: any) {
-      console.error("Error al enviar el formulario:", error.message);
-    }
-  };
+  } catch (error: any) {
+    console.error("Error al enviar el formulario:", error.response?.data || error.message);
+  }
+};
 
   // Editar artículo (simulado)
   const handleEdit = () => {
