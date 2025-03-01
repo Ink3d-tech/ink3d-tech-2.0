@@ -30,7 +30,7 @@ const MagazinePage: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch("http://localhost:3002/api/magazine");
+        const response = await fetch("http://localhost:3001/api/magazine");
         if (!response.ok) {
           throw new Error("Error al obtener los artículos");
         }
