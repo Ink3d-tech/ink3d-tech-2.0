@@ -91,7 +91,9 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     const logout = async () => {
-        localStorage.removeItem("token")
+        localStorage.removeItem("token");
+        // nacho --Agrego para que se elimine el carrito
+        localStorage.removeItem("cart")
         setIsAuthenticated(false)
         setToken(null)
     }
