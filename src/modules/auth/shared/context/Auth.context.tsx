@@ -3,18 +3,18 @@
 import React, { useState, useContext, createContext, useEffect } from "react";
 import { LoginInterface } from "../interfaces/Login.interface";
 import Loading from "@/app/loading";
-import { SignupInterface, UserInterface } from "../interfaces/Signup.interface";
+import { SignupInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 interface AuthContextInterface {
-    user: UserInterface | null
+    user: string | null
     login: (loginForm: LoginInterface) => void
     signup: (signForm: SignupInterface) => void
     logout: () => void
     isAuthenticated: boolean
-    isAdmin: boolean
-    token: string | null
+    // isAdmin: boolean
+    token: string
     isLoading: boolean
     getIdUser: (token: string) => string
 }
@@ -25,27 +25,30 @@ const AuthContext = createContext<AuthContextInterface>({
     logout: () => {},
     signup: () => {},
     isAuthenticated: false,
-    isAdmin: false,
+    // isAdmin: false,
     isLoading: true,
-    token: null,
+    token: "",
     getIdUser: () => ""
 })
 
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
-    const [token, setToken] = useState<string | null>(null)
-    const [user, setUser] = useState<UserInterface | null>(null)
+    const [token, setToken] = useState<string>("")
+    const [user, setUser] = useState<string | null>("")
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    // const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
     useEffect(() => {
+        const user = localStorage.getItem("user")
         const token = localStorage.getItem("token")
 
-        if(token) {
+        if(user && token) {
+            setUser(JSON.parse(user))
             setToken(token)
             setIsAuthenticated(true)
         } else {
-            setToken(null)
+            setUser(null)
+            setToken("")
             setIsAuthenticated(false)
         }
 
@@ -69,17 +72,18 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         message: string
     }
 
-    interface TokenInterface {
-        email: string
-        exp: number
-        iat: number
-        role: string
-        userId: string
-    }
+    // interface TokenInterface {
+    //     email: string
+    //     exp: number
+    //     iat: number
+    //     role: string
+    //     userId: string
+    // }
 
     const login = async (loginForm: LoginInterface) => {  
         const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm)
 
+        setUser(getIdUser(data.token))
         setToken(data.token)
         setIsAuthenticated(true)
         localStorage.setItem("token", data.token) 
@@ -93,7 +97,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const logout = async () => {
         localStorage.removeItem("token")
         setIsAuthenticated(false)
-        setToken(null)
+        setToken("")
     }
 
     const value = {
@@ -102,7 +106,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         signup,
         logout,
         isAuthenticated,
-        isAdmin,
+        // isAdmin,
         isLoading,
         token,
         getIdUser

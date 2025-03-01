@@ -2,7 +2,7 @@ import { ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-export default function () {
+export default function EmptyCart() {
     return (
         <div className='bg-gray-50 rounded-md px-6 py-2 flex items-center grow'>
             <div className='flex flex-row grow gap-2'>

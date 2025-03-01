@@ -5,17 +5,9 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import { Heart } from "lucide-react";
+import { Product, useCart } from "@/modules/checkout/pages/cart/Cart.context";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  size?: string;
-  stock: number; // Agregamos la propiedad stock para controlar disponibilidad
-}
 
 export default function ProductDetail() {
   const params = useParams();
@@ -27,23 +19,22 @@ export default function ProductDetail() {
   const [isFavorited, setIsFavorited] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [availableSizes, setAvailableSizes] = useState<Product[]>([]); // Para almacenar los productos disponibles por talla
+  const [availableSizes, setAvailableSizes] = useState<Product[]>([]);
 
   useEffect(() => {
     if (!id) return;
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://project-ink3d-back-1.onrender.com/products/${id}`);
+        const response = await fetch(`${API_BACK}/products/${id}`);
         const data: Product = await response.json();
         setProduct(data);
 
-        // Filtramos los productos que tienen el mismo nombre y asignamos a la variable availableSizes
-        const responseAllProducts = await fetch("https://project-ink3d-back-1.onrender.com/products");
+        const responseAllProducts = await fetch(`${API_BACK}/products`);
         const allProducts: Product[] = await responseAllProducts.json();
         const sameNameProducts = allProducts.filter((item) => item.name === data.name);
 
-        setAvailableSizes(sameNameProducts); // Productos del mismo nombre
+        setAvailableSizes(sameNameProducts);
         setSelectedSize(data.size || null);
       } catch (error) {
         setError((error as Error).message);
@@ -54,6 +45,8 @@ export default function ProductDetail() {
 
     fetchProduct();
   }, [id]);
+  
+  const { emptyCart, handleAddToCart } = useCart()
 
   const handleFavoriteClick = () => {
     setIsFavorited(!isFavorited);
@@ -65,9 +58,8 @@ export default function ProductDetail() {
   };
 
   const handleSizeSelect = (size: string) => {
-    // Filtramos el producto con la talla seleccionada
     const selectedProduct = availableSizes.find((item) => item.size === size);
-    setProduct(selectedProduct || null); // Actualizamos el producto con la talla seleccionada
+    setProduct(selectedProduct || null);
     setSelectedSize(size);
   };
 
@@ -95,7 +87,7 @@ export default function ProductDetail() {
 
           <div className="flex-shrink-0">
             <Image
-              src={product.image || "/placeholder-image.png"}
+              src={product.image[0] || "/placeholder-image.png"}
               alt={product.name}
               width={400}
               height={400}
@@ -152,9 +144,12 @@ export default function ProductDetail() {
               </div>
 
               <div className="flex gap-4">
-                <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                <button 
+                className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition"
+                onClick={() => handleAddToCart(product)}>
                   Agregar al carrito 🛒
                 </button>
+                <button onClick={emptyCart}>RESET CARRITO</button>
               </div>
             </div>
           </div>
