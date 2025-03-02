@@ -5,18 +5,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import FilterCategories from "./components/FilterCategories.component";
+import { Product } from "@/modules/checkout/pages/cart/Cart.context";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  category: {
-    id: string;
-    name: string;
-  };
-  image: string;
-}
+
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -27,7 +19,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://project-ink3d-back-1.onrender.com/products");
+        const response = await fetch(`${API_BACK}/products`);
 
         if (!response.ok) {
           throw new Error("Error al obtener los productos");
@@ -67,8 +59,8 @@ export default function ProductsPage() {
             <Link key={product.id} href={`/productDetail/${product.id}`} passHref>
               <div className="flex flex-col items-center bg-white overflow-hidden shadow-md rounded-lg cursor-pointer transition-transform transform border border-gray-300 ">
                 <div className="w-full overflow-hidden">
-                  <Image
-                    src={product.image || "/placeholder-image.png"}
+                  <Image 
+                    src={product.image[0] || "/placeholder-image.png"}
                     alt={product.name}
                     width={800}
                     height={800}

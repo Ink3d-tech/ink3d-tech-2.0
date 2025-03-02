@@ -2,16 +2,17 @@
 
 import BackButton from '@/shared/components/buttons/BackButton.component';
 import React, { useEffect, useState } from 'react';
-import { tempCartProducts } from './helpers/TempCartProducts';
-import CartProduct from './components/CartProduct';
-import { IProduct, IProductMP } from './interfaces/Cart.interface';
+// import { tempCartProducts } from './helpers/TempCartProducts';
+// import CartProduct from './components/CartProduct';
+import { IProduct } from './interfaces/Cart.interface';
 import EmptyCart from './components/EmptyCart';
 import { useAuth } from '@/modules/auth/shared/context/Auth.context';
-import { confirmOrderService, paymentCreateService } from './services/cart.services';
-import { ICartProduct, IPaymentResponse } from './interfaces/cartService.interface';
-import { useRouter } from 'next/navigation';
+import { confirmOrderService } from './services/cart.services';
+import CartList from './CartList';
+import { useCart } from './Cart.context';
 
 export default function Cart() {
+    const { products } = useCart();
     const [productsOnCart, setProductsOnCart] = useState<IProduct[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const { getIdUser, token } = useAuth();
@@ -56,21 +57,21 @@ export default function Cart() {
 
 
         ////// TEMPORAL
-        const [tempCont, setTempCont] = useState(0)
+        // const [tempCont, setTempCont] = useState(0)
         
     
-        const handleTempCart = () => {
-            const cart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]")
-            cart.push(tempCartProducts[tempCont])
-            localStorage.setItem("cart", JSON.stringify(cart))
-            setTempCont(tempCont+1)
-        }
-        ////////////
+        // const handleTempCart = () => {
+        //     const cart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]")
+        //     cart.push(tempCartProducts[tempCont])
+        //     localStorage.setItem("cart", JSON.stringify(cart))
+        //     setTempCont(tempCont+1)
+        // }
+        // ////////////
 
     return (
         <div className='flex flex-col min-h-screen bg-[#D9D9D9]'>
             <BackButton tab='Carrito' />
-            <div className='flex md:mt-8 mt-4 lg:mx-32 mx-8 gap-8'>
+            {/* <div className='flex md:mt-8 mt-4 lg:mx-32 mx-8 gap-8'>
                 {productsOnCart.length > 0 ? <div className='flex flex-col grow gap-4 mr-8'>
                     {productsOnCart.map((product) => (
                         <CartProduct 
@@ -82,8 +83,8 @@ export default function Cart() {
                             key={product.id} 
                         />
                     ))}
-                </div> : <EmptyCart />}
-                
+                </div> */}
+                {products.length ? <CartList products={products} /> : <EmptyCart />}
                 
                 <div className='w-1/5 h-fit bg-white rounded'>
                     <h2 className='p-4 font-semibold'>Resumen de la compra</h2>
@@ -103,9 +104,10 @@ export default function Cart() {
                 </div>
             </div>
 
-            {/* TEMPORAL */}
-            <button onClick={handleTempCart}>AGREGADOR TEMPORAL</button>
-            {/* /////////// */}
-        </div>
-    );
+    //         {/* TEMPORAL */}
+    //         <button onClick={handleTempCart}>AGREGADOR TEMPORAL</button>
+    //         {/* /////////// */}
+    //     </div>
+    // );
+    )
 }
