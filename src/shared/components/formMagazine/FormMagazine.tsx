@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Footer from "../footer/Footer";
 
 interface FormData {
   id?: string; // ID opcional para editar/eliminar
@@ -25,8 +26,8 @@ export default function FormMagazine() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/api/magazine");
-        setArticles(data);
+        const response = await axios.get<FormData[]>("http://localhost:3000/api/magazine");
+        setArticles(response.data); 
       } catch (error) {
         console.error("Error al obtener los artículos:", error);
       }
@@ -66,9 +67,9 @@ export default function FormMagazine() {
       setFormData({ author: "", title: "", description: "", image: "" });
       setSelectedId(null);
 
-      // Refrescar lista de artículos
-      const { data } = await axios.put("http://localhost:3000/api/magazine");
-      setArticles(data);
+      // Refrescar lista de artículos después de la actualización o creación
+      const response = await axios.get<FormData[]>("http://localhost:3000/api/magazine");
+      setArticles(response.data);
 
     } catch (error: any) {
       console.error("Error al enviar el formulario:", error.response?.data || error.message);
@@ -84,7 +85,7 @@ export default function FormMagazine() {
   // Eliminar artículo
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:3000/api/magazine/{id}`);
+      await axios.delete(`http://localhost:3000/api/magazine/${id}`);
       console.log("Artículo eliminado con éxito.");
 
       // Eliminar el artículo de la lista sin necesidad de recargar la página
@@ -190,6 +191,7 @@ export default function FormMagazine() {
           <p>No hay artículos disponibles.</p>
         )}
       </div>
+      
     </div>
   );
 }
