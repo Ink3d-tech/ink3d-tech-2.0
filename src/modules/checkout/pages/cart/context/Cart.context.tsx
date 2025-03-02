@@ -22,7 +22,7 @@ export interface Product {
 interface CartContextType {
     products: Product[]
     addProductToCart: (product: Product) => void
-    removeProductFromCart: (id: number) => void
+    removeProductFromCart: (id: string) => void
     emptyCart: () => void
     countProducts: (id: number) => number
     productInTheCart: (product: Product) => boolean
@@ -106,10 +106,13 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
         const updatedProducts = [...products, product]
         setProducts(updatedProducts)
         saveCart(updatedProducts)
+        console.log(product.id)
     }
 
-    const removeProductFromCart = (id: number) => {
-        const filteredProduct = products.filter((product) => Number(product.id) !== id)
+    const removeProductFromCart = (id: string) => {
+        console.log(id)
+        const filteredProduct = products.filter((product) => (product.id) !== id)
+        console.log(filteredProduct)
         setProducts(filteredProduct)
         saveCart(filteredProduct)
     } 
@@ -145,7 +148,6 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
 
 export const useCart = () => {
     const context = useContext(CartContext)
-    // chequeo si puedo usar el useContext en esa parte de la aplicacion
     if(!context) throw new Error("useCart must be used  within an CartProvider")
     return context
 }

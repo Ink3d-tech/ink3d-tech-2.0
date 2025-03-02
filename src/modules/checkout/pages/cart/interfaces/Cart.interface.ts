@@ -7,9 +7,24 @@ export interface IProduct {
     category: string;
     price: number;
     stock: number;
-    units: number
-    talle: string
+    units: number;
+    talle: string;
 }
+
+export interface Product {
+    id: string;
+    name: string;
+    price: number;
+    size: string;
+    stock: number;
+    description: string;
+    units: number;
+    category: {
+      id: string;
+      name: string;
+    };
+    image: string;
+  }
 
 export interface ICartProductProps {
     ProductProps: IProduct;

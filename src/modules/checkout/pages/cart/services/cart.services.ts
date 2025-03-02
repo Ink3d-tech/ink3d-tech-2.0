@@ -1,9 +1,9 @@
 import axios from "axios";
-import { IProduct } from "../interfaces/Cart.interface";
+import { Product } from "../interfaces/Cart.interface";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 
-export const confirmOrderService = async (userBuyer: string, confirmedCart: IProduct[], token: string | null) => {
+export const confirmOrderService = async (userBuyer: string, confirmedCart: Product[], token: string | null) => {
     try {
         const body = {
             userId: userBuyer,

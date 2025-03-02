@@ -40,7 +40,7 @@ export default function CartProduct({ ProductProps, setTotalPrice, totalPrice, s
         const newCart = productsOnCart.filter(product => product.id !== id);
         setProductsOnCart(newCart)
         localStorage.setItem("cart", JSON.stringify(newCart));
-        let calcTotal = totalPrice - productNumber*price
+        const calcTotal = totalPrice - productNumber*price
         setTotalPrice(calcTotal);
     }
 

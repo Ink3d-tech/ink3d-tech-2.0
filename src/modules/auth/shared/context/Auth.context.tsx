@@ -13,10 +13,9 @@ interface AuthContextInterface {
     signup: (signForm: SignupInterface) => void
     logout: () => void
     isAuthenticated: boolean
-    // isAdmin: boolean
     token: string
     isLoading: boolean
-    getIdUser: (token: string) => string
+    getIdUser: (token: string) => string | null
 }
 
 const AuthContext = createContext<AuthContextInterface>({
@@ -25,39 +24,37 @@ const AuthContext = createContext<AuthContextInterface>({
     logout: () => {},
     signup: () => {},
     isAuthenticated: false,
-    // isAdmin: false,
     isLoading: true,
     token: "",
-    getIdUser: () => ""
-})
+    getIdUser: () => null
+});
 
-export const AuthProvider = ({children}: {children: React.ReactNode}) => {
-    const [token, setToken] = useState<string>("")
-    const [user, setUser] = useState<string | null>("")
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [token, setToken] = useState<string>("");
+    const [user, setUser] = useState<string | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    // const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
     useEffect(() => {
-        const user = localStorage.getItem("user")
-        const token = localStorage.getItem("token")
+        const storedUser = localStorage.getItem("user");
+        const storedToken = localStorage.getItem("token");
 
-        if(user && token) {
-            setUser(JSON.parse(user))
-            setToken(token)
-            setIsAuthenticated(true)
+        if (storedUser && storedToken) {
+            setUser(JSON.parse(storedUser));
+            setToken(storedToken);
+            setIsAuthenticated(true);
         } else {
-            setUser(null)
-            setToken("")
-            setIsAuthenticated(false)
+            setUser(null);
+            setToken("");
+            setIsAuthenticated(false);
         }
 
         setIsLoading(false);
-    }, [])
+    }, []);
 
-    if(isLoading) return <Loading/>
+    if (isLoading) return <Loading />;
 
-    const getIdUser = (token: string) => {
+    const getIdUser = (token: string): string | null => {
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
             return payload.userId;
@@ -68,37 +65,36 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     };
 
     interface ResponseInterface {
-        token: string
-        message: string
+        token: string;
+        message: string;
     }
-
-    // interface TokenInterface {
-    //     email: string
-    //     exp: number
-    //     iat: number
-    //     role: string
-    //     userId: string
-    // }
 
     const login = async (loginForm: LoginInterface) => {  
-        const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm)
+        const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm);
 
-        setUser(getIdUser(data.token))
-        setToken(data.token)
-        setIsAuthenticated(true)
-        localStorage.setItem("token", data.token) 
-    }
-    
+        const userId = getIdUser(data.token);
 
-    const signup = async(signupForm: SignupInterface) => {
-        await axios.post(`${API_BACK}/auth/signup`, signupForm)
-    }
+        if (userId) {
+            setUser(userId);
+            localStorage.setItem("user", JSON.stringify(userId));
+        }
 
-    const logout = async () => {
-        localStorage.removeItem("token")
-        setIsAuthenticated(false)
-        setToken("")
-    }
+        setToken(data.token);
+        setIsAuthenticated(true);
+        localStorage.setItem("token", data.token);
+    };
+
+    const signup = async (signupForm: SignupInterface) => {
+        await axios.post(`${API_BACK}/auth/signup`, signupForm);
+    };
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setIsAuthenticated(false);
+        setUser(null);
+        setToken("");
+    };
 
     const value = {
         user,
@@ -106,28 +102,20 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         signup,
         logout,
         isAuthenticated,
-        // isAdmin,
         isLoading,
         token,
         getIdUser
-    }
+    };
 
-   return (
-    <AuthContext.Provider value={value}>
-        {children}
-    </AuthContext.Provider>
-   )
-        
-}
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
 
 export const useAuth = () => {
-    const context = useContext(AuthContext)
-    // chequeo si puedo usar el useContext en esa parte de la aplicacion
-    if(!context) throw new Error("useAuth must be used  within an AuthProvider")
-    return context
-}
-
-
-
-
-
+    const context = useContext(AuthContext);
+    if (!context) throw new Error("useAuth must be used within an AuthProvider");
+    return context;
+};

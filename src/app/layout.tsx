@@ -5,7 +5,7 @@ import { AuthProvider } from "@/modules/auth/shared/context/Auth.context"
 // import ExcludedPaths from "../modules/auth/shared/helpers/ExcludedPath";
 import { ProductsProvider } from "../modules/user/pages/manager/context/Products.context";
 import Chatbot from "@/shared/components/Chatbot";
-import { CartProvider } from "@/modules/checkout/pages/cart/Cart.context";
+import { CartProvider } from "@/modules/checkout/pages/cart/context/Cart.context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,10 +25,10 @@ export default function RootLayout({
         <ProductsProvider>
           <AuthProvider>
             <CartProvider>
+              <NavBar /> 
               <main className="bg-[#D9D9D9]">
                 <Chatbot />
                 {/* <ExcludedPaths > */}
-                  <NavBar /> 
                 {/* </ExcludedPaths> */}
                 {children}
               </main>

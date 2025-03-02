@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { API_BACK } from "../../../../../shared/config/api/getEnv";
-import { Product } from "@/modules/checkout/pages/cart/Cart.context";
+import { Product } from "@/modules/checkout/pages/cart/context/Cart.context";
 
 interface ProductsContextType {
     products: Product[]

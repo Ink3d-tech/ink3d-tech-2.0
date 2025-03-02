@@ -1,4 +1,5 @@
-import { Product, useCart } from "./Cart.context";
+import { Product, useCart } from "../context/Cart.context";
+import { Fire, getAlert } from "./FireAlert.component";
 
 export interface ICartItemProps {
     className?: string
@@ -34,12 +35,14 @@ export default function CartItem({
                     <div className="col-span-12 text-right">
                         <button
                             onClick={() => {
-                                removeProductFromCart(Number(id))
-                                alert("Función proxima a eliminar producto")
+                                getAlert("Delete", () => {
+                                    Fire("Deleted!");
+                                    removeProductFromCart (product.id);
+                                })
                             }}
                             className="text-red-600 hover:text-red-800 bg-none px-4 py-2 hover:bg-red-100 my-2 rounded-md"
                         >
-                            Delete
+                            X
                         </button>
                     </div>
 
