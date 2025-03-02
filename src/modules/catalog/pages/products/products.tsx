@@ -59,13 +59,16 @@ export default function ProductsPage() {
             <Link key={product.id} href={`/productDetail/${product.id}`} passHref>
               <div className="flex flex-col items-center bg-white overflow-hidden shadow-md rounded-lg cursor-pointer transition-transform transform border border-gray-300 ">
                 <div className="w-full overflow-hidden">
-                  <Image 
-                    src={product.image[0] || "/placeholder-image.png"}
-                    alt={product.name}
-                    width={800}
-                    height={800}
-                    className="w-full h-auto object-cover"
-                  />
+   
+
+<Image
+  src={Array.isArray(product.image) && product.image.length > 0 ? product.image[0] : "/placeholder-image.png"}
+  alt={product.name}
+  width={800}
+  height={800}
+  className="w-full h-auto object-cover"
+/>
+
                 </div>
                 <div className="p-4 text-center">
                   <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 uppercase">
