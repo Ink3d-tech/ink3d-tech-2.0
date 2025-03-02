@@ -1,6 +1,3 @@
-
-
- import React from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 const Finanzas = () => {
@@ -49,26 +46,26 @@ const Finanzas = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Tabla de transacciones */}
-        <div className="overflow-auto max-h-[500px] bg-white text-black p-4 rounded-md shadow-lg">
+        {/* Tabla de transacciones con altura ajustada */}
+        <div className="bg-white text-black p-10s rounded-md shadow-lg overflow-auto max-h-[400px]">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-red-500 text-white">
-                <th className="p-2">ID</th>
-                <th className="p-2">Producto</th>
-                <th className="p-2">Precio</th>
-                <th className="p-2">Cantidad</th>
-                <th className="p-2">Total</th>
+                <th className="p-3">ID</th>
+                <th className="p-3">Producto</th>
+                <th className="p-3">Precio</th>
+                <th className="p-3">Cantidad</th>
+                <th className="p-3">Total</th>
               </tr>
             </thead>
             <tbody>
               {transactions.map((t) => (
                 <tr key={t.id} className="text-center border-b">
-                  <td className="p-2">{t.id}</td>
-                  <td className="p-2">{t.producto}</td>
-                  <td className="p-2">${t.precio.toFixed(2)}</td>
-                  <td className="p-2">{t.cantidad}</td>
-                  <td className="p-2">${t.total.toFixed(2)}</td>
+                  <td className="p-3">{t.id}</td>
+                  <td className="p-3">{t.producto}</td>
+                  <td className="p-3">${t.precio.toFixed(2)}</td>
+                  <td className="p-3">{t.cantidad}</td>
+                  <td className="p-3">${t.total.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -76,12 +73,12 @@ const Finanzas = () => {
         </div>
       </main>
 
-      {/* Footer fijo */}
-      <footer className="bg-red-500 text-white text-center p-4">
+      {/* Footer siempre en la parte inferior */}
+      <footer className="bg-red-500 text-white text-center p-4 mt-auto">
         © 2024 Mi Tienda - Finanzas
       </footer>
     </div>
   );
 };
 
-export default Finanzas
+export default Finanzas;

@@ -19,8 +19,9 @@ import Stock from "../../shared/components/stock/Stock"
 
 import FormMagazine from "../../shared/components/formMagazine/FormMagazine";
 
-import finanzas from "../../shared/components/finanzas/Finanzas"
 import Finanzas from "../../shared/components/finanzas/Finanzas";
+import seguridadConfiguracion  from "../../shared/components/seguridadConfiguracion/SeguridadConfiguracion";
+import SeguridadConfiguracion from "../../shared/components/seguridadConfiguracion/SeguridadConfiguracion";
 
 
 
@@ -166,14 +167,7 @@ export default function Dashboard() {
             </table>
           </div>
         )}
-         <button
-            className={`w-full text-left px-3 py-2 rounded-lg ${
-              activeTab === "invent" ? "bg-gray-700" : ""
-            }`}
-            onClick={() => setActiveTab("invent")}
-          >
-            🏷️ Stock
-          </button>
+         
         {activeTab === "invent" && (<Stock/>
         )}
 
@@ -219,15 +213,7 @@ export default function Dashboard() {
  )}
           
 
-        {activeTab === "settings" && (
-          <div>
-            <h2 className="text-3xl font-bold mb-4">🔐 Seguridad y Configuración</h2>
-            <label className="flex items-center space-x-2">
-              <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(!darkMode)} />
-              <span>🌙 Modo Oscuro</span>
-            </label>
-          </div>
-        )}
+        {activeTab === "settings" && ( <SeguridadConfiguracion/> )}
       </div>
     </div>
   );
