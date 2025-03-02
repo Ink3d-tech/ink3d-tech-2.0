@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { LogOut, Settings, User, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
+import Image from "next/image";
 
 interface UserMenu {
   avatarUrl: string;
@@ -26,7 +27,7 @@ const UserMenu: React.FC<UserMenu> = ({ avatarUrl }) => {
         className="cursor-pointer"
         onClick={toggleDropdown}
       >
-        <img
+        <Image
           src={avatarUrl}
           alt="User Avatar"
           width={40}
