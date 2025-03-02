@@ -157,38 +157,295 @@
 //         </div>
 //     );
 // }
+
+
+//------------------------------------------------------------------------------------------------
+
+
+// "use client";
+
+// import React, { useState, useEffect } from "react";
+// import HamburguerMenu from "./HamburguerMenu.components";
+// import { Menu, X, ShoppingCart, HelpCircle, LogOut } from "lucide-react";
+// import Link from "next/link";
+// import Image from "next/image";
+// import { useAuth } from "@/modules/auth/shared/context/Auth.context";
+
+// export default function NavBar() {
+//     const { isAuthenticated, logout } = useAuth(); 
+//     const [menu, setMenu] = useState(false);
+//     const [isClient, setIsClient] = useState(false);
+
+//     const handleToggle = () => setMenu(prevMenu => !prevMenu);
+//     const handleLogout = () => logout();
+
+//     useEffect(() => {
+//         setIsClient(true);
+//     }, []);
+
+//     useEffect(() => {
+//         if (isClient) {
+//             document.body.style.overflow = menu ? "hidden" : "";
+//         }
+
+//         return () => { document.body.style.overflow = ""; };
+//     }, [menu, isClient]);
+
+//     useEffect(() => {
+//         if (isClient) {
+//             const handleResize = () => {
+//                 if (window.innerWidth >= 768) setMenu(false);
+//             };
+//             window.addEventListener("resize", handleResize);
+//             return () => window.removeEventListener("resize", handleResize);
+//         }
+//     }, [isClient]);
+
+//     if (!isClient) {
+//         return null;
+//     }
+
+//     return (
+//         <div>
+//             <div className="bg-black text-white h-20 flex fixed top-0 w-full z-50 items-center px-4 md:px-8 justify-between">
+//                 <div className="md:hidden cursor-pointer" onClick={handleToggle}>
+//                     {menu ? <X size="24" color="gray" /> : <Menu size="24" color="gray" />}
+//                 </div>
+//                 <div className="flex-1 flex justify-center md:justify-start">
+//                     <Link href="/home">
+//                         <Image src="/LogoInk3d.webp" alt="Logo Ink3d" width={130} height={130} className="object-contain w-auto h-auto max-w-[100px]" />
+//                     </Link>
+//                 </div>
+//                 <div className="hidden md:flex items-center gap-6">
+//                     <Link href="/manager/magazine" className="text-white">Magazine</Link>
+//                     <Link href="/categories" className="text-white">Categorías</Link>
+//                     <Link href="/sales" className="text-white">Ofertas</Link>
+//                 </div>
+//                 <div className="hidden md:flex items-center gap-6">
+//                     {isAuthenticated ? (
+//                         <>
+//                             <button onClick={handleLogout} className="flex items-center gap-2 text-white">
+//                                  <span>Cerrar sesión</span>
+//                                  <LogOut size={24} color="gray" />
+//                                         </button>
+//                             <Image
+//                                 src="/avatar.webp"
+//                                 alt="User Avatar"
+//                                 width={40}
+//                                 height={40}
+//                                 className="rounded-full"
+//                             />
+//                         </>
+//                     ) : (
+//                         <>
+//                             <Link href="/auth/login" className="text-white">Iniciar sesión</Link>
+//                             <Link href="/auth/signup" className="text-white">Crear cuenta</Link>
+//                         </>
+//                     )}
+//                     <Link href="/cart">
+//                         <ShoppingCart size="24" color="gray" />
+//                     </Link>
+//                 </div>
+//             </div>
+//             <div className={`fixed top-20 left-0 min-w-full h-[calc(100vh-56px)] bg-white z-50 overflow-y-auto transform transition-transform duration-300 ${menu ? "translate-x-0" : "-translate-x-full"}`}>
+//                 <HamburguerMenu handleToggle={handleToggle} />
+//             </div>
+//             <div className="absolute top-0 right-0 mt-4 mr-4">
+//                 <Link href="/help">
+//                     <HelpCircle size="24" color="gray" className="cursor-pointer" />
+//                 </Link>
+//             </div>
+//         </div>
+//     );
+// }
+
+
+//------------------------------------------------------------------------------------------------
+
+
+// "use client";
+
+// import React, { useState, useEffect } from "react";
+// import HamburguerMenu from "./HamburguerMenu.components";
+// import { Menu, X, ShoppingCart, HelpCircle, LogOut, Search } from "lucide-react";
+// import Link from "next/link";
+// import Image from "next/image";
+// import { useAuth } from "@/modules/auth/shared/context/Auth.context";
+
+// export default function NavBar() {
+//     const { isAuthenticated, logout } = useAuth();
+//     const [menu, setMenu] = useState(false);
+//     const [isClient, setIsClient] = useState(false);
+//     const [searchVisible, setSearchVisible] = useState(false); // State para controlar la visibilidad de la búsqueda
+//     const [searchQuery, setSearchQuery] = useState(""); // Estado para el texto de búsqueda
+
+//     const handleToggle = () => setMenu((prevMenu) => !prevMenu);
+//     const handleLogout = () => logout();
+
+//     const toggleSearch = () => setSearchVisible((prev) => !prev);
+
+//     useEffect(() => {
+//         setIsClient(true);
+//     }, []);
+
+//     useEffect(() => {
+//         if (isClient) {
+//             document.body.style.overflow = menu ? "hidden" : "";
+//         }
+
+//         return () => {
+//             document.body.style.overflow = "";
+//         };
+//     }, [menu, isClient]);
+
+//     useEffect(() => {
+//         if (isClient) {
+//             const handleResize = () => {
+//                 if (window.innerWidth >= 768) setMenu(false);
+//             };
+//             window.addEventListener("resize", handleResize);
+//             return () => window.removeEventListener("resize", handleResize);
+//         }
+//     }, [isClient]);
+
+//     if (!isClient) {
+//         return null;
+//     }
+
+//     return (
+//         <div>
+//             <div className="bg-black text-white h-20 flex fixed top-0 w-full z-50 items-center px-4 md:px-8 justify-between">
+//                 {/* Menú hamburguesa para móviles */}
+//                 <div className="md:hidden cursor-pointer" onClick={handleToggle}>
+//                     {menu ? <X size="24" color="gray" /> : <Menu size="24" color="gray" />}
+//                 </div>
+
+//                 {/* Logo */}
+//                 <div className="flex-1 flex justify-center md:justify-start">
+//                     <Link href="/home">
+//                         <Image
+//                             src="/LogoInk3d.webp"
+//                             alt="Logo Ink3d"
+//                             width={130}
+//                             height={130}
+//                             className="object-contain w-auto h-auto max-w-[100px]"
+//                         />
+//                     </Link>
+//                 </div>
+
+//                 {/* Enlaces de navegación en desktop */}
+//                 <div className="hidden md:flex items-center gap-6">
+//                     <Link href="/manager/magazine" className="text-white">Magazine</Link>
+//                     <Link href="/categories" className="text-white">Categorías</Link>
+//                     <Link href="/sales" className="text-white">Ofertas</Link>
+//                     {/* Barra de búsqueda en desktop */}
+//                     <div className="relative flex items-center">
+//                         <Search
+//                             size="24"
+//                             color="gray"
+//                             onClick={toggleSearch}
+//                             className="cursor-pointer"
+//                         />
+//                         {searchVisible && (
+//                             <input
+//                                 type="text"
+//                                 placeholder="Buscar..."
+//                                 className="ml-2 p-2 rounded-md bg-white border w-48 transition-all duration-300 ease-in-out"
+//                                 value={searchQuery}
+//                                 onChange={(e) => setSearchQuery(e.target.value)}
+//                             />
+//                         )}
+//                     </div>
+
+
+//                 </div>
+
+//                 <div className="hidden md:flex items-center gap-6">
+//                     {isAuthenticated ? (
+//                         <>
+//                             <Image
+//                                 src="/avatar.webp"
+//                                 alt="User Avatar"
+//                                 width={40}
+//                                 height={40}
+//                                 className="rounded-full"
+//                             />
+//                             <button
+//                                 onClick={handleLogout}
+//                                 className="flex items-center gap-2 text-white relative group"
+//                             >
+//                                 <LogOut size={24} color="gray" />
+//                                 <span className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+//                                     Cerrar sesión
+//                                 </span>
+//                             </button>
+//                         </>
+//                     ) : (
+//                         <>
+//                             <Link href="/auth/login" className="text-white">Iniciar sesión</Link>
+//                             <Link href="/auth/signup" className="text-white">Crear cuenta</Link>
+//                         </>
+//                     )}
+//                     <Link href="/cart">
+//                         <ShoppingCart size="24" color="gray" />
+//                     </Link>
+//                 </div>
+//             </div>
+
+//             {/* Menú hamburguesa en dispositivos móviles */}
+//             <div
+//                 className={`fixed top-20 left-0 min-w-full h-[calc(100vh-56px)] bg-white z-50 overflow-y-auto transform transition-transform duration-300 ${menu ? "translate-x-0" : "-translate-x-full"
+//                     }`}
+//             >
+//                 <HamburguerMenu handleToggle={handleToggle} />
+//             </div>
+
+//             {/* Icono de ayuda */}
+//             <div className="absolute top-0 right-0 mt-4 mr-4">
+//                 <Link href="/help">
+//                     <HelpCircle size="24" color="gray" className="cursor-pointer" />
+//                 </Link>
+//             </div>
+//         </div>
+//     );
+// }
+
 "use client";
 
 import React, { useState, useEffect } from "react";
 import HamburguerMenu from "./HamburguerMenu.components";
-import { Menu, X, ShoppingCart, HelpCircle, LogOut } from "lucide-react";
+import { Menu, X, ShoppingCart, HelpCircle, Search, User } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
+import UserMenu from "./UserMenu.components";
 
 export default function NavBar() {
-    const { isAuthenticated, logout } = useAuth(); 
+    const { isAuthenticated, logout } = useAuth();
     const [menu, setMenu] = useState(false);
-    const [isClient, setIsClient] = useState(false); // State to track if we're in the client
+    const [isClient, setIsClient] = useState(false);
+    const [searchVisible, setSearchVisible] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
-    const handleToggle = () => setMenu(prevMenu => !prevMenu);
-    const handleLogout = () => logout();
+    const handleToggle = () => setMenu((prevMenu) => !prevMenu);
+    const toggleSearch = () => setSearchVisible((prev) => !prev);
 
-    // Ensure we're on the client
     useEffect(() => {
-        setIsClient(true); // This runs only in the client
+        setIsClient(true);
     }, []);
 
     useEffect(() => {
-        if (isClient) { // Make sure the following only runs in the client
+        if (isClient) {
             document.body.style.overflow = menu ? "hidden" : "";
         }
 
-        return () => { document.body.style.overflow = ""; };
+        return () => {
+            document.body.style.overflow = "";
+        };
     }, [menu, isClient]);
 
     useEffect(() => {
-        if (isClient) { // Ensure window is defined before adding event listeners
+        if (isClient) {
             const handleResize = () => {
                 if (window.innerWidth >= 768) setMenu(false);
             };
@@ -198,40 +455,55 @@ export default function NavBar() {
     }, [isClient]);
 
     if (!isClient) {
-        return null; // Render nothing until we confirm we're on the client
+        return null;
     }
 
     return (
         <div>
-            <div className="bg-black text-white h-20 flex fixed top-0 w-full z-50 items-center px-4 md:px-8 justify-between">
+            <div className="bg-black text-white h-20 flex fixed top-0 w-full z-50 items-center px-4 md:px-8 justify-between relative"> {/* Agregado relative aquí */}
                 <div className="md:hidden cursor-pointer" onClick={handleToggle}>
                     {menu ? <X size="24" color="gray" /> : <Menu size="24" color="gray" />}
                 </div>
+
+                {/* Logo */}
                 <div className="flex-1 flex justify-center md:justify-start">
                     <Link href="/home">
-                        <Image src="/LogoInk3d.webp" alt="Logo Ink3d" width={130} height={130} className="object-contain w-auto h-auto max-w-[100px]" />
+                        <Image
+                            src="/LogoInk3d.webp"
+                            alt="Logo Ink3d"
+                            width={130}
+                            height={130}
+                            className="object-contain w-auto h-auto max-w-[100px]"
+                        />
                     </Link>
                 </div>
+
                 <div className="hidden md:flex items-center gap-6">
                     <Link href="/manager/magazine" className="text-white">Magazine</Link>
                     <Link href="/categories" className="text-white">Categorías</Link>
                     <Link href="/sales" className="text-white">Ofertas</Link>
+                    <div className="relative flex items-center">
+                        <Search
+                            size="24"
+                            color="gray"
+                            onClick={toggleSearch}
+                            className="cursor-pointer"
+                        />
+                        {searchVisible && (
+                            <input
+                                type="text"
+                                placeholder="Buscar..."
+                                className="ml-2 p-2 rounded-md bg-white border w-48 transition-all duration-300 ease-in-out"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        )}
+                    </div>
                 </div>
+
                 <div className="hidden md:flex items-center gap-6">
                     {isAuthenticated ? (
-                        <>
-                            <button onClick={handleLogout} className="flex items-center gap-2 text-white">
-                                <LogOut size={24} color="gray" />
-                                <span>Cerrar sesión</span>
-                            </button>
-                            <Image
-                                src="/avatar.webp"
-                                alt="User Avatar"
-                                width={40}
-                                height={40}
-                                className="rounded-full"
-                            />
-                        </>
+                        <UserMenu avatarUrl="/avatar.webp" />
                     ) : (
                         <>
                             <Link href="/auth/login" className="text-white">Iniciar sesión</Link>
@@ -243,9 +515,39 @@ export default function NavBar() {
                     </Link>
                 </div>
             </div>
-            <div className={`fixed top-20 left-0 min-w-full h-[calc(100vh-56px)] bg-white z-50 overflow-y-auto transform transition-transform duration-300 ${menu ? "translate-x-0" : "-translate-x-full"}`}>
+
+            {/* Elementos a la derecha en móvil: barra de búsqueda y carrito */}
+            <div className="md:hidden absolute top-6 right-4 flex items-center gap-4 z-50">
+                <div className="relative flex items-center">
+                    <Search
+                        size="24"
+                        color="gray"
+                        onClick={toggleSearch}
+                        className="cursor-pointer"
+                    />
+                    {searchVisible && (
+                        <input
+                            type="text"
+                            placeholder="Buscar..."
+                            className="ml-2 p-2 rounded-md bg-white border w-48 transition-all duration-300 ease-in-out"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    )}
+                </div>
+                <Link href="/cart">
+                    <ShoppingCart size="24" color="gray" />
+                </Link>
+            </div>
+
+            <div
+                className={`fixed top-20 left-0 min-w-full h-[calc(100vh-56px)] bg-white z-50 overflow-y-auto transform transition-transform duration-300 ${menu ? "translate-x-0" : "-translate-x-full"
+                    }`}
+            >
                 <HamburguerMenu handleToggle={handleToggle} />
             </div>
+
+            {/* Icono de ayuda */}
             <div className="absolute top-0 right-0 mt-4 mr-4">
                 <Link href="/help">
                     <HelpCircle size="24" color="gray" className="cursor-pointer" />
