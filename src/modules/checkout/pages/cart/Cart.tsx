@@ -4,15 +4,19 @@ import BackButton from '@/shared/components/buttons/BackButton.component';
 import React, { useEffect, useState } from 'react';
 import { tempCartProducts } from './helpers/TempCartProducts';
 import CartProduct from './components/CartProduct';
-import { IProduct } from './interfaces/Cart.interface';
+import { IProduct, IProductMP } from './interfaces/Cart.interface';
 import EmptyCart from './components/EmptyCart';
 import { useAuth } from '@/modules/auth/shared/context/Auth.context';
-import { confirmOrderService, paymentCreate } from './services/cart.services';
+import { confirmOrderService, paymentCreateService } from './services/cart.services';
+import { ICartProduct, IPaymentResponse } from './interfaces/cartService.interface';
+import { useRouter } from 'next/navigation';
 
 export default function Cart() {
     const [productsOnCart, setProductsOnCart] = useState<IProduct[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const { getIdUser, token } = useAuth();
+    const router = useRouter()
+    
     
     // Obtención del carrito acá. Llamada al back o al localStorage
     
@@ -28,29 +32,27 @@ export default function Cart() {
         }
     }, []);
 
-    const handleConfirmPurchase = () => {
-        const userBuyer = getIdUser(localStorage.getItem("token") || "");
-        const confirmedCart: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");   
-
-        confirmOrderService(userBuyer, confirmedCart, token)
-    //         .then(order => {
-    //         const orderId = order.id;
-    //         const products = order.orderDetails;
-
-    //     console.log("ID de la orden:", orderId);
-    //     console.log("Productos de la orden:", products);
-    // })
-    // .catch(error => console.error("Error al crear la orden:", error));
+    const handleConfirmPurchase = async () => {
+        try {
+            const userBuyer = getIdUser(localStorage.getItem("token") || "");
+            const confirmedCart: ICartProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");
+            const { orderId, currency, products } = await confirmOrderService(userBuyer, confirmedCart, token);
+            // Ahora puedes usar los datos de orderId, currency, y products directamente
+            console.log("Orden confirmada:", orderId, currency, confirmedCart);
+            
+            const paymentResponse = await paymentCreateService(orderId, "ARS", confirmedCart, token)
+            
+            console.log("Respuesta del pago:", paymentResponse);
         
-        const exampleCurrency = "USD";
 
-
-
-        // const paymentData = paymentCreate()
-
-        localStorage.removeItem("cart");
-
-    }
+        } catch (error) {
+            console.error("Error al confirmar la compra en cart.tsx:", error);
+        }
+        
+        
+    };
+    
+    
 
 
         ////// TEMPORAL

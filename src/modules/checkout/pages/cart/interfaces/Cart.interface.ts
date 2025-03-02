@@ -11,6 +11,13 @@ export interface IProduct {
     talle: string
 }
 
+export interface IProductMP {
+    id: string;
+    name: string;
+    price: number;
+    units: number
+}
+
 export interface ICartProductProps {
     ProductProps: IProduct;
     totalPrice: number;
