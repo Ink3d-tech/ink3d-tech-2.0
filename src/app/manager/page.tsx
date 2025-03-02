@@ -20,6 +20,7 @@ import Stock from "../../shared/components/stock/Stock"
 import FormMagazine from "../../shared/components/formMagazine/FormMagazine";
 
 
+
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [darkMode, setDarkMode] = useState(false);
@@ -224,11 +225,11 @@ export default function Dashboard() {
  
  
 
-        {activeTab === "forum" && ( <FormMagazine/>
+ {activeTab === "forum" && (
  
-
-     
-        )}
+            <FormMagazine />
+ )}
+          
 
         {activeTab === "settings" && (
           <div>
