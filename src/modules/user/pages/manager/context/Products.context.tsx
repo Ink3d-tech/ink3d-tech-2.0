@@ -16,12 +16,11 @@ export interface ProductInterface {
     name: string
     description: string
     price: number | ""
-    stock: number | ""
-    image: string[]
     size: string
-    color: string
+    stock: number | ""
+    image: string
     discount?: number | ""
-    category: string
+    categoryId: string
     isActive?: boolean
 }
 

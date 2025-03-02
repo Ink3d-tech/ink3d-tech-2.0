@@ -20,7 +20,6 @@ interface AuthContextInterface {
 }
 
 const AuthContext = createContext<AuthContextInterface>({
-    user: null,
     login: () => {},
     logout: () => {},
     signup: () => {},
@@ -99,7 +98,6 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     const value = {
-        user,
         login,
         signup,
         logout,

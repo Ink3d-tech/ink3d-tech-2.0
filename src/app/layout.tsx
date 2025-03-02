@@ -5,6 +5,8 @@ import { AuthProvider, useAuth } from "@/modules/auth/shared/context/Auth.contex
 import { ProductsProvider } from "../modules/user/pages/manager/context/Products.context";
 import Chatbot from "@/shared/components/Chatbot";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
+import Footer from "@/shared/components/Footer/Footer";
+
 
 
 export const metadata: Metadata = {
@@ -25,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </AuthProvider>
           </ProductsProvider>
         </CategoriesProvider>
+        <Footer /> 
       </body>
     </html>
   );
