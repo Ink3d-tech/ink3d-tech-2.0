@@ -341,325 +341,349 @@
 // }
 
 
-"use client";
 
-import { useState } from "react";
-import { useCategories } from "../../context/Categories.context";
-import { Title } from "./components/Title";
-import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
-import { ProductInterface, useProducts } from "../../context/Products.context";
-import { Plus, X } from "lucide-react";
-import axios from "axios";
-import { API_BACK } from "@/shared/config/api/getEnv";
-import { PlusOption } from "./components/PlusOption.component";
-import Image from "next/image";
 
-interface Size {
-  id: number;
-  name: string;
-}
 
-const sizes: Size[] = [
-  { id: 1, name: "XL" },
-  { id: 2, name: "L" },
-  { id: 3, name: "M" },
-  { id: 4, name: "S" },
-];
 
-const colorins = [
-  { id: 1, name: "Blanco" },
-  { id: 2, name: "Negro" },
-  { id: 3, name: "Rojo" },
-  { id: 4, name: "Azul" },
-];
+//------------------------------------------------------------------------------------------------------------------------------
 
-export interface Color {
-  id: number;
-  color: string;
-}
 
-const MAX_IMAGES = 5;
 
-const FORM_PRODUCT_INTIAL: ProductInterface = {
-  name: "",
-  description: "",
-  image: [],
-  price: "",
-  stock: "",
-  category: "",
-  size: "",
-  isActive: false,
-  color: "",
-};
 
-export const ManagmentProductForm = () => {
-  const [formProduct, setFormProduct] = useState<ProductInterface>(FORM_PRODUCT_INTIAL);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [newCategory, setNewCategory] = useState<string>("");
-  const { createProduct } = useProducts(); // Elimina `products` ya que no se usa
-  const { categories, createCategory } = useCategories(); // Elimina `error` ya que no se usa
-  const [cloudinary, setCloudinary] = useState<string[]>([]);
 
-  const [images, setImages] = useState<(string | null)[]>(Array(MAX_IMAGES).fill(null));
+// "use client";
 
-  const handleCloudinary = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
+// import { useState } from "react";
+// import { useCategories } from "../../context/Categories.context";
+// import { Title } from "./components/Title";
+// import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
+// import { ProductInterface, useProducts } from "../../context/Products.context";
+// import { Plus, X } from "lucide-react";
+// import axios from "axios";
+// import { API_BACK } from "@/shared/config/api/getEnv";
+// import { PlusOption } from "./components/PlusOption.component";
+// import Image from "next/image";
 
-    try {
-      const res = await axios.post<string>(`${API_BACK}/file`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setCloudinary((prevState) => [...prevState, res.data]);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  };
+// interface Size {
+//   id: number;
+//   name: string;
+// }
 
-  // Handle product input changes
-  const handleChangeProduct = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormProduct({
-      ...formProduct,
-      [name]: value,
-    });
-  };
+// const sizes: Size[] = [
+//   { id: 1, name: "XL" },
+//   { id: 2, name: "L" },
+//   { id: 3, name: "M" },
+//   { id: 4, name: "S" },
+// ];
 
-  // Handle category creation
-  const handleCreateCategory = (e: React.SyntheticEvent) => {
-    e.preventDefault();
+// const colorins = [
+//   { id: 1, name: "Blanco" },
+//   { id: 2, name: "Negro" },
+//   { id: 3, name: "Rojo" },
+//   { id: 4, name: "Azul" },
+// ];
 
-    if (!newCategory) {
-      Mixin.fire("El campo no puede quedar vacio", "", "error");
-      return;
-    }
+// export interface Color {
+//   id: number;
+//   color: string;
+// }
 
-    createCategory({ name: newCategory });
+// const MAX_IMAGES = 5;
 
-    Mixin.fire(`Categoria: ${newCategory} creada con exito`, "", "success");
-    setIsModalOpen(false);
-    setNewCategory("");
-  };
+// const FORM_PRODUCT_INTIAL: ProductInterface = {
+//   name: "",
+//   description: "",
+//   image: [],
+//   price: "",
+//   stock: "",
+//   category: "",
+//   size: "",
+//   isActive: false,
+//   color: "",
+// };
 
-  const handleImageChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      handleCloudinary(file);
-      const imageUrl = URL.createObjectURL(file);
-      setImages(images.map((img, i) => (i === index ? imageUrl : img)));
-    }
-  };
+// export const ManagmentProductForm = () => {
+//   const [formProduct, setFormProduct] = useState<ProductInterface>(FORM_PRODUCT_INTIAL);
+//   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+//   const [newCategory, setNewCategory] = useState<string>("");
+//   const { createProduct } = useProducts(); // Elimina `products` ya que no se usa
+//   const { categories, createCategory } = useCategories(); // Elimina `error` ya que no se usa
+//   const [cloudinary, setCloudinary] = useState<string[]>([]);
 
-  const handleRemoveImage = (index: number) => {
-    setImages(images.map((img, i) => (i === index ? null : img)));
-  };
+//   const [images, setImages] = useState<(string | null)[]>(Array(MAX_IMAGES).fill(null));
 
-  // Submit form data
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+//   const handleCloudinary = async (file: File) => {
+//     const formData = new FormData();
+//     formData.append("file", file);
 
-    const formData = {
-      ...formProduct,
-      image: cloudinary,
-    };
+//     try {
+//       const res = await axios.post<string>(`${API_BACK}/file`, formData, {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//           Authorization: `Bearer ${localStorage.getItem("token")}`,
+//         },
+//       });
+//       setCloudinary((prevState) => [...prevState, res.data]);
+//     } catch (error) {
+//       console.error("Error uploading image:", error);
+//     }
+//   };
 
-    if (Object.values(formData).some((value) => value === "" || value === undefined || value === null)) {
-      Mixin.fire("Error", "Por favor, completa todos los campos correctamente.", "error");
-      return;
-    }
+//   // Handle product input changes
+//   const handleChangeProduct = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+//     const { name, value } = e.target;
+//     setFormProduct({
+//       ...formProduct,
+//       [name]: value,
+//     });
+//   };
 
-    try {
-      createProduct(formData);
-      setFormProduct(FORM_PRODUCT_INTIAL);
-      setCloudinary([]);
-      setImages(Array(MAX_IMAGES).fill(null));
-      Mixin.fire("Producto creado con éxito", "", "success");
-    } catch (error) {
-      Mixin.fire("Error al crear el producto", "", "error");
-    }
-  };
+//   // Handle category creation
+//   const handleCreateCategory = (e: React.SyntheticEvent) => {
+//     e.preventDefault();
 
-  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const invalidKeys = ["+", "-", "e", "E", ",", "."];
-    if (invalidKeys.includes(e.key)) {
-      e.preventDefault();
-    }
-  };
+//     if (!newCategory) {
+//       Mixin.fire("El campo no puede quedar vacio", "", "error");
+//       return;
+//     }
 
+//     createCategory({ name: newCategory });
+
+//     Mixin.fire(`Categoria: ${newCategory} creada con exito`, "", "success");
+//     setIsModalOpen(false);
+//     setNewCategory("");
+//   };
+
+//   const handleImageChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = event.target.files?.[0];
+//     if (file) {
+//       handleCloudinary(file);
+//       const imageUrl = URL.createObjectURL(file);
+//       setImages(images.map((img, i) => (i === index ? imageUrl : img)));
+//     }
+//   };
+
+//   const handleRemoveImage = (index: number) => {
+//     setImages(images.map((img, i) => (i === index ? null : img)));
+//   };
+
+//   // Submit form data
+//   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+
+//     const formData = {
+//       ...formProduct,
+//       image: cloudinary,
+//     };
+
+//     if (Object.values(formData).some((value) => value === "" || value === undefined || value === null)) {
+//       Mixin.fire("Error", "Por favor, completa todos los campos correctamente.", "error");
+//       return;
+//     }
+
+//     try {
+//       createProduct(formData);
+//       setFormProduct(FORM_PRODUCT_INTIAL);
+//       setCloudinary([]);
+//       setImages(Array(MAX_IMAGES).fill(null));
+//       Mixin.fire("Producto creado con éxito", "", "success");
+//     } catch (error) {
+//       Mixin.fire("Error al crear el producto", "", "error");
+//     }
+//   };
+
+//   const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+//     const invalidKeys = ["+", "-", "e", "E", ",", "."];
+//     if (invalidKeys.includes(e.key)) {
+//       e.preventDefault();
+//     }
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit} className="space-y-4 bg-gray-300 p-6 rounded-lg">
+//       <div className="space-y-4 p-6 rounded-lg bg-white shadow-lg">
+//         <Title title="Nombre y descripción" />
+//         <input
+//           name="name"
+//           value={formProduct.name}
+//           onChange={handleChangeProduct}
+//           type="text"
+//           placeholder="Nombre del Producto"
+//           className="w-full p-2 border"
+//         />
+//         <textarea
+//           name="description"
+//           value={formProduct.description}
+//           onChange={handleChangeProduct}
+//           placeholder="Escribe la descripción aquí..."
+//           className="w-full p-2 border resize-none h-60"
+//         ></textarea>
+//       </div>
+
+//       {/* ############################### IMAGENES ############################### */}
+//       <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
+//         <Title title="Fotos" />
+//         <div className="flex justify-center items-center gap-8">
+//           {images.map((image, index) => (
+//             <div key={index} className="relative w-40 h-40">
+//               <label className="w-full h-full flex items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100 transition relative">
+//                 <input
+//                   type="file"
+//                   name="image"
+//                   accept="image/*"
+//                   onChange={(e) => handleImageChange(index, e)}
+//                   className="hidden"
+//                 />
+//                 {image ? (
+//                   <Image
+//                     src={image}
+//                     alt={`Imagen ${index + 1}`}
+//                     className="w-full h-full object-cover rounded-lg"
+//                   />
+//                 ) : (
+//                   <div className="flex flex-col justify-center items-center">
+//                     <Plus size={40} className="text-gray-400" />
+//                     <h2 className="text-center">Arrastrá y soltá las imagenes aquí</h2>
+//                   </div>
+//                 )}
+//               </label>
+//               {image && (
+//                 <button
+//                   onClick={() => handleRemoveImage(index)}
+//                   className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full hover:bg-red-700 transition"
+//                 >
+//                   <X size={16} />
+//                 </button>
+//               )}
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+
+//       {/* ############################### PRECIO Y STOCK ############################### */}
+//       <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
+//         <Title title="Precio y stock" />
+//         <input
+//           name="price"
+//           value={formProduct.price}
+//           onChange={handleChangeProduct}
+//           type="number"
+//           placeholder="Price"
+//           className="w-full p-2 border"
+//           min="0"
+//           onKeyDown={handleOnKeyDown}
+//         />
+//         <input
+//           name="stock"
+//           value={formProduct.stock}
+//           onChange={handleChangeProduct}
+//           type="number"
+//           placeholder="Stock"
+//           className="w-full p-2 border"
+//           min="0"
+//           onKeyDown={handleOnKeyDown}
+//         />
+//       </div>
+
+//       {/* ############################### CATEGORIA ############################### */}
+//       <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
+//         <Title title="Categorías" />
+//         <select
+//           name="category"
+//           value={formProduct.category}
+//           onChange={handleChangeProduct}
+//           className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
+//         >
+//           <option value={""} disabled>
+//             Seleccionar una categoría
+//           </option>
+//           {categories.map((cat) => (
+//             <option key={cat.id} value={cat.id}>
+//               {cat.name}
+//             </option>
+//           ))}
+//         </select>
+
+//         <button
+//           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//           onClick={(e) => {
+//             e.preventDefault();
+//             setIsModalOpen(true);
+//           }}
+//         >
+//           +
+//         </button>
+//       </div>
+
+//       {isModalOpen && (
+//         <PlusOption
+//           setIsModalOpen={setIsModalOpen}
+//           newCategory={newCategory}
+//           setNewCategory={setNewCategory}
+//           handleCreateCategory={handleCreateCategory}
+//         />
+//       )}
+
+//       {/* ############################### TAMAÑO Y COLOR ############################### */}
+//       <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
+//         <Title title="Tamaño y color" />
+//         <div className="flex gap-4">
+//           <select
+//             name="size"
+//             value={formProduct.size}
+//             onChange={handleChangeProduct}
+//             className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
+//           >
+//             <option value={""} disabled>
+//               Seleccionar tamaño
+//             </option>
+//             {sizes.map((size) => (
+//               <option key={size.id} value={size.name}>
+//                 {size.name}
+//               </option>
+//             ))}
+//           </select>
+
+//           <select
+//             name="color"
+//             value={formProduct.color}
+//             onChange={handleChangeProduct}
+//             className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
+//           >
+//             <option value={""} disabled>
+//               Seleccionar color
+//             </option>
+//             {colorins.map((color) => (
+//               <option key={color.id} value={color.name}>
+//                 {color.name}
+//               </option>
+//             ))}
+//           </select>
+//         </div>
+//       </div>
+
+//       <div className="text-center mt-4">
+//         <button
+//           type="submit"
+//           className="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition"
+//         >
+//           Crear Producto
+//         </button>
+//       </div>
+//     </form>
+//   );
+// };
+
+
+// /pages/manager.tsx
+
+
+const ManagerPage = () => {
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-gray-300 p-6 rounded-lg">
-      <div className="space-y-4 p-6 rounded-lg bg-white shadow-lg">
-        <Title title="Nombre y descripción" />
-        <input
-          name="name"
-          value={formProduct.name}
-          onChange={handleChangeProduct}
-          type="text"
-          placeholder="Nombre del Producto"
-          className="w-full p-2 border"
-        />
-        <textarea
-          name="description"
-          value={formProduct.description}
-          onChange={handleChangeProduct}
-          placeholder="Escribe la descripción aquí..."
-          className="w-full p-2 border resize-none h-60"
-        ></textarea>
-      </div>
-
-      {/* ############################### IMAGENES ############################### */}
-      <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
-        <Title title="Fotos" />
-        <div className="flex justify-center items-center gap-8">
-          {images.map((image, index) => (
-            <div key={index} className="relative w-40 h-40">
-              <label className="w-full h-full flex items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100 transition relative">
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(index, e)}
-                  className="hidden"
-                />
-                {image ? (
-                  <Image
-                    src={image}
-                    alt={`Imagen ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                ) : (
-                  <div className="flex flex-col justify-center items-center">
-                    <Plus size={40} className="text-gray-400" />
-                    <h2 className="text-center">Arrastrá y soltá las imagenes aquí</h2>
-                  </div>
-                )}
-              </label>
-              {image && (
-                <button
-                  onClick={() => handleRemoveImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full hover:bg-red-700 transition"
-                >
-                  <X size={16} />
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ############################### PRECIO Y STOCK ############################### */}
-      <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
-        <Title title="Precio y stock" />
-        <input
-          name="price"
-          value={formProduct.price}
-          onChange={handleChangeProduct}
-          type="number"
-          placeholder="Price"
-          className="w-full p-2 border"
-          min="0"
-          onKeyDown={handleOnKeyDown}
-        />
-        <input
-          name="stock"
-          value={formProduct.stock}
-          onChange={handleChangeProduct}
-          type="number"
-          placeholder="Stock"
-          className="w-full p-2 border"
-          min="0"
-          onKeyDown={handleOnKeyDown}
-        />
-      </div>
-
-      {/* ############################### CATEGORIA ############################### */}
-      <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
-        <Title title="Categorías" />
-        <select
-          name="category"
-          value={formProduct.category}
-          onChange={handleChangeProduct}
-          className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
-        >
-          <option value={""} disabled>
-            Seleccionar una categoría
-          </option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={(e) => {
-            e.preventDefault();
-            setIsModalOpen(true);
-          }}
-        >
-          +
-        </button>
-      </div>
-
-      {isModalOpen && (
-        <PlusOption
-          setIsModalOpen={setIsModalOpen}
-          newCategory={newCategory}
-          setNewCategory={setNewCategory}
-          handleCreateCategory={handleCreateCategory}
-        />
-      )}
-
-      {/* ############################### TAMAÑO Y COLOR ############################### */}
-      <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
-        <Title title="Tamaño y color" />
-        <div className="flex gap-4">
-          <select
-            name="size"
-            value={formProduct.size}
-            onChange={handleChangeProduct}
-            className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
-          >
-            <option value={""} disabled>
-              Seleccionar tamaño
-            </option>
-            {sizes.map((size) => (
-              <option key={size.id} value={size.name}>
-                {size.name}
-              </option>
-            ))}
-          </select>
-
-          <select
-            name="color"
-            value={formProduct.color}
-            onChange={handleChangeProduct}
-            className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
-          >
-            <option value={""} disabled>
-              Seleccionar color
-            </option>
-            {colorins.map((color) => (
-              <option key={color.id} value={color.name}>
-                {color.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="text-center mt-4">
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition"
-        >
-          Crear Producto
-        </button>
-      </div>
-    </form>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold text-center">Formulario de Gestión de Productos</h1>
+    </div>
   );
 };
+
+export default ManagerPage;

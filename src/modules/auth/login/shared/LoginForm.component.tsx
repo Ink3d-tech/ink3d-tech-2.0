@@ -77,9 +77,9 @@
 //     );
 // }
 
-
 "use client";
 
+import { useEffect, useState } from "react";  // Importamos useEffect y useState
 import { BtnVariant, ButtonBase } from "@/modules/auth/shared/components/buttons/Button.component";
 import { FormComponent } from "@/modules/auth/shared/components/Form.component";
 import { LoginInterface } from "@/modules/auth/shared/interfaces/Login.interface";
@@ -114,6 +114,14 @@ export const LoginForm: React.FC<LoginProps> = ({
     handlerSubmit,
     isLoading
 }) => {
+    // Estado para verificar si estamos en el cliente
+    const [isClient, setIsClient] = useState(false);
+
+    // useEffect para actualizar el estado cuando el componente se monte
+    useEffect(() => {
+        setIsClient(true);  // Cambiamos a true una vez que el componente se haya montado en el cliente
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -136,15 +144,17 @@ export const LoginForm: React.FC<LoginProps> = ({
     };
 
     const handleGoogleAuth = () => {
-        Swal.fire({
-            title: "Redirigiendo...",
-            text: "Te estamos redirigiendo a Google para iniciar sesión",
-            icon: "info",
-            timer: 2000,
-            showConfirmButton: false
-        }).then(() => {
-            window.location.href = "http://localhost:3000/auth/google/login";
-        });
+        if (isClient) {  // Solo ejecutamos si estamos en el cliente
+            Swal.fire({
+                title: "Redirigiendo...",
+                text: "Te estamos redirigiendo a Google para iniciar sesión",
+                icon: "info",
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = "http://localhost:3000/auth/google/login";
+            });
+        }
     };
 
     return (

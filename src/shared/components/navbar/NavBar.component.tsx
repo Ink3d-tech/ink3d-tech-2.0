@@ -157,8 +157,6 @@
 //         </div>
 //     );
 // }
-
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -169,24 +167,39 @@ import Image from "next/image";
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
 
 export default function NavBar() {
-    const { isAuthenticated, user, logout } = useAuth(); 
+    const { isAuthenticated, logout } = useAuth(); 
     const [menu, setMenu] = useState(false);
+    const [isClient, setIsClient] = useState(false); // State to track if we're in the client
 
     const handleToggle = () => setMenu(prevMenu => !prevMenu);
     const handleLogout = () => logout();
 
+    // Ensure we're on the client
     useEffect(() => {
-        document.body.style.overflow = menu ? "hidden" : "";
-        return () => { document.body.style.overflow = ""; };
-    }, [menu]);
+        setIsClient(true); // This runs only in the client
+    }, []);
 
     useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 768) setMenu(false);
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+        if (isClient) { // Make sure the following only runs in the client
+            document.body.style.overflow = menu ? "hidden" : "";
+        }
+
+        return () => { document.body.style.overflow = ""; };
+    }, [menu, isClient]);
+
+    useEffect(() => {
+        if (isClient) { // Ensure window is defined before adding event listeners
+            const handleResize = () => {
+                if (window.innerWidth >= 768) setMenu(false);
+            };
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }
+    }, [isClient]);
+
+    if (!isClient) {
+        return null; // Render nothing until we confirm we're on the client
+    }
 
     return (
         <div>

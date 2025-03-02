@@ -143,7 +143,7 @@ const MagazinePage: React.FC = () => {
           throw new Error("Error al obtener los artículos");
         }
         const data: Article[] = await response.json();
-        setArticles(data); // Solo se obtienen los artículos desde la API
+        setArticles(data);
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -152,7 +152,7 @@ const MagazinePage: React.FC = () => {
     };
 
     fetchArticles();
-  }, []); // No hace falta el "hardcodedArticle" ahora
+  }, []); 
 
   if (loading) {
     return <p className="text-center text-gray-500">Cargando artículos...</p>;
@@ -164,7 +164,6 @@ const MagazinePage: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-white">
-      {/* 🔹 Navbar Lateral */}
       <nav className="w-64 bg-black text-white h-screen fixed top-0 left-0 p-6 flex flex-col justify-start space-y-10">
         <h2 className="text-2xl font-bold uppercase tracking-wide text-center">Magazine</h2>
         <div className="space-y-8 text-lg">
@@ -183,7 +182,6 @@ const MagazinePage: React.FC = () => {
         </div>
       </nav>
 
-      {/* 🔹 Contenido Principal */}
       <div className="flex-1 ml-64 p-8">
         <h1 className="text-5xl font-bold text-center uppercase tracking-widest mt-10 mb-10">
           Magazine

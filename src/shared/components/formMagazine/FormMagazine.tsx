@@ -183,8 +183,8 @@ export default function FormMagazine() {
 
       setFormData({ author: "", title: "", description: "", image: "" });
     } catch (error: unknown) {
-      // No mostrar nada, pero podrías descomentar el siguiente log en desarrollo:
-      // console.error("Error al enviar el formulario:", error);
+      console.error("Error al enviar el formulario:", error);
+      alert("Hubo un error al enviar el formulario. Por favor, intenta nuevamente.");
     }
   };
 
