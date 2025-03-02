@@ -1,67 +1,97 @@
 "use client";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
+// Definir tipos de datos
 interface Product {
-  id: number;
+  id: string;
   name: string;
-  category: "Remeras" | "Joggers" | "Buzos";
+  description: string;
+  price: string;
   stock: number;
-  price: number;
-  image: string; // Nueva propiedad para la imagen
+  image: string | null;
+  size: string;
+  isActive: boolean;
+  category: string;
 }
 
-// Mapear categorías a emojis
-const categoryEmojis: Record<string, string> = {
-  Remeras: "👕",
-  Joggers: "👖",
-  Buzos: "🧥",
-};
+interface StockMovement {
+  id: string;
+  quantity: number;
+  type: string;
+  reason: string;
+  createdAt: string;
+  product: Product;
+}
+
+interface Category {
+  id: string;
+  name: string;
+}
 
 export default function Stock() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categoryFilter, setCategoryFilter] = useState<"All" | "Remeras" | "Joggers" | "Buzos">("All");
-  const [loading, setLoading] = useState(true);
+  const [stockMovements, setStockMovements] = useState<StockMovement[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  // Obtener movimientos de stock desde el backend
   useEffect(() => {
-    setLoading(true);
-    fetch("https://project-ink3d-back-1.onrender.com/stock-movements")
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
-        console.log("📦 Movimientos de stock cargados:", data);
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch(error => {
+    const fetchStockMovements = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get<StockMovement[]>(
+          "http://localhost:3000/stock-movements"
+        );
+        setStockMovements(response.data);
+      } catch (error) {
         console.error("❌ Error al obtener movimientos de stock:", error);
-        alert("Hubo un error al cargar los movimientos. Revisa la consola.");
+        alert("Hubo un error al cargar los movimientos de stock.");
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get<Category[]>("http://localhost:3000/categories");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("❌ Error al obtener categorías:", error);
+      }
+    };
+
+    fetchStockMovements();
+    fetchCategories();
   }, []);
 
-  // Filtrar productos según categoría
-  const filteredProducts = categoryFilter === "All"
-    ? products
-    : products.filter(product => product.category === categoryFilter);
+  // Filtrar productos por categoría seleccionada
+  const filteredStock = selectedCategory
+    ? stockMovements.filter((m) => m.product.category === selectedCategory)
+    : stockMovements;
 
-  // Función para vender un producto y actualizar stock
-  const handleSell = async (id: number, quantity: number) => {
-    const response = await fetch("https://project-ink3d-back-1.onrender.com/api#/StockMovements/StockMovementsController_getAllStockMovements", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, quantity }),
-    });
+  // Función para realizar una venta (restar stock)
+  const handleSell = async (productId: string) => {
+    try {
+      const quantityToSell = 1;
 
-    const data = await response.json();
+      await axios.post("http://localhost:3000/sell-product", {
+        productId,
+        quantity: quantityToSell,
+      });
 
-    if (response.ok) {
-      setProducts(products.map(p => p.id === id ? { ...p, stock: p.stock - quantity } : p));
-      alert("✅ Compra realizada con éxito");
-    } else {
-      alert("❌ " + data.message);
+      // Actualizar el estado después de la venta
+      setStockMovements((prev) =>
+        prev.map((m) =>
+          m.product.id === productId
+            ? { ...m, product: { ...m.product, stock: m.product.stock - quantityToSell } }
+            : m
+        )
+      );
+
+      alert("✅ Venta realizada con éxito.");
+    } catch (error) {
+      console.error("❌ Error al realizar la venta:", error);
+      alert("Hubo un problema al procesar la venta.");
     }
   };
 
@@ -69,66 +99,66 @@ export default function Stock() {
 
   return (
     <div className="p-6 bg-black shadow-lg rounded-md">
-      <h2 className="text-3xl font-semibold text-red-500 mb-4">🔥 Stock de Productos 🔥</h2>
+      <h2 className="text-3xl font-semibold text-red-500 mb-4">
+        🔥 Movimientos de Stock 🔥
+      </h2>
 
-      {/* Selector de categoría */}
+      {/* Filtro de categorías */}
       <div className="mb-4">
-        <label className="text-lg font-medium text-white mr-2">📌 Filtrar por categoría:</label>
-        <select 
-          className="border border-red-500 p-2 rounded-md bg-black text-white"
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value as "All" | "Remeras" | "Joggers" | "Buzos")}
+        <label className="text-white">Filtrar por categoría: </label>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="ml-2 p-2 bg-gray-800 text-white rounded-md"
         >
-          <option value="All">🌍 Todos</option>
-          <option value="Remeras">👕 Remeras</option>
-          <option value="Joggers">👖 Joggers</option>
-          <option value="Buzos">🧥 Buzos</option>
+          <option value="">Todas</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.name}>
+              {category.name}
+            </option>
+          ))}
         </select>
       </div>
 
-      {/* Tabla de productos */}
+      {/* Tabla de movimientos de stock */}
       <table className="w-full border-collapse border border-red-500">
         <thead>
           <tr className="bg-red-500 text-white">
-            <th className="border border-red-500 p-2">🆔 ID</th>
-            <th className="border border-red-500 p-2">📸 Imagen</th>
+            <th className="border border-red-500 p-2">🆔 Producto</th>
             <th className="border border-red-500 p-2">📦 Nombre</th>
-            <th className="border border-red-500 p-2">📂 Categoría</th>
             <th className="border border-red-500 p-2">📊 Stock</th>
             <th className="border border-red-500 p-2">💰 Precio</th>
-            <th className="border border-red-500 p-2">⚡ Acción</th>
+            <th className="border border-red-500 p-2">📅 Fecha</th>
+            <th className="border border-red-500 p-2">🛒 Acción</th>
           </tr>
         </thead>
         <tbody>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map(product => (
-              <tr key={product.id} className="text-center text-white bg-black">
-                <td className="border border-red-500 p-2">{product.id}</td>
+          {filteredStock.length > 0 ? (
+            filteredStock.map((movement) => (
+              <tr key={movement.id} className="text-center text-white bg-black">
+                <td className="border border-red-500 p-2">{movement.product.id}</td>
+                <td className="border border-red-500 p-2">{movement.product.name}</td>
+                <td className="border border-red-500 p-2">{movement.product.stock}</td>
+                <td className="border border-red-500 p-2">${movement.product.price}</td>
                 <td className="border border-red-500 p-2">
-                  <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="w-16 h-16 object-cover rounded-md"
-                  />
+                  {new Date(movement.createdAt).toLocaleDateString()}
                 </td>
-                <td className="border border-red-500 p-2">{product.name}</td>
-                <td className="border border-red-500 p-2">{categoryEmojis[product.category]} {product.category}</td>
-                <td className="border border-red-500 p-2">{product.stock}</td>
-                <td className="border border-red-500 p-2">${product.price}</td>
                 <td className="border border-red-500 p-2">
-                  <button 
-                    className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-700 transition"
-                    disabled={product.stock === 0}
-                    onClick={() => handleSell(product.id, 1)}
+                  <button
+                    onClick={() => handleSell(movement.product.id)}
+                    disabled={movement.product.stock <= 0}
+                    className="bg-red-500 text-white p-2 rounded-md hover:bg-red-700 disabled:bg-gray-600"
                   >
-                    🛒 Comprar 1
+                    🛒 Vender
                   </button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={7} className="text-white text-center p-4">⚠️ No hay productos disponibles</td>
+              <td colSpan={6} className="text-white text-center p-4">
+                ⚠️ No hay productos disponibles en esta categoría
+              </td>
             </tr>
           )}
         </tbody>
@@ -136,4 +166,3 @@ export default function Stock() {
     </div>
   );
 }
-
