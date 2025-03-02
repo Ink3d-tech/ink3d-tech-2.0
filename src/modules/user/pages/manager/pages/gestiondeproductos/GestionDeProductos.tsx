@@ -12,7 +12,7 @@ const GestionProductos = () => {
     price: "",
     stock: "",
     discount: "",
-    image: "",
+    image: [],
     description: ""
   });
 

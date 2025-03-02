@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { API_BACK } from "@/shared/config/api/getEnv";
+import Image from "next/image";
+
+
 
 interface Article {
   id: number;
@@ -12,19 +16,20 @@ interface Article {
 }
 
 const ArticlePage = () => {
-  const { id } = useParams(); // ✅ Obtiene el ID de la URL
+  const { id } = useParams();
   const router = useRouter();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
 
   useEffect(() => {
-    if (!id) return; // No hacer la solicitud si no hay ID aún
+    if (!id) return; 
 
     const fetchArticle = async () => {
       try {
         console.log(`📡 Fetching article ${id}...`);
-        const response = await fetch(`http://localhost:3000/api/magazine/${id}`);
+        const response = await fetch(`${API_BACK}/api/magazine/${id}`);
 
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -55,7 +60,7 @@ const ArticlePage = () => {
         <div className="max-w-2xl bg-gray-100 p-6 rounded-lg shadow-lg">
           <h1 className="text-3xl font-bold mb-3">{article.title}</h1>
           <p className="text-gray-600">{article.date} · {article.author}</p>
-          <img src={article.image} alt={article.title} className="w-full h-64 object-cover rounded-lg my-4" />
+          <Image src={article.image} alt={article.title} className="w-full h-64 object-cover rounded-lg my-4" />
           <p className="text-lg text-gray-700">{article.description}</p>
         </div>
       )}

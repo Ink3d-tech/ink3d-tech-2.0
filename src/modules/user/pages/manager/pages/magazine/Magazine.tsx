@@ -115,9 +115,11 @@
 
 
 
+
 "use client"
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Article {
   id: number;
@@ -133,17 +135,6 @@ const MagazinePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Artículo Hardcodeado
-  const hardcodedArticle: Article = {
-    id: 2,
-    title: "Secretos del Estilo Urbano Chic",
-    author: "Nacho",
-    date: "10 Feb 2024",
-    image: "/images/02.png",
-    description:
-      "Los trucos y consejos para dominar el estilo urbano sin perder la elegancia. Inspirado en las grandes ciudades del mundo.",
-  
-  }
   useEffect(() => {
     const fetchArticles = async () => {
       try {
@@ -152,7 +143,7 @@ const MagazinePage: React.FC = () => {
           throw new Error("Error al obtener los artículos");
         }
         const data: Article[] = await response.json();
-        setArticles([hardcodedArticle, ...data]); // Agrega el artículo fijo al inicio
+        setArticles(data); // Solo se obtienen los artículos desde la API
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -161,7 +152,7 @@ const MagazinePage: React.FC = () => {
     };
 
     fetchArticles();
-  }, []);
+  }, []); // No hace falta el "hardcodedArticle" ahora
 
   if (loading) {
     return <p className="text-center text-gray-500">Cargando artículos...</p>;
@@ -205,7 +196,7 @@ const MagazinePage: React.FC = () => {
               className="bg-white shadow-lg rounded-lg overflow-hidden transition transform hover:scale-105 flex flex-col"
             >
               <Link href={`/manager/magazine/${article.id}`}>
-                <img
+                <Image
                   src={article.image}
                   alt={article.title}
                   className="w-full h-64 object-cover cursor-pointer"

@@ -126,7 +126,7 @@
 
 "use client";
 
-import React, { useState, useContext, createContext, useEffect } from "react";
+import React, { useState, useContext, createContext, useEffect, useCallback } from "react";
 import { LoginInterface } from "../interfaces/Login.interface";
 import { SignupInterface, UserInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
@@ -141,6 +141,7 @@ interface AuthContextInterface {
     isAdmin: boolean;
     token: string | null;
     isLoading: boolean;
+    getIdUser: (token: string) => string | null; // Agregar la función getIdUser
 }
 
 const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
@@ -152,16 +153,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-
-        if (storedToken) {
-            handleAuthentication(storedToken);
-        } else {
-            resetAuthState();
-        }
-
-        setIsLoading(false);
+    const resetAuthState = useCallback(() => {
+        localStorage.removeItem("token");
+        setToken(null);
+        setUser(null);
+        setIsAuthenticated(false);
+        setIsAdmin(false);
     }, []);
 
     const decodeToken = (token: string): UserInterface | null => {
@@ -174,11 +171,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const handleAuthentication = (token: string) => {
+    const handleAuthentication = useCallback((token: string) => {
         localStorage.setItem("token", token);
         setToken(token);
         setIsAuthenticated(true);
-        
+
         const userData = decodeToken(token);
         if (userData) {
             setUser(userData);
@@ -186,15 +183,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
             resetAuthState();
         }
-    };
+    }, [resetAuthState]);
 
-    const resetAuthState = () => {
-        localStorage.removeItem("token");
-        setToken(null);
-        setUser(null);
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-    };
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+
+        if (storedToken) {
+            handleAuthentication(storedToken);
+        } else {
+            resetAuthState();
+        }
+
+        setIsLoading(false);
+    }, [handleAuthentication, resetAuthState]);
 
     const login = async (loginForm: LoginInterface) => {
         try {
@@ -218,8 +219,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         resetAuthState();
     };
 
+    // Agregar la función getIdUser
+    const getIdUser = (token: string): string | null => {
+        const userData = decodeToken(token);
+        return userData ? userData.id : null;  // Retorna el ID del usuario
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, signup, logout, isAuthenticated, isAdmin, isLoading, token }}>
+        <AuthContext.Provider value={{ user, login, signup, logout, isAuthenticated, isAdmin, isLoading, token, getIdUser }}>
             {children}
         </AuthContext.Provider>
     );

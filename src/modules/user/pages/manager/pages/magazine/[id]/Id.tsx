@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 interface Article {
   id: number;
@@ -86,7 +87,7 @@ const ArticleDetail = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        <img src={article.image} alt={article.title} className="w-full h-64 object-cover" />
+        <Image src={article.image} alt={article.title} className="w-full h-64 object-cover" />
         <div className="p-6">
           <h1 className="text-3xl font-bold">{article.title}</h1>
           <p className="text-gray-500 text-sm mt-2">

@@ -11,10 +11,12 @@ export const formFields: InputInterface[] = [
 ]
 
 export const formInitial: SignupInterface = {
-    name: "", 
-    email: "", 
-    password: "", 
-    confirmPassword: ""
-}
+    id: "",  
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+};
+
 
 export const requiredFields: string[] = ["name", "email", "password", "confirmPassword"]

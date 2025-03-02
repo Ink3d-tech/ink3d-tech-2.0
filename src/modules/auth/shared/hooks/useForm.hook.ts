@@ -172,13 +172,11 @@ export function useForm<T>({
                 router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
             } catch (error: unknown) {
                 if (error instanceof Error) {
-                    const errorMessage = (error as any).response?.data?.message;
-                    const messageToShow = [
-                        "Invalid password", "User does not exist"
-                    ].includes(errorMessage)
+                    const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+                    const messageToShow = ["Invalid password", "User does not exist"].includes(errorMessage ?? "")
                         ? "Invalid credentials" 
                         : errorMessage;
-
+            
                     Mixin.fire(messageToShow ?? "An error occurred", "", "error");
                 } else {
                     Mixin.fire("An unexpected error occurred", "", "error");

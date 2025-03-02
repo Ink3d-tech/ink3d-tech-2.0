@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 // Definimos el tipo de datos de un artículo
@@ -120,7 +121,7 @@ export default function ForumPage() {
           <li key={article.id} className="border p-4 mt-2">
             <h4 className="text-xl font-semibold">{article.title}</h4>
             <p>{article.content}</p>
-            <img src={article.image} alt={article.title} className="w-32 h-32 mt-2" />
+            <Image src={article.image} alt={article.title} className="w-32 h-32 mt-2" />
             <div className="mt-2">
               <button
                 onClick={() => handleEdit(article)}

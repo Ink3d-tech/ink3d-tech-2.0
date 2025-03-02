@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/shared/components/navbar/NavBar.component";
-import { AuthProvider, useAuth } from "@/modules/auth/shared/context/Auth.context";
+import { AuthProvider } from "@/modules/auth/shared/context/Auth.context";
 import { ProductsProvider } from "../modules/user/pages/manager/context/Products.context";
 import Chatbot from "@/shared/components/Chatbot";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
-import Footer from "@/shared/components/Footer/Footer";
+import Footer from "@/shared/components/footer/Footer";
 
 
 
@@ -20,14 +20,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <CategoriesProvider>
           <ProductsProvider>
-                <AuthProvider>
-                  <Chatbot />
-                  <NavBar />
-                  <main className="bg-[#D9D9D9] pt-20">{children}</main>
-                </AuthProvider>
+            <AuthProvider>
+              <Chatbot />
+              <NavBar />
+              <main className="bg-[#D9D9D9] pt-20">{children}</main>
+            </AuthProvider>
           </ProductsProvider>
         </CategoriesProvider>
-        <Footer /> 
+        <Footer />
       </body>
     </html>
   );
