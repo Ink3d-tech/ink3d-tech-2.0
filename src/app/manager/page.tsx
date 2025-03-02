@@ -19,6 +19,9 @@ import Stock from "../../shared/components/stock/Stock"
 
 import FormMagazine from "../../shared/components/formMagazine/FormMagazine";
 
+import finanzas from "../../shared/components/finanzas/Finanzas"
+import Finanzas from "../../shared/components/finanzas/Finanzas";
+
 
 
 export default function Dashboard() {
@@ -174,25 +177,10 @@ export default function Dashboard() {
         {activeTab === "invent" && (<Stock/>
         )}
 
-           <button
-            
-            className={`w-full text-left px-3 py-2 rounded-lg ${
-              activeTab === "finance" ? "bg-gray-700" : ""
-            }`}
-            onClick={() => setActiveTab("finance")}
-          >
-            💲  Finazas
           
-          </button>
-        {activeTab === "finance" && (
-          <div>
-            <h2 
-              className="text-3xl font-bold mb-4 cursor-pointer"
-              onClick={() => router.push("/mycash")}
-            >
-              💲 Mi Dinero
-            </h2>
-          </div>
+         
+        {activeTab === "finance" && (<Finanzas/>
+         
         )}
 
         {activeTab === "products" && (
