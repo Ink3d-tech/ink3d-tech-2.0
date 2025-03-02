@@ -5,8 +5,7 @@ import { AuthProvider, useAuth } from "@/modules/auth/shared/context/Auth.contex
 import { ProductsProvider } from "../modules/user/pages/manager/context/Products.context";
 import Chatbot from "@/shared/components/Chatbot";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
-import { ColorsProvider } from "@/modules/user/pages/manager/context/Colors.context";
-import { SizesProvider } from "@/modules/user/pages/manager/context/Sizes.context";
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,15 +18,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <CategoriesProvider>
           <ProductsProvider>
-            <ColorsProvider>
-              <SizesProvider>
                 <AuthProvider>
                   <Chatbot />
                   <NavBar />
                   <main className="bg-[#D9D9D9] pt-20">{children}</main>
                 </AuthProvider>
-              </SizesProvider>
-            </ColorsProvider>
           </ProductsProvider>
         </CategoriesProvider>
       </body>

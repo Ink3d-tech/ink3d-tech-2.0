@@ -2,8 +2,28 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { API_BACK } from "../../../../../shared/config/api/getEnv";
-import { Product } from "@/modules/checkout/pages/cart/Cart.context";
+import { API_BACK } from "@/shared/config/api/getEnv";
+import { getAuthHeaders } from "./getAuthHeaders";
+
+
+export interface CategoryInterface {
+    id?: string
+    name: string
+}
+
+export interface ProductInterface {
+    id?: string
+    name: string
+    description: string
+    price: number | ""
+    stock: number | ""
+    image: string[]
+    size: string
+    color: string
+    discount?: number | ""
+    category: string
+    isActive?: boolean
+}
 
 interface ProductsContextType {
     products: Product[]
@@ -28,10 +48,10 @@ const ProductsContext = createContext<ProductsContextType>({
 });
 
 export const ProductsProvider = ({ children }: { children: React.ReactNode }) => {
-    const [products, setProducts] = useState<Product[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | undefined>()
-
+    const [products, setProducts] = useState<ProductInterface[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | undefined>();
+    console.log(products)
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -46,26 +66,16 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
         fetchProducts();
     }, []);
 
-    const getProductById = (id: string): Product | undefined  => {
-        return products.find(product => product.id === id)
-    }
+        
 
-    const createProduct = async (product: Product): Promise<void> => {
-        await axios.post(`${API_BACK}/products`, product)
-    }
-
-    const filteredProducts = (selectedCategory: string): Product[] | undefined => {
-        return selectedCategory
-            ? products.filter((product) => product.category.id === selectedCategory)
-            : products;
-    }
-
-    const getAllProducts = (): Product[] => {
-        console.log('====================================');
-        console.log(products);
-        console.log('====================================');
-        return products
-    }
+    const createProduct = async (product: ProductInterface): Promise<void> => {      
+        try {
+            const res = await axios.post<ProductInterface>(`${API_BACK}/products`, product,  getAuthHeaders());
+            setProducts(prev => [...prev, res.data]);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Error al crear el producto");
+        }
+    };
 
     const getProductById = (id: string): ProductInterface | undefined => {
         if (!products || products.length === 0) return undefined

@@ -8,20 +8,27 @@ import { ProductInterface, useProducts } from "../../context/Products.context";
 import { Plus, X } from "lucide-react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { useSizes } from "../../context/Sizes.context";
-import { useColors } from "../../context/Colors.context";
 
-// interface Size {
-//     id: number
-//     size: string
-// }
+import { PlusOption } from "./components/PlusOption.component";
+
+interface Size {
+    id: number
+    name: string
+}
+
+const sizes: Size[] = [
+    { id: 1, name: "XL" },
+    { id: 2, name: "L" },
+    { id: 3, name: "M" },
+    { id: 4, name: "S" },
+]
 
 
 const colorins = [
-    { id: 1, color: "Blanco" },
-    { id: 2, color: "Negro" },
-    { id: 3, color: "Rojo" },
-    { id: 4, color: "Azul" },
+    { id: 1, name: "Blanco" },
+    { id: 2, name: "Negro" },
+    { id: 3, name: "Rojo" },
+    { id: 4, name: "Azul" },
 ];
 
 export interface Color {
@@ -33,50 +40,32 @@ export interface Color {
 
 const MAX_IMAGES = 5;
 
+const FORM_PRODUCT_INTIAL: ProductInterface = {
+    name: "",
+    description: "",
+    image: [],
+    price: "",
+    stock: "",
+    category: "",
+    size: "",
+    isActive: false,
+    color: ""
+}
 
 
 export const ManagmentProductForm = () => {
+    const [formProduct, setFormProduct] = useState<ProductInterface>(FORM_PRODUCT_INTIAL)
+
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+
     const [newCategory, setNewCategory] = useState<string>("");
-    const [newColor, setNewColor] = useState<string>("")
-    const [newSize, setNewSize] = useState<string>("")
 
     const { products, createProduct } = useProducts()
     const { categories, createCategory, error } = useCategories()
-    const { createSize, sizes } = useSizes()
-    const { createColor } = useColors()
-
 
     const [cloudinary, setCloudinary] = useState<string[]>([])
-    const [colors, setColors] = useState<string[]>([])
 
-    const [IsModalOpenSize, setIsModalOpenSize] = useState<boolean>(false)
-
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [isOpenSize, setIsOpenSize] = useState(false);
-
-
-    
-
-    const handleColorProduct = (selectedColor: string) => {
-        setFormProduct((prev) => ({
-          ...prev,
-          color: prev.color.includes(selectedColor)
-            ? prev.color.filter((color) => color !== selectedColor) // Quita si ya estaba
-            : [...prev.color, selectedColor], // Agrega si no estaba
-        }));
-    };
-
-     const handleSizeProduct = (selectedSize: string) => {
-        setFormProduct((prev) => ({
-          ...prev,
-          size: prev.size.includes(selectedSize)
-            ? prev.size.filter((size) => size !== selectedSize) 
-            : [...prev.size, selectedSize],
-        }));
-    };
-  
     
     const handleCloudinary = async (file: File) => {
         const formData = new FormData();
@@ -100,21 +89,12 @@ export const ManagmentProductForm = () => {
         }
     };
 
-    const [formProduct, setFormProduct] = useState<ProductInterface>({
-        name: "",
-        description: "",
-        image: [],
-        price: "",
-        stock: "",
-        category: "",
-        size: [],
-        isActive: false,
-        color: []
-    })
+    
 
 
     const handleChangeProduct = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value  } = e.target;
+        console.log(formProduct)
         setFormProduct({
           ...formProduct,
           [name]: value
@@ -122,17 +102,10 @@ export const ManagmentProductForm = () => {
     };
 
 
-    const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, type, checked, value } = e.target;
-        setFormProduct({
-            ...formProduct,
-            [name]: type === "checkbox" ? checked : value
-        });
-    };
 
 
-    // CREAMOS UNA CATEGORIA
-    const handleCreateCategory = (e: any) => {
+    
+    const handleCreateCategory = (e: React.SyntheticEvent) => {
         e.preventDefault()
 
         if(!newCategory) {
@@ -152,28 +125,8 @@ export const ManagmentProductForm = () => {
         setIsModalOpen(false);
         setNewCategory("")
     };
+    
 
-    const handleCreateSize = (e: any) => {
-        e.preventDefault()
-
-        if(!newSize) {
-            Mixin.fire("El campo no puede quedar vacio", "", "error")
-            return
-        }
-        
-        if(error) {
-            Mixin.fire("Error al crear el size", error, "error")
-            return
-        }
-       
-        createSize({name: newSize})
-
-
-        Mixin.fire(`Categoria: ${newSize} creada con exito`, "", "success")
-        setIsModalOpenSize(false);
-        setNewSize("")
-    };
-   
     // IMAGES GUARDO LOS CAMBIOS
     const [images, setImages] = useState<(string | null)[]>(Array(MAX_IMAGES).fill(null));
 
@@ -196,18 +149,13 @@ export const ManagmentProductForm = () => {
     };
 
 
-    console.log('====================================');
-    console.log(formProduct);
-    console.log('====================================');
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         //handlerSubmit(e, products, "El producto ",formProduct, createProduct, "Producto creado con éxito", setFormProduct);
         e.preventDefault();
     
         const formData = {
             ...formProduct,
-            image: cloudinary, 
-            sizes: sizes,
-            color: colors
+            image: cloudinary
         };
 
         if (Object.values(formData).some(value => value === "" || value === undefined || value === null)) {
@@ -221,29 +169,18 @@ export const ManagmentProductForm = () => {
         }
 
         try {
-            console.log('====================================');
-            console.log(formData);
-            console.log('====================================');
             createProduct(formData)
-
-            setFormProduct({
-                name: "",
-                description: "",
-                image: [],
-                price: "",
-                stock: "",
-                category: "",
-                size: [],
-                isActive: false,
-                color: []
-            }); 
-    
+            
+            setFormProduct(FORM_PRODUCT_INTIAL); 
+            setCloudinary([]);
+            setImages(Array(MAX_IMAGES).fill(null));
 
             Mixin.fire("Producto creado con éxito", "", "success");
         } catch (error) {
             Mixin.fire("Error al crear el producto", "", "error");
         }
     };
+
 
     // MANEJADOR PARA VALIDAR EL CAMPO DE TIPO NUMBER
     const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -317,8 +254,6 @@ export const ManagmentProductForm = () => {
                 <input name="stock" value={formProduct.stock} onChange={handleChangeProduct} type="number" placeholder="Stock" className="w-full p-2 border" min="0" onKeyDown={handleOnKeyDown} />
             </div>
 
-
-
             {/* ############################### CATEGORIA ############################### */}
         
             <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
@@ -340,12 +275,6 @@ export const ManagmentProductForm = () => {
                 </button>
             </div>
 
-            
-
-
-
-            {/* ############################### MODAL CATEGORIA ############################### */}
-                    {/* CORRECCIONES: MODAL DE CATEGORIA FUNCIONANDO REALIZAR COMPONENTE */}
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center shadow-lg">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -386,78 +315,25 @@ export const ManagmentProductForm = () => {
                 {/* ########################### TALLES ########################### */}
                 
                 <div className="relative w-full">
-                    <div
-                        className="w-full p-2 border rounded-lg cursor-pointer bg-white"
-                        onClick={() => setIsOpenSize(!isOpenSize)}
-                    >
-                        {formProduct.size.length > 0
-                        ? formProduct.size.join(", ")
-                        : "Seleccionar talles"}
-                    </div>
-
-                    {/* Dropdown con opciones */}
-                    {isOpenSize && (
-                        <div className="absolute w-full bg-white border rounded-lg mt-1 shadow-lg z-10">
-                        {sizes.map((s) => (
-                            <div
-                                key={s.id}
-                                className={`p-2 hover:bg-gray-200 cursor-pointer flex justify-between ${
-                                    formProduct.size.includes(s.name) ? "bg-blue-300" : ""
-                                }`}
-                                onClick={() => handleSizeProduct(s.name)}
-                            >
-                                {s.name}
-                                {formProduct.size.includes(s.name) && <span>✓</span>}
-                            </div>
-                        ))}
-                        </div>
-                    )}   
+                    <select name="size" value={formProduct.size} onChange={handleChangeProduct} className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" >
+                        <option value={""} disabled>Seleccionar una talla</option>
+                        { sizes.map((cat) => <option key={cat.id} value={cat.name}>{cat.name}</option>) }
+                    </select> 
                 </div> 
 
                 {/* ########################### COLORES ########################### */}
                     
                 <div className="relative w-full">
-             
-                    <div
-                        className="w-full p-2 border rounded-lg cursor-pointer bg-white"
-                        onClick={() => setIsOpen(!isOpen)}
-                    >
-                        {formProduct.color.length > 0
-                        ? formProduct.color.join(", ") 
-                        : "Seleccionar colores"}
-                    </div>
-
-                    
-                    {isOpen && (
-                        <div className="absolute w-full bg-white border rounded-lg mt-1 shadow-lg z-10">
-                            {colorins.map((c) => (
-                                <div
-                                    key={c.id}
-                                    className={`p-2 hover:bg-gray-200 cursor-pointer flex justify-between ${
-                                        formProduct.color.includes(c.color) ? "bg-blue-300" : ""
-                                    }`}
-                                    onClick={() => handleColorProduct(c.color)}
-                                >
-                                    {c.color}
-                                    {formProduct.color.includes(c.color) && <span className="text-green-500">✓</span>}
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    <select name="color" value={formProduct.color} onChange={handleChangeProduct} className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" >
+                        <option value={""} disabled>Seleccionar un color</option>
+                        { colorins.map((cat) => <option key={cat.id} value={cat.name}>{cat.name}</option>) }
+                    </select>
                 </div>
             </div> 
-      
-
+         
             {/* ############################### MAS OPCIONES ############################### */}
 
-            <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4">
-                <h1 className="text-2xl font-semibold">Más opciones</h1>
-                <div className="flex gap-1">
-                    <input name="isActive" checked={formProduct.isActive} onChange={handleChangeCheckbox} id="isVisible" type="checkbox" className="p-2 border" />
-                    <label htmlFor="isVisible">Mostrar en la tienda</label>
-                    
-                </div>
-            </div>
+            <PlusOption formProduct={formProduct} setFormProduct={setFormProduct}/>
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Subir Producto</button>
         </form>
     )

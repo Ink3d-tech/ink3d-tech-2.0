@@ -207,27 +207,6 @@ export default function Dashboard() {
 
             {/* COMPONENTE A PARTE */}
             <ManagmentProductForm />
-            {/* <form className="space-y-4 bg-gray-200 p-6 rounded-lg">
-              <input type="text" placeholder="Nombre del Producto" className="w-full p-2 border" />
-              <input type="number" placeholder="Stock" className="w-full p-2 border" />
-              <select className="w-full p-2 border">
-                <option>XS</option>
-                <option>S</option>
-                <option>M</option>
-                <option>L</option>
-                <option>XL</option>
-              </select>
-              <select className="w-full p-2 border">
-                <option>Blanco</option>
-                <option>Negro</option>
-                <option>Azul</option>
-                <option>Turquesa</option>
-                <option>Rojo</option>
-              </select>
-              <textarea placeholder="Descripción" className="w-full p-2 border"></textarea>
-              <input type="file" className="w-full p-2 border" />
-              <button className="bg-black text-white px-4 py-2 rounded">Subir Producto</button>
-            </form> */}
           </div>
         )}
  
