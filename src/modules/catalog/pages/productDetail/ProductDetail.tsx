@@ -46,7 +46,7 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
   
-  const { emptyCart, handleAddToCart } = useCart()
+  const { handleAddToCart } = useCart()
 
   const handleFavoriteClick = () => {
     setIsFavorited(!isFavorited);

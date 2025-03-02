@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Product } from "../interfaces/Cart.interface";
+import { Product } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 

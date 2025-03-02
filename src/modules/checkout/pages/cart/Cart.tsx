@@ -49,7 +49,7 @@ export default function Cart() {
                 <div className='flex flex-col grow gap-4'>
                     {products.length > 0 ? <CartList products={products} /> : <EmptyCart />}
                 </div>
-{/*             
+             
                 <div className='w-full md:w-1/3 lg:w-1/4 bg-white rounded shadow-md p-6'>
                     <h2 className='text-lg font-semibold mb-4'>Resumen de la compra</h2>
                     <div className='border-b-2 border-gray-200 mb-4'/>
@@ -71,9 +71,9 @@ export default function Cart() {
                             </button>
                         </div>
                     ) : (
-                        // <p className='text-sm text-gray-700'>Aquí verás el total de tu compra una vez que hayas agregado productos.</p>
+                         <p className='text-sm text-gray-700'>Aquí verás el total de tu compra una vez que hayas agregado productos.</p>
                     )}
-                </div> */}
+                </div>
             </div>
         </div>
     );

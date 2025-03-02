@@ -5,9 +5,8 @@ import { ButtonBase } from "./ButtonBase.component"
 import { Fire, getAlert } from "./FireAlert.component"
 import { useCart } from "../context/Cart.context"
 import { confirmOrderService } from "../services/cart.services"
-import { useEffect, useState } from "react"
 import { useAuth } from "@/modules/auth/shared/context/Auth.context"
-import { Product } from "../interfaces/Cart.interface"
+import { Product } from "../context/Cart.context"
 
 export default function CartSummary () {
     // const { token, user } = useAuth()
@@ -24,30 +23,31 @@ export default function CartSummary () {
         })
     }
 
-        const { products, emptyCart } = useCart();
-        const [productsOnCart, setProductsOnCart] = useState<Product[]>([]);
-        const [totalPrice, setTotalPrice] = useState<number>(0);
+        const { products, emptyCart, countProducts } = useCart();
+        // const [productsOnCart, setProductsOnCart] = useState<Product[]>([]);
+        // const [totalPrice, setTotalPrice] = useState<number>(0);
         const { getIdUser, token } = useAuth();
         
-        useEffect(() => {
-            const localCart: Product[] = JSON.parse(localStorage.getItem("cart") || "[]")
-            if (localCart) {
-                let calcTotal = 0;
-                localCart?.map((product) => {
-                    calcTotal = calcTotal + product.price*product.units;
-                })
-                setProductsOnCart(localCart);
-                setTotalPrice(calcTotal);
-            }
-        }, []);
+        // useEffect(() => {
+        //     const localCart = JSON.parse(localStorage.getItem(`cart_${getIdUser(token)}`) || "[]")
+        //     console.log(localCart)
+        //     if (localCart) {
+        //         let calcTotal = 0;
+        //         localCart?.map((product: Product) => {
+        //             calcTotal = calcTotal + (Number(product.price))*product.units;
+        //         })
+        //         setProductsOnCart(localCart);
+        //         setTotalPrice(calcTotal);
+        //     }
+        // }, [getIdUser, token]);
     
-    
+        const totalPrice = products.reduce((total, product) => total + (Number(product.price)*product.units), 0)
         const handleConfirmPurchase = async () => {
             try {
                 const tokenStorage = localStorage.getItem("token") || "";
                 const userBuyer = getIdUser(tokenStorage) || "";
-                const confirmedCart: Product[] = JSON.parse(localStorage.getItem("cart") || "[]");   
-        
+                const confirmedCart: Product[] = JSON.parse(localStorage.getItem(`cart_${getIdUser(token)}`) || "[]");   
+                console.log(confirmedCart)
                 await confirmOrderService(userBuyer, confirmedCart, token);
                 console.log("Compra confirmada");
             } catch (error) {
@@ -62,11 +62,11 @@ export default function CartSummary () {
             <hr className="my-2"/>
             <div className="flex justify-between mb-2">
                 <span className="font-medium">Productos:</span>
-                <span>{products.length}</span>
+                <span>{countProducts()}</span>
             </div>
             <div className="flex justify-between">
                 <span className="font-medium">Total:</span>
-                <span className="font-bold text-xl">${totalPrice}</span>
+                <span className="font-bold text-xl">${totalPrice.toFixed(2)}</span>
             </div>
             <div className="flex justify-end gap-4 mt-4">
                 <ButtonBase name="Clear cart" onClick={handlerEmptyCart} />

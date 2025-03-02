@@ -11,6 +11,7 @@ export interface Product {
     price: number;
     size: string;
     stock: number;
+    units: number;
     description: string;
     category: {
       id: string;
@@ -24,9 +25,11 @@ interface CartContextType {
     addProductToCart: (product: Product) => void
     removeProductFromCart: (id: string) => void
     emptyCart: () => void
-    countProducts: (id: number) => number
+    countProducts: () => number
     productInTheCart: (product: Product) => boolean
     handleAddToCart: (product: Product) => void
+    handleProductDecrease: (id: string) => void
+    handleProductIncrease: (id: string, stock: number) => void
 }
 
 const CartContext = createContext<CartContextType>({
@@ -36,7 +39,9 @@ const CartContext = createContext<CartContextType>({
     emptyCart: () => {},
     countProducts: () => 0,
     productInTheCart: () => false,
-    handleAddToCart: () => {}
+    handleAddToCart: () => {},
+    handleProductDecrease: () => {},
+    handleProductIncrease: () => {},
 })
 
 export const CartProvider = ({children}: {children: React.ReactNode}) => {
@@ -71,10 +76,6 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
         if (!isAuthenticated) {
           Mixin.fire("Debes iniciar sesión para agregar productos al carrito", "", "warning");
           return;
-      } 
-        if (productInTheCart(product)) {
-          Mixin.fire("El producto ya está en el carrito", "", "error");  
-          return;
         }
         addProductToCart(product)
         Mixin.fire("Producto agregado con éxito", "", "success")
@@ -103,11 +104,28 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
             alert("Debes iniciar sesion para agregar productos al carrito.");
             return;
         }
-        const updatedProducts = [...products, product]
-        setProducts(updatedProducts)
-        saveCart(updatedProducts)
-        console.log(product.id)
-    }
+        setProducts((prev) => {
+            const updatedCart = prev.some(p => p.id === product.id) 
+                ? prev.map(p => p.id === product.id ? { ...p, units: (p.units || 1) + 1 } : p) 
+                : [...prev, { ...product, units: 1 }];
+            saveCart(updatedCart);
+            return updatedCart;
+        });
+        
+        // const updatedProducts = [...products, product]
+        // setProducts(updatedProducts)
+        // saveCart(updatedProducts)
+        // console.log(product.id)
+
+        // const productInCart = products.find((item) => item.name === product.name)
+        // if  (productInCart) {
+        //     products.map((item) => {
+        //         if (item.name === product.name) {
+                    
+        //         }
+        //     })
+        // }  
+    }    
 
     const removeProductFromCart = (id: string) => {
         console.log(id)
@@ -122,11 +140,35 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
         clearCart()
     }
 
-    const countProducts = (id: number) => {
-        return products.filter(product => Number(product.id) === id).length
+    const countProducts = () => {
+        return products.reduce((sum, product) => sum + product.units, 0);
     }
 
-
+    const handleProductIncrease = (id: string, stock: number) => {
+        const updatedProducts = products.map(product =>
+            product.id === id
+                ? { 
+                    ...product, 
+                    units: product.units < stock ? product.units + 1 : product.units // Solo aumenta si no excede el stock
+                }
+                : product
+        );
+        setProducts(updatedProducts);
+        saveCart(updatedProducts);
+    };
+    
+    const handleProductDecrease = (id: string) => {
+        const updatedProducts = products.map(product =>
+            product.id === id && product.units > 1
+                ? { ...product, units: product.units - 1 } // Decrementa si hay más de 1 unidad
+                : product
+        );
+    
+        const finalProducts = updatedProducts.filter(product => product.units > 0);
+    
+        setProducts(finalProducts);
+        saveCart(finalProducts);
+    };
 
     const value = {
         products,
@@ -136,6 +178,8 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
         countProducts,
         productInTheCart,
         handleAddToCart,
+        handleProductIncrease,
+        handleProductDecrease,
     }
 
     return (
