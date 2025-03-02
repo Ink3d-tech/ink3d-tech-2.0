@@ -2,13 +2,12 @@ import { formFields } from "./Signup.config"
 import { SignupInterface } from "./Signup.interface"
 import { Question } from "@/modules/auth/shared/components/Question.component"
 import { VariantQuestion } from "@/modules/auth/shared/components/Question.component"
-import { BtnVariant, ButtonBase } from "../../../shared/components/buttons/Button.component"
+import { BtnVariant, ButtonBase } from "../../shared/components/buttons/Button.component"
 import { FormComponent } from "@/modules/auth/shared/components/Form.component"
-import { Routes } from "../../../shared/enums/Routes"
 import { LoginFields } from "../../login/shared/LoginForm.component"
 import { FcGoogle } from "react-icons/fc"
 import Swal from "sweetalert2"
-import { Divider } from "../../../shared/components/Divider.component"
+import { Divider } from "../../shared/components/Divider.component"
 
 
 interface SignupFormProps {
@@ -44,7 +43,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             <div className={`h-[34px]`}></div>
             <ButtonBase name={LoginFields.REGISTER} isLoading={isLoading} variant={BtnVariant.PRIMARY}/>
             
-            <Question href={Routes.LOGIN} question={"¿Ya tienes una contraseña?"}variant={VariantQuestion.TERCIARY}/>
+            <Question href={"/auth/login"} question={"¿Ya tienes una cuenta?"} variant={VariantQuestion.TERCIARY}/>
 
             <Divider letter={LoginFields.OR}/>
 

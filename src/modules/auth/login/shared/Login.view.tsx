@@ -1,10 +1,9 @@
 "use client"
 
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
-import { Routes } from "../../../shared/enums/Routes";
-import { useForm } from "../../../shared/hooks/useForm.hook";
-import { LoginInterface } from "../../../shared/interfaces/Login.interface";
-import LoginForm from "./LoginForm.component";
+import { useForm } from "../../shared/hooks/useForm.hook";
+import { LoginInterface } from "../../shared/interfaces/Login.interface";
+import {LoginForm} from "./LoginForm.component";
 import { formInitial, requiredFields } from "./Login.config";
 import validateLogin from "./Login.validate";
 
@@ -17,7 +16,7 @@ export default function LoginView() {
         messageSuccess: "Login success",
         authAction: login,
         validateForm: validateLogin,
-        redirectSuccessRoute: Routes.HOME
+        redirectSuccessRoute: "/"
     })
 
     return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import LoginView from "@/modules/auth/pages/login/shared/Login.view";
+import LoginView from "@/modules/auth/login/shared/Login.view";
 
 export default function LoginModal() {
   const [isOpen, setIsOpen] = useState(true); // El modal se abre por defecto

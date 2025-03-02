@@ -1,5 +1,5 @@
-import { ErrorsInterface } from "../../../shared/interfaces/Error.interface"
-import { LoginInterface } from "../../../shared/interfaces/Login.interface"
+import { ErrorsInterface } from "../../shared/interfaces/Error.interface"
+import { LoginInterface } from "../../shared/interfaces/Login.interface"
 
 export const validateLogin = (form: LoginInterface, requiredFields: string[]): ErrorsInterface => {
     const currentErrors: ErrorsInterface = {}

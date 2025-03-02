@@ -1,4 +1,4 @@
-import Wrapper from "../../shared/components/Wrapper";
+import Wrapper from "../shared/components/Wrapper";
 import LoginView from "./shared/Login.view";
 
 export default function Login () {

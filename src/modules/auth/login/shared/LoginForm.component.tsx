@@ -4,10 +4,9 @@ import { BtnVariant, ButtonBase } from "@/modules/auth/shared/components/buttons
 import { FormComponent } from "@/modules/auth/shared/components/Form.component";
 import { LoginInterface } from "@/modules/auth/shared/interfaces/Login.interface";
 import { Question, VariantQuestion } from "@/modules/auth/shared/components/Question.component"
-import { formFields } from "@/modules/auth/pages/login/shared/Login.config";
+import { formFields } from "@/modules/auth/login/shared/Login.config";
 import { Divider } from "@/modules/auth/shared/components/Divider.component";
 import { Spacer } from "@/modules/auth/shared/components/Spacer";
-import { Routes } from "@/modules/auth/shared/enums/Routes";
 import { FcGoogle } from "react-icons/fc";
 import Swal from "sweetalert2";
 
@@ -70,9 +69,10 @@ export const LoginForm: React.FC<LoginProps> = ({
             <Spacer value={34}/>
             
             <div className="flex mx-auto">
-                <Question question={LoginFields.NEWACCOUNT} href={Routes.SIGNUP} variant={VariantQuestion.SECONDARY}/>
-                <Question question={LoginFields.REGISTER} href={Routes.SIGNUP} variant={VariantQuestion.PRIMARY}/>
-            </div>
+    <Question question={LoginFields.NEWACCOUNT} href="/auth/signup" variant={VariantQuestion.SECONDARY}/>
+    <Question question={LoginFields.REGISTER} href="/auth/signup" variant={VariantQuestion.PRIMARY}/>
+</div>
+
         </form>
     );
 }

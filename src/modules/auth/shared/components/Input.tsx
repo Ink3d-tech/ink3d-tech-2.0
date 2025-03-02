@@ -1,7 +1,6 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { Routes } from "../enums/Routes"
 
 export interface InputProps {
     id: number
@@ -38,7 +37,7 @@ export default function Input({
                 placeholder={placeholder}
             />
 
-            {error && pathname === Routes.SIGNUP && <p className="absolute text-red-600 text-sm font-semibold tracking-tight ml-1">{error}</p>}
+        {error && pathname === "/auth/signup" && <p className="absolute text-red-600 text-sm font-semibold tracking-tight ml-1">{error}</p>}
         </div>
     )
 }

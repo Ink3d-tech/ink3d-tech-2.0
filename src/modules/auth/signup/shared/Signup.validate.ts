@@ -49,7 +49,7 @@
 
 
 
-import { ErrorsInterface } from "../../../shared/interfaces/Error.interface"
+import { ErrorsInterface } from "../../shared/interfaces/Error.interface"
 import { SignupInterface } from "./Signup.interface"
 
 export const validateFormSignup = (form: SignupInterface, requiredFields: string[]): ErrorsInterface => {

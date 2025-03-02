@@ -1,5 +1,5 @@
 
-import { InputInterface } from "../../../shared/interfaces/Input.interface";
+import { InputInterface } from "../../shared/interfaces/Input.interface";
 import { SignupInterface } from "./Signup.interface";
 
 export const formFields: InputInterface[] = [
