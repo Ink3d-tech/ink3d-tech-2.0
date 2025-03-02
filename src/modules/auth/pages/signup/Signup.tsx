@@ -3,7 +3,6 @@
 import { useAuth } from "../../shared/context/Auth.context"
 import { useForm } from "../../shared/hooks/useForm.hook"
 import { SignupInterface } from "./shared/Signup.interface"
-
 import SignupForm from "./shared/Signup.component"
 import { formInitial, requiredFields } from "./shared/Signup.config"
 import { validateFormSignup } from "./shared/Signup.validate"
