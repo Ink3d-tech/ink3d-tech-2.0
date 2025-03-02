@@ -460,7 +460,7 @@ export default function NavBar() {
 
     return (
         <div>
-            <div className="bg-black text-white h-20 flex fixed top-0 w-full z-50 items-center px-4 md:px-8 justify-between relative"> {/* Agregado relative aquí */}
+            <div className="bg-black text-white h-20 flex fixed top-0 w-full z-50 items-center px-4 md:px-8 justify-between"> 
                 <div className="md:hidden cursor-pointer" onClick={handleToggle}>
                     {menu ? <X size="24" color="gray" /> : <Menu size="24" color="gray" />}
                 </div>

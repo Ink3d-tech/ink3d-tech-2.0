@@ -42,8 +42,8 @@ const UserMenu: React.FC<UserMenu> = ({ avatarUrl }) => {
               href="/manager"
               className="flex gap-2 items-center text-gray-700 hover:text-black"
             >
-              <Settings size={20} /> {/* Icono del panel */}
-              <span>Panel de administración</span>
+              <Settings size={20} /> 
+              <span>Panel de administrador</span>
             </Link>
             <Link
               href="/account"
