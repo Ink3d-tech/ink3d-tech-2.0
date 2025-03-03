@@ -48,7 +48,7 @@ export default function NavBar() {
 
     return (
         <div>
-            <div className="bg-black text-white h-20 flex fixed top-0 w-full z-50 items-center px-4 md:px-8 justify-between">
+            <div className="bg-black text-white h-20 flex  w-full z-50 items-center px-4 md:px-8 justify-between">
                 <div className="md:hidden cursor-pointer" onClick={handleToggle}>
                     {menu ? <X size="24" color="gray" /> : <Menu size="24" color="gray" />}
                 </div>
@@ -78,8 +78,8 @@ export default function NavBar() {
                         <UserMenu avatarUrl="/avatar.webp" />
                     ) : (
                         <>
-                            <Link href="/auth/login" className="text-white">Iniciar sesión</Link>
-                            <Link href="/auth/signup" className="text-white">Crear cuenta</Link>
+                            <Link href="/login" className="text-white">Iniciar sesión</Link>
+                            <Link href="/signup" className="text-white">Crear cuenta</Link>
                         </>
                     )}
                     <div className="relative flex items-center">
@@ -105,7 +105,7 @@ export default function NavBar() {
                 </div>
             </div>
 
-            <div className={`fixed top-3 right-0 min-w-[250px] h-[56px] bg-black z-50 flex items-center gap-4 md:hidden`}>
+            <div className={`fixed top-3 right-0 min-w-[250px] h-[56px]  z-50 flex items-center gap-4 md:hidden`}>
                 <div className="relative flex items-center ml-auto">
                     <Search
                         size="24"

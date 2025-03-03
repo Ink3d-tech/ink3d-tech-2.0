@@ -1,136 +1,48 @@
-// "use client"
-// import { createContext, useContext, useEffect, useState } from "react"
-// import axios from "axios"
-// import { API_BACK } from "@/shared/config/api/getEnv"
-// import { getAuthHeaders } from "./getAuthHeaders"
-// import { Mixin } from "@/modules/auth/shared/components/MixinAlert"
-// export interface CategoryInterface {
-//     id?: string
-//     name: string
-// }
-// interface CategoryContextType {
-//     categories: CategoryInterface[]
-//     loading: boolean
-//     error: string | undefined
-//     createCategory: (category: CategoryInterface) => Promise<void>
-//     getCategoryById: (categoryId: string | undefined) => Promise<void>
-//     deleteCategory: (id: string) => Promise<void>
-// }
-// const CategoriesContext = createContext<CategoryContextType>({
-//     categories: [],
-//     loading: false,
-//     error: undefined,
-//     createCategory: async() => {},
-//     getCategoryById: async() => {},
-//     deleteCategory: async() => {},
-// })
-// export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
-//     const [categories, setCategories] = useState<CategoryInterface[]>([])
-//     const [categoryId, setCategoryId] = useState<CategoryInterface>()
-//     const [loading, setLoading] = useState<boolean>(false)
-//     const [error, setError] = useState<string | undefined>(undefined)
-//     useEffect(() => {
-//         const fetchCategories = async () => {
-//             try {
-//                 const res = await axios.get<CategoryInterface[]>(`${API_BACK}/categories`, getAuthHeaders());
-//                 if (res) setCategories(res.data);
-                
-//             } catch (error) {
-//                 setError(error instanceof Error ? error.message : "Error interno del servidor");
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
-//         fetchCategories();
-//     }, [])
-//     const createCategory = async (category: CategoryInterface) => { 
-//         try {
-//             const res = await axios.post<CategoryInterface>(`http://localhost:3000/categories`, category);
+"use client"
 
-//             setCategories(prev => [...prev, res.data]);
-//         } catch (error) {
-//             Mixin.fire("Error al crear la categoria", "", "error")
-//             setError(error instanceof Error ? error.message : "Error al crear la categoria");
-//         }
-//     }
-//     const getCategoryById = async (categoryId: string | undefined) => {
-//         try {
-//             const res = await axios.get<CategoryInterface>(
-//                 `${API_BACK}/categories/${categoryId}`, getAuthHeaders()
-//             )
-//             setCategoryId(res.data)
-//         } catch (error) {
-//             setError(error instanceof Error ? error.message : "Error al obtener la categoria");
-//         }
-//     }
+import { createContext, useContext, useEffect, useState } from "react"
+import axios from "axios"
+import { API_BACK } from "@/shared/config/api/getEnv"
+import { getAuthHeaders } from "./getAuthHeaders"
+import { Mixin } from "@/modules/auth/shared/components/MixinAlert"
 
-//     const deleteCategory = async (id: string) => {
-//         await axios.delete<CategoryInterface>(`${API_BACK}/categories/${id}`, getAuthHeaders())
-//         setCategories(categories.filter(category => category.id !== id));
-//     }
-
-//     const value = {
-//         categories,
-//         loading,
-//         error,
-//         createCategory,
-//         deleteCategory,
-//         getCategoryById
-//     }
-
-//     return (
-//         <CategoriesContext.Provider value={value}>
-//             {children}
-//         </CategoriesContext.Provider>
-//     )
-// }
-// export const useCategories = (): CategoryContextType => {
-//     const context = useContext(CategoriesContext)
-//     if (!context) throw new Error("useCategories must be used within a CategoriesProvider");
-//     return context;
-// }
-
-"use client";
-import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { API_BACK } from "@/shared/config/api/getEnv";
-import { getAuthHeaders } from "./getAuthHeaders";
-import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
 
 export interface CategoryInterface {
-    id?: string;
-    name: string;
+    id?: string
+    name: string
 }
 
 interface CategoryContextType {
-    categories: CategoryInterface[];
-    loading: boolean;
-    error: string | undefined;
-    createCategory: (category: CategoryInterface) => Promise<void>;
-    getCategoryById: (categoryId: string) => Promise<void>;
-    deleteCategory: (id: string) => Promise<void>;
+    categories: CategoryInterface[]
+    loading: boolean
+    error: string | undefined
+    createCategory: (category: CategoryInterface) => Promise<void>
+    getCategoryById: (categoryId: string | undefined) => Promise<void>
+    deleteCategory: (id: string) => Promise<void>
 }
 
 const CategoriesContext = createContext<CategoryContextType>({
     categories: [],
     loading: false,
     error: undefined,
-    createCategory: async () => {},
-    getCategoryById: async () => {},
-    deleteCategory: async () => {},
-});
+    createCategory: async() => {},
+    getCategoryById: async() => {},
+    deleteCategory: async() => {},
+})
 
-export const CategoriesProvider = ({ children }: { children: React.ReactNode }) => {
-    const [categories, setCategories] = useState<CategoryInterface[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | undefined>(undefined);
+export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
+    const [categories, setCategories] = useState<CategoryInterface[]>([])
+    const [categoryId, setCategoryId] = useState<CategoryInterface>()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | undefined>(undefined)
 
+    
     useEffect(() => {
         const fetchCategories = async () => {
-            setLoading(true);
             try {
                 const res = await axios.get<CategoryInterface[]>(`${API_BACK}/categories`, getAuthHeaders());
-                setCategories(res.data);
+                if (res) setCategories(res.data);
+                
             } catch (error) {
                 setError(error instanceof Error ? error.message : "Error interno del servidor");
             } finally {
@@ -138,35 +50,34 @@ export const CategoriesProvider = ({ children }: { children: React.ReactNode }) 
             }
         };
         fetchCategories();
-    }, []);
+    }, [])
 
-    const createCategory = async (category: CategoryInterface) => {
+    const createCategory = async (category: CategoryInterface) => { 
         try {
-            const res = await axios.post<CategoryInterface>(`${API_BACK}/categories`, category, getAuthHeaders());
+            const res = await axios.post<CategoryInterface>(`http://localhost:3000/categories`, category);
+
             setCategories(prev => [...prev, res.data]);
         } catch (error) {
-            Mixin.fire("Error al crear la categoría", "", "error");
-            setError(error instanceof Error ? error.message : "Error al crear la categoría");
+            Mixin.fire("Error al crear la categoria", "", "error")
+            setError(error instanceof Error ? error.message : "Error al crear la categoria");
         }
-    };
+    }
 
-    const getCategoryById = async (categoryId: string) => {
+    const getCategoryById = async (categoryId: string | undefined) => {
         try {
-            await axios.get<CategoryInterface>(`${API_BACK}/categories/${categoryId}`, getAuthHeaders());
+            const res = await axios.get<CategoryInterface>(
+                `${API_BACK}/categories/${categoryId}`, getAuthHeaders()
+            )
+            setCategoryId(res.data)
         } catch (error) {
-            setError(error instanceof Error ? error.message : "Error al obtener la categoría");
+            setError(error instanceof Error ? error.message : "Error al obtener la categoria");
         }
-    };
+    }
 
     const deleteCategory = async (id: string) => {
-        try {
-            await axios.delete(`${API_BACK}/categories/${id}`, getAuthHeaders());
-            setCategories(prev => prev.filter(category => category.id !== id));
-        } catch (error) {
-            Mixin.fire("Error al eliminar la categoría", "", "error");
-            setError(error instanceof Error ? error.message : "Error al eliminar la categoría");
-        }
-    };
+        await axios.delete<CategoryInterface>(`${API_BACK}/categories/${id}`, getAuthHeaders())
+        setCategories(categories.filter(category => category.id !== id));
+    }
 
     const value = {
         categories,
@@ -174,14 +85,18 @@ export const CategoriesProvider = ({ children }: { children: React.ReactNode }) 
         error,
         createCategory,
         deleteCategory,
-        getCategoryById,
-    };
+        getCategoryById
+    }
 
-    return <CategoriesContext.Provider value={value}>{children}</CategoriesContext.Provider>;
-};
+    return (
+        <CategoriesContext.Provider value={value}>
+            {children}
+        </CategoriesContext.Provider>
+    )
+}
 
 export const useCategories = (): CategoryContextType => {
-    const context = useContext(CategoriesContext);
+    const context = useContext(CategoriesContext)
     if (!context) throw new Error("useCategories must be used within a CategoriesProvider");
     return context;
-};
+}

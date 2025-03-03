@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 
@@ -9,8 +10,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           {/* Logo y descripción */}
           <div>
-            <h2 className="text-3xl font-bold mb-3">The Ink3d Poyect</h2>
-            <p className="text-gray-400">
+            <Link href={"/home"}>
+              <Image src={"/LogoInk3d.png"} alt="Logo inked project" width={100} height={100}/>
+            </Link>
+            <p className="text-gray-400 mt-4">
               Estilo, calidad y vanguardia en cada prenda.
             </p>
           </div>
@@ -41,28 +44,13 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-3">Síguenos</h3>
             <div className="flex justify-center md:justify-start space-x-4">
-              <a
-                href="https://www.facebook.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition text-2xl"
-              >
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
                 <FaFacebook />
               </a>
-              <a
-                href="https://www.instagram.com/ink3d_asian/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition text-2xl"
-              >
+              <a href="https://www.instagram.com/ink3d_asian/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
                 <FaInstagram />
               </a>
-              <a
-                href="https://twitter.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition text-2xl"
-              >
+              <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
                 <FaTwitter />
               </a>
             </div>

@@ -1,2 +1,1 @@
 export { default } from "@/modules/user/pages/manager/pages/mycash/MyCash"
-

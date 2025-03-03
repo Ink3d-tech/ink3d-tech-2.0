@@ -1,6 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
+import { Routes } from "../enums/Routes"
 
 export interface InputProps {
     id: number
@@ -12,12 +13,12 @@ export interface InputProps {
     error: string
 }
 
-export default function Input({
+export default function Input ({
     id,
     type,
     name,
-    placeholder = "",
-    value = "",
+    placeholder ="",
+    value="",
     onChange,
     error
 }: InputProps) {
@@ -29,15 +30,13 @@ export default function Input({
             <input 
                 id={String(id)} 
                 className="w-full px-3 py-3 border border-inputSecondary rounded-md text-inputSecondary
-    bg-inputPrimary shadow-md"
+                bg-inputPrimary shadow-md"
                 type={type}
                 name={name}
                 value={value}
                 onChange={onChange}
-                placeholder={placeholder}
             />
-
-        {error && pathname === "/auth/signup" && <p className="absolute text-red-600 text-sm font-semibold tracking-tight ml-1">{error}</p>}
+            {error && pathname === Routes.SIGNUP && <p className="absolute text-red-600 text-sm font-semibold tracking-tight ml-1">{error}</p>}
         </div>
     )
 }

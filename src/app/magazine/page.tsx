@@ -43,8 +43,59 @@ const MagazinePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white p-8">
-      <h1 className="text-5xl font-bold text-center uppercase tracking-widest mt-10 mb-10">
-        Magazine
+
+         {/* Navbar */}
+         {/* Navbar */}
+<nav className="fixed top-0 left-0 w-full bg-white text-black shadow-md z-50">
+  <div className="container mx-auto flex justify-between items-center p-4">
+    {/* Logo a la izquierda */}
+    <div
+      className="flex items-center cursor-pointer hover:opacity-80 transition"
+      onClick={() => router.push("/home")} // Redirige al Home
+    >
+      <Image 
+        src="/LogoInkedWhite.png" 
+        alt="The Ink3D Project" 
+        width={50} 
+        height={50} 
+        className="w-12 h-12 object-contain"
+      />
+      <h1 className="ml-2 text-xl font-bold uppercase tracking-wide">
+        
+      </h1>
+    </div>
+
+    {/* Categorías */}
+    <ul className="flex gap-6 text-sm uppercase">
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/outfits")}>
+        Outfits Ink3D
+      </li>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/woman")}>
+        Woman
+      </li>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/men")}>
+        Men
+      </li>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/compras")}>
+        Compras
+      </li>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/mundo-asian")}>
+        Mundo Asian
+      </li>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/motorsport")}>
+        Motorsport
+      </li>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/streetwear")}>
+        Streetwear
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+       
+      <h1 className="text-5xl font-bold text-center uppercase tracking-widest py-5 mt-10 mb-10">
+        INK3D Magazine
       </h1>
 
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">

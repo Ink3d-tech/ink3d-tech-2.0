@@ -1,93 +1,168 @@
-"use client"
-import { useState } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-export default function StockManagement() {
-  const [inventory, setInventory] = useState([
-    { id: 1, nombre: "Remera", talla: "M", color: "Blanco", precio: 20, stock: 10, categoria: "Ropa", descripcion: "Remera básica de algodón", imagen: "" },
-    { id: 2, nombre: "Jogger", talla: "L", color: "Negro", precio: 35, stock: 5, categoria: "Ropa Deportiva", descripcion: "Jogger cómodo para entrenar", imagen: "" },
-  ]);
-  const [newItem, setNewItem] = useState({
-    nombre: "", talla: "XS", color: "Blanco", precio: 0, stock: 1, categoria: "", descripcion: "", imagen: ""
-  });
-  // const handleImageUpload = (e: any) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setNewItem({ ...newItem, imagen: reader.result });
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+"use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (typeof reader.result === "string") {
-          setNewItem({ ...newItem, imagen: reader.result });
-        }
-      };
-      reader.readAsDataURL(file);
+// Definir tipos de datos
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  stock: number;
+  image: string | null;
+  size: string;
+  isActive: boolean;
+  category: string;
+}
+
+interface StockMovement {
+  id: string;
+  quantity: number;
+  type: string;
+  reason: string;
+  createdAt: string;
+  product: Product;
+}
+
+interface Category {
+  id: string;
+  name: string;
+}
+
+export default function Stock() {
+  const [stockMovements, setStockMovements] = useState<StockMovement[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
+  useEffect(() => {
+    const fetchStockMovements = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get<StockMovement[]>(
+          "http://localhost:3000/stock-movements"
+        );
+        setStockMovements(response.data);
+      } catch (error) {
+        console.error("❌ Error al obtener movimientos de stock:", error);
+        alert("Hubo un error al cargar los movimientos de stock.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get<Category[]>("http://localhost:3000/categories");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("❌ Error al obtener categorías:", error);
+      }
+    };
+
+    fetchStockMovements();
+    fetchCategories();
+  }, []);
+
+  // Filtrar productos por categoría seleccionada
+  const filteredStock = selectedCategory
+    ? stockMovements.filter((m) => m.product.category === selectedCategory)
+    : stockMovements;
+
+  // Función para realizar una venta (restar stock)
+  const handleSell = async (productId: string) => {
+    try {
+      const quantityToSell = 1;
+
+      await axios.post("http://localhost:3000/sell-product", {
+        productId,
+        quantity: quantityToSell,
+      });
+
+      // Actualizar el estado después de la venta
+      setStockMovements((prev) =>
+        prev.map((m) =>
+          m.product.id === productId
+            ? { ...m, product: { ...m.product, stock: m.product.stock - quantityToSell } }
+            : m
+        )
+      );
+
+      alert("✅ Venta realizada con éxito.");
+    } catch (error) {
+      console.error("❌ Error al realizar la venta:", error);
+      alert("Hubo un problema al procesar la venta.");
     }
   };
-  
 
+  if (loading) return <p className="text-white">⏳ Cargando stock...</p>;
 
-  const addItem = () => {
-    setInventory([...inventory, { ...newItem, id: Date.now() }]);
-    setNewItem({ nombre: "", talla: "XS", color: "Blanco", precio: 0, stock: 1, categoria: "", descripcion: "", imagen: "" });
-  };
   return (
-    <div className="min-h-screen p-6 bg-black text-white">
-      <h1 className="text-3xl font-bold mb-4 text-center">📦 Gestión de Stock</h1>
-      {/* Formulario para agregar stock */}
-      <motion.div className="bg-gray-800 p-6 rounded-lg shadow-md max-w-lg mx-auto"
-        initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-        <h2 className="text-xl font-semibold mb-4">➕ Agregar Nuevo Producto</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <input type="text" placeholder="Nombre" value={newItem.nombre} onChange={(e) => setNewItem({ ...newItem, nombre: e.target.value })} className="p-2 border rounded text-black" />
-          <select value={newItem.talla} onChange={(e) => setNewItem({ ...newItem, talla: e.target.value })} className="p-2 border rounded text-black">
-            <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option>
-          </select>
-          <select value={newItem.color} onChange={(e) => setNewItem({ ...newItem, color: e.target.value })} className="p-2 border rounded text-black">
-            <option>Blanco</option><option>Negro</option><option>Azul Marino</option><option>Rojo</option>
-          </select>
-          <input type="number" placeholder="Precio" value={newItem.precio} onChange={(e) => setNewItem({ ...newItem, precio: Number(e.target.value) })} className="p-2 border rounded text-black" />
-          <input type="number" placeholder="Stock" value={newItem.stock} onChange={(e) => setNewItem({ ...newItem, stock: Number(e.target.value) })} className="p-2 border rounded text-black" />
-          <input type="file" accept="image/*" onChange={handleImageUpload} className="p-2 border rounded text-white" />
-        </div>
-        <button onClick={addItem} className="w-full bg-green-500 text-white py-2 rounded mt-4">Agregar al Stock</button>
-      </motion.div>
-      {/* Tabla de Inventario */}
-      <div className="overflow-x-auto mt-6">
-        <table className="min-w-full bg-gray-900 text-white">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b">Imagen</th>
-              <th className="py-2 px-4 border-b">Producto</th>
-              <th className="py-2 px-4 border-b">Talla</th>
-              <th className="py-2 px-4 border-b">Color</th>
-              <th className="py-2 px-4 border-b">Precio</th>
-              <th className="py-2 px-4 border-b">Stock</th>
-            </tr>
-          </thead>
-          <tbody>
-            {inventory.map((item) => (
-              <tr key={item.id}>
-                <td className="py-2 px-4 border-b">{item.imagen && <Image src={item.imagen} alt={item.nombre} className="w-16 h-16 object-cover" />}</td>
-                <td className="py-2 px-4 border-b">{item.nombre}</td>
-                <td className="py-2 px-4 border-b">{item.talla}</td>
-                <td className="py-2 px-4 border-b">{item.color}</td>
-                <td className="py-2 px-4 border-b">${item.precio}</td>
-                <td className="py-2 px-4 border-b">{item.stock}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="p-6 bg-black shadow-lg rounded-md">
+      <h2 className="text-3xl font-semibold text-red-500 mb-4">
+        🔥 Movimientos de Stock 🔥
+      </h2>
+
+      {/* Filtro de categorías */}
+      <div className="mb-4">
+        <label className="text-white">Filtrar por categoría: </label>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="ml-2 p-2 bg-gray-800 text-white rounded-md"
+        >
+          <option value="">Todas</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.name}>
+              {category.name}
+            </option>
+          ))}
+        </select>
       </div>
+
+      {/* Tabla de movimientos de stock */}
+      <table className="w-full border-collapse border border-red-500">
+        <thead>
+          <tr className="bg-red-500 text-white">
+            <th className="border border-red-500 p-2">🆔 Producto</th>
+            <th className="border border-red-500 p-2">📦 Nombre</th>
+            <th className="border border-red-500 p-2">📊 Stock</th>
+            <th className="border border-red-500 p-2">💰 Precio</th>
+            <th className="border border-red-500 p-2">📅 Fecha</th>
+            <th className="border border-red-500 p-2">🛒 Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredStock.length > 0 ? (
+            filteredStock.map((movement) => (
+              <tr key={movement.id} className="text-center text-white bg-black">
+                <td className="border border-red-500 p-2">{movement.product.id}</td>
+                <td className="border border-red-500 p-2">{movement.product.name}</td>
+                <td className="border border-red-500 p-2">{movement.product.stock}</td>
+                <td className="border border-red-500 p-2">${movement.product.price}</td>
+                <td className="border border-red-500 p-2">
+                  {new Date(movement.createdAt).toLocaleDateString()}
+                </td>
+                <td className="border border-red-500 p-2">
+                  <button
+                    onClick={() => handleSell(movement.product.id)}
+                    disabled={movement.product.stock <= 0}
+                    className="bg-red-500 text-white p-2 rounded-md hover:bg-red-700 disabled:bg-gray-600"
+                  >
+                    🛒 Vender
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={6} className="text-white text-center p-4">
+                ⚠️ No hay productos disponibles en esta categoría
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }

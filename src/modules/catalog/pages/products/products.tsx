@@ -5,10 +5,20 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import FilterCategories from "./components/FilterCategories.component";
-import { Product } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  image: string;
+}
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -59,16 +69,13 @@ export default function ProductsPage() {
             <Link key={product.id} href={`/productDetail/${product.id}`} passHref>
               <div className="flex flex-col items-center bg-white overflow-hidden shadow-md rounded-lg cursor-pointer transition-transform transform border border-gray-300 ">
                 <div className="w-full overflow-hidden">
-   
-
-<Image
-  src={Array.isArray(product.image) && product.image.length > 0 ? product.image[0] : "/placeholder-image.png"}
-  alt={product.name}
-  width={800}
-  height={800}
-  className="w-full h-auto object-cover"
-/>
-
+                  <Image
+                    src={product.image[0] || "/placeholder-image.png"}
+                    alt={product.name}
+                    width={800}
+                    height={800}
+                    className="w-full h-auto object-cover"
+                  />
                 </div>
                 <div className="p-4 text-center">
                   <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 uppercase">

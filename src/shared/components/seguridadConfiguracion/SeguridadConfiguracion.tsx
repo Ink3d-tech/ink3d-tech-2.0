@@ -8,21 +8,7 @@ const SeguridadConfiguracion = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  // const handlePasswordChange = (e) => {
-  //   e.preventDefault();
-  //   if (newPassword !== confirmPassword) {
-  //     setError("Las contraseñas no coinciden.");
-  //     return;
-  //   }
-  //   if (newPassword.length < 6) {
-  //     setError("La nueva contraseña debe tener al menos 6 caracteres.");
-  //     return;
-  //   }
-  //   setError("");
-  //   alert("Contraseña actualizada correctamente.");
-  // };
-
-  const handlePasswordChange = (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePasswordChange = (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
@@ -33,13 +19,8 @@ const SeguridadConfiguracion = () => {
       return;
     }
     setError("");
-    alert("Contraseña actualizada correctamente.");
+    alert("✅ Contraseña actualizada correctamente.");
   };
-  
-
-
-
-
 
   return (
     <div className={`p-6 min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-white text-black"}`}>
