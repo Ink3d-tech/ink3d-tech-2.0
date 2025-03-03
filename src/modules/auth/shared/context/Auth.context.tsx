@@ -5,6 +5,7 @@ import { LoginInterface } from "../interfaces/Login.interface";
 import Loading from "@/app/loading";
 import { SignupInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
+import { API_BACK } from "@/shared/config/api/getEnv";
 // import { API_BACK } from "@/shared/config/api/getEnv";
 
 
@@ -93,7 +94,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 
     const login = async (loginForm: LoginInterface) => {  
-        const { data } = await axios.post<ResponseInterface>(`https://project-ink3d-back-1.onrender.com/auth/signin`, loginForm);
+        const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm);
 
         const userId = getIdUser(data.token);
 
@@ -107,7 +108,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const signup = async (signupForm: SignupInterface) => {
-        await axios.post(`https://project-ink3d-back-1.onrender.com/auth/signup`, signupForm);
+        await axios.post(`${API_BACK}/auth/signup`, signupForm);
     };
 
     const logout = () => {
