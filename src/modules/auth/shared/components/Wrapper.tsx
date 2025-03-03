@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { Question, QuestionInterface, VariantQuestion } from "./Question.component"
-import Image from "next/image"
+// import Image from "next/image"
 
 export interface WrapperProps {
     children: React.ReactNode
