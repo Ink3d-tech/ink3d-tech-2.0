@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { API_BACK } from "@/shared/config/api/getEnv";
+// import { API_BACK } from "@/shared/config/api/getEnv";
 
 interface Article {
   id: number;
@@ -22,7 +22,7 @@ const MagazinePage: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch(`${API_BACK}/api/magazine`);
+        const response = await fetch(`https://project-ink3d-back-1.onrender.com/api/magazine`);
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }

@@ -7,7 +7,7 @@ import { Divider } from "../../../shared/components/Divider.component";
 import { Spacer } from "@/modules/auth/shared/components/Spacer"
 import { Routes } from "../../../shared/enums/Routes";
 import { FcGoogle } from "react-icons/fc";
-import { API_BACK } from "@/shared/config/api/getEnv";
+// import { API_BACK } from "@/shared/config/api/getEnv";
 
 
 export enum LoginFields {
@@ -37,7 +37,7 @@ export const LoginForm: React.FC<LoginProps> = ({
 }) => {
 
     const handleGoogleAuth = () => {
-        window.location.href = `${API_BACK}/auth/google/login`; 
+        window.location.href = `https://project-ink3d-back-1.onrender.com/auth/google/login`; 
     }
 
     return (

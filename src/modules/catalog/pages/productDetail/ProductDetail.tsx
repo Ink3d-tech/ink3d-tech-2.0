@@ -6,7 +6,7 @@ import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import { Heart } from "lucide-react";
 import { Product, useCart } from "@/modules/checkout/pages/cart/context/Cart.context";
-import { API_BACK } from "@/shared/config/api/getEnv";
+// import { API_BACK } from "@/shared/config/api/getEnv";
 
 
 export default function ProductDetail() {
@@ -26,11 +26,11 @@ export default function ProductDetail() {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`${API_BACK}/products/${id}`);
+        const response = await fetch(`https://project-ink3d-back-1.onrender.com/auth/google/login/products/${id}`);
         const data: Product = await response.json();
         setProduct(data);
 
-        const responseAllProducts = await fetch(`${API_BACK}/products`);
+        const responseAllProducts = await fetch(`https://project-ink3d-back-1.onrender.com/auth/google/login/products`);
         const allProducts: Product[] = await responseAllProducts.json();
         const sameNameProducts = allProducts.filter((item) => item.name === data.name);
 

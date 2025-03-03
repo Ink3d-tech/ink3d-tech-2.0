@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { API_BACK } from "@/shared/config/api/getEnv";
+// import { API_BACK } from "@/shared/config/api/getEnv";
 import Image from "next/image";
 import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
@@ -30,7 +30,7 @@ export default function FormMagazine() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get<FormData[]>(`${API_BACK}/api/magazine`);
+        const response = await axios.get<FormData[]>(`https://project-ink3d-back-1.onrender.com/auth/google/login/api/magazine`);
         setArticles(response.data);
       } catch (error) {
         console.error("Error al obtener los artículos:", error);
@@ -78,7 +78,7 @@ export default function FormMagazine() {
       setImagePreview("");
 
       // Refrescar lista de artículos
-      const response = await axios.get<FormData[]>(`${API_BACK}/api/magazine`);
+      const response = await axios.get<FormData[]>(`https://project-ink3d-back-1.onrender.com/auth/google/login/api/magazine`);
       setArticles(response.data);
 
     } catch (error) {

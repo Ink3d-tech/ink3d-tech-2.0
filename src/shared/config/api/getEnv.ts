@@ -1,1 +1,1 @@
-export const API_BACK=process.env.NEXT_PUBLIC_API
+// export const API_BACK=process.env.NEXT_PUBLIC_API
