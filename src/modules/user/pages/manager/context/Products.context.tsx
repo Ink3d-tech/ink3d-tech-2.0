@@ -129,29 +129,8 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { API_BACK } from "@/shared/config/api/getEnv";
-import { getAuthHeaders } from "./getAuthHeaders";
-
-
-export interface CategoryInterface {
-    id?: string;
-    name: string;
-}
-
-export interface ProductInterface {
-    id?: string;
-    name: string;
-    description: string;
-    price: number | "";
-    size: string;
-    stock: number | "";
-    image: string[];
-    category?: string;
-    discount?: number | "";
-    categoryId?: string;
-    isActive?: boolean;
-    color?: string;
-}
+import { API_BACK } from "../../../../../shared/config/api/getEnv";
+import { Product } from "@/modules/checkout/pages/cart/context/Cart.context";
 
 interface ProductsContextType {
     products: ProductInterface[];

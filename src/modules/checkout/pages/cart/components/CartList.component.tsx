@@ -1,6 +1,6 @@
 import React from 'react'
-import { Product } from './Cart.context'
-import CartItem from './CartItem'
+import { Product } from '../context/Cart.context'
+import CartItem from './CartItem.component'
 
 const CartList = ({products}: {products:Product[]}) => {
 

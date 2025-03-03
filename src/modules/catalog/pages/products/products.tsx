@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import FilterCategories from "./components/FilterCategories.component";
-import { Product } from "@/modules/checkout/pages/cart/Cart.context";
+import { Product } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 

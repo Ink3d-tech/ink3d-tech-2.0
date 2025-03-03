@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import { Heart } from "lucide-react";
-import { Product, useCart } from "@/modules/checkout/pages/cart/Cart.context";
+import { Product, useCart } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 
@@ -46,7 +46,7 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
   
-  const { emptyCart, handleAddToCart } = useCart()
+  const { handleAddToCart } = useCart()
 
   const handleFavoriteClick = () => {
     setIsFavorited(!isFavorited);
@@ -149,7 +149,6 @@ export default function ProductDetail() {
                 onClick={() => handleAddToCart(product)}>
                   Agregar al carrito 🛒
                 </button>
-                <button onClick={emptyCart}>RESET CARRITO</button>
               </div>
             </div>
           </div>
