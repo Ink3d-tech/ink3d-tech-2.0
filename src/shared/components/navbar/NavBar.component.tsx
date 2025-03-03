@@ -67,7 +67,7 @@ export default function NavBar() {
                 </div>
 
                 <div className="hidden md:flex items-center gap-6 px-12">
-                    <Link href="/manager/magazine" className="text-white">Magazine</Link>
+                    <Link href="/magazine" className="text-white">Magazine</Link>
                     <Link href="/categories" className="text-white">Categorías</Link>
                     <Link href="/sales" className="text-white">Ofertas</Link>
                 
