@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 
     const login = async (loginForm: LoginInterface) => {  
-        const { data } = await axios.post<ResponseInterface>(`https://g4248mz6-3000.brs.devtunnels.ms/auth/signin`, loginForm);
+        const { data } = await axios.post<ResponseInterface>(`https://project-ink3d-back-1.onrender.com/auth/signin`, loginForm);
 
         const userId = getIdUser(data.token);
 
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const signup = async (signupForm: SignupInterface) => {
-        await axios.post(`https://g4248mz6-3000.brs.devtunnels.ms/auth/signup`, signupForm);
+        await axios.post(`https://project-ink3d-back-1.onrender.com/auth/signup`, signupForm);
     };
 
     const logout = () => {
