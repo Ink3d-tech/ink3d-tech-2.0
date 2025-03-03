@@ -1,4 +1,5 @@
 "use client"
+
 import Spinner from "./Spinner.component"
 import Link from "next/link"
 

@@ -252,6 +252,7 @@ import Stock from "@/shared/components/stock/Stock";
 import FormMagazine from "@/shared/components/formMagazine/FormMagazine";
 import Finanzas from "@/shared/components/finanzas/Finanzas";
 import Image from "next/image";
+import { ManagmentProductForm } from "./management/Managment";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -393,7 +394,7 @@ export default function Dashboard() {
           <div>
             <h1 className="text-white">Mi negocio</h1>
             <h2 className="text-3xl font-bold mb-4">🛍️ Gestión de Productos</h2>
-            <form className="space-y-4 bg-gray-200 p-6 rounded-lg">
+            {/* <form className="space-y-4 bg-gray-200 p-6 rounded-lg">
               <input type="text" placeholder="Nombre del Producto" className="w-full p-2 border" />
               <input type="number" placeholder="Stock" className="w-full p-2 border" />
               <select className="w-full p-2 border">
@@ -413,7 +414,11 @@ export default function Dashboard() {
               <textarea placeholder="Descripción" className="w-full p-2 border"></textarea>
               <input type="file" className="w-full p-2 border" />
               <button className="bg-black text-white px-4 py-2 rounded">Subir Producto</button>
-            </form>
+            </form> */}
+<ManagmentProductForm/>
+
+
+
           </div>
         )}
 

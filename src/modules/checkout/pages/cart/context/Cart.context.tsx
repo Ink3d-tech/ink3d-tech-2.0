@@ -17,7 +17,7 @@ export interface Product {
       id: string;
       name: string;
     };
-    image: string;
+    image: string[];
   }
 
 interface CartContextType {
@@ -84,18 +84,18 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
 
     const saveCart = (updatedProducts: Product[]) => {
         if (isAuthenticated) {
-            localStorage.setItem(`cart_${getIdUser(token)}`, JSON.stringify(updatedProducts));
+            token ? localStorage.setItem(`cart_${getIdUser(token)}`, JSON.stringify(updatedProducts)) : "";
         }
     }
 
     const clearCart = () => {
         if (isAuthenticated) {
-            localStorage.removeItem(`cart_${getIdUser(token)}`);
+            token ? localStorage.removeItem(`cart_${getIdUser(token)}`) : "";
         }
     }
 
     const productInTheCart = (product: Product) => {
-        const cart: Product[] = JSON.parse(localStorage.getItem(`cart_${getIdUser(token)}`) || "[]");
+        const cart: Product[] =  token ? JSON.parse(localStorage.getItem(`cart_${getIdUser(token)}`) || "[]") : "";
         return cart?.some((item) => item.id === product.id);
       }
     
@@ -169,6 +169,7 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
         setProducts(finalProducts);
         saveCart(finalProducts);
     };
+
 
     const value = {
         products,

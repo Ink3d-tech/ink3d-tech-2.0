@@ -1,11 +1,18 @@
 import axios from "axios";
-import { Product } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { IOrder, ICartProduct, IPaymentResponse } from "../interfaces/cartService.interface";
+import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
 
-
-export const confirmOrderService = async (userBuyer: string, confirmedCart: Product[], token: string | null) => {
+// Servicio para confirmar la orden
+export const confirmOrderService = async (
+    userBuyer: string,
+    confirmedCart: ICartProduct[],
+    token: string | null
+): Promise<{ orderId: string, currency: string, products: { id: string, price: number, quantity: number }[] }> => {
     try {
+
+        console.log(`id del USER ${userBuyer}`);
+        
+
         const body = {
             userId: userBuyer,
             products: confirmedCart.map(({ id, units }) => ({
@@ -14,12 +21,16 @@ export const confirmOrderService = async (userBuyer: string, confirmedCart: Prod
             })),
         };
 
+        // console.log("Body de la request order:", JSON.stringify(body, null, 2));
+        
+
         const { data } = await axios.post<IOrder>(`${API_BACK}/orders`, body, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
         });
+
 
         const orderDetails = data.orderDetails.map((product) => ({
             id: product.productId,
@@ -32,9 +43,9 @@ export const confirmOrderService = async (userBuyer: string, confirmedCart: Prod
             currency: data.currency,
             products: orderDetails,
         };
-    } catch {
-        console.error("Error confirming order");
-        throw new Error("An error occurred while confirming the order");
+    } catch (error) {
+        console.error("Error confirming order:", error);
+        throw error;
     }
 };
 
@@ -45,10 +56,6 @@ export const paymentCreateService = async (
     confirmedCart: ICartProduct[],
     token: string | null
 ): Promise<IPaymentResponse> => {
-    if (!token) {
-        throw new Error("Token is required to create the payment.");
-    }
-
     try {
         const body = {
             orderId,
@@ -60,6 +67,7 @@ export const paymentCreateService = async (
                 quantity: units,
             })),
         };
+
 
         console.log("Body de la request MP:", JSON.stringify(body, null, 2));
         console.log(`token ${token}`);
@@ -76,8 +84,8 @@ export const paymentCreateService = async (
         );
 
         return data;
-    } catch {
-        console.error("Error creating payment MP");
-        throw new Error("An error occurred while creating the payment");
+    } catch (error: any) {
+        console.error("Error creando el pago MP:", error.response?.data || error);
+        throw error;
     }
 };

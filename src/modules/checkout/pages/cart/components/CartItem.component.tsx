@@ -91,7 +91,7 @@ export default function CartItem({
           </span>
         </div>
         <div className="col-span-2">
-          <span className="text-xl font-bold">${price}</span>
+          <span className="text-xl font-bold">${(price * units).toFixed(2)}</span>
         </div>
         <div className="col-span-12 text-right">
           <button

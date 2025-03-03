@@ -405,8 +405,8 @@ export const ManagmentProductForm = () => {
   const [formProduct, setFormProduct] = useState<ProductInterface>(FORM_PRODUCT_INTIAL);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newCategory, setNewCategory] = useState<string>("");
-  const { createProduct } = useProducts(); // Elimina `products` ya que no se usa
-  const { categories, createCategory } = useCategories(); // Elimina `error` ya que no se usa
+  const { createProduct } = useProducts(); 
+  const { categories, createCategory } = useCategories(); 
   const [cloudinary, setCloudinary] = useState<string[]>([]);
 
   const [images, setImages] = useState<(string | null)[]>(Array(MAX_IMAGES).fill(null));

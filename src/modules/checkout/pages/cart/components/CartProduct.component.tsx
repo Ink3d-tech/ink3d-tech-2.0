@@ -60,7 +60,7 @@ export default function CartProduct({ ProductProps, setTotalPrice, totalPrice, s
                     onClick={handleProductDelete}
                     >Eliminar</button>
                     <span className="text-xs font-bold text-red-600 bg-red-100 px-2 py-1 uppercase w-fit">
-                        {category.id}
+                        {category}
                     </span>
                 </div>
 

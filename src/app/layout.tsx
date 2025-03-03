@@ -6,6 +6,7 @@ import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.
 import Chatbot from "@/shared/components/Chatbot";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
 import Footer from "@/shared/components/footer/Footer";
+import { CartProvider } from "@/modules/checkout/pages/cart/context/Cart.context";
 
 
 
@@ -18,15 +19,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <body>
-        <CategoriesProvider>
           <ProductsProvider>
             <AuthProvider>
+              <CartProvider>
+              <CategoriesProvider>
               <Chatbot />
               <NavBar />
               <main className="bg-[#D9D9D9] pt-20">{children}</main>
+               </CategoriesProvider>
+               </CartProvider>
             </AuthProvider>
           </ProductsProvider>
-        </CategoriesProvider>
         <Footer />
       </body>
     </html>
