@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 
     const login = async (loginForm: LoginInterface) => {  
-        const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm);
+        const { data } = await axios.post<ResponseInterface>(`${process.env.NEXT_PUBLIC_API}/auth/signin`, loginForm);
 
         const userId = getIdUser(data.token);
 
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const signup = async (signupForm: SignupInterface) => {
-        await axios.post(`${API_BACK}/auth/signup`, signupForm);
+        await axios.post(`${process.env.NEXT_PUBLIC_API}/auth/signup`, signupForm);
     };
 
     const logout = () => {
