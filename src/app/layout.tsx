@@ -7,7 +7,7 @@ import { ProductsProvider } from "../modules/user/pages/manager/context/Products
 import Chatbot from "@/shared/components/Chatbot";
 import { CartProvider } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
-import Footer from "@/shared/components/Footer/Footer";
+import Footer from "@/shared/components/Footer/FooterView";
 
 export const metadata: Metadata = {
   title: "The Ink3d project",
@@ -35,7 +35,7 @@ export default function RootLayout({
                     {children}
                   </main>
                 
-                <Footer />
+                <Footer/>
               </CartProvider>
             </AuthProvider>
           </ProductsProvider>
