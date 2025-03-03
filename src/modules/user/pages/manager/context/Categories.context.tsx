@@ -17,7 +17,7 @@ interface CategoryContextType {
     loading: boolean
     error: string | undefined
     createCategory: (category: CategoryInterface) => Promise<void>
-    getCategoryById: (categoryId: string | undefined) => Promise<void>
+    // getCategoryById: (categoryId: string | undefined) => Promise<void>
     deleteCategory: (id: string) => Promise<void>
 }
 
@@ -26,13 +26,13 @@ const CategoriesContext = createContext<CategoryContextType>({
     loading: false,
     error: undefined,
     createCategory: async() => {},
-    getCategoryById: async() => {},
+    // getCategoryById: async() => {},
     deleteCategory: async() => {},
 })
 
 export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
     const [categories, setCategories] = useState<CategoryInterface[]>([])
-    const [categoryId, setCategoryId] = useState<CategoryInterface>()
+    // const [categoryId, setCategoryId] = useState<CategoryInterface>()
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>(undefined)
 
@@ -54,7 +54,7 @@ export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
 
     const createCategory = async (category: CategoryInterface) => { 
         try {
-            const res = await axios.post<CategoryInterface>(`http://localhost:3000/categories`, category);
+            const res = await axios.post<CategoryInterface>(`${API_BACK}/categories`, category);
 
             setCategories(prev => [...prev, res.data]);
         } catch (error) {
@@ -63,16 +63,16 @@ export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
         }
     }
 
-    const getCategoryById = async (categoryId: string | undefined) => {
-        try {
-            const res = await axios.get<CategoryInterface>(
-                `${API_BACK}/categories/${categoryId}`, getAuthHeaders()
-            )
-            setCategoryId(res.data)
-        } catch (error) {
-            setError(error instanceof Error ? error.message : "Error al obtener la categoria");
-        }
-    }
+    // const getCategoryById = async (categoryId: string | undefined) => {
+    //     try {
+    //         const res = await axios.get<CategoryInterface>(
+    //             `${API_BACK}/categories/${categoryId}`, getAuthHeaders()
+    //         )
+    //         setCategoryId(res.data)
+    //     } catch (error) {
+    //         setError(error instanceof Error ? error.message : "Error al obtener la categoria");
+    //     }
+    // }
 
     const deleteCategory = async (id: string) => {
         await axios.delete<CategoryInterface>(`${API_BACK}/categories/${id}`, getAuthHeaders())
@@ -85,7 +85,7 @@ export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
         error,
         createCategory,
         deleteCategory,
-        getCategoryById
+        // getCategoryById
     }
 
     return (

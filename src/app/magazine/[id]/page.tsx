@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import Image from "next/image";
 
 interface Article {
   id: number;
@@ -56,7 +57,7 @@ const ArticlePage = () => {
         <div className="max-w-2xl bg-gray-100 p-6 rounded-lg shadow-lg">
           <h1 className="text-3xl font-bold mb-3">{article.title}</h1>
           <p className="text-gray-600">{article.date} · {article.author}</p>
-          <img src={article.image} alt={article.title} className="w-full h-64 object-cover rounded-lg my-4" />
+          <Image src={article.image} alt={article.title} className="w-full h-64 object-cover rounded-lg my-4" width={200} height={200}/>
           <p className="text-lg text-gray-500">{article.content}</p>
 
         </div>

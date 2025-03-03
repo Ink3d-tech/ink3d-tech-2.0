@@ -8,17 +8,17 @@ import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 
-interface UserInterface {
-    id: string,
-    name: string,
-    email: string,
-    phone?: number | null,
-    address?: string | null,
-    city?: string | null,
-    country?: string | null,
-    bio?: string | null,
-    role: string
-}
+// interface UserInterface {
+//     id: string,
+//     name: string,
+//     email: string,
+//     phone?: number | null,
+//     address?: string | null,
+//     city?: string | null,
+//     country?: string | null,
+//     bio?: string | null,
+//     role: string
+// }
 
 interface ResponseInterface {
     token: string;
@@ -26,7 +26,6 @@ interface ResponseInterface {
 }
 
 interface AuthContextInterface {
-    isAdmin: boolean
     user: string | null
     login: (loginForm: LoginInterface) => void
     signup: (signForm: SignupInterface) => void
@@ -39,7 +38,6 @@ interface AuthContextInterface {
 }
 
 const AuthContext = createContext<AuthContextInterface>({
-    isAdmin: false,
     user: null,
     login: () => {},
     logout: () => {},
@@ -52,7 +50,6 @@ const AuthContext = createContext<AuthContextInterface>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const [token, setToken] = useState<string>("");
     const [user, setUser] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
@@ -87,12 +84,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return payload.userId;
     };
 
-    const dataUser = async(token: string) => {
-        const idUser = getIdUser(token)
-        const user = await axios.get(`${API_BACK}/users/${idUser}`)
-        if(user) return user
+    // const dataUser = async(token: string) => {
+    //     const idUser = getIdUser(token)
+    //     const user = await axios.get(`${API_BACK}/users/${idUser}`)
+    //     if(user) return user
 
-    }
+    // }
 
 
     const login = async (loginForm: LoginInterface) => {  
@@ -122,7 +119,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const value = {
-        isAdmin,
         user,
         login,
         signup,

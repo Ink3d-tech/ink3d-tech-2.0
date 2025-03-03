@@ -6,7 +6,6 @@ export const validateFormSignup = (form: SignupInterface, requiredFields: string
     const currentErrors: ErrorsInterface = {}
 
     requiredFields.forEach((field) => {
-        let error = ""
         switch (field) {
             case "email":
                 if (!form.email) currentErrors.email = "El email es obligatorio";   
@@ -40,9 +39,6 @@ export const validateFormSignup = (form: SignupInterface, requiredFields: string
             default:
                 break; 
         }   
-        if (error) {
-            currentErrors[field] = error;
-        }
     })
     return currentErrors 
 } 

@@ -1,7 +1,5 @@
 
 import { BtnVariant, ButtonBase } from "@/modules/auth/shared/components/buttons/Button.component";
-import { Routes } from "@/modules/auth/shared/enums/Routes";
-
 
 export const AuthRequiredComponent = ({title}: {title: string}) => {
     return (

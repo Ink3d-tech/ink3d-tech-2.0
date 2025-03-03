@@ -2,9 +2,8 @@
 
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Routes } from '../enums/Routes';
 
-export default function HeaderBackBtn({route, name}: {route: Routes, name: string}) {
+export default function HeaderBackBtn({route, name}: {route: string, name: string}) {
     const router = useRouter();
 
     const handleReturn = () => {

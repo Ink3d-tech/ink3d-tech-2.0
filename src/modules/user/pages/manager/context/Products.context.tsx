@@ -25,11 +25,13 @@ export interface ProductInterface {
     isActive?: boolean
 }
 
+export type ProductWithoutId = Omit<ProductInterface, "id">
+
 interface ProductsContextType {
     products: ProductInterface[];
     loading: boolean;
     error: string | undefined;
-    createProduct: (product: ProductInterface) => Promise<void>;
+    createProduct: (product: ProductWithoutId) => Promise<void>;
     getProductById: (id: string) => ProductInterface | undefined;
     updateProduct: (id: string, data: Partial<ProductInterface>) => Promise<void>
     deleteProduct: (id: string) => Promise<void>;
@@ -67,7 +69,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
 
         
 
-    const createProduct = async (product: ProductInterface): Promise<void> => {      
+    const createProduct = async (product: ProductWithoutId): Promise<void> => {      
         try {
             const res = await axios.post<ProductInterface>(`${API_BACK}/products`, product,  getAuthHeaders());
             setProducts(prev => [...prev, res.data]);

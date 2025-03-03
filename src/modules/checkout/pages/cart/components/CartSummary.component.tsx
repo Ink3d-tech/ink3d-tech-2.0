@@ -5,10 +5,9 @@ import { Fire, getAlert } from "./FireAlert.component"
 import { useCart } from "../context/Cart.context"
 import { confirmOrderService, paymentCreateService } from "../services/cart.services"
 import { useAuth } from "@/modules/auth/shared/context/Auth.context"
-import { Product } from "../context/Cart.context"
 import { ICartProduct } from "../interfaces/cartService.interface"
-import { useRouter } from "next/navigation"
-import { API_BACK } from "@/shared/config/api/getEnv"
+
+
 
 export default function CartSummary() {
     const handlerEmptyCart = () => {
@@ -19,13 +18,8 @@ export default function CartSummary() {
         })
     }
 
-    interface MPINterface {
-        paymentUrl: string
-    }
-
     const { products, emptyCart, countProducts } = useCart();
     const { getIdUser, token } = useAuth();
-    const router = useRouter()
 
     const totalPrice = products.reduce((total, product) => total + (Number(product.price) * product.units), 0)
 
@@ -36,7 +30,9 @@ export default function CartSummary() {
             const { orderId, currency, products } = await confirmOrderService(userBuyer, confirmedCart, token);
             // Ahora puedes usar los datos de orderId, currency, y products directamente
             console.log("Orden confirmada:", orderId, currency, confirmedCart);
-
+     
+            console.log(products);
+        
             const response = await paymentCreateService(orderId, "ARS", confirmedCart, token)
         
             const link = Object.values(response)[0]

@@ -3,11 +3,10 @@
 import Image from "next/image";
 import { ButtonBase } from "./ButtonBase.component";
 import Link from "next/link";
-import { useProducts } from "@/modules/user/pages/manager/context/Products.context";
-import { Product } from "../context/Cart.context";
+import { ProductInterface, useProducts } from "@/modules/user/pages/manager/context/Products.context";
 import { getRoute } from "./getRoute";
 
-export const CardProductComponent = ({ product }: { product: Product }) => {
+export const CardProductComponent = ({ product }: { product: ProductInterface }) => {
     const { name, image, price } = product;
     return (
         <div className="relative">
@@ -46,15 +45,16 @@ export const ProductsComponent = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {
                         !products.length
-                        ? Array.from({ length: 4 }).map((_, index) => (
+                        ? (Array.from({ length: 4 }).map((_, index) => (
                             <div key={index} className="w-full h-64 bg-gray-200 animate-pulse rounded"></div>    
-                        )) 
-                        : products.slice(0, 4).map((product) => (
-                            <Link key={product.id} href={getRoute("/productDetail/:id", { id: product.id })}>
+                        ))) 
+                        : (products.slice(0, 4).map((product) => (
+                            <Link key={product.id} href={product.id ? getRoute("/productDetail/:id", { id: product.id }): ""}>
                                 <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                                     <CardProductComponent product={product} />
                                 </div>
                             </Link>
+                            )
                         ))
                     }
                 </div>
