@@ -153,7 +153,7 @@ export const LoginForm: React.FC<LoginProps> = ({
                 timer: 2000,
                 showConfirmButton: false
             }).then(() => {
-                window.location.href = `${API_BACK}/auth/google/login`;
+                window.location.href = `https://project-ink3d-back-1.onrender.com/auth/google/login`;
             });
         }
     };
