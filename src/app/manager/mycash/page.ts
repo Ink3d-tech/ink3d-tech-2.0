@@ -1,1 +1,2 @@
-export { default } from "@/modules/user/pages/manager/pages/mycash/MyCash"
+export { default } from "@/modules/user/pages/manager/pages/mycash/mycash"
+
