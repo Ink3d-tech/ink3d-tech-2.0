@@ -8,6 +8,7 @@ import { Routes } from "../../../shared/enums/Routes"
 import { LoginFields } from "../../login/shared/LoginForm.component"
 import { FcGoogle } from "react-icons/fc"
 import { Divider } from "../../../shared/components/Divider.component"
+import { API_BACK } from "@/shared/config/api/getEnv"
 
 
 interface SignupFormProps {
@@ -27,9 +28,12 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 }) => {
 
     const handleGoogleAuth = () => {
-
-        window.location.href = "http://localhost:3000/auth/google/login";
-    
+        console.log('================/ API BACK GOOGLE /====================');
+        console.log(API_BACK);
+        console.log('====================================');
+  
+        window.location.href = `${API_BACK}/auth/google/login`;
+        
     }
 
     return (
