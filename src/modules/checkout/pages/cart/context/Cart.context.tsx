@@ -4,7 +4,6 @@ import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { getAlert } from "../components/FireAlert.component";
-import { useRouter } from "next/navigation";
 
 
 export interface Product {
@@ -49,7 +48,6 @@ const CartContext = createContext<CartContextType>({
 export const CartProvider = ({children}: {children: React.ReactNode}) => {
     const [products, setProducts] = useState<Product[]>([])
     const { isAuthenticated, getIdUser, token } = useAuth()
-    const router = useRouter()
 
     useEffect(() => { 
         if(isAuthenticated && token) {

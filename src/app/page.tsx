@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link'; // Usamos next/link para redirección
 
 export default function LandingPage() {
@@ -16,10 +17,12 @@ export default function LandingPage() {
         </div>
         {/* Imagen de fondo */}
         <div className="absolute inset-0 z-[-1]">
-          <img
+          <Image
             src="/path-to-your-image.jpg" // Reemplaza con tu imagen
             alt="Imagen principal"
             className="w-full h-full object-cover"
+            width={100}
+            height={100}
           />
         </div>
       </section>
@@ -30,17 +33,17 @@ export default function LandingPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-12">Características Destacadas</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="feature-card bg-gray-100 p-6 rounded-lg shadow-md">
-              <img src="/path-to-feature-image-1.jpg" alt="Feature 1" className="w-full h-64 object-cover mb-6 rounded-lg"/>
+              <Image src="/path-to-feature-image-1.jpg" alt="Feature 1" className="w-full h-64 object-cover mb-6 rounded-lg" width={200} height={200}/>
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Innovación a tu alcance</h3>
               <p className="text-gray-600">Descubre cómo nuestros productos están cambiando el futuro de la tecnología.</p>
             </div>
             <div className="feature-card bg-gray-100 p-6 rounded-lg shadow-md">
-              <img src="/path-to-feature-image-2.jpg" alt="Feature 2" className="w-full h-64 object-cover mb-6 rounded-lg"/>
+              <Image src="/path-to-feature-image-2.jpg" alt="Feature 2" className="w-full h-64 object-cover mb-6 rounded-lg" width={200} height={200}/>
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Diseño elegante</h3>
               <p className="text-gray-600">Un diseño que se adapta a tu estilo, con materiales de primera calidad.</p>
             </div>
             <div className="feature-card bg-gray-100 p-6 rounded-lg shadow-md">
-              <img src="/path-to-feature-image-3.jpg" alt="Feature 3" className="w-full h-64 object-cover mb-6 rounded-lg"/>
+              <Image src="/path-to-feature-image-3.jpg" alt="Feature 3" className="w-full h-64 object-cover mb-6 rounded-lg" width={200} height={200}/>
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Rendimiento sin igual</h3>
               <p className="text-gray-600">Potencia y eficiencia para que puedas trabajar, jugar y crear sin límites.</p>
             </div>

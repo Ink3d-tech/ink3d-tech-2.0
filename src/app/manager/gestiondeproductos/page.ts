@@ -1,1 +1,1 @@
-export { default } from "@/modules/user/pages/manager/pages/gestiondeproductos/GestionDeProductos"
+export { default } from "@/modules/user/pages/manager/Manager"

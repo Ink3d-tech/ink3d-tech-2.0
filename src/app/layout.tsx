@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/shared/components//navbar/NavBar.component";
 import { AuthProvider } from "@/modules/auth/shared/context/Auth.context"
-import ExcludedPaths from "../modules/auth/shared/helpers/ExcludedPath";
+
 import { ProductsProvider } from "../modules/user/pages/manager/context/Products.context";
 import Chatbot from "@/shared/components/Chatbot";
 import { CartProvider } from "@/modules/checkout/pages/cart/context/Cart.context";
-import Footer from "@/shared/components/footer/Footer";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
-import ProtectedRoute from "@/shared/helpers/ProtectedRoute";
+import Footer from "@/shared/components/Footer/Footer";
 
 export const metadata: Metadata = {
   title: "The Ink3d project",

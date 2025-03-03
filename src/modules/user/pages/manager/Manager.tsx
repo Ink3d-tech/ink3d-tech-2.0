@@ -1,34 +1,29 @@
 
 "use client";
+
 import { useState } from "react";
 import {
   LineChart,
   Line,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-import { useRouter } from "next/navigation";
-import React from "react";
 import Finanzas from "@/shared/components/finanzas/Finanzas";
 import FormMagazine from "@/shared/components/formMagazine/FormMagazine";
 import SeguridadConfiguracion from "@/shared/components/seguridadConfiguracion/SeguridadConfiguracion";
 import Stock from "./pages/stock/Stock";
 import { ManagmentProductForm } from "./pages/management/Managment";
 import ProtectedRouteAdmin from "@/shared/helpers/ProtectedRouteAdmin";
-
-
+import Image from "next/image";
 
 
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
-  const [darkMode, setDarkMode] = useState(false);
-  const router = useRouter();
+  // const [darkMode, setDarkMode] = useState(false);
 
   const salesData = [
     { name: "Ene", ventas: 4000 },
@@ -38,21 +33,23 @@ export default function Dashboard() {
     { name: "May", ventas: 6000 },
   ];
 
-  const userData = [
-    { name: "Ene", usuarios: 100 },
-    { name: "Feb", usuarios: 150 },
-    { name: "Mar", usuarios: 300 },
-    { name: "Abr", usuarios: 250 },
-    { name: "May", usuarios: 400 },
-  ];
+  // const userData = [
+  //   { name: "Ene", usuarios: 100 },
+  //   { name: "Feb", usuarios: 150 },
+  //   { name: "Mar", usuarios: 300 },
+  //   { name: "Abr", usuarios: 250 },
+  //   { name: "May", usuarios: 400 },
+  // ];
 
   return (
     <ProtectedRouteAdmin>
+      {/* <div className={`flex ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}> */}
+      <div className={`flex bg-white text-black`}>
+        {/* <nav className={`w-64 p-4 space-y-3 ${darkMode ? "bg-gray-900" : "bg-black"} text-white`}> */}
+        <nav className={`w-64 p-4 space-y-3 bg-black text-white`}>
 
-      <div className={`flex ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
-        <nav className={`w-64 p-4 space-y-3 ${darkMode ? "bg-gray-900" : "bg-black"} text-white`}>
-
-          <img src="/Logoink3d.png" alt="Logo" className="w-32 mx-auto  mt-10 mb-4" />
+          <Image src="/Logoink3d.png" alt="Logo" className="w-32 mx-auto  mt-10 mb-4" width={200}
+              height={200}/>
           <h2 className="text-white"> General </h2>
 
           {[

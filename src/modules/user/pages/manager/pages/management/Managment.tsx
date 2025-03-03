@@ -10,6 +10,8 @@ import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 import { PlusOption } from "./components/PlusOption.component";
+import Image from "next/image";
+import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
 interface Size {
     id: number
@@ -61,7 +63,7 @@ export const ManagmentProductForm = () => {
 
     const [newCategory, setNewCategory] = useState<string>("");
 
-    const { products, createProduct } = useProducts()
+    const { createProduct } = useProducts()
     const { categories, createCategory, error } = useCategories()
 
     const [cloudinary, setCloudinary] = useState<string[]>([])
@@ -88,9 +90,6 @@ export const ManagmentProductForm = () => {
             return
         }
     };
-
-    
-
 
     const handleChangeProduct = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value  } = e.target;
@@ -177,7 +176,8 @@ export const ManagmentProductForm = () => {
 
             Mixin.fire("Producto creado con éxito", "", "success");
         } catch (error) {
-            Mixin.fire("Error al crear el producto", "", "error");
+            const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"
+            Mixin.fire("Error al crear el producto", errorMessage, "error");
         }
     };
 
@@ -216,10 +216,12 @@ export const ManagmentProductForm = () => {
                             className="hidden"
                             />
                             {image ? (
-                                    <img
+                                    <Image
                                         src={image}
                                         alt={`Imagen ${index + 1}`}
                                         className="w-full h-full object-cover rounded-lg"
+                                        width={200}
+                                        height={200}
                                     />
                                 ) : (
                                     <div className="flex flex-col justify-center items-center">

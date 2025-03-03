@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
+import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
 // Servicio para confirmar la orden
 export const confirmOrderService = async (
@@ -84,8 +85,9 @@ export const paymentCreateService = async (
         );
 
         return data;
-    } catch (error: any) {
-        console.error("Error creando el pago MP:", error.response?.data || error);
+    } catch (error) {
+        const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor" 
+        console.error("Error creando el pago MP:", errorMessage);
         throw error;
     }
 };

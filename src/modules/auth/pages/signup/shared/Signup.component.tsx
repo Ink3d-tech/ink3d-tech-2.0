@@ -7,7 +7,6 @@ import { FormComponent } from "@/modules/auth/shared/components/Form.component"
 import { Routes } from "../../../shared/enums/Routes"
 import { LoginFields } from "../../login/shared/LoginForm.component"
 import { FcGoogle } from "react-icons/fc"
-import Swal from "sweetalert2"
 import { Divider } from "../../../shared/components/Divider.component"
 
 

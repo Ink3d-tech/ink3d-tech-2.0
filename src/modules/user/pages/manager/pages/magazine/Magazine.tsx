@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Article {
   id: number;
@@ -57,10 +58,12 @@ const MagazinePage: React.FC = () => {
             key={article.id}
             className="bg-white shadow-lg rounded-lg overflow-hidden transition transform hover:scale-105 flex flex-col"
           >
-            <img
+            <Image
               src={article.image}
               alt={article.title}
               className="w-full h-64 object-cover"
+              width={200}
+              height={200}
             />
             <div className="p-5 flex-grow flex flex-col">
               <p className="text-gray-500 text-sm">

@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import Image from "next/image";
+import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
 
 interface FormData {
@@ -76,11 +78,12 @@ export default function FormMagazine() {
       setImagePreview("");
 
       // Refrescar lista de artículos
-      const response = await axios.get<FormData[]>("http://localhost:3000/api/magazine");
+      const response = await axios.get<FormData[]>(`${API_BACK}/api/magazine`);
       setArticles(response.data);
 
-    } catch (error: any) {
-      console.error("Error al enviar el formulario:", error.response?.data || error.message);
+    } catch (error) {
+      const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"
+      console.error("Error al enviar el formulario:", errorMessage);
     }
   };
 
@@ -100,8 +103,9 @@ export default function FormMagazine() {
       setFormData({ author: "", title: "", description: "", image: "" });
       setSelectedId(null);
       setImagePreview("");
-    } catch (error: any) {
-      console.error("Error al eliminar el artículo:", error.response?.data || error.message);
+    } catch (error) {
+      const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"
+      console.error("Error al eliminar el artículo:", errorMessage);
     }
   };
 
@@ -161,7 +165,8 @@ export default function FormMagazine() {
         {imagePreview && (
           <div className="mt-3">
             <p className="text-gray-500 text-sm">Vista previa:</p>
-            <img src={imagePreview} alt="Vista previa" className="w-32 h-32 object-cover border rounded-md" />
+            <Image src={imagePreview} alt="Vista previa" className="w-32 h-32 object-cover border rounded-md" width={200}
+              height={200} />
           </div>
         )}
 
