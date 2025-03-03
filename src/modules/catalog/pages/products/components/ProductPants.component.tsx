@@ -1,5 +1,6 @@
 import ProductCard from "../../home/components/products/ProductCard.component";
 
+
 interface Product {
   id: number;
   name: string;

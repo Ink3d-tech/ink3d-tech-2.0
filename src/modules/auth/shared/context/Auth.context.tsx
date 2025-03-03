@@ -124,122 +124,6 @@
 // };
 
 
-"use client";
-
-import React, { useState, useContext, createContext, useEffect, useCallback } from "react";
-import { LoginInterface } from "../interfaces/Login.interface";
-import { SignupInterface, UserInterface } from "../interfaces/Signup.interface";
-import axios from "axios";
-import { API_BACK } from "@/shared/config/api/getEnv";
-
-interface AuthContextInterface {
-    user: UserInterface | null;
-    login: (loginForm: LoginInterface) => Promise<void>;
-    signup: (signForm: SignupInterface) => Promise<void>;
-    logout: () => void;
-    isAuthenticated: boolean;
-    isAdmin: boolean;
-    token: string ;
-    isLoading: boolean;
-    getIdUser: (token: string) => string | null; 
-}
-
-const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
-
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [token, setToken] = useState<string | null>(null);
-    const [user, setUser] = useState<UserInterface | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [isAdmin, setIsAdmin] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    const resetAuthState = useCallback(() => {
-        localStorage.removeItem("token");
-        setToken(null);
-        setUser(null);
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-    }, []);
-
-    const decodeToken = (token: string): UserInterface | null => {
-        try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            return payload as UserInterface;
-        } catch (error) {
-            console.error("Error al decodificar el token:", error);
-            return null;
-        }
-    };
-
-    const handleAuthentication = useCallback((token: string) => {
-        localStorage.setItem("token", token);
-        setToken(token);
-        setIsAuthenticated(true);
-
-        const userData = decodeToken(token);
-        if (userData) {
-            setUser(userData);
-            setIsAdmin(userData.role === "admin");
-        } else {
-            resetAuthState();
-        }
-    }, [resetAuthState]);
-
-    useEffect(() => {
-        const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-        if (storedToken) {
-            handleAuthentication(storedToken);
-        } else {
-            resetAuthState();
-        }
-
-        setIsLoading(false);
-    }, [handleAuthentication, resetAuthState]);
-
-    const login = async (loginForm: LoginInterface) => {
-        try {
-            const { data } = await axios.post<{ token: string }>(`${API_BACK}/auth/signin`, loginForm);
-            handleAuthentication(data.token);
-        } catch (error) {
-            console.error("Error en login:", error);
-            resetAuthState();
-        }
-    };
-
-    const signup = async (signupForm: SignupInterface) => {
-        try {
-            await axios.post(`${API_BACK}/auth/signup`, signupForm);
-        } catch (error) {
-            console.error("Error en signup:", error);
-        }
-    };
-
-    const logout = () => {
-        resetAuthState();
-    };
-
-    // Agregar la función getIdUser
-    const getIdUser = (token: string): string | null => {
-        const userData = decodeToken(token);
-        return userData ? userData.id : null;  
-    };
-
-    return (
-        <AuthContext.Provider value={{ user, login, signup, logout, isAuthenticated, isAdmin, isLoading, token, getIdUser }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) throw new Error("useAuth must be used within an AuthProvider");
-    return context;
-};
-
-
-
 // "use client";
 
 // import React, { useState, useContext, createContext, useEffect, useCallback } from "react";
@@ -255,16 +139,15 @@ export const useAuth = () => {
 //     logout: () => void;
 //     isAuthenticated: boolean;
 //     isAdmin: boolean;
-//     token: string; // Cambiado de string | null a string
+//     token: string ;
 //     isLoading: boolean;
-//     getIdUser: (token: string) => string | null; // Función para obtener el ID del usuario
+//     getIdUser: (token: string) => string | null; 
 // }
 
 // const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
 
 // export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-//     // Cambié el estado de token a string en lugar de string | null
-//     const [token, setToken] = useState<string>(""); // Iniciar con una cadena vacía
+//     const [token, setToken] = useState<string | null>(null);
 //     const [user, setUser] = useState<UserInterface | null>(null);
 //     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 //     const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -272,7 +155,7 @@ export const useAuth = () => {
 
 //     const resetAuthState = useCallback(() => {
 //         localStorage.removeItem("token");
-//         setToken(""); // Limpiar el token con una cadena vacía
+//         setToken(null);
 //         setUser(null);
 //         setIsAuthenticated(false);
 //         setIsAdmin(false);
@@ -303,7 +186,7 @@ export const useAuth = () => {
 //     }, [resetAuthState]);
 
 //     useEffect(() => {
-//         const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : "";
+//         const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
 //         if (storedToken) {
 //             handleAuthentication(storedToken);
@@ -336,10 +219,10 @@ export const useAuth = () => {
 //         resetAuthState();
 //     };
 
-//     // La función getIdUser ahora espera un token no nulo
+//     // Agregar la función getIdUser
 //     const getIdUser = (token: string): string | null => {
 //         const userData = decodeToken(token);
-//         return userData ? userData.id : null;  // Retorna el ID del usuario
+//         return userData ? userData.id : null;  
 //     };
 
 //     return (
@@ -354,3 +237,138 @@ export const useAuth = () => {
 //     if (!context) throw new Error("useAuth must be used within an AuthProvider");
 //     return context;
 // };
+
+
+"use client";
+
+import React, { useState, useContext, createContext, useEffect, useCallback } from "react";
+import { LoginInterface } from "../interfaces/Login.interface";
+import { SignupInterface, UserInterface } from "../interfaces/Signup.interface";
+import axios from "axios";
+import { API_BACK } from "@/shared/config/api/getEnv";
+
+interface AuthContextInterface {
+    user: UserInterface | null;
+    login: (loginForm: LoginInterface) => Promise<void>;
+    signup: (signForm: SignupInterface) => Promise<void>;
+    logout: () => void;
+    isAuthenticated: boolean;
+    isAdmin: boolean;
+    token: string;
+    isLoading: boolean;
+    getIdUser: (token: string) => string | null;
+}
+
+const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [token, setToken] = useState<string>("");
+    const [user, setUser] = useState<UserInterface | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    const resetAuthState = useCallback(() => {
+        localStorage.removeItem("token");
+        setToken("");
+        setUser(null);
+        setIsAuthenticated(false);
+        setIsAdmin(false);
+    }, []);
+
+    const decodeToken = (token: string): UserInterface | null => {
+        try {
+            if (!token.includes(".")) {
+                console.warn("Intentando decodificar un token inválido:", token);
+                return null;
+            }
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            return payload as UserInterface;
+        } catch (error) {
+            console.error("Error al decodificar el token:", error);
+            return null;
+        }
+    };
+
+    const handleAuthentication = useCallback((token: string) => {
+        if (!token) {
+            console.warn("Intento de autenticación con token vacío.");
+            resetAuthState();
+            return;
+        }
+
+        localStorage.setItem("token", token);
+        setToken(token);
+        setIsAuthenticated(true);
+
+        const userData = decodeToken(token);
+        if (userData) {
+            setUser(userData);
+            setIsAdmin(userData.role === "admin");
+        } else {
+            resetAuthState();
+        }
+    }, [resetAuthState]);
+
+    useEffect(() => {
+        try {
+            const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+            if (storedToken) {
+                handleAuthentication(storedToken);
+            } else {
+                resetAuthState();
+            }
+        } catch (error) {
+            console.error("Error al recuperar el token de localStorage:", error);
+            resetAuthState();
+        }
+        setIsLoading(false);
+    }, [handleAuthentication, resetAuthState]);
+
+    const login = async (loginForm: LoginInterface) => {
+        try {
+            const { data } = await axios.post<{ token: string }>(`${API_BACK}/auth/signin`, loginForm);
+            if (!data.token) {
+                throw new Error("Token no recibido en la respuesta del servidor.");
+            }
+            handleAuthentication(data.token);
+        } catch (error) {
+            console.error("Error en login:", error);
+            resetAuthState();
+        }
+    };
+
+    const signup = async (signupForm: SignupInterface) => {
+        try {
+            await axios.post(`${API_BACK}/auth/signup`, signupForm);
+        } catch (error) {
+            console.error("Error en signup:", error);
+        }
+    };
+
+    const logout = () => {
+        resetAuthState();
+    };
+
+    const getIdUser = (token: string): string | null => {
+        if (!token) {
+            console.warn("Intentando obtener el ID del usuario con un token vacío.");
+            return null;
+        }
+
+        const userData = decodeToken(token);
+        return userData?.id ?? null;
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, signup, logout, isAuthenticated, isAdmin, isLoading, token, getIdUser }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) throw new Error("useAuth debe ser usado dentro de un AuthProvider");
+    return context;
+};

@@ -1,17 +1,108 @@
+// import axios from "axios";
+// import { API_BACK } from "@/shared/config/api/getEnv";
+// import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
+
+// // Servicio para confirmar la orden
+// export const confirmOrderService = async (
+//     userBuyer: string,
+//     confirmedCart: ICartProduct[],
+//     token: string | null
+// ): Promise<{ orderId: string, currency: string, products: { id: string, price: number, quantity: number }[] }> => {
+//     try {
+
+//         console.log(`id del USER ${userBuyer}`);
+        
+
+//         const body = {
+//             userId: userBuyer,
+//             products: confirmedCart.map(({ id, units }) => ({
+//                 id,
+//                 quantity: units,
+//             })),
+//         };
+
+//         // console.log("Body de la request order:", JSON.stringify(body, null, 2));
+        
+
+//         const { data } = await axios.post<IOrder>(`${API_BACK}/orders`, body, {
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${token}`,
+//             },
+//         });
+
+
+//         const orderDetails = data.orderDetails.map((product) => ({
+//             id: product.productId,
+//             price: product.priceAtPurchase,
+//             quantity: product.quantity,
+//         }));
+
+//         return {
+//             orderId: data.id,
+//             currency: data.currency,
+//             products: orderDetails,
+//         };
+//     } catch (error) {
+//         console.error("Error confirming order:", error);
+//         throw error;
+//     }
+// };
+
+// // Servicio para crear el pago
+// export const paymentCreateService = async (
+//     orderId: string,
+//     currency: string,
+//     confirmedCart: ICartProduct[],
+//     token: string | null
+// ): Promise<IPaymentResponse> => {
+//     try {
+//         const body = {
+//             orderId,
+//             currency,
+//             products: confirmedCart.map(({ id, name, price, units }) => ({
+//                 id,
+//                 title: name,
+//                 price,
+//                 quantity: units,
+//             })),
+//         };
+
+
+//         console.log("Body de la request MP:", JSON.stringify(body, null, 2));
+//         console.log(`token ${token}`);
+
+//         const { data } = await axios.post<IPaymentResponse>(
+//             `${API_BACK}/payment-methods/create`,
+//             body,
+//             {
+//                 headers: {
+//                     "Content-Type": "application/json",
+//                     Authorization: `Bearer ${token}`,
+//                 },
+//             }
+//         );
+
+//         return data;
+//     } catch (error: any) {
+//         console.error("Error creando el pago MP:", error.response?.data || error);
+//         throw error;
+//     }
+// };
+
+
+
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
+import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface";
 
-// Servicio para confirmar la orden
 export const confirmOrderService = async (
     userBuyer: string,
     confirmedCart: ICartProduct[],
     token: string | null
-): Promise<{ orderId: string, currency: string, products: { id: string, price: number, quantity: number }[] }> => {
+): Promise<{ orderId: string; currency: string; products: { id: string; price: number; quantity: number }[] }> => {
     try {
-
-        console.log(`id del USER ${userBuyer}`);
-        
+        console.log(`ID del usuario comprador: ${userBuyer}`);
 
         const body = {
             userId: userBuyer,
@@ -21,35 +112,28 @@ export const confirmOrderService = async (
             })),
         };
 
-        // console.log("Body de la request order:", JSON.stringify(body, null, 2));
-        
+        const headers = {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}), 
+        };
 
-        const { data } = await axios.post<IOrder>(`${API_BACK}/orders`, body, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-
-        const orderDetails = data.orderDetails.map((product) => ({
-            id: product.productId,
-            price: product.priceAtPurchase,
-            quantity: product.quantity,
-        }));
+        const { data } = await axios.post<IOrder>(`${API_BACK}/orders`, body, { headers });
 
         return {
             orderId: data.id,
             currency: data.currency,
-            products: orderDetails,
+            products: data.orderDetails.map(({ productId, priceAtPurchase, quantity }) => ({
+                id: productId,
+                price: priceAtPurchase,
+                quantity,
+            })),
         };
-    } catch (error) {
-        console.error("Error confirming order:", error);
-        throw error;
+    } catch  {
+        console.error("Error al confirmar la orden");
+        throw new Error("No se pudo confirmar la orden");
     }
 };
 
-// Servicio para crear el pago
 export const paymentCreateService = async (
     orderId: string,
     currency: string,
@@ -62,30 +146,22 @@ export const paymentCreateService = async (
             currency,
             products: confirmedCart.map(({ id, name, price, units }) => ({
                 id,
-                title: name,
+                title: name || "Producto sin nombre",
                 price,
                 quantity: units,
             })),
         };
 
+        const headers = {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        };
 
-        console.log("Body de la request MP:", JSON.stringify(body, null, 2));
-        console.log(`token ${token}`);
-
-        const { data } = await axios.post<IPaymentResponse>(
-            `${API_BACK}/payment-methods/create`,
-            body,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        const { data } = await axios.post<IPaymentResponse>(`${API_BACK}/payment-methods/create`, body, { headers });
 
         return data;
-    } catch (error: any) {
-        console.error("Error creando el pago MP:", error.response?.data || error);
-        throw error;
+    } catch {
+        console.error("Error creando el pago MP");
+        throw new Error("No se pudo procesar el pago");
     }
 };
