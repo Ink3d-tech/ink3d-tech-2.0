@@ -4,14 +4,16 @@ import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 export default function Footer() {
   return (
     <footer className="bg-black text-white py-10">
+      
       <div className="container mx-auto px-6 lg:px-20">
+        
         {/* Sección superior */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           {/* Logo y descripción */}
           <div>
-            <h2 className="text-3xl font-bold mb-3">The Ink3d Project</h2>
+            <h2 className="text-3xl font-bold mb-3"></h2>
             <p className="text-gray-400">
-              Estilo, calidad y vanguardia en cada prenda.
+              
             </p>
           </div>
 

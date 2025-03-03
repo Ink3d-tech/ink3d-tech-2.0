@@ -4,11 +4,11 @@ import axios from "axios";
 import Footer from "../footer/Footer";
 
 interface FormData {
-  id?: string; // ID opcional para editar/eliminar
+  id?: string;
   author: string;
   title: string;
   description: string;
-  image: string; // URL de la imagen
+  image: string;
 }
 
 export default function FormMagazine() {
@@ -19,26 +19,32 @@ export default function FormMagazine() {
     image: "",
   });
 
-  const [selectedId, setSelectedId] = useState<string | null>(null); // ID del artículo seleccionado
-  const [articles, setArticles] = useState<FormData[]>([]); // Lista de artículos
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [articles, setArticles] = useState<FormData[]>([]);
+  const [imagePreview, setImagePreview] = useState<string>(""); // Vista previa de imagen
 
   // Cargar artículos desde la API
   useEffect(() => {
     const fetchArticles = async () => {
       try {
         const response = await axios.get<FormData[]>("http://localhost:3000/api/magazine");
-        setArticles(response.data); 
+        setArticles(response.data);
       } catch (error) {
         console.error("Error al obtener los artículos:", error);
       }
     };
-
     fetchArticles();
   }, []);
 
   // Manejar cambios en los inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Si es el campo de imagen, actualizar la vista previa
+    if (name === "image") {
+      setImagePreview(value);
+    }
   };
 
   // Crear o actualizar artículo
@@ -63,11 +69,12 @@ export default function FormMagazine() {
         console.log("Artículo publicado:", formDataToSend);
       }
 
-      // Resetear formulario y ID
+      // Resetear formulario e ID
       setFormData({ author: "", title: "", description: "", image: "" });
       setSelectedId(null);
+      setImagePreview("");
 
-      // Refrescar lista de artículos después de la actualización o creación
+      // Refrescar lista de artículos
       const response = await axios.get<FormData[]>("http://localhost:3000/api/magazine");
       setArticles(response.data);
 
@@ -80,6 +87,7 @@ export default function FormMagazine() {
   const handleEdit = (article: FormData) => {
     setFormData(article);
     setSelectedId(article.id || null);
+    setImagePreview(article.image); // Mostrar la imagen actual en la vista previa
   };
 
   // Eliminar artículo
@@ -87,13 +95,10 @@ export default function FormMagazine() {
     try {
       await axios.delete(`http://localhost:3000/api/magazine/${id}`);
       console.log("Artículo eliminado con éxito.");
-
-      // Eliminar el artículo de la lista sin necesidad de recargar la página
       setArticles(articles.filter((article) => article.id !== id));
-
-      // Resetear formulario después de eliminar
       setFormData({ author: "", title: "", description: "", image: "" });
       setSelectedId(null);
+      setImagePreview("");
     } catch (error: any) {
       console.error("Error al eliminar el artículo:", error.response?.data || error.message);
     }
@@ -151,6 +156,14 @@ export default function FormMagazine() {
           />
         </label>
 
+        {/* Vista previa de la imagen */}
+        {imagePreview && (
+          <div className="mt-3">
+            <p className="text-gray-500 text-sm">Vista previa:</p>
+            <img src={imagePreview} alt="Vista previa" className="w-32 h-32 object-cover border rounded-md" />
+          </div>
+        )}
+
         {/* Botones de acción */}
         <div className="flex gap-3 mt-3">
           <button 
@@ -192,6 +205,8 @@ export default function FormMagazine() {
         )}
       </div>
       
+      
     </div>
   );
 }
+
