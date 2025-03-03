@@ -3,7 +3,7 @@ import { Newspaper, ShieldCheck, List, CreditCard } from "lucide-react";
 import React from "react";
 
 const buttons = [
-  { label: "Magazine", icon: <Newspaper />, href: "/magazine", highlight: true },
+  { label: "Magazine", icon: <Newspaper />, href: "/manager/magazine", highlight: true },
   { label: "Compra protegida", icon: <ShieldCheck />, href: "/proteccion" },
   { label: "Categorias", icon: <List />, href: "/categories" },
   { label: "Metodos de pago", icon: <CreditCard />, href: "/pagos" },

@@ -37,7 +37,7 @@ const UserMenu: React.FC<UserMenu> = ({ avatarUrl }) => {
       </div>
 
       {dropdownVisible && (
-        <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md">
+        <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-[100]">
           <div className="p-4">
             <Link
               href="/manager"

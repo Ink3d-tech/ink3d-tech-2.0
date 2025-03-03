@@ -2,7 +2,7 @@
 
 export interface ICartProduct {
     id: string;
-    name?: string; 
+    name?: string; // Opcional porque `confirmOrderService` no lo usa
     price: number;
     units: number;
 }

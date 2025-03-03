@@ -45,7 +45,7 @@ export default function ProductDetail() {
 
     fetchProduct();
   }, [id]);
-  
+
   const { handleAddToCart } = useCart()
 
   const handleFavoriteClick = () => {
@@ -127,13 +127,12 @@ export default function ProductDetail() {
                       <button
                         key={size}
                         onClick={() => handleSizeSelect(size)}
-                        className={`px-3 py-2 border rounded-md transition ${
-                          selectedSize === size
+                        className={`px-3 py-2 border rounded-md transition ${selectedSize === size
                             ? "bg-black text-white border-black"
                             : isAvailable
-                            ? "hover:bg-gray-200"
-                            : "bg-gray-300 cursor-not-allowed"
-                        }`}
+                              ? "hover:bg-gray-200"
+                              : "bg-gray-300 cursor-not-allowed"
+                          }`}
                         disabled={!isAvailable}
                       >
                         {size} {isAvailable ? "" : ""}
@@ -144,9 +143,9 @@ export default function ProductDetail() {
               </div>
 
               <div className="flex gap-4">
-                <button 
-                className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition"
-                onClick={() => handleAddToCart(product)}>
+                <button
+                  className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition"
+                  onClick={() => handleAddToCart(product)}>
                   Agregar al carrito 🛒
                 </button>
               </div>

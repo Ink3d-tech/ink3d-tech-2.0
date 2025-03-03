@@ -5,10 +5,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "i.pinimg.com",
-      },
-      {
-        protocol: "https",
         hostname: "imagen.com",
       },
       {
@@ -23,6 +19,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "project-ink3d-back-1.onrender.com",
       },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com"
+      }
     ],
   },
 };

@@ -6,42 +6,7 @@ export interface ICartItemProps {
   product: Product;
 }
 
-// const {id, name, image, category, price, stock, talle, units} = ProductProps;
 
-// const [productNumber, setProductNumber] = useState<number>(units);
-
-// const handleProductIncrease = () => {
-//     setProductNumber(productNumber+1);
-//     const newCart: IProduct[] = JSON.parse(localStorage.getItem(`cart_${getIdUser(token)}`) || "[]");
-//     newCart.map((product) => {
-//         if(product.id === id) {
-//             product.units++;
-//         }
-//     localStorage.setItem(`cart_${getIdUser(token)}`, JSON.stringify(newCart));
-//     })
-//     setTotalPrice(totalPrice + price)
-// }
-
-// const handleProductDecrease = () => {
-//     setProductNumber(productNumber-1);
-//     const newCart: IProduct[] = JSON.parse(localStorage.getItem(`cart_${getIdUser(token)}`) || "[]");
-//     newCart.map((product) => {
-//         if(product.id === id) {
-//             product.units--;
-//         }
-//     localStorage.setItem(`cart_${getIdUser(token)}`, JSON.stringify(newCart));
-//     })
-//     setTotalPrice(totalPrice + price)
-//     setTotalPrice(totalPrice - price)
-// }
-
-// const handleProductDelete = () => {
-//     const newCart = productsOnCart.filter(product => product.id !== id);
-//     setProductsOnCart(newCart)
-//     localStorage.setItem(`cart_${getIdUser(token)}`, JSON.stringify(newCart));
-//     const calcTotal = totalPrice - productNumber*price
-//     setTotalPrice(calcTotal);
-// }
 
 export default function CartItem({
   product,
@@ -66,29 +31,32 @@ export default function CartItem({
           </h2>
         </div>
         <div className="col-span-3">
-          <span className="text-gray-500 text-center flex sm:flex-row">
-            <button
-              className="bg-gray-200 text-gray-700 px-3 py-1 rounded-l-md hover:bg-gray-300 transition"
-              onClick={(event) => {
-                event.preventDefault();
-                handleProductDecrease(id);
-              }}
-            >
-              -
-            </button>
-            <span className="bg-white text-gray-900 px-4 py-1 border border-gray-300">
-              {units}
+          <div className="flex flex-col items-center">
+            <span className="text-gray-500 text-center flex sm:flex-row">
+              <button
+                className="bg-gray-200 text-gray-700 px-3 py-1 rounded-l-md hover:bg-gray-300 transition"
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleProductDecrease(id);
+                }}
+              >
+                -
+              </button>
+              <span className="bg-white text-gray-900 px-4 py-1 border border-gray-300">
+                {units}
+              </span>
+              <button
+                className="bg-gray-200 text-gray-700 px-3 py-1 rounded-r-md hover:bg-gray-300 transition"
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleProductIncrease(id, stock);
+                }}
+              >
+                +
+              </button>
             </span>
-            <button
-              className="bg-gray-200 text-gray-700 px-3 py-1 rounded-r-md hover:bg-gray-300 transition"
-              onClick={(event) => {
-                event.preventDefault();
-                handleProductIncrease(id, stock);
-              }}
-            >
-              +
-            </button>
-          </span>
+              <span className="text-gray-500 text-[12px] font-light">{product.stock} unidades!</span>
+          </div>
         </div>
         <div className="col-span-2">
           <span className="text-xl font-bold">${(price * units).toFixed(2)}</span>
