@@ -89,6 +89,7 @@ import { Divider } from "@/modules/auth/shared/components/Divider.component";
 import { Spacer } from "@/modules/auth/shared/components/Spacer";
 import { FcGoogle } from "react-icons/fc";
 import Swal from "sweetalert2";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 export enum LoginFields {
     ENTER = "Entrar",
@@ -152,7 +153,7 @@ export const LoginForm: React.FC<LoginProps> = ({
                 timer: 2000,
                 showConfirmButton: false
             }).then(() => {
-                window.location.href = "http://localhost:3000/auth/google/login";
+                window.location.href = `${API_BACK}/auth/google/login`;
             });
         }
     };
