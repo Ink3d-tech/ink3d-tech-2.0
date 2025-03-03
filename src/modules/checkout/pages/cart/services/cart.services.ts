@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Product } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import { IOrder, ICartProduct, IPaymentResponse } from "../interfaces/cartService.interface";
 
 
 export const confirmOrderService = async (userBuyer: string, confirmedCart: Product[], token: string | null) => {

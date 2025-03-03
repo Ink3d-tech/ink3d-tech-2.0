@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/shared/components/navbar/NavBar.component";
 import { AuthProvider } from "@/modules/auth/shared/context/Auth.context";
-import { ProductsProvider } from "../modules/user/pages/manager/context/Products.context";
+import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.context";
 import Chatbot from "@/shared/components/Chatbot";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
 import Footer from "@/shared/components/footer/Footer";
