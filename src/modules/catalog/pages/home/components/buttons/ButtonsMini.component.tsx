@@ -3,7 +3,7 @@ import { Newspaper, ShieldCheck, List, CreditCard } from "lucide-react";
 import React from "react";
 
 const buttons = [
-  { label: "Magazine", icon: <Newspaper />, href: "/magazine", highlight: true },
+  { label: "Magazine", icon: <Newspaper />, href: "/manager/magazine", highlight: true },
   { label: "Compra protegida", icon: <ShieldCheck />, href: "/proteccion" },
   { label: "Categorias", icon: <List />, href: "/categories" },
   { label: "Metodos de pago", icon: <CreditCard />, href: "/pagos" },
@@ -21,7 +21,7 @@ const ButtonsMini = () => {
               highlight ? "highlight-button" : ""
             }`}
           >
-            <div className="w-20 h-20 flex items-center justify-center rounded-full border-2 border-gray-400 relative">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full border-2 border-gray-300 relative">
               {highlight && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="absolute w-20 h-20 bg-blue-400 opacity-20 rounded-full animate-pulse"></div>

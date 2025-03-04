@@ -20,7 +20,7 @@ import Stock from "../../shared/components/stock/Stock"
 import FormMagazine from "../../shared/components/formMagazine/FormMagazine";
 
 import Finanzas from "../../shared/components/finanzas/Finanzas";
-import seguridadConfiguracion  from "../../shared/components/seguridadConfiguracion/SeguridadConfiguracion";
+
 import SeguridadConfiguracion from "../../shared/components/seguridadConfiguracion/SeguridadConfiguracion";
 
 

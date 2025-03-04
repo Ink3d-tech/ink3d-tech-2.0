@@ -6,7 +6,7 @@ import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import { MessageSquareCode, MessageSquareMoreIcon, X } from "lucide-react";
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3003";
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "https://project-ink3d-back-1.onrender.com";
 const socket = io(SOCKET_URL, {
   transports: ["websocket", "polling"],
 });
@@ -103,10 +103,10 @@ export default function Chatbot() {
   }, [isOpen, chatSize]);
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-6 right-5 z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
+        className="bg-blue-500 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110"
       >
         <MessageSquareMoreIcon />
       </button>
