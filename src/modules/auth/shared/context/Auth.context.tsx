@@ -57,21 +57,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-       //  const storedUser = localStorage.getItem("user");
-        const storedToken = localStorage.getItem("token");
-
-        if (storedToken) {
-            //setUser(JSON.parse(storedUser));
-            setToken(storedToken);
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+    
+        if (token) {
+            localStorage.setItem("token", token);
+            setToken(token); 
             setIsAuthenticated(true);
+            
+            window.history.replaceState({}, document.title, window.location.pathname);
         } else {
-            setUser(null);
-            setToken("");
-            setIsAuthenticated(false);
+            const storedToken = localStorage.getItem("token");
+    
+            if (storedToken) {
+                setToken(storedToken);
+                setIsAuthenticated(true);
+            } else {
+                setUser(null);
+                setToken("");
+                setIsAuthenticated(false);
+            }
         }
-
+    
         setIsLoading(false);
-    }, [setIsAuthenticated, setToken]);
+    }, []);
 
     if (isLoading) return <Loading />;
 
@@ -95,16 +104,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const login = async (loginForm: LoginInterface) => {  
         const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm);
-
-        const userId = getIdUser(data.token);
-
+        
+        const userId = getIdUser(data.token)
+        
         if (userId) {
             setUser(userId);
             localStorage.setItem("user", JSON.stringify(userId));
         }
-
-        setToken(data.token);
-        localStorage.setItem("token", data.token);
+    
+        setToken(data.token)
+        setIsAuthenticated(true)
+        localStorage.setItem("token", data.token)
     };
 
     const signup = async (signupForm: SignupInterface) => {
@@ -117,6 +127,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(false);
         setUser(null);
         setToken("");
+
+        window.location.reload()
     };
 
     const value = {
