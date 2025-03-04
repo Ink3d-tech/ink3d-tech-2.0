@@ -26,11 +26,11 @@ export default function ProductDetail() {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`${API_BACK}/auth/google/login/products/${id}`);
+        const response = await fetch(`${API_BACK}/products/${id}`);
         const data: Product = await response.json();
         setProduct(data);
 
-        const responseAllProducts = await fetch(`${API_BACK}/auth/google/login/products`);
+        const responseAllProducts = await fetch(`${API_BACK}/products`);
         const allProducts: Product[] = await responseAllProducts.json();
         const sameNameProducts = allProducts.filter((item) => item.name === data.name);
 
