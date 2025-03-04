@@ -6,7 +6,6 @@ import React, { useState } from "react"
 import { ErrorsInterface } from "../interfaces/Error.interface"
 import { Mixin } from "../components/MixinAlert"
 import { CustomError } from "../helpers/customError"
-// import { API_BACK } from "@/shared/config/api/getEnv"
 
 /**
  * Interfaz que define las propiedades requeridas para usar el hook "useForm"

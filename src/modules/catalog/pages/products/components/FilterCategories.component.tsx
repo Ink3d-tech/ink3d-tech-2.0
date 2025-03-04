@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 interface Category {
   id: string;
@@ -18,7 +19,7 @@ export default function FilterCategories({ onSelectCategory }: FilterCategoriesP
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://project-ink3d-back-1.onrender.com/categories");
+        const response = await fetch(`${API_BACK}/categories`);
         if (!response.ok) {
           throw new Error("Error al obtener las categorías");
         }

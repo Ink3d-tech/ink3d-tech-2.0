@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react"
 import axios from "axios"
-// import { API_BACK } from "@/shared/config/api/getEnv"
+import { API_BACK } from "@/shared/config/api/getEnv"
 import { getAuthHeaders } from "./getAuthHeaders"
 import { Mixin } from "@/modules/auth/shared/components/MixinAlert"
 
@@ -40,7 +40,7 @@ export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await axios.get<CategoryInterface[]>(`https://project-ink3d-back-1.onrender.com/categories`, getAuthHeaders());
+                const res = await axios.get<CategoryInterface[]>(`${API_BACK}/categories`, getAuthHeaders());
                 if (res) setCategories(res.data);
                 
             } catch (error) {
@@ -54,7 +54,7 @@ export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
 
     const createCategory = async (category: CategoryInterface) => { 
         try {
-            const res = await axios.post<CategoryInterface>(`https://project-ink3d-back-1.onrender.com/categories`, category);
+            const res = await axios.post<CategoryInterface>(`${API_BACK}/categories`, category);
 
             setCategories(prev => [...prev, res.data]);
         } catch (error) {
@@ -75,7 +75,7 @@ export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
     // }
 
     const deleteCategory = async (id: string) => {
-        await axios.delete<CategoryInterface>(`https://project-ink3d-back-1.onrender.com/categories/${id}`, getAuthHeaders())
+        await axios.delete<CategoryInterface>(`${API_BACK}/categories/${id}`, getAuthHeaders())
         setCategories(categories.filter(category => category.id !== id));
     }
 

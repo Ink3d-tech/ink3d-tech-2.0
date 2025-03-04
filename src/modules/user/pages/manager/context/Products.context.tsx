@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-// import { API_BACK } from "@/shared/config/api/getEnv";
+import { API_BACK } from "@/shared/config/api/getEnv";
 import { getAuthHeaders } from "./getAuthHeaders";
 
 
@@ -56,7 +56,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
         const fetchProducts = async () => {
             try {
                 setLoading(true)
-                const res = await axios.get<ProductInterface[]>(`https://project-ink3d-back-1.onrender.com/products`, getAuthHeaders());
+                const res = await axios.get<ProductInterface[]>(`${API_BACK}/products`, getAuthHeaders());
                 setProducts(res.data)
             } catch (error) {
                 setError(error instanceof Error ? error.message : "Error interno del servidor");
@@ -71,7 +71,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
 
     const createProduct = async (product: ProductWithoutId): Promise<void> => {      
         try {
-            const res = await axios.post<ProductInterface>(`https://project-ink3d-back-1.onrender.com/products`, product,  getAuthHeaders());
+            const res = await axios.post<ProductInterface>(`${API_BACK}/products`, product,  getAuthHeaders());
             setProducts(prev => [...prev, res.data]);
         } catch (error) {
             setError(error instanceof Error ? error.message : "Error al crear el producto");
@@ -86,7 +86,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
 
     const updateProduct = async (id: string, data: Partial<ProductInterface>): Promise<void> => {
         try {
-            await axios.patch(`https://project-ink3d-back-1.onrender.com/products/${id}`, data, getAuthHeaders());
+            await axios.patch(`${API_BACK}/products/${id}`, data, getAuthHeaders());
             setProducts(prev => prev.map(product =>
                 product.id === id ? { ...product, ...data } : product
             ));
@@ -97,7 +97,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
 
     const deleteProduct = async (id: string): Promise<void> => {
         try {
-            await axios.delete(`https://project-ink3d-back-1.onrender.com/products/${id}`, getAuthHeaders())
+            await axios.delete(`${API_BACK}/products/${id}`, getAuthHeaders())
             setProducts(prev => prev.filter(product => product.id !== id));
         } catch (error) {
             setError(error instanceof Error ? error.message : "Error eliminando el producto")
