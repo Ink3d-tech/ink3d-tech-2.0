@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import FilterCategories from "./components/FilterCategories.component";
-// import { API_BACK } from "@/shared/config/api/getEnv";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 
 interface Product {
@@ -29,7 +29,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`https://project-ink3d-back-1.onrender.com/auth/google/login/products`);
+        const response = await fetch(`${API_BACK}/auth/google/login/products`);
 
         if (!response.ok) {
           throw new Error("Error al obtener los productos");

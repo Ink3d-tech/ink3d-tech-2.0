@@ -7,7 +7,7 @@ import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
 import { ProductInterface, useProducts } from "../../context/Products.context";
 import { Plus, X } from "lucide-react";
 import axios from "axios";
-// import { API_BACK } from "@/shared/config/api/getEnv";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 import { PlusOption } from "./components/PlusOption.component";
 import Image from "next/image";
@@ -75,7 +75,7 @@ export const ManagmentProductForm = () => {
         
         try {
             const res = await axios.post<string>(
-                `https://project-ink3d-back-1.onrender.com/auth/google/login/file`, 
+                `${API_BACK}/auth/google/login/file`, 
                 formData,
                 {
                     headers: {

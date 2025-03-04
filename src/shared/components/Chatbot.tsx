@@ -6,7 +6,7 @@ import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import { MessageSquareMoreIcon, X } from "lucide-react";
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "https://project-ink3d-back-1.onrender.com";
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL;
 const socket = io(SOCKET_URL, {
   transports: ["websocket", "polling"],
 });
