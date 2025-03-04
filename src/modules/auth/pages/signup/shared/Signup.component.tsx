@@ -30,7 +30,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 }) => {
 
     const handleGoogleAuth = () => {
-        window.location.href = `https://project-ink3d-back-1.onrender.com/auth/google/login`;
+        window.location.href = `${API_BACK}/auth/google/login`;
         
     }
 
