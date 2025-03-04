@@ -2,7 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["i.pinimg.com", "co.pinterest.com"], // Agrega los dominios permitidos
+    domains: [
+      "i.pinimg.com",
+      "co.pinterest.com",
+      "i0.wp.com", // ← Agregado aquí
+    ],
 
     remotePatterns: [
       {
@@ -15,14 +19,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "co.images.search.yahoo.com",
-
-      },
-
-      {
-        protocol: "https",
         hostname: "imagenssprueba.png",
       },
+      {
+        protocol: "https",
+        hostname: "i0.wp.com", // ← Agregado aquí también
+      },
+      
+
     ],
   },
 };

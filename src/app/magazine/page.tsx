@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import CarrouselMagazine from "@/shared/components/carrouselMgazine/CarrouselMagazine";
+import { useKeenSlider } from "keen-slider/react";
 
 interface Article {
   id: number;
@@ -17,6 +19,7 @@ const MagazinePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [sliderRef] = useKeenSlider({ loop: true });
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -53,10 +56,10 @@ const MagazinePage: React.FC = () => {
       onClick={() => router.push("/home")} // Redirige al Home
     >
       <Image 
-        src="/LogoInk3d.png" 
+        src="/logoonk3dwhite.png" 
         alt="The Ink3D Project" 
-        width={50} 
-        height={50} 
+        width={1000} 
+        height={1000} 
         className="w-12 h-12 object-contain"
       />
       <h1 className="ml-2 text-xl font-bold uppercase tracking-wide">
@@ -66,31 +69,33 @@ const MagazinePage: React.FC = () => {
 
     {/* Categorías */}
     <ul className="flex gap-6 text-sm uppercase">
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/outfits")}>
-        Outfits Ink3D
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/outfit")}>
+        Outfit Ink3d
       </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/woman")}>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/woman")}>
         Woman
       </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/men")}>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/men")}>
         Men
       </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/compras")}>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/compras")}>
         Compras
       </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/mundo-asian")}>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/mundoasian")}>
         Mundo Asian
       </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/motorsport")}>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/motorsport")}>
         Motorsport
       </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/streetwear")}>
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/streetwear")}>
         Streetwear
       </li>
     </ul>
   </div>
+  
 </nav>
 
+ 
 
        
       <h1 className="text-5xl font-bold text-center uppercase tracking-widest py-5 mt-10 mb-10">
@@ -122,6 +127,10 @@ const MagazinePage: React.FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div>
+        <CarrouselMagazine/>
       </div>
     </div>
   );

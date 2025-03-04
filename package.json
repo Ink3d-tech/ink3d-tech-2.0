@@ -7,12 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
-  
   },
   "dependencies": {
     "@types/axios": "^0.9.36",
     "axios": "^1.7.9",
     "framer-motion": "^12.4.7",
+    "keen-slider": "^6.8.6",
     "lucide-react": "^0.475.0",
     "next": "15.1.7",
     "react": "^19.0.0",
@@ -24,7 +24,7 @@
     "socket": "^0.14.43",
     "socket.io-client": "^4.8.1",
     "sweetalert2": "^11.17.2",
-    "swiper": "^11.2.4"
+    "swiper": "^11.2.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

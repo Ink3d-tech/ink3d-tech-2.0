@@ -48,8 +48,8 @@ const ArticlePage = () => {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center p-10">
-      <button onClick={() => router.push("/magazine")} className="mb-5 text-blue-500 hover:underline">
-        ⬅ Volver al Magazine
+      <button onClick={() => router.push("/magazine")} className="mb-5 text-cyan-500 hover:underline">
+         Volver al Magazine
       </button>
       {article && (
         <div className="max-w-2xl bg-gray-100 p-6 rounded-lg shadow-lg">
