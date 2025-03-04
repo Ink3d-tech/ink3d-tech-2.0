@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 export default function CartSummary() {
     const { products, emptyCart, countProducts } = useCart();
     const { getIdUser, token } = useAuth();
-    const router = useRouter();
+    // const router = useRouter();
     
     const [showDiscountInput, setShowDiscountInput] = useState(false);
     const [discountCode, setDiscountCode] = useState("");
