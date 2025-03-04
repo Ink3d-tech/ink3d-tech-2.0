@@ -1,82 +1,3 @@
-// "use client";
-
-// import { BtnVariant, ButtonBase } from "@/modules/auth/shared/components/buttons/Button.component";
-// import { FormComponent } from "@/modules/auth/shared/components/Form.component";
-// import { LoginInterface } from "@/modules/auth/shared/interfaces/Login.interface";
-// import { Question, VariantQuestion } from "@/modules/auth/shared/components/Question.component"
-// import { formFields } from "@/modules/auth/login/shared/Login.config";
-// import { Divider } from "@/modules/auth/shared/components/Divider.component";
-// import { Spacer } from "@/modules/auth/shared/components/Spacer";
-// import { FcGoogle } from "react-icons/fc";
-// import Swal from "sweetalert2";
-
-// export enum LoginFields {
-//     ENTER = "Entrar",
-//     GOOGLE = "Iniciar sesión con Google",
-//     PASSWORD = "¿Olvidaste tu contraseña?",
-//     NEWACCOUNT = "¿No tienes una cuenta?",
-//     REGISTER = "Registrarte",
-//     OR = "o"
-// }
-
-// interface LoginProps {
-//     form: LoginInterface;
-//     handlerChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-//     formErrors: Record<string, string>;
-//     handlerSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-//     isLoading: boolean;
-// }
-
-// export const LoginForm: React.FC<LoginProps> = ({
-//     form,
-//     handlerChange,
-//     formErrors,
-//     handlerSubmit,
-//     isLoading
-// }) => {
-
-//     // Nacho auth google
-
-//     const handleGoogleAuth = () => {
-
-//         window.location.href = "http://localhost:3000/auth/google/login";
-    
-//     }
-
-//     return (
-//         <form onSubmit={handlerSubmit} className="flex flex-col px-4 mx-auto max-w-[400px]">
-//             <FormComponent 
-//                 form={form}
-//                 handlerChange={handlerChange}
-//                 inputs={formFields}
-//                 formErrors={formErrors}
-//             />
-//             <Question question={LoginFields.PASSWORD} href={"#"} variant={VariantQuestion.PRIMARY}/>
-
-//             <ButtonBase name={LoginFields.ENTER} isLoading={isLoading} variant={BtnVariant.PRIMARY}/>
-
-//             <Divider letter={LoginFields.OR}/>
-
-//             <button
-//                 type="button"
-//                 className="flex items-center justify-center py-2 rounded-md font-medium text-[14px] bg-white text-black border-gray-400"
-//                 onClick={handleGoogleAuth}
-//                 >
-//                 <FcGoogle size={20} /> 
-//                 <span>Registrarse con Google</span>
-//             </button>
-
-//             <Spacer value={34}/>
-            
-//             <div className="flex mx-auto">
-//     <Question question={LoginFields.NEWACCOUNT} href="/auth/signup" variant={VariantQuestion.SECONDARY}/>
-//     <Question question={LoginFields.REGISTER} href="/auth/signup" variant={VariantQuestion.PRIMARY}/>
-// </div>
-
-//         </form>
-//     );
-// }
-
 "use client";
 
 import { useEffect, useState } from "react";  // Importamos useEffect y useState
@@ -89,8 +10,7 @@ import { Divider } from "@/modules/auth/shared/components/Divider.component";
 import { Spacer } from "@/modules/auth/shared/components/Spacer";
 import { FcGoogle } from "react-icons/fc";
 import Swal from "sweetalert2";
-
-// import { API_BACK } from "@/shared/config/api/getEnv";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 export enum LoginFields {
     ENTER = "Entrar",
@@ -154,7 +74,7 @@ export const LoginForm: React.FC<LoginProps> = ({
                 timer: 2000,
                 showConfirmButton: false
             }).then(() => {
-                window.location.href = `https://project-ink3d-back-1.onrender.com/auth/google/login`;
+                window.location.href = `${API_BACK}/auth/google/login`;
             });
         }
     };
