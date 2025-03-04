@@ -11,6 +11,7 @@ import { API_BACK } from "@/shared/config/api/getEnv";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 
+const API_BACK = process.env.NEXT_PUBLIC_API
 
 export enum LoginFields {
     ENTER = "Entrar",

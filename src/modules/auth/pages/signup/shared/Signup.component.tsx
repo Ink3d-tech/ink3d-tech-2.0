@@ -10,6 +10,8 @@ import { FcGoogle } from "react-icons/fc"
 import { Divider } from "../../../shared/components/Divider.component"
 import { API_BACK } from "@/shared/config/api/getEnv"
 
+const API_BACK = process.env.NEXT_PUBLIC_API
+
 
 interface SignupFormProps {
     form: SignupInterface
