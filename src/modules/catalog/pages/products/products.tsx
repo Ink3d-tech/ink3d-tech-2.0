@@ -29,7 +29,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${API_BACK}/auth/google/login/products`);
+        const response = await fetch(`${API_BACK}/products`);
 
         if (!response.ok) {
           throw new Error("Error al obtener los productos");

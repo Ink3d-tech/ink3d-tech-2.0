@@ -25,7 +25,7 @@ export const confirmOrderService = async (
         // console.log("Body de la request order:", JSON.stringify(body, null, 2));
         
 
-        const { data } = await axios.post<IOrder>(`${API_BACK}/auth/google/login/orders`, body, {
+        const { data } = await axios.post<IOrder>(`${API_BACK}/orders`, body, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const paymentCreateService = async (
         console.log(`token ${token}`);
 
         const { data } = await axios.post<IPaymentResponse>(
-            `${API_BACK}/auth/google/login/payment-methods/create`,
+            `${API_BACK}/payment-methods/create`,
             body,
             {
                 headers: {
