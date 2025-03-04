@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import io from "socket.io-client";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
-import { MessageSquareCode, MessageSquareMoreIcon, X } from "lucide-react";
+import { MessageSquareMoreIcon, X } from "lucide-react";
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "https://project-ink3d-back-1.onrender.com";
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL;
 const socket = io(SOCKET_URL, {
   transports: ["websocket", "polling"],
 });
@@ -17,11 +17,18 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [chatSize, setChatSize] = useState({ width: 320, height: 400 });
-  const [position, setPosition] = useState({
-    x: window.innerWidth - 340, 
-    y: window.innerHeight - 460,
-  });
+  const [position, setPosition] = useState({ x: 0, y: 0 }); // Inicializamos sin `window`
   const [dragging, setDragging] = useState(false);
+
+  useEffect(() => {
+    // Solo se ejecuta en el cliente después del primer renderizado
+    if (typeof window !== "undefined") {
+      setPosition({
+        x: window.innerWidth - 340,
+        y: window.innerHeight - 460,
+      });
+    }
+  }, []); // Se ejecuta solo una vez, cuando el componente se monta en el cliente
 
   useEffect(() => {
     const handleBotResponse = (data: { text: string }) => {
@@ -67,22 +74,34 @@ export default function Chatbot() {
     }
   };
 
-  const startDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const startDrag = useCallback(() => {
     setDragging(true);
-  };
+  }, []);
 
-  const onDrag = (e: MouseEvent) => {
-    if (dragging) {
+  const onDrag = useCallback(
+    (e: MouseEvent) => {
+      if (dragging) {
+        setPosition({
+          x: Math.min(window.innerWidth - chatSize.width, Math.max(0, e.clientX - chatSize.width / 2)),
+          y: Math.min(window.innerHeight - chatSize.height, Math.max(0, e.clientY - 30)),
+        });
+      }
+    },
+    [dragging, chatSize]
+  );
+
+  const stopDrag = useCallback(() => {
+    setDragging(false);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
       setPosition({
-        x: Math.min(window.innerWidth - chatSize.width, Math.max(0, e.clientX - chatSize.width / 2)),
-        y: Math.min(window.innerHeight - chatSize.height, Math.max(0, e.clientY - 30)),
+        x: window.innerWidth - chatSize.width - 20,
+        y: window.innerHeight - chatSize.height - 80,
       });
     }
-  };
-
-  const stopDrag = () => {
-    setDragging(false);
-  };
+  }, [isOpen, chatSize]);
 
   useEffect(() => {
     window.addEventListener("mousemove", onDrag);
@@ -91,26 +110,17 @@ export default function Chatbot() {
       window.removeEventListener("mousemove", onDrag);
       window.removeEventListener("mouseup", stopDrag);
     };
-  }, [dragging]);
-
-  useEffect(() => {
-    if (isOpen) {
-      setPosition({
-        x: window.innerWidth - chatSize.width - 20, 
-        y: window.innerHeight - chatSize.height - 80,
-      });
-    }
-  }, [isOpen, chatSize]);
+  }, [onDrag, stopDrag]);
 
   return (
-    <div className="fixed bottom-6 right-5 z-50">
+    <div className="fixed bottom-5 right-5 z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-blue-500 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110"
+        className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
       >
         <MessageSquareMoreIcon />
       </button>
-  
+
       {isOpen && (
         <div
           style={{
@@ -134,10 +144,10 @@ export default function Chatbot() {
               <div className="flex justify-between items-center border-b pb-2">
                 <h2 className="text-lg font-semibold">Chatbot INK3D</h2>
                 <button onClick={() => setIsOpen(false)} className="text-red-500">
-                  <X/>
+                  <X />
                 </button>
               </div>
-  
+
               <div className="flex-1 overflow-y-auto p-2">
                 {messages.map((msg, index) => (
                   <div key={index} className={`p-2 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
@@ -148,7 +158,7 @@ export default function Chatbot() {
                 ))}
                 <div ref={messagesEndRef} />
               </div>
-  
+
               <div className="flex mt-2">
                 <input
                   className="flex-1 p-2 border rounded-md"
@@ -167,5 +177,4 @@ export default function Chatbot() {
       )}
     </div>
   );
-  
 }

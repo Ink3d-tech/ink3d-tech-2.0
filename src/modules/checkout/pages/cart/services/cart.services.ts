@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
+import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
 // Servicio para confirmar la orden
 export const confirmOrderService = async (
@@ -9,6 +10,10 @@ export const confirmOrderService = async (
     token: string | null
 ): Promise<{ orderId: string, currency: string, products: { id: string, price: number, quantity: number }[] }> => {
     try {
+
+        console.log(`id del USER ${userBuyer}`);
+        
+
         const body = {
             userId: userBuyer,
             products: confirmedCart.map(({ id, units }) => ({
@@ -26,6 +31,7 @@ export const confirmOrderService = async (
                 Authorization: `Bearer ${token}`,
             },
         });
+
 
         const orderDetails = data.orderDetails.map((product) => ({
             id: product.productId,
@@ -66,10 +72,9 @@ export const paymentCreateService = async (
 
         console.log("Body de la request MP:", JSON.stringify(body, null, 2));
         console.log(`token ${token}`);
-        
 
         const { data } = await axios.post<IPaymentResponse>(
-            `http://localhost:3000/payment-methods/create`,
+            `${API_BACK}/payment-methods/create`,
             body,
             {
                 headers: {
@@ -80,8 +85,9 @@ export const paymentCreateService = async (
         );
 
         return data;
-    } catch (error: any) {
-        console.error("Error creando el pago MP:", error.response?.data || error);
+    } catch (error) {
+        const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor" 
+        console.error("Error creando el pago MP:", errorMessage);
         throw error;
     }
 };

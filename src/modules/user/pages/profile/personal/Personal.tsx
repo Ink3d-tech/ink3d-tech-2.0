@@ -2,9 +2,11 @@ import BackButton from '@/shared/components/buttons/BackButton.component'
 import { BadgeCheck } from 'lucide-react'
 import React from 'react'
 import PersonalCard from '../components/ProfilCard.component'
+import ProtectedRoute from '@/shared/helpers/ProtectedRoute'
 
 export default function Personal() {
     return (
+        <ProtectedRoute title='Debes iniciar sesion o registrarte para ver tu perfil personal'>
             <div className="flex flex-col min-h-screen">
                 <BackButton tab='Informacion personal' />
                 <div className='flex flex-col bg-white m-4 p-5 rounded gap-4 shadow-shadow-gray shadow-lg'>
@@ -26,6 +28,7 @@ export default function Personal() {
 
                 <PersonalCard field='Nombre elegido' value='Ignacio Alonso' validated='Validado' />
             </div>
+        </ProtectedRoute>
 
             
         

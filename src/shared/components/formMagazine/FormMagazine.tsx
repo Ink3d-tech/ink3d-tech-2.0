@@ -1,13 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Footer from "../footer/Footer";
 
 interface FormData {
   id?: string;
+  id?: string;
   author: string;
   title: string;
   description: string;
+  image: string;
   image: string;
 }
 
@@ -45,12 +48,28 @@ export default function FormMagazine() {
     if (name === "image") {
       setImagePreview(value);
     }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Si es el campo de imagen, actualizar la vista previa
+    if (name === "image") {
+      setImagePreview(value);
+    }
   };
 
   // Crear o actualizar artículo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+  // Crear o actualizar artículo
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    const formDataToSend = {
+      title: formData.title,
+      content: formData.description,
+      image: formData.image,
+      author: formData.author,
+    };
     const formDataToSend = {
       title: formData.title,
       content: formData.description,
@@ -88,6 +107,11 @@ export default function FormMagazine() {
     setFormData(article);
     setSelectedId(article.id || null);
     setImagePreview(article.image); // Mostrar la imagen actual en la vista previa
+  // Cargar datos en el formulario para edición
+  const handleEdit = (article: FormData) => {
+    setFormData(article);
+    setSelectedId(article.id || null);
+    setImagePreview(article.image); // Mostrar la imagen actual en la vista previa
   };
 
   // Eliminar artículo
@@ -119,6 +143,20 @@ export default function FormMagazine() {
             required 
           />
         </label>
+    <div>
+      {/* Formulario de artículo */}
+      <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-md shadow-md">
+        <label className="block">
+          Autor:
+          <input 
+            type="text" 
+            name="author" 
+            value={formData.author} 
+            onChange={handleChange} 
+            className="border p-2 w-full" 
+            required 
+          />
+        </label>
 
         <label className="block">
           Título:
@@ -131,7 +169,28 @@ export default function FormMagazine() {
             required 
           />
         </label>
+        <label className="block">
+          Título:
+          <input 
+            type="text" 
+            name="title" 
+            value={formData.title} 
+            onChange={handleChange} 
+            className="border p-2 w-full" 
+            required 
+          />
+        </label>
 
+        <label className="block">
+          Descripción:
+          <textarea 
+            name="description" 
+            value={formData.description} 
+            onChange={handleChange} 
+            className="border p-2 w-full" 
+            required 
+          ></textarea>
+        </label>
         <label className="block">
           Descripción:
           <textarea 
@@ -164,6 +223,45 @@ export default function FormMagazine() {
           </div>
         )}
 
+        {/* Botones de acción */}
+        <div className="flex gap-3 mt-3">
+          <button 
+            type="submit" 
+            className={`px-4 py-2 rounded text-white transition ${selectedId ? "bg-green-500 hover:bg-green-600" : "bg-blue-500 hover:bg-blue-600"}`}
+          >
+            {selectedId ? "Actualizar" : "Publicar"}
+          </button>
+        </div>
+      </form>
+
+      {/* Lista de artículos */}
+      <div className="mt-8">
+        <h2 className="text-xl font-bold mb-4">Lista de Artículos</h2>
+        {articles.length > 0 ? (
+          <ul>
+            {articles.map((article) => (
+              <li key={article.id} className="flex justify-between items-center p-2 border-b">
+                <span>{article.title}</span>
+                <div>
+                  <button
+                    onClick={() => handleEdit(article)}
+                    className="bg-yellow-500 text-white px-3 py-1 rounded mr-2"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(article.id!)}
+                    className="bg-red-500 text-white px-3 py-1 rounded"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay artículos disponibles.</p>
+        )}
         {/* Botones de acción */}
         <div className="flex gap-3 mt-3">
           <button 

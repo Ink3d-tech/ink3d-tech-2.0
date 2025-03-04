@@ -1,7 +1,5 @@
 
 import { BtnVariant, ButtonBase } from "@/modules/auth/shared/components/buttons/Button.component";
-import { Routes } from "@/modules/auth/shared/enums/Routes";
-
 
 export const AuthRequiredComponent = ({title}: {title: string}) => {
     return (
@@ -10,8 +8,8 @@ export const AuthRequiredComponent = ({title}: {title: string}) => {
                 <h1 className="text-center text-xl text-gray-900 p-2 font-semibold">
                     {title}
                 </h1>
-                <ButtonBase name="Crear cuenta" href={Routes.SIGNUP} variant={BtnVariant.SECONDARY}/>
-                <ButtonBase name="Ingresar" href={Routes.LOGIN} variant={BtnVariant.PRIMARY} />
+                <ButtonBase name="Crear cuenta" href={"/signup"} variant={BtnVariant.SECONDARY}/>
+                <ButtonBase name="Ingresar" href={"/login"} variant={BtnVariant.PRIMARY} />
             </div>
         </div>
     );

@@ -1,1 +1,2 @@
-export { default } from "@/modules/user/pages/manager/pages/magazine/[id]/Id"
+export { default } from "@/modules/user/pages/manager/pages/magazine/[id]/id"
+

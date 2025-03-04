@@ -7,9 +7,8 @@ import { FormComponent } from "@/modules/auth/shared/components/Form.component"
 import { Routes } from "../../../shared/enums/Routes"
 import { LoginFields } from "../../login/shared/LoginForm.component"
 import { FcGoogle } from "react-icons/fc"
-import Swal from "sweetalert2"
 import { Divider } from "../../../shared/components/Divider.component"
-
+import { API_BACK } from "@/shared/config/api/getEnv"
 
 interface SignupFormProps {
     form: SignupInterface
@@ -26,6 +25,12 @@ export const SignupForm: React.FC<SignupFormProps> = ({
     handlerSubmit,
     isLoading,
 }) => {
+
+    const handleGoogleAuth = () => {
+        window.location.href = `${API_BACK}/auth/google/login`;
+        
+    }
+
     return (
         <form onSubmit={handlerSubmit} className="flex flex-col px-4 mx-auto max-w-[402px] h-screen">  
             <FormComponent 
@@ -44,7 +49,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             <button
                 type="button"
                 className="flex items-center justify-center py-2 rounded-md font-medium text-[14px] bg-white text-black border-gray-400"
-                onClick={() => Swal.fire("Función no disponible aún")}
+                onClick={handleGoogleAuth}
                 >
                 <FcGoogle size={20} /> 
                 <span>Registrarse con Google</span>

@@ -24,8 +24,8 @@ export default function Input ({
     const pathname = usePathname()
     return (
         <div className="relative mt-6">
-            <label htmlFor={String(id)} className={` bg-transparent capitalize ml-1 absolute left-2 top-3 text-inputSecondary transition-all duration-300
-            ${(value.length > 0) ? 'absolute text-xs text-left top-0 left-2 bg-inputPrimary' : 'text-base top-3'}`}>{name}</label>
+            <label htmlFor={String(id)} className={`bg-transparent capitalize ml-1 absolute left-2 top-3 text-inputSecondary transition-all duration-300
+            ${(value.length > 0) ? 'absolute text-xs text-left -top-0.5 left-2 bg-inputPrimary' : 'text-base top-3'}`}>{name}</label>
             <input 
                 id={String(id)} 
                 className="w-full px-3 py-3 border border-inputSecondary rounded-md text-inputSecondary

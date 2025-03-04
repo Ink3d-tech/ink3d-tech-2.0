@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { API_BACK } from "@/shared/config/api/getEnv";
+import Image from "next/image";
 
 interface Article {
   id: number;
@@ -8,7 +10,7 @@ interface Article {
   author: string;
   date: string;
   image: string;
-  description: string;
+  content: string;
 }
 
 const ArticlePage = () => {
@@ -24,7 +26,7 @@ const ArticlePage = () => {
     const fetchArticle = async () => {
       try {
         console.log(`📡 Fetching article ${id}...`);
-        const response = await fetch(`http://localhost:3000/api/magazine/${id}`);
+        const response = await fetch(`${API_BACK}/api/magazine/${id}`);
 
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);

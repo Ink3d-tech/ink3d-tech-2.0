@@ -1,5 +1,4 @@
 import BackButton from '@/shared/components/buttons/BackButton.component'
-import React from 'react'
 import Shopping from './components/Shopping.component'
 import Configuration from './components/Configuration.component'
 import Logout from './components/Logout.component'
