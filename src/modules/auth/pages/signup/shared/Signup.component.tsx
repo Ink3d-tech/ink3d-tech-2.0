@@ -10,6 +10,8 @@ import { FcGoogle } from "react-icons/fc"
 import { Divider } from "../../../shared/components/Divider.component"
 // import { API_BACK } from "@/shared/config/api/getEnv"
 
+const API_BACK = process.env.NEXT_PUBLIC_API
+
 
 interface SignupFormProps {
     form: SignupInterface
@@ -28,7 +30,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 }) => {
 
     const handleGoogleAuth = () => {
-        window.location.href = `https://project-ink3d-back-1.onrender.com/auth/google/login`;
+        window.location.href = `${API_BACK}/auth/google/login`;
         
     }
 
