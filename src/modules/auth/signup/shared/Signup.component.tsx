@@ -68,9 +68,11 @@ import { Question } from "@/modules/auth/shared/components/Question.component"
 import { VariantQuestion } from "@/modules/auth/shared/components/Question.component"
 import { BtnVariant, ButtonBase } from "../../shared/components/buttons/Button.component"
 import { FormComponent } from "@/modules/auth/shared/components/Form.component"
-import { LoginFields } from "../../login/shared/LoginForm.component"
+import { LoginFields } from "../../pages/login/shared/LoginForm.component"
 import { FcGoogle } from "react-icons/fc"
 import { Divider } from "../../shared/components/Divider.component"
+import Swal from "sweetalert2"
+import { API_BACK } from "@/shared/config/api/getEnv"
 
 
 interface SignupFormProps {
@@ -90,10 +92,18 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 }) => {
 
     const handleGoogleAuth = () => {
-
-        window.location.href = "http://localhost:3000/auth/google/login";
-    
-    }
+                // if (isClient) {  
+                    Swal.fire({
+                        title: "Redirigiendo...",
+                        text: "Te estamos redirigiendo a Google para iniciar sesión",
+                        icon: "info",
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = `${API_BACK}/auth/google/login`;
+                    });
+                // }
+            };
 
     return (
         <form onSubmit={handlerSubmit} className="flex flex-col px-4 mx-auto max-w-[402px] h-screen">  
