@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { API_BACK } from "@/shared/config/api/getEnv";
+import { API_BACK } from "@/shared/config/api/getEnv";
 import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
 import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
@@ -25,7 +25,7 @@ export const confirmOrderService = async (
         // console.log("Body de la request order:", JSON.stringify(body, null, 2));
         
 
-        const { data } = await axios.post<IOrder>(`https://project-ink3d-back-1.onrender.com/auth/google/login/orders`, body, {
+        const { data } = await axios.post<IOrder>(`${API_BACK}/auth/google/login/orders`, body, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const paymentCreateService = async (
         console.log(`token ${token}`);
 
         const { data } = await axios.post<IPaymentResponse>(
-            `https://project-ink3d-back-1.onrender.com/auth/google/login/payment-methods/create`,
+            `${API_BACK}/auth/google/login/payment-methods/create`,
             body,
             {
                 headers: {

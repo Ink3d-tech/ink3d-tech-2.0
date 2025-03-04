@@ -8,7 +8,7 @@ import { Routes } from "../../../shared/enums/Routes"
 import { LoginFields } from "../../login/shared/LoginForm.component"
 import { FcGoogle } from "react-icons/fc"
 import { Divider } from "../../../shared/components/Divider.component"
-// import { API_BACK } from "@/shared/config/api/getEnv"
+import { API_BACK } from "@/shared/config/api/getEnv"
 
 const API_BACK = process.env.NEXT_PUBLIC_API
 
