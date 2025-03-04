@@ -75,7 +75,7 @@ export const ManagmentProductForm = () => {
         
         try {
             const res = await axios.post<string>(
-                `${API_BACK}/auth/google/login/file`, 
+                `${API_BACK}/file`, 
                 formData,
                 {
                     headers: {

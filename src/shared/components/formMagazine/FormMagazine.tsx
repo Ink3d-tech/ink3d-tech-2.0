@@ -30,7 +30,7 @@ export default function FormMagazine() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get<FormData[]>(`${API_BACK}/auth/google/login/api/magazine`);
+        const response = await axios.get<FormData[]>(`${API_BACK}/api/magazine`);
         setArticles(response.data);
       } catch (error) {
         console.error("Error al obtener los artículos:", error);
@@ -78,7 +78,7 @@ export default function FormMagazine() {
       setImagePreview("");
 
       // Refrescar lista de artículos
-      const response = await axios.get<FormData[]>(`${API_BACK}/auth/google/login/api/magazine`);
+      const response = await axios.get<FormData[]>(`${API_BACK}/api/magazine`);
       setArticles(response.data);
 
     } catch (error) {
