@@ -7,8 +7,8 @@ import { FormComponent } from "@/modules/auth/shared/components/Form.component"
 import { Routes } from "../../../shared/enums/Routes"
 import { LoginFields } from "../../login/shared/LoginForm.component"
 import { FcGoogle } from "react-icons/fc"
-import Swal from "sweetalert2"
 import { Divider } from "../../../shared/components/Divider.component"
+// import { API_BACK } from "@/shared/config/api/getEnv"
 
 
 interface SignupFormProps {
@@ -28,9 +28,8 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 }) => {
 
     const handleGoogleAuth = () => {
-
-        window.location.href = "http://localhost:3000/auth/google/login";
-    
+        window.location.href = `https://project-ink3d-back-1.onrender.com/auth/google/login`;
+        
     }
 
     return (

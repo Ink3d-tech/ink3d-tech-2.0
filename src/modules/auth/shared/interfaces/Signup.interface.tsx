@@ -5,6 +5,4 @@ export interface SignupInterface {
     confirmPassword: string,
 }
 
-export interface UserInterface extends SignupInterface {}
-
 

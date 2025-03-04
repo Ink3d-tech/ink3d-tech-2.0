@@ -1,6 +1,7 @@
 import axios from "axios";
-import { API_BACK } from "@/shared/config/api/getEnv";
+// import { API_BACK } from "@/shared/config/api/getEnv";
 import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
+import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
 // Servicio para confirmar la orden
 export const confirmOrderService = async (
@@ -24,12 +25,13 @@ export const confirmOrderService = async (
         // console.log("Body de la request order:", JSON.stringify(body, null, 2));
         
 
-        const { data } = await axios.post<IOrder>(`http://localhost:3000/orders`, body, {
+        const { data } = await axios.post<IOrder>(`https://project-ink3d-back-1.onrender.com/auth/google/login/orders`, body, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
         });
+
 
         const orderDetails = data.orderDetails.map((product) => ({
             id: product.productId,
@@ -70,10 +72,9 @@ export const paymentCreateService = async (
 
         console.log("Body de la request MP:", JSON.stringify(body, null, 2));
         console.log(`token ${token}`);
-        
 
         const { data } = await axios.post<IPaymentResponse>(
-            `http://localhost:3000/payment-methods/create`,
+            `https://project-ink3d-back-1.onrender.com/auth/google/login/payment-methods/create`,
             body,
             {
                 headers: {
@@ -84,8 +85,9 @@ export const paymentCreateService = async (
         );
 
         return data;
-    } catch (error: any) {
-        console.error("Error creando el pago MP:", error.response?.data || error);
+    } catch (error) {
+        const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor" 
+        console.error("Error creando el pago MP:", errorMessage);
         throw error;
     }
 };

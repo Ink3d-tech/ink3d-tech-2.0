@@ -3,20 +3,39 @@
 import React, { useState, useContext, createContext, useEffect } from "react";
 import { LoginInterface } from "../interfaces/Login.interface";
 import Loading from "@/app/loading";
-import { SignupInterface, UserInterface } from "../interfaces/Signup.interface";
+import { SignupInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
-import { API_BACK } from "@/shared/config/api/getEnv";
+
+// import { API_BACK } from "@/shared/config/api/getEnv";
+
+
+// interface UserInterface {
+//     id: string,
+//     name: string,
+//     email: string,
+//     phone?: number | null,
+//     address?: string | null,
+//     city?: string | null,
+//     country?: string | null,
+//     bio?: string | null,
+//     role: string
+// }
+
+interface ResponseInterface {
+    token: string;
+    message: string;
+}
 
 interface AuthContextInterface {
-    user: UserInterface | null
+    user: string | null
     login: (loginForm: LoginInterface) => void
     signup: (signForm: SignupInterface) => void
     logout: () => void
     isAuthenticated: boolean
-    isAdmin: boolean
-    token: string | null
+    token: string
     isLoading: boolean
     getIdUser: (token: string) => string
+    getIsAdmin: (token: string) => boolean
 }
 
 const AuthContext = createContext<AuthContextInterface>({
@@ -25,76 +44,80 @@ const AuthContext = createContext<AuthContextInterface>({
     logout: () => {},
     signup: () => {},
     isAuthenticated: false,
-    isAdmin: false,
     isLoading: true,
-    token: null,
-    getIdUser: () => ""
-})
+    token: "",
+    getIdUser: () => "",
+    getIsAdmin: () => false
+});
 
-export const AuthProvider = ({children}: {children: React.ReactNode}) => {
-    const [token, setToken] = useState<string | null>(null)
-    const [user, setUser] = useState<UserInterface | null>(null)
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [token, setToken] = useState<string>("");
+    const [user, setUser] = useState<string | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
+       //  const storedUser = localStorage.getItem("user");
+        const storedToken = localStorage.getItem("token");
 
-        if(token) {
-            setToken(token)
-            setIsAuthenticated(true)
+        if (storedToken) {
+            //setUser(JSON.parse(storedUser));
+            setToken(storedToken);
+            setIsAuthenticated(true);
         } else {
-            setToken(null)
-            setIsAuthenticated(false)
+            setUser(null);
+            setToken("");
+            setIsAuthenticated(false);
         }
 
         setIsLoading(false);
-    }, [])
+    }, [setIsAuthenticated, setToken]);
 
-    if(isLoading) return <Loading/>
+    if (isLoading) return <Loading />;
 
-    const getIdUser = (token: string) => {
-        try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            return payload.userId;
-        } catch (error) {
-            console.error("Error al obtener el userId desde el token:", error);
-            return null;
-        }
+    const getIsAdmin = (token: string): boolean => {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        return payload.role === "admin"
     };
 
-    interface ResponseInterface {
-        token: string
-        message: string
-    }
+    const getIdUser = (token: string): string => {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        return payload.userId;
+    };
 
-    interface TokenInterface {
-        email: string
-        exp: number
-        iat: number
-        role: string
-        userId: string
-    }
+    // const dataUser = async(token: string) => {
+    //     const idUser = getIdUser(token)
+    //     const user = await axios.get(`${API_BACK}/users/${idUser}`)
+    //     if(user) return user
+
+    // }
+
 
     const login = async (loginForm: LoginInterface) => {  
-        const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm)
+        const { data } = await axios.post<ResponseInterface>(`https://project-ink3d-back-1.onrender.com/auth/signin`, loginForm);
 
-        setToken(data.token)
-        setIsAuthenticated(true)
-        localStorage.setItem("token", data.token) 
-    }
-    
+        const userId = getIdUser(data.token);
 
-    const signup = async(signupForm: SignupInterface) => {
-        await axios.post(`${API_BACK}/auth/signup`, signupForm)
-    }
+        if (userId) {
+            setUser(userId);
+            localStorage.setItem("user", JSON.stringify(userId));
+        }
 
-    const logout = async () => {
-        localStorage.removeItem("token")
-        setIsAuthenticated(false)
-        setToken(null)
-    }
+        setToken(data.token);
+        localStorage.setItem("token", data.token);
+    };
+
+    const signup = async (signupForm: SignupInterface) => {
+        await axios.post(`https://project-ink3d-back-1.onrender.com/auth/signup`, signupForm);
+    };
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setIsAuthenticated(false);
+        setUser(null);
+        setToken("");
+    };
 
     const value = {
         user,
@@ -102,28 +125,21 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         signup,
         logout,
         isAuthenticated,
-        isAdmin,
         isLoading,
         token,
-        getIdUser
-    }
+        getIdUser,
+        getIsAdmin
+    };
 
-   return (
-    <AuthContext.Provider value={value}>
-        {children}
-    </AuthContext.Provider>
-   )
-        
-}
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
 
 export const useAuth = () => {
-    const context = useContext(AuthContext)
-    // chequeo si puedo usar el useContext en esa parte de la aplicacion
-    if(!context) throw new Error("useAuth must be used  within an AuthProvider")
-    return context
-}
-
-
-
-
-
+    const context = useContext(AuthContext);
+    if (!context) throw new Error("useAuth must be used within an AuthProvider");
+    return context;
+};

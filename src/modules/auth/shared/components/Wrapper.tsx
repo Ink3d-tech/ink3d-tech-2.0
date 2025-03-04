@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { Question, QuestionInterface, VariantQuestion } from "./Question.component"
+// import Image from "next/image"
 
 export interface WrapperProps {
     children: React.ReactNode
@@ -29,9 +30,9 @@ export const Wrapper: React.FC<WrapperProps> = ({
         <>
             {pathname === "/login" ? (
                 <div className="bg-primary  mx-auto py-14">
-                    <figure className="flex justify-center">
-                        <img src={"LogoInk3d.png"} alt={"Logo ink3d"} width={145} height={85}/>
-                    </figure>
+                    {/* <figure className="flex justify-center">
+                        <Image src={"LogoInk3d.webp"} alt={"Logo ink3d"} width={145} height={85}/>
+                    </figure> */}
                     
                     {withTopHr && <hr className="my-4 border-transparent"/>}
                     {children}

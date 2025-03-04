@@ -5,6 +5,8 @@ import React, { useState } from "react"
 
 import { ErrorsInterface } from "../interfaces/Error.interface"
 import { Mixin } from "../components/MixinAlert"
+import { CustomError } from "../helpers/customError"
+// import { API_BACK } from "@/shared/config/api/getEnv"
 
 /**
  * Interfaz que define las propiedades requeridas para usar el hook "useForm"
@@ -73,18 +75,17 @@ export function useForm<T>({
 
                 await authAction(form)
 
-                console.log(form);
    
                 Mixin.fire(messageSuccess, "", "success")
                 router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
-            } catch (error: any) {
-                const errorMessage = error.response?.data?.message
+            } catch (error) {
+                const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"
                 const messageToShow = [
                     "Invalid password", "User does not exist"
                 ].includes(errorMessage)
                     ? "Invalid credentials" : errorMessage
 
-                Mixin.fire(messageToShow ?? error.response?.data?.message, "", "error")
+                Mixin.fire(messageToShow, "", "error")
             } finally {
                 setIsLoading(false)
             }
@@ -107,7 +108,7 @@ export function useForm<T>({
         }));
 
         // Validar solo el campo que está cambiando
-        setFormErrors((prevErrors) => ({
+        setFormErrors(() => ({
             ...validateForm({ ...form, [name]: value }, [name]) // Solo validamos el campo actual
         }));
     };

@@ -1,1 +1,1 @@
-export { default } from "@/modules/checkout/pages/cart/Cart"
+export { default } from "@/modules/checkout/pages/cart/CartReal"

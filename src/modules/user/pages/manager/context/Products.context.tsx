@@ -1,93 +1,107 @@
-"use client"
+"use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { API_BACK } from "../../../../../shared/config/api/getEnv";
+// import { API_BACK } from "@/shared/config/api/getEnv";
+import { getAuthHeaders } from "./getAuthHeaders";
+
+
+export interface CategoryInterface {
+    id?: string
+    name: string
+}
 
 export interface ProductInterface {
     id?: string
     name: string
     description: string
-    price: number
-    stock: number
-    image: string
-    discount: number
-    categoryId: string
-    isActive: boolean
+    price: number | ""
+    stock: number | ""
+    image: string[]
+    size: string
+    color: string
+    discount?: number | ""
+    category: string
+    isActive?: boolean
 }
 
+export type ProductWithoutId = Omit<ProductInterface, "id">
+
 interface ProductsContextType {
-    products: ProductInterface[]
-    loading: boolean
-    error: string | undefined
-    getAllProducts: () => ProductInterface[]  | undefined
-    getProductById: (id: string) => ProductInterface | undefined
-    filteredProducts: (selectedCategory: string) => ProductInterface[] | undefined
-    desactivateProduct: (id: string) => Promise<void>
-    activateProduct: (id: string) => Promise<void>
-    createProduct: (product: ProductInterface) => Promise<void>
+    products: ProductInterface[];
+    loading: boolean;
+    error: string | undefined;
+    createProduct: (product: ProductWithoutId) => Promise<void>;
+    getProductById: (id: string) => ProductInterface | undefined;
+    updateProduct: (id: string, data: Partial<ProductInterface>) => Promise<void>
+    deleteProduct: (id: string) => Promise<void>;
 }
 
 const ProductsContext = createContext<ProductsContextType>({
     products: [],
     loading: true,
     error: undefined,
-    getAllProducts: () => undefined,
+    createProduct: async () => { },
     getProductById: () => undefined,
-    filteredProducts: () => undefined,
-    desactivateProduct: async () => {},
-    activateProduct: async() => {},
-    createProduct: async () => {}
+    updateProduct: async () => { },
+    deleteProduct: async () => { },
 });
 
 export const ProductsProvider = ({ children }: { children: React.ReactNode }) => {
-    const [products, setProducts] = useState<ProductInterface[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | undefined>()
-
+    const [products, setProducts] = useState<ProductInterface[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | undefined>();
+    console.log(products)
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get<ProductInterface[]>(`${API_BACK}/products`)
-                if(res) setProducts(res.data)
+                setLoading(true)
+                const res = await axios.get<ProductInterface[]>(`https://project-ink3d-back-1.onrender.com/products`, getAuthHeaders());
+                setProducts(res.data)
             } catch (error) {
-                setError(
-                    error instanceof Error ? error.message : "Error interno del servidor"
-                )
+                setError(error instanceof Error ? error.message : "Error interno del servidor");
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
+        };
+        fetchProducts();
+    }, []);
+
+        
+
+    const createProduct = async (product: ProductWithoutId): Promise<void> => {      
+        try {
+            const res = await axios.post<ProductInterface>(`https://project-ink3d-back-1.onrender.com/products`, product,  getAuthHeaders());
+            setProducts(prev => [...prev, res.data]);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Error al crear el producto");
         }
-        fetchProducts()
-    }, [])
-
-    const getProductById = (id: string): ProductInterface | undefined  => {
-        return products.find(product => product.id === id)
-    }
-
-    const createProduct = async (product: ProductInterface): Promise<void> => {
-        await axios.post(`${API_BACK}/products`, product)
-    }
-
-    const filteredProducts = (selectedCategory: string): ProductInterface[] | undefined => {
-        return selectedCategory
-            ? products.filter((product) => product.categoryId === selectedCategory)
-            : products;
-    }
-
-    const getAllProducts = (): ProductInterface[] => {
-        console.log('====================================');
-        console.log(products);
-        console.log('====================================');
-        return products
-    }
-
-    const activateProduct = async (id: string): Promise<void> => {
-        await axios.patch(`${API_BACK}/${id}/activate`)
     };
 
-    const desactivateProduct = async (id: string): Promise<void> => {
-        await axios.patch(`${API_BACK}/${id}/desactivate`);
+    const getProductById = (id: string): ProductInterface | undefined => {
+        if (!products || products.length === 0) return undefined
+        return products.find(product => product.id === id) || undefined;
+    };
+
+
+    const updateProduct = async (id: string, data: Partial<ProductInterface>): Promise<void> => {
+        try {
+            await axios.patch(`https://project-ink3d-back-1.onrender.com/products/${id}`, data, getAuthHeaders());
+            setProducts(prev => prev.map(product =>
+                product.id === id ? { ...product, ...data } : product
+            ));
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Error actualizando el producto");
+        }
+    };
+
+    const deleteProduct = async (id: string): Promise<void> => {
+        try {
+            await axios.delete(`https://project-ink3d-back-1.onrender.com/products/${id}`, getAuthHeaders())
+            setProducts(prev => prev.filter(product => product.id !== id));
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Error eliminando el producto")
+        }
     }
 
     const value = {
@@ -95,23 +109,20 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
         loading,
         error,
         getProductById,
-        filteredProducts,
-        getAllProducts,
-        activateProduct,
-        desactivateProduct,
-        createProduct
-    }
+        updateProduct,
+        createProduct,
+        deleteProduct
+    };
 
     return (
         <ProductsContext.Provider value={value}>
-            { children }
+            {children}
         </ProductsContext.Provider>
-    )
-}
+    );
+};
 
 export const useProducts = (): ProductsContextType => {
-    const context = useContext(ProductsContext)
-
-    if (!context) throw new Error("useProdudcts must be used  within an ProductsProvider")
-    return context
-}
+    const context = useContext(ProductsContext);
+    if (!context) throw new Error("useProducts must be used within a ProductsProvider");
+    return context;
+};

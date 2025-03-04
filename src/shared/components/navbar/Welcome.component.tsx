@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link';
 import { useAuth } from '@/modules/auth/shared/context/Auth.context';
 import Image from 'next/image';
@@ -14,8 +14,7 @@ export default function Welcome({ handleToggle }: WelcomeProps) {
     const logoEx = "/png-clipart-round-multicolored-logo-vanamo-logo-icons-logos-emojis-tech-companies-thumbnail.png"
 
     const { isAuthenticated } = useAuth()
-    // Del contexto 
-    // const [logged, setLogged] = useState(true);
+
 
     return (
         <div className='flex flex-col  bg-black px-5'>
@@ -32,10 +31,10 @@ export default function Welcome({ handleToggle }: WelcomeProps) {
                     </div>}
                 </div>
                 {isAuthenticated ? null : <div className='mb-2 grid grid-cols-2 gap-2 w-full'>
-                <Link href={"/login"} onClick={handleToggle} type="button" className="w-full flex justify-center text-white bg-blue-700 hover:bg-blue-800
+                <Link href={"/auth/login"} onClick={handleToggle} type="button" className="w-full flex justify-center text-white bg-blue-700 hover:bg-blue-800
                     font-medium rounded-md text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700">
                     Iniciar Sesión</Link>
-                <Link href={"/signup"} onClick={handleToggle} type="button" className="w-full flex justify-center text-blue-700 bg-white
+                <Link href={"signup"} onClick={handleToggle} type="button" className="w-full flex justify-center text-blue-700 bg-white
                     hover:bg-gray-300 font-medium rounded-md text-sm px-5 py-2.5 me-2 mb-2 ">
                     Crear Cuenta</Link>
                 </div>}
