@@ -8,12 +8,13 @@ export interface ProductInterface {
     id?: string
     name: string
     description: string
-    price: number
-    stock: number
+    price: number | ""
+    size: string
+    stock: number | ""
     image: string
-    discount: number
+    discount?: number | ""
     categoryId: string
-    isActive: boolean
+    isActive?: boolean
 }
 
 interface ProductsContextType {

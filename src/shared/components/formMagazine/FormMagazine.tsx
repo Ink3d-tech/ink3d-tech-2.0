@@ -205,7 +205,7 @@ export default function FormMagazine() {
         )}
       </div>
       
-      
+    
     </div>
   );
 }
