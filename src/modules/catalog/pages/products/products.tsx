@@ -36,12 +36,15 @@ export default function ProductsPage() {
         }
 
         const data: Product[] = await response.json();
+        
         setProducts(data);
       } catch (error) {
         setError((error as Error).message);
       } finally {
         setLoading(false);
       }
+      
+      
     };
 
     fetchProducts();
@@ -76,6 +79,7 @@ export default function ProductsPage() {
                     height={800}
                     className="w-full h-auto object-cover"
                   />
+                  
                 </div>
                 <div className="p-4 text-center">
                   <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 uppercase">

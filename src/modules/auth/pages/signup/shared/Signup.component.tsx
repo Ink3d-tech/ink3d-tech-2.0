@@ -10,7 +10,6 @@ import { FcGoogle } from "react-icons/fc"
 import { Divider } from "../../../shared/components/Divider.component"
 import { API_BACK } from "@/shared/config/api/getEnv"
 
-
 interface SignupFormProps {
     form: SignupInterface
     handlerChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -28,10 +27,6 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 }) => {
 
     const handleGoogleAuth = () => {
-        console.log('================/ API BACK GOOGLE /====================');
-        console.log(API_BACK);
-        console.log('====================================');
-  
         window.location.href = `${API_BACK}/auth/google/login`;
         
     }
