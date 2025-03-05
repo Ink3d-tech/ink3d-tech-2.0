@@ -44,36 +44,53 @@ export default function CartSummary() {
     };
 
     const handleAcceptDiscount = async () => {
-
-        const fetchDiscount = await validateDiscount(discountCode, token);
-        
-        if(fetchDiscount?.status) {
-            Swal.fire({
-                title: "Código ingresado!",
-                text: `Código aplicado: ${discountCode}`,
-                icon: "success",
-                confirmButtonText: "OK"
-            })
-
-            const discountAmount = fetchDiscount.amount;
-            setValidDiscount(discountCode)
-            setDiscountPrice(totalPrice - totalPrice * discountAmount/100)
-            setShowDiscountInput(!showDiscountInput);
-            
-        } else {
-            Swal.fire({
-                title: "Código invalido",
-                text: `Revisa que esté bien escrito`,
-                icon: "error",
-                confirmButtonText: "OK"
-            })
-            setValidDiscount("")
-        } 
-        console.log(`Descuento ingresado ${discountCode}`);       
-        console.log(`Descuento validado ${validDiscount}`);
-        console.log(`descuento descuento ${fetchDiscount.amount}`);
-        
+        try {
+            const fetchDiscount = await validateDiscount(discountCode, token);
+    
+            if (fetchDiscount?.status === "active") {
+                const discountAmount = fetchDiscount.amount;
+                Swal.fire({
+                    title: "Código ingresado!",
+                    text: `Descuento aplicado: ${discountAmount}%`,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+    
+                
+                setValidDiscount(discountCode);
+                setDiscountPrice(totalPrice - (totalPrice * discountAmount) / 100);
+                setShowDiscountInput(!showDiscountInput);
+                
+            } else if (fetchDiscount?.status === "used") {
+                Swal.fire({
+                    title: "Código usado",
+                    text: "Los códigos de descuento son de uso único",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            } else if (fetchDiscount?.status === "expired") {
+                Swal.fire({
+                    title: "Código expirado",
+                    text: "Este código ha expirado",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            } else if (fetchDiscount?.status === "invalid") {
+                Swal.fire({
+                    title: "Código inválido",
+                    text: "Revisa que esté bien escrito",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+    
+                setValidDiscount("");
+            }
+        } catch (error) {
+            console.error("Error inesperado:", error);
+        }
     };
+    
+    
 
     return (
         <div className="bg-white rounded-lg shadow-gray-300 shadow-md h-auto sticky top-8 right-0 p-4">
