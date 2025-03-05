@@ -32,3 +32,12 @@ export interface IPaymentResponse {
     status: string;
     message?: string; // Mensaje en caso de error
 }
+
+export interface IDiscountReponse {
+        id: string;
+        amount: number; // Si `amount` debería ser un número, usa `number`
+        isUsed: boolean;
+        createdAt: string; // Puede convertirse en `Date` si lo parseas
+        expiresAt: string | null; // Puede ser `null`
+        status: "active" | "expired" | "used"; // Tipado de posibles valores si son fijos
+}

@@ -1,13 +1,14 @@
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
+import { ICartProduct, IDiscountReponse, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
 import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
 // Servicio para confirmar la orden
 export const confirmOrderService = async (
     userBuyer: string,
     confirmedCart: ICartProduct[],
-    token: string | null
+    token: string | null,
+    discountCode: string | null
 ): Promise<{ orderId: string, currency: string, products: { id: string, price: number, quantity: number }[] }> => {
     try {
 
@@ -16,6 +17,7 @@ export const confirmOrderService = async (
 
         const body = {
             userId: userBuyer,
+            discountCode,
             products: confirmedCart.map(({ id, units }) => ({
                 id,
                 quantity: units,
@@ -91,3 +93,23 @@ export const paymentCreateService = async (
         throw error;
     }
 };
+
+export const validateDiscount = async (discountCode: string, token: string) => {
+    try {
+
+        const { data } = await axios.get<IDiscountReponse>(`${API_BACK}/discounts/${discountCode}`, {
+
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        
+        return data;
+    } catch (error) {
+        const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor" 
+        console.error("Error validando el descuento:", errorMessage);
+        throw error;
+        
+    }
+}   
