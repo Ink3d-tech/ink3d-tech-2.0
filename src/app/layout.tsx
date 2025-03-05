@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/shared/components//navbar/NavBar.component";
 import { AuthProvider } from "@/modules/auth/shared/context/Auth.context"
-
-import { ProductsProvider } from "../modules/user/pages/manager/context/Products.context";
-import Chatbot from "@/shared/components/Chatbot";
 import { CartProvider } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
+import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.context";
+import Chatbot from "@/shared/components/Chatbot";
 import Footer from "@/shared/components/Footer/FooterView";
+import LocationPathname from "@/shared/helpers/LocationPathname";
+
+
 
 export const metadata: Metadata = {
   title: "The Ink3d project",
@@ -24,22 +26,47 @@ export default function RootLayout({
     <html lang="en">
 
       <body>
-        <CategoriesProvider>
-          <ProductsProvider>
+      <CategoriesProvider>
+        <AuthProvider>
+          <CartProvider>
+            <ProductsProvider>
+              <LocationPathname redirectRoutes={["/login", "/signup"]}>
+
+                  <NavBar />
+                  
+                    <main className="bg-[#D9D9D9] min-h-screen">
+                      <Chatbot />
+                      {children}
+                    </main>
+                  
+                  <Footer/>
+
+              </LocationPathname>
+            </ProductsProvider>
+          </CartProvider>
+        </AuthProvider>
+      </CategoriesProvider>
+       
+          {/* <ProductsProvider>
             <AuthProvider>
               <CartProvider>
-                <NavBar />
+                <OrderProvider>
+
+                  <NavBar />
+                  
+                    <main className="bg-[#D9D9D9] min-h-screen">
+                      <Chatbot />
+                      {children}
+                    </main>
+                  
+                  <Footer/>
+
+                </OrderProvider>
                 
-                  <main className="bg-[#D9D9D9] min-h-screen">
-                    <Chatbot />
-                    {children}
-                  </main>
-                
-                <Footer/>
               </CartProvider>
             </AuthProvider>
           </ProductsProvider>
-        </CategoriesProvider>
+        </CategoriesProvider> */}
 
       </body>
     </html>

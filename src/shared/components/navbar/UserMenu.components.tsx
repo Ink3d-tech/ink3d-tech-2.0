@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { LogOut, Settings, User, HelpCircle } from "lucide-react";
+import { LogOut, Settings, User, HelpCircle, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
 import Image from "next/image";
@@ -52,6 +52,13 @@ const UserMenu: React.FC<UserMenu> = ({ avatarUrl }) => {
             >
               <User size={20} />
               <span>Mi cuenta</span>
+            </Link>
+            <Link
+              href="/orders"
+              className="flex gap-2 items-center text-gray-700 hover:text-black mt-2"
+            >
+              <ShoppingBag size={20} />
+              <span>Mis compras</span>
             </Link>
             <Link
               href="/help"
