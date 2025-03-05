@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useContext, createContext, useEffect } from "react";
+import React, { useState, useContext, createContext, useEffect, useCallback } from "react";
 import { LoginInterface } from "../interfaces/Login.interface";
 import Loading from "@/app/loading";
 import { SignupInterface } from "../interfaces/Signup.interface";
@@ -8,7 +8,7 @@ import axios from "axios";
 
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { UserInterface } from "../interfaces/User.interface";
-import { getAuthHeaders } from "@/modules/user/pages/manager/context/getAuthHeaders";
+
 
 interface ResponseInterface {
     token: string;
@@ -50,14 +50,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return payload.userId;
     };
 
-    const fetchUser = async(token: string) => {
+    const fetchUser = useCallback(async(token: string) => {
         const res = await axios.get<UserInterface>(`${API_BACK}/users/${getIdUser(token)}`, {
             headers: {
               Authorization: `Bearer ${token}` 
             }
         });
         setUser(res.data)
-    }
+    }, [])
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     
         setIsLoading(false);
-    }, []);
+    }, [fetchUser]);
 
     if(isLoading) return <Loading/> 
        

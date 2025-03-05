@@ -1,4 +1,4 @@
-import { IOrder } from "../../checkout/pages/cart/interfaces/cartService.interface";
+import { IOrder } from "../../../../checkout/pages/cart/interfaces/cartService.interface";
 
 
 const formatDate = (date: string) =>

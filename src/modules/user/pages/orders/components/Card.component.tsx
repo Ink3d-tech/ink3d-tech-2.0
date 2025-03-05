@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from "../../auth/shared/context/Auth.context";
+import { useAuth } from "../../../../auth/shared/context/Auth.context";
 
 export const CardUser = () => {
     const { user } = useAuth();

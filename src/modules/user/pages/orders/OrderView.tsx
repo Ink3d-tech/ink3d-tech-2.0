@@ -2,16 +2,12 @@
 
 import Link from "next/link";
 import { CardOrder } from "./components/CardOrder.component";
-import { useOrder } from "./Orders.context";
-import { useAuth } from "../auth/shared/context/Auth.context";
+import { useAuth } from "../../../auth/shared/context/Auth.context";
 
 
 export default function Dashboard() {
-  const { orders } = useOrder()
   const { user } = useAuth()
-  console.log('================/ DATA USER /==================');
-  console.log(user?.orders);
-  console.log('====================================');
+
 
   return (
         <div className="bg-[#ECE7E7] mx-auto p-4 h-[100%] text-gray-900">

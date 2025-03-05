@@ -1,1 +1,1 @@
-export { default } from "@/modules/orders/OrderView"
+export { default } from "@/modules/user/pages/orders/OrderView"

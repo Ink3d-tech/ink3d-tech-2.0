@@ -6,9 +6,8 @@ import { createContext, useContext, useEffect, useState } from "react"
 import axios from "axios"
 import Swal from "sweetalert2"
 import { API_BACK } from "@/shared/config/api/getEnv"
-import { IOrder } from "../checkout/pages/cart/interfaces/cartService.interface"
-import { useAuth } from "../auth/shared/context/Auth.context"
-import Loading from "@/app/loading"
+import { IOrder } from "../../../checkout/pages/cart/interfaces/cartService.interface"
+import { useAuth } from "../../../auth/shared/context/Auth.context"
 
 interface DashboardContextInterface {
     orders: IOrder[]
