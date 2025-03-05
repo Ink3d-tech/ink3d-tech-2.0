@@ -6,7 +6,6 @@ import Loading from "@/app/loading";
 import { SignupInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-// import { API_BACK } from "@/shared/config/api/getEnv";
 
 
 // interface UserInterface {
