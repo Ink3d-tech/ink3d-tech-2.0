@@ -102,6 +102,9 @@ export default function NavBar() {
                     <Link href="/cart">
                         <ShoppingCart size="24" color="gray" />
                     </Link>
+                    <Link href="/help">
+                        <HelpCircle size="24" color="gray" className="cursor-pointer" />
+                    </Link>
                 </div>
             </div>
 
@@ -134,13 +137,7 @@ export default function NavBar() {
             >
                 <HamburguerMenu handleToggle={handleToggle} />
             </div>
-
-            {/* Icono de ayuda */}
-            <div className="absolute top-0 right-0 mt-4 mr-4">
-                <Link href="/help">
-                    <HelpCircle size="24" color="gray" className="cursor-pointer" />
-                </Link>
-            </div>
+            
         </div>
     );
 }
