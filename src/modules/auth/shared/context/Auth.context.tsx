@@ -8,19 +8,19 @@ import axios from "axios";
 
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { UserInterface } from "../interfaces/User.interface";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-enum Role {
-    USER = "user",
-    ADMIN = "admin",
-    MOD = "mod"
-}
+// enum Role {
+//     USER = "user",
+//     ADMIN = "admin",
+//     MOD = "mod"
+// }
 
-interface PayloadInterface {
-    userId: string
-    email: string
-    role: Role
-}
+// interface PayloadInterface {
+//     userId: string
+//     email: string
+//     role: Role
+// }
 
 
 interface ResponseInterface {
@@ -30,7 +30,7 @@ interface ResponseInterface {
 
 interface AuthContextInterface {
     user: UserInterface | null 
-    isAdmin: boolean
+    // isAdmin: boolean
     login: (loginForm: LoginInterface) => void
     signup: (signForm: SignupInterface) => void
     logout: () => void
@@ -43,7 +43,7 @@ interface AuthContextInterface {
 
 const AuthContext = createContext<AuthContextInterface>({
     user: null,
-    isAdmin: false,
+    // isAdmin: false,
     login: () => {},
     logout: () => {},
     signup: () => {},
@@ -57,11 +57,11 @@ const AuthContext = createContext<AuthContextInterface>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
     const [user, setUser] = useState<UserInterface | null>(null);
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    // const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const router = useRouter()
-    const pathname =  usePathname()
+    
 
     const getIdUser = (token: string): string => {
         const payload = JSON.parse(atob(token.split(".")[1]));
@@ -150,12 +150,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
         setToken("");
 
-        pathname === "/home" ? window.location.reload() : router.replace("/home")
+        router.push("/home")
     };
 
 
     const value = {
-        isAdmin,
+        // isAdmin,
         user,
         login,
         signup,
