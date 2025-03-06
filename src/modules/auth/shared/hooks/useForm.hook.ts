@@ -79,12 +79,12 @@ export function useForm<T>({
                 router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
             } catch (error) {
                 const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"
-                const messageToShow = [
-                    "Invalid password", "User does not exist"
-                ].includes(errorMessage)
-                    ? "Invalid credentials" : "Tus credeciales de inicio de sesión no coinciden con ninguna cuenta en nuestro sistema"
+                // const messageToShow = [
+                //     "Invalid password", "User does not exist"
+                // ].includes(errorMessage)
+                //     ? "Invalid credentials" : "Tus credeciales de inicio de sesión no coinciden con ninguna cuenta en nuestro sistema"
 
-                Mixin.fire("", messageToShow, "error")
+                Mixin.fire("", errorMessage, "error")
             } finally {
                 setIsLoading(false)
             }
