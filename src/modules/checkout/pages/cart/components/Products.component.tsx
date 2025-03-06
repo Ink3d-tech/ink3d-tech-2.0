@@ -23,6 +23,7 @@ export const CardProductComponent = ({ product }: { product: ProductInterface })
                 {/* <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-40 transition duration-300">
                     <ButtonBase name="View details"/>
                 </div> */}
+
             </div>
             
             <div className="mt-4">
@@ -59,7 +60,7 @@ export const ProductsComponent = () => {
                     }
                 </div>
                 <div className="flex justify-center mt-10">
-                    <ButtonBase name="See more products" href={"/products"} />
+                    <ButtonBase name="Ver más productos" href={"/products"} />
                 </div>
             </div>
         </section>
