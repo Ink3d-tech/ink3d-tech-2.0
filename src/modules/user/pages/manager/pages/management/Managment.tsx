@@ -157,6 +157,8 @@ export const ManagmentProductForm = () => {
             image: cloudinary
         };
 
+        console.log(formData)
+
         if (Object.values(formData).some(value => value === "" || value === undefined || value === null)) {
             Mixin.fire("Error", "Por favor, completa todos los campos correctamente.", "error");
             return;
@@ -169,7 +171,6 @@ export const ManagmentProductForm = () => {
 
         try {
             createProduct(formData)
-            
             setFormProduct(FORM_PRODUCT_INTIAL); 
             setCloudinary([]);
             setImages(Array(MAX_IMAGES).fill(null));
@@ -263,7 +264,7 @@ export const ManagmentProductForm = () => {
     
                 <select name="category" value={formProduct.category} onChange={handleChangeProduct} className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" >
                     <option value={""} disabled>Seleccionar una categoría</option>
-                    { categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.name}</option>) }
+                    { categories.map((cat) => <option key={cat.id} value={cat.name}>{cat.name}</option>) }
                 </select>
 
                 <button 

@@ -1,7 +1,10 @@
 import Image from 'next/image';
-import Link from 'next/link'; // Usamos next/link para redirección
+import Link from 'next/link'; 
 
 export default function LandingPage() {
+
+
+
   return (
     <div className="relative">
       {/* Sección de introducción */}
