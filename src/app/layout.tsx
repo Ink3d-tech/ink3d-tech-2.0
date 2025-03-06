@@ -4,7 +4,12 @@ import NavBar from "@/shared/components//navbar/NavBar.component";
 import { AuthProvider } from "@/modules/auth/shared/context/Auth.context"
 import { CartProvider } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
-import Footer from "@/shared/components/footer/FooterView";
+import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.context";
+import Chatbot from "@/shared/components/Chatbot";
+import Footer from "@/shared/components/Footer/FooterView";
+import LocationPathname from "@/shared/helpers/LocationPathname";
+
+
 
 export const metadata: Metadata = {
   title: "The Ink3d project",
@@ -21,8 +26,8 @@ export default function RootLayout({
     <html lang="en">
 
       <body>
-        <CategoriesProvider>
           <AuthProvider>
+        <CategoriesProvider>
             <CartProvider>
               <ProductsProvider>
                 <LocationPathname redirectRoutes={["/login", "/signup"]}>
@@ -39,8 +44,8 @@ export default function RootLayout({
                 </LocationPathname>
               </ProductsProvider>
             </CartProvider>
-          </AuthProvider>
         </CategoriesProvider>
+          </AuthProvider>
       </body>
     </html>
   );

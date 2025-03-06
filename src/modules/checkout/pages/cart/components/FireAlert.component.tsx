@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 export const getAlert = (confirmButtonText?: string, action?: () => void, route?: string, text?: string) => {
     return (
@@ -12,7 +13,7 @@ export const getAlert = (confirmButtonText?: string, action?: () => void, route?
             confirmButtonText: confirmButtonText ?? "Cerrar sesion!"
         }).then((result) => {
             if(result.isConfirmed && action && route) {
-                window.location.href = `http://localhost:3001/${route}`
+                window.location.href = `${API_BACK}/${route}`
                 action();
             }
             if (result.isConfirmed && action) {

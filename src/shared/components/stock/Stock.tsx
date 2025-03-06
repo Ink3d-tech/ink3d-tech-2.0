@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 // Definir tipos de datos
 interface Product {
@@ -40,7 +41,7 @@ export default function Stock() {
       try {
         setLoading(true);
         const response = await axios.get<StockMovement[]>(
-          "http://localhost:3000/stock-movements"
+          `${API_BACK}/stock-movements`
         );
         setStockMovements(response.data);
       } catch (error) {
@@ -53,7 +54,7 @@ export default function Stock() {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get<Category[]>("http://localhost:3000/categories");
+        const response = await axios.get<Category[]>(`${API_BACK}/categories`);
         setCategories(response.data);
       } catch (error) {
         console.error(" Error al obtener categorías:", error);
@@ -74,7 +75,7 @@ export default function Stock() {
     try {
       const quantityToSell = 1;
 
-      await axios.post("http://localhost:3000/sell-product", {
+      await axios.post(`${API_BACK}/sell-product`, {
         productId,
         quantity: quantityToSell,
       });

@@ -21,7 +21,7 @@ import Image from "next/image";
 
 
 
-export default function Dashboard() {
+export default function Manager() {
   const [activeTab, setActiveTab] = useState("overview");
   // const [darkMode, setDarkMode] = useState(false);
 

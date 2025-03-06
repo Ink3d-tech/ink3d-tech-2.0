@@ -54,7 +54,9 @@ export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
 
     const createCategory = async (category: CategoryInterface) => { 
         try {
-            const res = await axios.post<CategoryInterface>(`${API_BACK}/categories`, category);
+            const res = await axios.post<CategoryInterface>(`${API_BACK}/categories`, category,
+                getAuthHeaders()
+            );
 
             setCategories([...categories, res.data]);
         } catch (error) {

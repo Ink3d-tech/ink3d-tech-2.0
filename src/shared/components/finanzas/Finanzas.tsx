@@ -1,3 +1,4 @@
+import { API_BACK } from '@/shared/config/api/getEnv';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
@@ -20,7 +21,7 @@ type IDetailsVenta = {
 // Servicios API
 const fetchTransactions = async (): Promise<ITransaction[]> => {
     try {
-        const response = await axios.get('http://localhost:3000/transactions');
+        const response = await axios.get(`${API_BACK}/transactions`);
         if (!Array.isArray(response.data)) throw new Error("Datos incorrectos en transactions");
         return response.data as ITransaction[];
     } catch (error) {
@@ -31,7 +32,7 @@ const fetchTransactions = async (): Promise<ITransaction[]> => {
 
 const fetchDetailsVenta = async (): Promise<IDetailsVenta[]> => {
     try {
-        const response = await axios.get('http://localhost:3000/details-venta');
+        const response = await axios.get(`${API_BACK}/details-venta`);
         if (!Array.isArray(response.data)) throw new Error("Datos incorrectos en details venta");
         return response.data as IDetailsVenta[];
     } catch (error) {

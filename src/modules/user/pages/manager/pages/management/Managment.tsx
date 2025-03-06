@@ -115,7 +115,7 @@ export const ManagmentProductForm = () => {
         }
         
         if(error) {
-            Mixin.fire("Error al crear la categoria", error, "error")
+            Mixin.fire("Salida por aca", error, "error")
             return
         }
        
@@ -263,7 +263,7 @@ export const ManagmentProductForm = () => {
         
             <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
                 <Title title="Categorías"/>
-    
+                    
                 <select name="category" value={formProduct.category} onChange={handleChangeProduct} className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" >
                     <option value={""} disabled>Seleccionar una categoría</option>
                     { categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.name}</option>) }
