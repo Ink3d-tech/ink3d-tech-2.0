@@ -22,7 +22,7 @@ const MagazinePage: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch(`${API_BACK}/api/magazine`);
+        const response = await fetch(`${API_BACK}/api/magazine/active`);
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
