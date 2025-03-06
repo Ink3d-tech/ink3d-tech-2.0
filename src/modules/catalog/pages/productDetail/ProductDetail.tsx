@@ -203,6 +203,7 @@ export default function ProductDetail() {
         </div>
       </div>
 
+
       <div className="mt-10">
         <ProductsComponent />
       </div>
