@@ -1,10 +1,14 @@
+"use client"
+
 import BackButton from '@/shared/components/buttons/BackButton.component'
 import { BadgeCheck } from 'lucide-react'
-import React from 'react'
 import PersonalCard from '../components/ProfilCard.component'
 import ProtectedRoute from '@/shared/helpers/ProtectedRoute'
+import { useAuth } from '@/modules/auth/shared/context/Auth.context'
 
 export default function Personal() {
+    const { user } = useAuth()
+
     return (
         <ProtectedRoute title='Debes iniciar sesion o registrarte para ver tu perfil personal'>
             <div className="flex flex-col min-h-screen">
@@ -16,17 +20,17 @@ export default function Personal() {
                     </div>
                     <div className=''>
                         <p>Nombre y apellido</p>
-                        <p className='text-[#D9D9D9] text-sm'>Ignacio Alonso</p>
+                        <p className='text-[#D9D9D9] text-sm'>{user?.name ?? "Sin asignar"}</p>
                     </div>
                     <div className=''>
                         <p>DNI</p>
-                        <p className='text-[#D9D9D9] text-sm'>123456789</p>
+                        <p className='text-[#D9D9D9] text-sm'>{"Sin asignar"}</p>
                     </div>
-                    
-                    <div className='border-b border-gray-200'></div>
+            
+                    <hr/>
                 </div>
 
-                <PersonalCard field='Nombre elegido' value='Ignacio Alonso' validated='Validado' />
+                <PersonalCard field='Nombre elegido' value={user?.name ?? "Sin asignar"} validated='Validado' />
             </div>
         </ProtectedRoute>
 

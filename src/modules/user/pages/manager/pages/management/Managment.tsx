@@ -93,7 +93,6 @@ export const ManagmentProductForm = () => {
 
     const handleChangeProduct = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value  } = e.target;
-        console.log(formProduct)
         setFormProduct({
           ...formProduct,
           [name]: value

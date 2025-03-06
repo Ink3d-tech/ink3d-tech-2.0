@@ -82,9 +82,9 @@ export function useForm<T>({
                 const messageToShow = [
                     "Invalid password", "User does not exist"
                 ].includes(errorMessage)
-                    ? "Invalid credentials" : errorMessage
+                    ? "Invalid credentials" : "Tus credeciales de inicio de sesión no coinciden con ninguna cuenta en nuestro sistema"
 
-                Mixin.fire(messageToShow, "", "error")
+                Mixin.fire("", messageToShow, "error")
             } finally {
                 setIsLoading(false)
             }
