@@ -52,11 +52,11 @@ export default function ProductsPage() {
     : products;
 
   return (
-    <div className="min-h-screen bg-gray-300 pb-2">
+    <div className="min-h-screen bg-gray-300 pb-2 ">
       <BackButton tab="Asian" />
-      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md">
-        <div className="flex justify-between items-center px-30">
-          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">Lista de Productos</h2>
+      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md ">
+        <div className="flex justify-between items-center px-30 px-4">
+          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3 ">Lista de Productos</h2>
           <FilterCategories onSelectCategory={setSelectedCategory} />
         </div>
         <div className="w-full h-px bg-gray-300"></div>

@@ -51,9 +51,9 @@ export default function ProductsPage() {
 
   return (
     <div className=" bg-gray-300 pb-2 ">
-      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md">
-        <div className="flex justify-between items-center px-30 ">
-          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3 ">
+      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md ">
+        <div className="flex justify-between items-center px-30  px-4">
+          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
             Lista de Productos
           </h2>
         </div>
