@@ -30,12 +30,12 @@ export default function RootLayout({
               <CartProvider>
                 <NavBar />
                 
-                  <main className="bg-[#D9D9D9] min-h-screen">
+                  <main className="bg-[#D9D9D9] flex-grow">
                     <Chatbot />
                     {children}
                   </main>
                 
-                <Footer/>
+                
               </CartProvider>
             </AuthProvider>
           </ProductsProvider>

@@ -17,15 +17,15 @@ const ComprasPage: React.FC = () => {
 
       <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/compras-item1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
+          <img src="/asian1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 1</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/compras-item2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
+          <img src="/street2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 2</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/compras-item3.jpg" alt="Item 3" className="w-full h-64 object-cover" />
+          <img src="/man1.jpg" alt="Item 3" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 3</p>
         </div>
       </div>

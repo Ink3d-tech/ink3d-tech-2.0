@@ -5,7 +5,7 @@
 import React from "react";
 import { useRouter } from "next/navigation"; // Correcto
 
-const MundoSportPage: React.FC = () => {
+const Motorsport: React.FC = () => {
   const router = useRouter();
 
   return (
@@ -19,15 +19,15 @@ const MundoSportPage: React.FC = () => {
 
       <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/mundo-sport-item1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
+          <img src="/motorsport1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 1</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/mundo-sport-item2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
+          <img src="/motorsport2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 2</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/mundo-sport-item3.jpg" alt="Item 3" className="w-full h-64 object-cover" />
+          <img src="/motorsport3.jpg" alt="Item 3" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 3</p>
         </div>
       </div>
@@ -35,4 +35,4 @@ const MundoSportPage: React.FC = () => {
   );
 };
 
-export default MundoSportPage;
+export default Motorsport;

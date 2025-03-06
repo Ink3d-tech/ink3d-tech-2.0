@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CarrouselMagazine from "@/shared/components/carrouselMgazine/CarrouselMagazine";
 import { useKeenSlider } from "keen-slider/react";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 interface Article {
   id: number;
@@ -24,7 +25,7 @@ const MagazinePage: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch(`${API_BACK}/api/magazine`);
+        const response = await fetch(`${API_BACK}/api/magazine/active`);
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
@@ -47,6 +48,7 @@ const MagazinePage: React.FC = () => {
     <div className="min-h-screen bg-white p-8">
 
          {/* Navbar */}
+         <div></div>
          {/* Navbar */}
 <nav className="fixed top-0 left-0 w-full bg-white text-black shadow-md z-50">
   <div className="container mx-auto flex justify-between items-center p-4">

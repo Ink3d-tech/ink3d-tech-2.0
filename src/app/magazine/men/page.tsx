@@ -19,15 +19,15 @@ const MenPage: React.FC = () => {
 
       <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/men-outfit1.jpg" alt="Outfit 1" className="w-full h-64 object-cover" />
+          <img src="/man1.jpg" alt="Outfit 1" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Outfit Casual 1</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/men-outfit2.jpg" alt="Outfit 2" className="w-full h-64 object-cover" />
+          <img src="/man3.jpg" alt="Outfit 2" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Outfit Formal 2</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/men-outfit3.jpg" alt="Outfit 3" className="w-full h-64 object-cover" />
+          <img src="/man2.jpg" alt="Outfit 3" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Outfit Deportivo 3</p>
         </div>
       </div>

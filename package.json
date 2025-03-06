@@ -9,8 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tiptap/core": "^2.11.5",
+    "@tiptap/extension-bold": "^2.11.5",
+    "@tiptap/extension-italic": "^2.11.5",
+    "@tiptap/extension-strike": "^2.11.5",
+    "@tiptap/react": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
     "@types/axios": "^0.9.36",
-    "axios": "^1.7.9",
+    "axios": "^1.8.1",
     "dotenv": "^16.4.7",
     "framer-motion": "^12.4.7",
     "keen-slider": "^6.8.6",
@@ -22,6 +28,7 @@
     "react-quill": "^2.0.0",
     "react-resizable": "^3.0.5",
     "recharts": "^2.15.1",
+    "shadcn-ui": "^0.9.5",
     "socket": "^0.14.43",
     "socket.io-client": "^4.8.1",
     "sweetalert2": "^11.17.2",

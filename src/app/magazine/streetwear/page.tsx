@@ -14,20 +14,20 @@ const StreetwearPage: React.FC = () => {
         <button onClick={() => router.push("/magazine")} className="text-xl">
           Volver
         </button>
-        <h1 className="text-2xl font-bold">Streetwear</h1>
+        <h1 className="text-2xl font-bold"> ¿Que es el Streetwear? </h1>
       </nav>
 
       <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/streetwear-item1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
+          <img src="/street1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 1</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/streetwear-item2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
+          <img src="/street2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 2</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/streetwear-item3.jpg" alt="Item 3" className="w-full h-64 object-cover" />
+          <img src="/street3.jpg" alt="Item 3" className="w-full h-64 object-cover" />
           <p className="mt-4 text-center">Artículo 3</p>
         </div>
       </div>

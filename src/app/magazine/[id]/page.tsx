@@ -1,10 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { API_BACK } from "@/shared/config/api/getEnv";
-import Image from "next/image";
+import Finanzas from "@/shared/components/finanzas/Finanzas";
+import NavBar from "@/shared/components/navbar/NavBar.component";
+
 
 interface Article {
+  description: ReactNode;
   id: number;
   title: string;
   author: string;
@@ -14,7 +16,7 @@ interface Article {
 }
 
 const ArticlePage = () => {
-  const { id } = useParams(); // ✅ Obtiene el ID de la URL
+  const { id } = useParams(); 
   const router = useRouter();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ const ArticlePage = () => {
     const fetchArticle = async () => {
       try {
         console.log(`📡 Fetching article ${id}...`);
-        const response = await fetch(`${API_BACK}/api/magazine/${id}`);
+        const response = await fetch(`https://project-ink3d-back-1.onrender.com/api/magazine/${id}`);
 
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -50,6 +52,10 @@ const ArticlePage = () => {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center p-10">
+      <NavBar />
+      <div>
+        
+      </div>
       <button onClick={() => router.push("/magazine")} className="mb-5 text-cyan-500 hover:underline">
          Volver al Magazine
       </button>
