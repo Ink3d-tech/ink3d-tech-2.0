@@ -1,4 +1,3 @@
-import React from 'react'
 import ProfileBanner from './components/ProfileBanner.component'
 import ProfileButtons from './components/ProfileButtons.components'
 import BackButton from '@/shared/components/buttons/BackButton.component'

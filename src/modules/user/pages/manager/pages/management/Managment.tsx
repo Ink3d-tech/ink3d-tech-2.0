@@ -100,16 +100,18 @@ export const ManagmentProductForm = () => {
         });
     };
 
-
-
-
-    
     const handleCreateCategory = (e: React.SyntheticEvent) => {
         e.preventDefault()
 
         if(!newCategory) {
             Mixin.fire("El campo no puede quedar vacio", "", "error")
             return
+        }
+
+        const categoryExists = categories.some(cat => cat.name.toLowerCase() === newCategory.toLowerCase());
+        if (categoryExists) {
+            Mixin.fire("La categoría ya existe", "", "warning");
+            return;
         }
         
         if(error) {
@@ -157,6 +159,8 @@ export const ManagmentProductForm = () => {
             image: cloudinary
         };
 
+        console.log(formData)
+
         if (Object.values(formData).some(value => value === "" || value === undefined || value === null)) {
             Mixin.fire("Error", "Por favor, completa todos los campos correctamente.", "error");
             return;
@@ -169,7 +173,6 @@ export const ManagmentProductForm = () => {
 
         try {
             createProduct(formData)
-            
             setFormProduct(FORM_PRODUCT_INTIAL); 
             setCloudinary([]);
             setImages(Array(MAX_IMAGES).fill(null));

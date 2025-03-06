@@ -17,7 +17,7 @@ export default function Home() {
     
 
     if (token) {
-      localStorage.setItem("token", token); // Guarda el token en localStorage
+      localStorage.setItem("token", token);
     }
   },[]);
 
@@ -26,13 +26,13 @@ export default function Home() {
       <div className="mb-6">
         {/* <BackButton tab="Inicio"/> */}
       </div>
-      <Carousel imageIds={[1, 2, 3]} />
+      <Carousel />
       <ButtonsMini />
-      <ProductList category="remeras" />
+      <ProductList/>
       <StaticCarousel imageIds={[4, 5, 6]} />
-      <ProductList category="buzos"/>
+      <ProductList/>
       <StaticCarousel imageIds={[7, 8, 9]} />
-      <ProductList category="pantalones"/>
+      <ProductList/>
       <ScrollToTop />
     </div>
   );

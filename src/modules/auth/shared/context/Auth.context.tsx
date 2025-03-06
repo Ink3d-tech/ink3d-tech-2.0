@@ -9,6 +9,11 @@ import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { UserInterface } from "../interfaces/User.interface";
 
+// enum Role {
+//     USER = "user",
+//     ADMIN = "admin",
+//     MOD = "mod"
+// }
 
 interface ResponseInterface {
     token: string;
@@ -29,6 +34,7 @@ interface AuthContextInterface {
 
 const AuthContext = createContext<AuthContextInterface>({
     user: null,
+    // isAdmin: false,
     login: () => {},
     logout: () => {},
     signup: () => {},
@@ -44,18 +50,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<UserInterface | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    
 
     const getIdUser = (token: string): string => {
         const payload = JSON.parse(atob(token.split(".")[1]));
         return payload.userId;
     };
-
     const fetchUser = useCallback(async(token: string) => {
         const res = await axios.get<UserInterface>(`${API_BACK}/users/${getIdUser(token)}`, {
             headers: {
               Authorization: `Bearer ${token}` 
             }
         });
+        console.log("TOKEN", token)
         setUser(res.data)
     }, [])
 
@@ -68,7 +75,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setToken(token); 
             fetchUser(token);
             setIsAuthenticated(true);
-            
             window.history.replaceState({}, document.title, window.location.pathname);
         } else {
             const storedToken = localStorage.getItem("token");
@@ -77,19 +83,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setToken(storedToken);
                 setIsAuthenticated(true);
                 fetchUser(storedToken); 
-
+              
             } else {
                 setUser(null);
                 setToken("");
                 setIsAuthenticated(false);
             }
         }
-    
+     
         setIsLoading(false);
-    }, [fetchUser]);
+    }, [fetchUser, setToken]);
+    
 
     if(isLoading) return <Loading/> 
-       
+
     const getIsAdmin = (token: string): boolean => {
         const payload = JSON.parse(atob(token.split(".")[1]));
         return payload.role === "admin"
@@ -103,6 +110,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem("user", getIdUser(data.token)) 
 
         fetchUser(data.token)
+
+        getIsAdmin(data.token)
+
     };
 
     const signup = async (signupForm: SignupInterface) => {
@@ -110,6 +120,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logout = () => {
+        
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setIsAuthenticated(false);
@@ -117,10 +128,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken("");
 
         window.location.reload()
+
     };
 
 
     const value = {
+        // isAdmin,
         user,
         login,
         signup,
