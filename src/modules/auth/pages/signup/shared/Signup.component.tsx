@@ -42,7 +42,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             <div className={`h-[34px]`}></div>
             <ButtonBase name={LoginFields.REGISTER} isLoading={isLoading} variant={BtnVariant.PRIMARY}/>
             
-            <Question href={Routes.LOGIN} question={"¿Ya tienes una contraseña?"}variant={VariantQuestion.TERCIARY}/>
+            <Question href={Routes.LOGIN} question={"¿Ya tienes una cuenta?"}variant={VariantQuestion.TERCIARY}/>
 
             <Divider letter={LoginFields.OR}/>
 
