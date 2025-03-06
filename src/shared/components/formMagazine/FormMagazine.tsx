@@ -163,14 +163,43 @@ export default function FormMagazine() {
   return (
     <div>
       <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-md shadow-md">
-        <label className="block">
-          Autor:
-          <input type="text" name="author" value={formData.author} onChange={(e) => setFormData({ ...formData, author: e.target.value })} className="border p-2 w-full" required />
-        </label>
-        <label className="block">
-          Título:
-          <input type="text" name="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="border p-2 w-full" required />
-        </label>
+        <div className="flex justify-between space-x-4">
+          <div className="w-3/5">
+            <label className="block">
+              Autor:
+              <input type="text" name="author" value={formData.author} onChange={(e) => setFormData({ ...formData, author: e.target.value })} className="border p-2 w-full" required />
+            </label>
+            <label className="block">
+              Título:
+              <input type="text" name="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="border p-2 w-full" required />
+            </label>
+          </div>
+          <div className="w-2/5">
+            <label className="block">
+              📷 Subir Imagen:
+              <div
+                className="border p-4 w-full text-center rounded-md border-dashed"
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
+                <p className="text-gray-600">Arrastra y suelta una imagen aquí o haz clic para seleccionar</p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </div>
+            </label>
+            {imagePreview && (
+              <div className="mt-3">
+                <p className="text-gray-500 text-sm">Vista previa:</p>
+                <img src={imagePreview} alt="Vista previa" className="w-32 h-32 object-cover border rounded-md" />
+              </div>
+            )}
+          </div>
+        </div>
+
         <label className="block">
           Descripción:
           <div className="border p-3 w-full min-h-[200px] rounded-md relative">
@@ -184,28 +213,7 @@ export default function FormMagazine() {
             <EditorContent editor={editor} className="min-h-[150px] p-2" />
           </div>
         </label>
-        <label className="block">
-          📷 Subir Imagen:
-          <div
-            className="border p-4 w-full text-center rounded-md border-dashed"
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-          >
-            <p className="text-gray-600">Arrastra y suelta una imagen aquí o haz clic para seleccionar</p>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-          </div>
-        </label>
-        {imagePreview && (
-          <div className="mt-3">
-            <p className="text-gray-500 text-sm">Vista previa:</p>
-            <img src={imagePreview} alt="Vista previa" className="w-32 h-32 object-cover border rounded-md" />
-          </div>
-        )}
+
         <button type="submit" className={`px-4 py-2 rounded text-white transition ${selectedId ? "bg-green-500 hover:bg-green-600" : "bg-blue-500 hover:bg-blue-600"}`} disabled={!isAuthenticated}>
           {selectedId ? "Actualizar" : "Publicar"}
         </button>
@@ -224,7 +232,6 @@ export default function FormMagazine() {
                   </p>
                 </div>
 
-
                 <button
                   onClick={() => {
                     setFormData(article);
@@ -236,9 +243,6 @@ export default function FormMagazine() {
                 >
                   Editar
                 </button>
-
-
-
 
                 <button
                   onClick={() => handleToggleActive(article.id!)}
@@ -266,4 +270,3 @@ export default function FormMagazine() {
     </div>
   );
 }
-
