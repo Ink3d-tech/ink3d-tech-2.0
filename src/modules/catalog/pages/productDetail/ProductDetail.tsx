@@ -5,9 +5,12 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import { Heart } from "lucide-react";
-import { Product, useCart } from "@/modules/checkout/pages/cart/context/Cart.context";
+import {
+  Product,
+  useCart,
+} from "@/modules/checkout/pages/cart/context/Cart.context";
 import { API_BACK } from "@/shared/config/api/getEnv";
-
+import ProductsComponent from "@/modules/checkout/pages/cart/components/Products.component";
 
 export default function ProductDetail() {
   const params = useParams();
@@ -20,6 +23,7 @@ export default function ProductDetail() {
   const [showNotification, setShowNotification] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [availableSizes, setAvailableSizes] = useState<Product[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string>("");
 
   useEffect(() => {
     if (!id) return;
@@ -29,10 +33,13 @@ export default function ProductDetail() {
         const response = await fetch(`${API_BACK}/products/${id}`);
         const data: Product = await response.json();
         setProduct(data);
+        setSelectedImage(data.image[0] || "/placeholder-image.png");
 
         const responseAllProducts = await fetch(`${API_BACK}/products`);
         const allProducts: Product[] = await responseAllProducts.json();
-        const sameNameProducts = allProducts.filter((item) => item.name === data.name);
+        const sameNameProducts = allProducts.filter(
+          (item) => item.name === data.name
+        );
 
         setAvailableSizes(sameNameProducts);
         setSelectedSize(data.size || null);
@@ -46,7 +53,11 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
-  const { handleAddToCart } = useCart()
+  const { handleAddToCart } = useCart();
+
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
 
   const handleFavoriteClick = () => {
     setIsFavorited(!isFavorited);
@@ -57,101 +68,144 @@ export default function ProductDetail() {
     }, 2000);
   };
 
-  const handleSizeSelect = (size: string) => {
-    const selectedProduct = availableSizes.find((item) => item.size === size);
-    setProduct(selectedProduct || null);
-    setSelectedSize(size);
-  };
-
-  if (loading) return <p className="text-gray-500 text-center mt-10">Cargando producto...</p>;
+  if (loading)
+    return (
+      <p className="text-gray-500 text-center mt-10">Cargando producto...</p>
+    );
   if (error) return <p className="text-red-500 text-center mt-10">{error}</p>;
-  if (!product) return <p className="text-gray-500 text-center mt-10">Producto no encontrado</p>;
+  if (!product)
+    return (
+      <p className="text-gray-500 text-center mt-10">Producto no encontrado</p>
+    );
 
   return (
     <div>
       <BackButton tab="Producto" />
-      <div className="min-h-screen flex items-center justify-center bg-gray-300 p-6">
-        <div className="bg-white shadow-lg rounded-lg p-6 max-w-4xl mx-auto pr-10 flex flex-col md:flex-row gap-6 relative">
+      <div className=" flex items-center justify-center pt-10 pb-2">
+        <div className="bg-white shadow-xl rounded-lg p-8 max-w-6xl w-full flex flex-col md:flex-row gap-10 relative">
           <button
             className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
             onClick={handleFavoriteClick}
           >
-            <Heart size={20} fill={isFavorited ? "black" : "none"} stroke="black" />
+            <Heart
+              size={24}
+              fill={isFavorited ? "black" : "none"}
+              stroke="black"
+            />
           </button>
 
           {showNotification && (
             <div className="absolute -top-9 right-0 bg-black text-white text-sm px-3 py-1 rounded-md shadow-lg animate-fade-in">
-              {isFavorited ? "Se añadió a favoritos!" : "Se quitó de favoritos!"}
+              {isFavorited
+                ? "Se añadió a favoritos!"
+                : "Se quitó de favoritos!"}
             </div>
           )}
 
-          <div className="flex-shrink-0">
-            <Image
-              src={product.image[0] || "/placeholder-image.png"}
-              alt={product.name}
-              width={400}
-              height={400}
-              className="rounded-lg object-cover w-full md:w-[400px] h-auto"
-            />
+          <div className="flex flex-col items-center gap-4 w-full md:w-3/5">
+            <div className="rounded-lg bg-white flex items-center justify-center w-[500px] h-[500px]">
+              <Image
+                src={selectedImage}
+                alt={product.name}
+                width={500}
+                height={500}
+                className="object-contain w-full h-full"
+              />
+            </div>
+
+            <div className="flex gap-3 overflow-x-auto">
+              {product.image.slice(0, 5).map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleImageClick(img)}
+                  className="focus:outline-none"
+                >
+                  <Image
+                    src={img}
+                    alt={`Vista ${index + 1}`}
+                    width={90}
+                    height={90}
+                    className={`rounded-md border-2 ${
+                      selectedImage === img ? "border-black" : "border-gray-300"
+                    } transition-all`}
+                  />
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="flex flex-col justify-center flex-grow">
+          <div className="flex flex-col justify-between flex-grow gap-2 w-full md:w-2/5">
+            <h2 className="text-4xl font-bold">{product.name}</h2>
+            <div className="flex gap-2">
+              <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 uppercase mt-2 inline-block">
+                Asian
+              </span>
+            </div>
+            <p className="text-gray-500 text-lg">{product.description}</p>
+            <p className="text-4xl font-bold text-black mt-2">
+              ${product.price}
+            </p>
+
             <div>
-              <h2 className="text-3xl font-bold">{product.name}</h2>
-              {typeof product.category === "string" ? (
-                <span className="text-xs font-bold text-blue-700 bg-blue-200 px-2 py-1 uppercase mt-2 inline-block">
-                  {product.category}
-                </span>
-              ) : (
-                <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 uppercase mt-2 inline-block">
-                  Asian
-                </span>
-              )}
-              <p className="text-gray-500 text-lg mt-2">{product.description}</p>
+              <p className="text-sm font-bold mb-2">Selecciona tu talla:</p>
+              <div className="flex gap-3">
+                {["S", "M", "L", "XL"].map((size) => {
+                  const productWithSize = availableSizes.find(
+                    (item) => item.size === size
+                  );
+                  const isAvailable =
+                    productWithSize && productWithSize.stock > 0;
 
-
-              <p className="text-3xl font-bold text-black mt-4">${product.price}</p>
-            </div>
-
-            <div className="mt-6">
-              <div className="mb-4">
-                <p className="text-sm font-bold mb-2">Selecciona tu talla:</p>
-                <div className="flex gap-2">
-                  {["S", "M", "L", "XL"].map((size) => {
-                    const productWithSize = availableSizes.find(
-                      (item) => item.size === size
-                    );
-                    const isAvailable = productWithSize && productWithSize.stock > 0;
-
-                    return (
-                      <button
-                        key={size}
-                        onClick={() => handleSizeSelect(size)}
-                        className={`px-3 py-2 border rounded-md transition ${selectedSize === size
-                            ? "bg-black text-white border-black"
-                            : isAvailable
-                              ? "hover:bg-gray-200"
-                              : "bg-gray-300 cursor-not-allowed"
-                          }`}
-                        disabled={!isAvailable}
-                      >
-                        {size} {isAvailable ? "" : ""}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <button
-                  className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition"
-                  onClick={() => handleAddToCart(product)}>
-                  Agregar al carrito 🛒
-                </button>
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`px-4 py-2 border rounded-md transition ${
+                        selectedSize === size
+                          ? "bg-black text-white border-black"
+                          : isAvailable
+                          ? "hover:bg-gray-200"
+                          : "bg-gray-300 cursor-not-allowed"
+                      }`}
+                      disabled={!isAvailable}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
               </div>
             </div>
+
+            <div className="bg-gray-100 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold">Cuidado del producto</h3>
+              <p className="text-gray-600 text-sm mt-2">
+                Para prolongar la vida útil de esta prenda, lavar a mano o en
+                ciclo delicado con agua fría. No usar blanqueador ni secadora.
+                Planchar a baja temperatura si es necesario.
+              </p>
+            </div>
+
+            <div className="bg-gray-100 p-4 rounded-lg mt-2">
+              <h3 className="text-lg font-semibold">Guía de talles</h3>
+              <p className="text-gray-600 text-sm mt-2">
+                Consulta nuestra guía de talles para asegurarte de elegir la
+                mejor opción para ti.
+              </p>
+            </div>
+
+            <button
+              className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition mt-4"
+              onClick={() => handleAddToCart(product)}
+            >
+              Agregar al carrito 🛒
+            </button>
           </div>
         </div>
+      </div>
+
+
+      <div className="mt-10">
+        <ProductsComponent />
       </div>
 
       <style jsx>{`

@@ -116,9 +116,10 @@ export default function Chatbot() {
     <div className="fixed bottom-5 right-5 z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
+        className="bg-blue-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition"
       >
-        <MessageSquareMoreIcon />
+        <MessageSquareMoreIcon size={24} className="hidden sm:block" />
+        <MessageSquareMoreIcon size={15} className="sm:hidden" />
       </button>
 
       {isOpen && (

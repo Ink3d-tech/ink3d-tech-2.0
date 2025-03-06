@@ -18,7 +18,7 @@ export interface Product {
       id: string;
       name: string;
     };
-    image: string;
+    image: string[];
   }
 
 interface CartContextType {

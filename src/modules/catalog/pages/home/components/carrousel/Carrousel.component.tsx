@@ -7,34 +7,25 @@ import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { API_BACK } from "@/shared/config/api/getEnv";
+import { useRouter } from "next/navigation"; 
 
-interface IImage {
+interface Article {
   id: number;
-  name: string;
+  title: string;
+  author: string;
+  date: string;
+  image: string;
+  content: string;
 }
 
-const images: IImage[] = [
-  { id: 1, name: "/images/carrousel1.png" },
-  { id: 2, name: "/images/carrousel1.png" },
-  { id: 3, name: "/images/carrousel1.png" },
-  { id: 4, name: "/images/carrousel1.png" },
-  { id: 5, name: "/images/carrousel1.png" },
-  { id: 6, name: "/images/carrousel1.png" },
-  { id: 7, name: "/images/carrousel1.png" },
-  { id: 8, name: "/images/carrousel1.png" },
-  { id: 9, name: "/images/carrousel1.png" },
-];
-
-interface CarouselProps {
-  imageIds: number[];
-}
-
-const Carousel = ({ imageIds }: CarouselProps) => {
-  const filteredImages = images.filter((img) => imageIds.includes(img.id));
-  
-  // Estado para controlar el primer movimiento del carrusel
+const Carousel = () => {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
   const [firstSlide, setFirstSlide] = useState(true);
+  
+  const router = useRouter(); 
 
   const handleSlideChange = () => {
     if (firstSlide) {
@@ -42,12 +33,37 @@ const Carousel = ({ imageIds }: CarouselProps) => {
     }
   };
 
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch(`${API_BACK}/api/magazine`);
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setArticles(data);
+      } catch (err) {
+        console.error("Error fetching articles:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  if (loading) return <p className="text-center text-gray-500">Cargando carrusel...</p>;
+
+  const handleImageClick = (id: number) => {
+    router.push(`/magazine/${id}`);
+  };
+
   return (
     <div className="relative w-full mx-auto group">
       <Swiper
         loop={true}
         autoplay={{
-          delay: firstSlide ? 1 : 4000,  // Primer slide con autoplay de 1ms (instantáneo)
+          delay: firstSlide ? 1 : 4000,
           reverseDirection: true,
         }}
         speed={500}
@@ -60,35 +76,42 @@ const Carousel = ({ imageIds }: CarouselProps) => {
         modules={[Pagination, Navigation, Autoplay]}
         observer={true}
         observeParents={true}
-        onSlideChange={handleSlideChange} // Detecta el primer movimiento
+        onSlideChange={handleSlideChange}
         breakpoints={{
           640: { slidesPerView: 1 },
           768: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
         }}
       >
-        {filteredImages.map((image, index) => (
-          <SwiperSlide key={`${image.id}-${index}`} className="relative flex items-center justify-center">
+        {articles.map((article) => (
+          <SwiperSlide key={article.id} className="relative flex items-center justify-center">
             <figure className="flex justify-center">
-              <Image
-                className="object-cover rounded-lg shadow-lg"
-                src={image.name}
-                alt={`imagen-${image.id}-${index}`}
-                loading="eager"
-                width={1920}
-                height={500}
-                style={{
-                  width: "100%",
-                  maxHeight: "500px",
-                  minWidth: "300px",
-                }}
-              />
+              <a
+                onClick={() => handleImageClick(article.id)} 
+              >
+                <Image
+                  className="object-cover rounded-lg shadow-lg"
+                  src={article.image}
+                  alt={`imagen-${article.id}`}
+                  loading="eager"
+                  width={1920}
+                  height={500}
+                  style={{
+
+                    maxHeight: "500px",
+                    minWidth: "300px",
+                  }}
+                />
+              </a>
             </figure>
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
+              <h2 className="text-xl font-semibold">{article.title}</h2>
+              <p>{article.author}</p>
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Botones de navegación personalizados */}
       <button className="custom-prev absolute left-4"></button>
       <button className="custom-next absolute right-4"></button>
     </div>
