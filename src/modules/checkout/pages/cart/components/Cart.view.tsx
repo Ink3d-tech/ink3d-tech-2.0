@@ -6,6 +6,5 @@ import EmptyCart from "./EmptyCart.component"
 
 export default function CartView() {
     const { products } = useCart()
-    console.log(products)
     return  products.length > 0 ? <CartWithItems/> : <EmptyCart/>
 }
