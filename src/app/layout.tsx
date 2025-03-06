@@ -5,6 +5,9 @@ import { AuthProvider } from "@/modules/auth/shared/context/Auth.context"
 import { CartProvider } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
 import Footer from "@/shared/components/footer/FooterView";
+import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.context";
+import LocationPathname from "@/shared/helpers/LocationPathname";
+import Chatbot from "@/shared/components/Chatbot";
 
 export const metadata: Metadata = {
   title: "The Ink3d project",

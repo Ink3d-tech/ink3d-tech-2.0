@@ -9,6 +9,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
 import Strike from "@tiptap/extension-strike";
+import Image from "next/image";
 
 interface FormData {
   id?: string;
@@ -130,8 +131,8 @@ export default function FormMagazine() {
       setImagePreview("");
       setSelectedFile(null);
       fetchArticles();
-    } catch (error: any) {
-      console.error("Error al enviar el formulario:", error.response?.data || error.message);
+    } catch{
+      console.error("Error al enviar el formulario:");
     }
   };
 
@@ -191,10 +192,17 @@ export default function FormMagazine() {
                 />
               </div>
             </label>
+
             {imagePreview && (
               <div className="mt-3">
                 <p className="text-gray-500 text-sm">Vista previa:</p>
-                <img src={imagePreview} alt="Vista previa" className="w-32 h-32 object-cover border rounded-md" />
+                <Image
+                  src={imagePreview}
+                  alt="Vista previa"
+                  width={128}
+                  height={128}
+                  className="w-32 h-32 object-cover border rounded-md"
+                />
               </div>
             )}
           </div>
@@ -237,7 +245,7 @@ export default function FormMagazine() {
                     setFormData(article);
                     setSelectedId(article.id || null);
                     setImagePreview(article.image);
-                    console.log("Artículo seleccionado con ID:", article.id); 
+                    console.log("Artículo seleccionado con ID:", article.id);
                   }}
                   className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                 >
