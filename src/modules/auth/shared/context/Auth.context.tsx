@@ -10,17 +10,17 @@ import { API_BACK } from "@/shared/config/api/getEnv";
 import { UserInterface } from "../interfaces/User.interface";
 import { useRouter } from "next/navigation";
 
-enum Role {
-    USER = "user",
-    ADMIN = "admin",
-    MOD = "mod"
-}
+// enum Role {
+//     USER = "user",
+//     ADMIN = "admin",
+//     MOD = "mod"
+// }
 
-interface PayloadInterface {
-    userId: string
-    email: string
-    role: Role
-}
+// interface PayloadInterface {
+//     userId: string
+//     email: string
+//     role: Role
+// }
 
 
 interface ResponseInterface {
@@ -30,7 +30,7 @@ interface ResponseInterface {
 
 interface AuthContextInterface {
     user: UserInterface | null 
-    isAdmin: boolean
+    // isAdmin: boolean
     login: (loginForm: LoginInterface) => void
     signup: (signForm: SignupInterface) => void
     logout: () => void
@@ -38,12 +38,12 @@ interface AuthContextInterface {
     token: string
     isLoading: boolean
     getIdUser: (token: string) => string
-    getIsAdmin: (token: string) => void
+    getIsAdmin: (token: string) => boolean
 }
 
 const AuthContext = createContext<AuthContextInterface>({
     user: null,
-    isAdmin: false,
+    // isAdmin: false,
     login: () => {},
     logout: () => {},
     signup: () => {},
@@ -51,16 +51,17 @@ const AuthContext = createContext<AuthContextInterface>({
     isLoading: true,
     token: "",
     getIdUser: () => "",
-    getIsAdmin: () => {}
+    getIsAdmin: () => false
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
     const [user, setUser] = useState<UserInterface | null>(null);
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    // const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const router = useRouter()
+    
 
     const getIdUser = (token: string): string => {
         const payload = JSON.parse(atob(token.split(".")[1]));
@@ -77,14 +78,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(res.data)
     }, [])
 
-    const getIsAdmin = (): void => {
-        const token = localStorage.getItem("token");
-        if(token) {
-            const payload = token.split(".")[1];
-            const parse: PayloadInterface = JSON.parse(atob(payload));
-            setIsAdmin(parse.role === Role.ADMIN)
-        } 
-    };
+    // const getIsAdmin = (): void => {
+    //     const token = localStorage.getItem("token");
+    //     if(token) {
+    //         const payload = token.split(".")[1];
+    //         const parse: PayloadInterface = JSON.parse(atob(payload));
+    //         setIsAdmin(parse.role === Role.ADMIN)
+    //     } 
+    // };
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -115,12 +116,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         
         setIsLoading(false);
-    }, [fetchUser]);
+    }, [fetchUser, setToken]);
     
 
 
     if(isLoading) return <Loading/> 
-       
+    
+    const getIsAdmin = (token: string): boolean => {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        return payload.role === "admin"
+    };
 
     const login = async (loginForm: LoginInterface) => {  
         const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm);
@@ -130,7 +135,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem("user", getIdUser(data.token)) 
 
         fetchUser(data.token)
-        getIsAdmin()
+        getIsAdmin(data.token)
     };
 
     const signup = async (signupForm: SignupInterface) => {
@@ -138,6 +143,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logout = () => {
+        
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setIsAuthenticated(false);
@@ -149,7 +155,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 
     const value = {
-        isAdmin,
+        // isAdmin,
         user,
         login,
         signup,
