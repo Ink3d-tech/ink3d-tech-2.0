@@ -78,7 +78,7 @@ export function useForm<T>({
                 Mixin.fire(messageSuccess, "", "success")
                 router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
             } catch (error) {
-                const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"
+                const errorMessage = error instanceof Error ? error.message : "Error interno del servidor"
                 // const messageToShow = [
                 //     "Invalid password", "User does not exist"
                 // ].includes(errorMessage)

@@ -100,16 +100,18 @@ export const ManagmentProductForm = () => {
         });
     };
 
-
-
-
-    
     const handleCreateCategory = (e: React.SyntheticEvent) => {
         e.preventDefault()
 
         if(!newCategory) {
             Mixin.fire("El campo no puede quedar vacio", "", "error")
             return
+        }
+
+        const categoryExists = categories.some(cat => cat.name.toLowerCase() === newCategory.toLowerCase());
+        if (categoryExists) {
+            Mixin.fire("La categoría ya existe", "", "warning");
+            return;
         }
         
         if(error) {
@@ -264,7 +266,7 @@ export const ManagmentProductForm = () => {
     
                 <select name="category" value={formProduct.category} onChange={handleChangeProduct} className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" >
                     <option value={""} disabled>Seleccionar una categoría</option>
-                    { categories.map((cat) => <option key={cat.id} value={cat.name}>{cat.name}</option>) }
+                    { categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.name}</option>) }
                 </select>
 
                 <button 
