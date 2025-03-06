@@ -11,7 +11,7 @@ interface UserMenu {
 }
 
 const UserMenu: React.FC<UserMenu> = ({ avatarUrl }) => {
-  const { logout, isAdmin, getIsAdmin } = useAuth();
+  const { logout, isAdmin } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const toggleDropdown = () => setDropdownVisible((prev) => !prev);
