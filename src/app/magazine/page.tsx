@@ -2,10 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-<<<<<<< Updated upstream
-=======
-import CarrouselMagazine from "@/shared/components/carrouselMgazine/CarrouselMagazine";
->>>>>>> Stashed changes
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 interface Article {
@@ -48,12 +44,7 @@ const MagazinePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white p-8">
 
-<<<<<<< Updated upstream
-         {/* Navbar */}
-         {/* Navbar */}
-=======
-         <div></div>
->>>>>>> Stashed changes
+
 <nav className="fixed top-0 left-0 w-full bg-white text-black shadow-md z-50">
   <div className="container mx-auto flex justify-between items-center p-4">
     <div
