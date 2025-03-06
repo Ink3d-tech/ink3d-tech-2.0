@@ -44,7 +44,7 @@ export default function Stock() {
         );
         setStockMovements(response.data);
       } catch (error) {
-        console.error("❌ Error al obtener movimientos de stock:", error);
+        console.error(" Error al obtener movimientos de stock:", error);
         alert("Hubo un error al cargar los movimientos de stock.");
       } finally {
         setLoading(false);
@@ -56,7 +56,7 @@ export default function Stock() {
         const response = await axios.get<Category[]>("http://localhost:3000/categories");
         setCategories(response.data);
       } catch (error) {
-        console.error("❌ Error al obtener categorías:", error);
+        console.error(" Error al obtener categorías:", error);
       }
     };
 
@@ -88,19 +88,19 @@ export default function Stock() {
         )
       );
 
-      alert("✅ Venta realizada con éxito.");
+      alert(" Venta realizada con éxito.");
     } catch (error) {
-      console.error("❌ Error al realizar la venta:", error);
+      console.error(" Error al realizar la venta:", error);
       alert("Hubo un problema al procesar la venta.");
     }
   };
 
-  if (loading) return <p className="text-white">⏳ Cargando stock...</p>;
+  if (loading) return <p className="text-white"> Cargando stock...</p>;
 
   return (
     <div className="p-6 bg-black shadow-lg rounded-md">
       <h2 className="text-3xl font-semibold text-red-500 mb-4">
-        🔥 Movimientos de Stock 🔥
+        Movimientos de Stock 
       </h2>
 
       {/* Filtro de categorías */}
@@ -124,12 +124,12 @@ export default function Stock() {
       <table className="w-full border-collapse border border-red-500">
         <thead>
           <tr className="bg-red-500 text-white">
-            <th className="border border-red-500 p-2">🆔 Producto</th>
-            <th className="border border-red-500 p-2">📦 Nombre</th>
-            <th className="border border-red-500 p-2">📊 Stock</th>
-            <th className="border border-red-500 p-2">💰 Precio</th>
-            <th className="border border-red-500 p-2">📅 Fecha</th>
-            <th className="border border-red-500 p-2">🛒 Acción</th>
+            <th className="border border-red-500 p-2"> Producto</th>
+            <th className="border border-red-500 p-2"> Nombre</th>
+            <th className="border border-red-500 p-2">Stock</th>
+            <th className="border border-red-500 p-2"> Precio</th>
+            <th className="border border-red-500 p-2">Fecha</th>
+            <th className="border border-red-500 p-2"> Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -157,7 +157,7 @@ export default function Stock() {
           ) : (
             <tr>
               <td colSpan={6} className="text-white text-center p-4">
-                ⚠️ No hay productos disponibles en esta categoría
+                 No hay productos disponibles en esta categoría
               </td>
             </tr>
           )}

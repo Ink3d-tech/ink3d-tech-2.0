@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 const SeguridadConfiguracion = () => {
@@ -94,3 +95,4 @@ const SeguridadConfiguracion = () => {
 };
 
 export default SeguridadConfiguracion;
+

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 
@@ -6,15 +5,15 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white py-10">
       <div className="container mx-auto px-6 lg:px-20">
+        
         {/* Sección superior */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+          
           {/* Logo y descripción */}
           <div>
-            <Link href={"/home"}>
-              <Image src={"/LogoInk3d.png"} alt="Logo inked project" width={100} height={100}/>
-            </Link>
-            <p className="text-gray-400 mt-4">
-              Estilo, calidad y vanguardia en cada prenda.
+            <h2 className="text-3xl font-bold mb-3">Ink3D Fashion</h2>
+            <p className="text-gray-400">
+              Innovación y estilo en cada prenda.
             </p>
           </div>
 
