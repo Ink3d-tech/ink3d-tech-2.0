@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tiptap/react": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
     "@types/axios": "^0.9.36",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
@@ -18,7 +20,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^5.5.0",
-    "react-quill": "^2.0.0",
+    "react-quill": "^2.0.0-beta.2",
     "react-resizable": "^3.0.5",
     "recharts": "^2.15.1",
     "socket": "^0.14.43",
