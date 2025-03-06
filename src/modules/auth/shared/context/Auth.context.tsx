@@ -8,20 +8,12 @@ import axios from "axios";
 
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { UserInterface } from "../interfaces/User.interface";
-import { useRouter } from "next/navigation";
 
 // enum Role {
 //     USER = "user",
 //     ADMIN = "admin",
 //     MOD = "mod"
 // }
-
-// interface PayloadInterface {
-//     userId: string
-//     email: string
-//     role: Role
-// }
-
 
 interface ResponseInterface {
     token: string;
@@ -30,7 +22,6 @@ interface ResponseInterface {
 
 interface AuthContextInterface {
     user: UserInterface | null 
-    // isAdmin: boolean
     login: (loginForm: LoginInterface) => void
     signup: (signForm: SignupInterface) => void
     logout: () => void
@@ -57,17 +48,14 @@ const AuthContext = createContext<AuthContextInterface>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
     const [user, setUser] = useState<UserInterface | null>(null);
-    // const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const router = useRouter()
     
 
     const getIdUser = (token: string): string => {
         const payload = JSON.parse(atob(token.split(".")[1]));
         return payload.userId;
     };
-
     const fetchUser = useCallback(async(token: string) => {
         const res = await axios.get<UserInterface>(`${API_BACK}/users/${getIdUser(token)}`, {
             headers: {
@@ -78,15 +66,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(res.data)
     }, [])
 
-    // const getIsAdmin = (): void => {
-    //     const token = localStorage.getItem("token");
-    //     if(token) {
-    //         const payload = token.split(".")[1];
-    //         const parse: PayloadInterface = JSON.parse(atob(payload));
-    //         setIsAdmin(parse.role === Role.ADMIN)
-    //     } 
-    // };
-
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
@@ -96,8 +75,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setToken(token); 
             fetchUser(token);
             setIsAuthenticated(true);
-            
-            
             window.history.replaceState({}, document.title, window.location.pathname);
         } else {
             const storedToken = localStorage.getItem("token");
@@ -106,22 +83,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setToken(storedToken);
                 setIsAuthenticated(true);
                 fetchUser(storedToken); 
-                
-
+              
             } else {
                 setUser(null);
                 setToken("");
                 setIsAuthenticated(false);
             }
         }
-        
+     
         setIsLoading(false);
     }, [fetchUser, setToken]);
     
 
-
     if(isLoading) return <Loading/> 
-    
+
     const getIsAdmin = (token: string): boolean => {
         const payload = JSON.parse(atob(token.split(".")[1]));
         return payload.role === "admin"
@@ -135,7 +110,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem("user", getIdUser(data.token)) 
 
         fetchUser(data.token)
+
         getIsAdmin(data.token)
+
     };
 
     const signup = async (signupForm: SignupInterface) => {
@@ -150,7 +127,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
         setToken("");
 
-        router.push("/home")
+        window.location.reload()
+
     };
 
 

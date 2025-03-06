@@ -36,12 +36,15 @@ export default function ProductsPage() {
         }
 
         const data: Product[] = await response.json();
+        
         setProducts(data);
       } catch (error) {
         setError((error as Error).message);
       } finally {
         setLoading(false);
       }
+      
+      
     };
 
     fetchProducts();
@@ -84,6 +87,7 @@ export default function ProductsPage() {
                     height={800}
                     className="w-full h-full object-cover"
                   />
+                  
                 </div>
 
                 <div className="p-3 text-center">

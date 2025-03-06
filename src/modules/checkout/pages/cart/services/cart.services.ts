@@ -1,21 +1,22 @@
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { ICartProduct, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
+import { ICartProduct, IDiscountReponse, IOrder, IPaymentResponse } from "../interfaces/cartService.interface"; 
 import { CustomError } from "@/modules/auth/shared/helpers/customError";
 
 // Servicio para confirmar la orden
 export const confirmOrderService = async (
     userBuyer: string,
     confirmedCart: ICartProduct[],
-    token: string | null
+    token: string | null,
+    discountCode: string | null
 ): Promise<{ orderId: string, currency: string, products: { id: string, price: number, quantity: number }[] }> => {
     try {
 
-        console.log(`id del USER ${userBuyer}`);
-        
+        console.log(`id del USER ${userBuyer}`);        
 
         const body = {
             userId: userBuyer,
+            discountCode,
             products: confirmedCart.map(({ id, units }) => ({
                 id,
                 quantity: units,
@@ -23,6 +24,7 @@ export const confirmOrderService = async (
         };
 
         // console.log("Body de la request order:", JSON.stringify(body, null, 2));
+        // console.log(`token del order ${token}`);
         
 
         const { data } = await axios.post<IOrder>(`${API_BACK}/orders`, body, {
@@ -70,8 +72,8 @@ export const paymentCreateService = async (
         };
 
 
-        console.log("Body de la request MP:", JSON.stringify(body, null, 2));
-        console.log(`token ${token}`);
+        // console.log("Body de la request MP:", JSON.stringify(body, null, 2));
+        // console.log(`token ${token}`);
 
         const { data } = await axios.post<IPaymentResponse>(
             `${API_BACK}/payment-methods/create`,
@@ -89,5 +91,23 @@ export const paymentCreateService = async (
         const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor" 
         console.error("Error creando el pago MP:", errorMessage);
         throw error;
+    }
+};
+
+export const validateDiscount = async (discountCode: string, token: string) => {
+    try {
+        const { data } = await axios.get<IDiscountReponse>(`${API_BACK}/discounts/${discountCode}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return data;
+    } catch (error) {
+        console.error("Error validando el descuento:", error);
+
+        // En lugar de lanzar el error, devolvemos un objeto con status "invalid"
+        return { status: "invalid", amount: 0 };
     }
 };
