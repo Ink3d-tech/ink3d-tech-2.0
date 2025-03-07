@@ -1,38 +1,75 @@
-// /pages/outfitsink3d/streetwear.tsx
+"use client";
 
-"use client"; // Asegúrate de usar 'use client'
+import { useState, useEffect } from "react";
 
-import React from "react";
-import { useRouter } from "next/navigation"; // Correcto
+interface Article {
+  id: number;
+  title: string;
+  author: string;
+  date: string;
+  image: string;
+  description: string;
+}
 
-const StreetwearPage: React.FC = () => {
-  const router = useRouter();
+export default function streetwearPage() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/magazine");
+        if (!response.ok) throw new Error("Error al obtener los artículos");
+
+        const data: Article[] = await response.json();
+        setArticles(data);
+      } catch (error) {
+        console.error("Error al cargar los artículos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <nav className="flex justify-between items-center mb-6">
-        <button onClick={() => router.push("/magazine")} className="text-xl">
-          Volver
-        </button>
-        <h1 className="text-2xl font-bold"> ¿Que es el Streetwear? </h1>
-      </nav>
+    <div className="min-h-screen bg-gray-100 text-gray-900 p-6">
+      <header className="text-center py-10">
+        <h1 className="text-4xl font-extrabold tracking-wide text-red-500">
+          MOTORSPORT
+        </h1>
+        <h2 className="text-lg text-gray-600">Lo más exclusivo del momento</h2>
+      </header>
 
-      <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
-        <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/street1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
-          <p className="mt-4 text-center">Artículo 1</p>
+      {loading ? (
+        <p className="text-center text-gray-500">Cargando artículos...</p>
+      ) : articles.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {articles.map((article) => (
+            <div
+              key={article.id}
+              className="bg-white rounded-lg shadow-md overflow-hidden"
+            >
+              <img
+                src={article.image || "/motorsport2.jpg"}
+                alt={article.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-xl font-bold text-gray-900">
+                  {article.title}
+                </h3>
+                <p className="text-gray-600 text-sm">{article.date}</p>
+                <p className="text-gray-800 mt-2">{article.description}</p>
+                <p className="text-gray-500 text-sm mt-2">Por: {article.author}</p>
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/street2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
-          <p className="mt-4 text-center">Artículo 2</p>
-        </div>
-        <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/street3.jpg" alt="Item 3" className="w-full h-64 object-cover" />
-          <p className="mt-4 text-center">Artículo 3</p>
-        </div>
-      </div>
+      ) : (
+        <p className="text-center text-gray-500">No hay artículos disponibles</p>
+      )}
     </div>
   );
-};
-
-export default StreetwearPage;
+}

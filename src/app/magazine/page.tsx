@@ -58,10 +58,10 @@ const MagazinePage: React.FC = () => {
       onClick={() => router.push("/home")} // Redirige al Home
     >
       <Image 
-        src="/logoonk3dwhite.png" 
+        src="/image.png" 
         alt="The Ink3D Project" 
-        width={1000} 
-        height={1000} 
+        width={8000} 
+        height={8000} 
         className="w-12 h-12 object-contain"
       />
       <h1 className="ml-2 text-xl font-bold uppercase tracking-wide">
@@ -71,17 +71,10 @@ const MagazinePage: React.FC = () => {
 
     {/* Categorías */}
     <ul className="flex gap-6 text-sm uppercase">
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/outfit")}>
-        Outfit Ink3d
-      </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/woman")}>
-        Woman
-      </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/men")}>
-        Men
-      </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/compras")}>
-        Compras
+    
+     
+      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/acercaDeNosotros")}>
+        Acerca de nosotros
       </li>
       <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/mundoasian")}>
         Mundo Asian
@@ -131,9 +124,7 @@ const MagazinePage: React.FC = () => {
         ))}
       </div>
 
-      <div>
-        <CarrouselMagazine/>
-      </div>
+     
     </div>
   );
 };

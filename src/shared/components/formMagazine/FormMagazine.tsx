@@ -17,6 +17,7 @@ interface FormData {
   description: string;
   image: string;
   isActive: boolean;
+  category: string
 }
 
 export default function FormMagazine() {
@@ -28,6 +29,8 @@ export default function FormMagazine() {
     description: "",
     image: "",
     isActive: true,
+    category: ""
+
   });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [articles, setArticles] = useState<FormData[]>([]);
@@ -111,6 +114,7 @@ export default function FormMagazine() {
       image: imageUrl,
       author: formData.author,
       isActive: formData.isActive,
+      category: formData.category
     };
 
     try {
@@ -120,12 +124,12 @@ export default function FormMagazine() {
         });
         console.log("Artículo actualizado:", formDataToSend);
       } else {
-        await axios.post(`${API_BACK}/api/magazine`, formDataToSend, {
+        await axios.post(`${API_BACK}/api/magazine/category`, formDataToSend, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("Artículo publicado:", formDataToSend);
       }
-      setFormData({ author: "", title: "", description: "", image: "", isActive: true });
+      setFormData({ author: "", title: "", description: "", image: "", isActive: true, category:""});
       setSelectedId(null);
       setImagePreview("");
       setSelectedFile(null);
@@ -173,6 +177,25 @@ export default function FormMagazine() {
               Título:
               <input type="text" name="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="border p-2 w-full" required />
             </label>
+            
+  
+
+<label className="block mt-4">
+  Categoría:
+  <select
+    name="category"
+    value={formData.category}
+    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+    className="border p-2 w-full"
+    required
+  >
+    <option value="">Selecciona una categoría</option>
+    <option value="Mundo Asian">Mundo Asian</option>
+    <option value="Motor Sport">Motor Sport</option>
+    <option value="Streetwear">Streetwear</option>
+    <option value="Acerca de Nosotros">Acerca de Nosotros</option>
+  </select>
+</label>
           </div>
           <div className="w-2/5">
             <label className="block">
