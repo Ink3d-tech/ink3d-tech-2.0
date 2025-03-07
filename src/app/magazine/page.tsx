@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import CarrouselMagazine from "@/shared/components/carrouselMgazine/CarrouselMagazine";
 import { useKeenSlider } from "keen-slider/react";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import NavBar from "@/shared/components/navbar/NavBar.component";
+import { Link } from "lucide-react";
 
 interface Article {
   id: number;
@@ -45,54 +47,53 @@ const MagazinePage: React.FC = () => {
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
-    <div className="min-h-screen bg-white p-8">
+    <><div> <NavBar /> 
+    </div><div className="min-h-screen bg-white p-8">
 
-         {/* Navbar */}
-         <div></div>
-         {/* Navbar */}
-<nav className="fixed top-0 left-0 w-full bg-white text-black shadow-md z-50">
-  <div className="container mx-auto flex justify-between items-center p-4">
-    {/* Logo a la izquierda */}
-    <div
-      className="flex items-center cursor-pointer hover:opacity-80 transition"
-      onClick={() => router.push("/home")} // Redirige al Home
-    >
-      <Image 
-        src="/image.png" 
-        alt="The Ink3D Project" 
-        width={8000} 
-        height={8000} 
-        className="w-12 h-12 object-contain"
-      />
-      <h1 className="ml-2 text-xl font-bold uppercase tracking-wide">
-        
-      </h1>
-    </div>
+      {/* Navbar */}
 
-    {/* Categorías */}
-    <ul className="flex gap-6 text-sm uppercase">
-    
-     
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/acercaDeNosotros")}>
-        Acerca de nosotros
-      </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/mundoasian")}>
-        Mundo Asian
-      </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/motorsport")}>
-        Motorsport
-      </li>
-      <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/streetwear")}>
-        Streetwear
-      </li>
-    </ul>
-  </div>
-  
-</nav>
 
- 
 
-       
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 w-full bg-white text-black shadow-md z-50">
+        <div className="container mx-auto flex justify-between items-center p-4 mt-4">
+          {/* Logo a la izquierda */}
+          <div
+            className="flex items-center cursor-pointer hover:opacity-80 transition"
+            onClick={() => router.push("/home")} // Redirige al Home
+          >
+            
+            <h1 className="ml-2 text-xl font-bold uppercase tracking-wide">
+
+            </h1>
+          </div>
+
+
+
+          {/* Categorías */}
+          <ul className="flex gap-6 text-sm uppercase">
+
+
+            <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/acercaDeNosotros")}>
+              Acerca de nosotros
+            </li>
+            <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/mundoasian")}>
+              Mundo Asian
+            </li>
+            <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/motorsport")}>
+              Motorsport
+            </li>
+            <li className="hover:text-red-500 transition cursor-pointer" onClick={() => router.push("/magazine/streetwear")}>
+              Streetwear
+            </li>
+          </ul>
+        </div>
+
+      </nav>
+
+
+
+
       <h1 className="text-5xl font-bold text-center uppercase tracking-widest py-5 mt-10 mb-10">
         INK3D Magazine
       </h1>
@@ -100,20 +101,19 @@ const MagazinePage: React.FC = () => {
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
         {articles.map(({ id, title, author, date, image, description }) => (
           <div key={id} className="bg-white shadow-lg rounded-lg overflow-hidden transition transform hover:scale-105 flex flex-col">
-            <Image 
-              src={image} 
-              alt={title} 
-              width={500} 
-              height={300} 
-              className="w-full h-64 object-cover" 
-              priority
-            />
+            <Image
+              src={image}
+              alt={title}
+              width={1300}
+              height={1300}
+              className="w-full h-64 object-cover"
+              priority />
             <div className="p-5 flex-grow flex flex-col">
               <p className="text-gray-500 text-sm">
                 {date} · <span className="font-bold">{author}</span>
               </p>
-              <button 
-                onClick={() => router.push(`/magazine/${id}`)} 
+              <button
+                onClick={() => router.push(`/magazine/${id}`)}
                 className="text-xl font-semibold mt-2 hover:text-red-500 transition"
               >
                 {title}
@@ -124,8 +124,8 @@ const MagazinePage: React.FC = () => {
         ))}
       </div>
 
-     
-    </div>
+
+    </div></>
   );
 };
 

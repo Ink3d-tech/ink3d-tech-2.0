@@ -119,12 +119,13 @@ export default function FormMagazine() {
 
     try {
       if (selectedId) {
+        console.log(API_BACK)
         await axios.patch(`${API_BACK}/api/magazine/${selectedId}`, formDataToSend, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("Artículo actualizado:", formDataToSend);
       } else {
-        await axios.post(`${API_BACK}/api/magazine/category`, formDataToSend, {
+        await axios.post(`${API_BACK}/api/magazine`, formDataToSend, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("Artículo publicado:", formDataToSend);
@@ -135,7 +136,8 @@ export default function FormMagazine() {
       setSelectedFile(null);
       fetchArticles();
     } catch (error: any) {
-      console.error("Error al enviar el formulario:", error.response?.data || error.message);
+      console.error("Error al enviar el formulario:", error.response ? error.response.data : error.message);
+
     }
   };
 
