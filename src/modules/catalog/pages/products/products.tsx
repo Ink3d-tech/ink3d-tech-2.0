@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // ⬅️ Importamos para leer query params
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import FilterCategories from "./components/FilterCategories.component";
