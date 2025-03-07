@@ -21,7 +21,7 @@ interface Product {
   name: string;
   image: string | string[];
   price: number;
-  rating?: number; // Se agregó el rating opcionalmente
+  rating?: number; 
 }
 
 const ArticlePage = () => {
@@ -88,7 +88,7 @@ const ArticlePage = () => {
                   products={latestProducts.map(product => ({
                     ...product,
                     image: Array.isArray(product.image) ? product.image[0] : product.image || "/placeholder-image.png",
-                    rating: product.rating ?? 0, // Se eliminó el uso de `any`
+                    rating: product.rating ?? 0, 
                   }))}
                 />
               </div>
@@ -155,7 +155,7 @@ const ArticlePage = () => {
                 products={latestProducts.map(product => ({
                   ...product,
                   image: Array.isArray(product.image) ? product.image[0] : product.image || "/placeholder-image.png",
-                  rating: product.rating ?? 0, // Se eliminó el uso de `any`
+                  rating: product.rating ?? 0,
                 }))}
               />
             </div>
