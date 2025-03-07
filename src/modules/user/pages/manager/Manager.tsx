@@ -18,7 +18,8 @@ import Stock from "./pages/stock/Stock";
 import { ManagmentProductForm } from "./pages/management/Managment";
 import ProtectedRouteAdmin from "@/shared/helpers/ProtectedRouteAdmin";
 import Image from "next/image";
-
+import UserManagement  from "./general/GestionUsuarios/UserManagement";
+import OrderList from "./general/GestionPedidos/OrderList";
 
 
 export default function Dashboard() {
@@ -122,48 +123,20 @@ export default function Dashboard() {
 
           {activeTab === "orders" && (
             <div>
+           
               <h2 className="text-3xl font-bold mb-4">📦 Gestión de Pedidos</h2>
-              <form className="space-y-4 bg-gray-200 p-6 rounded-lg">
-                <input type="text" placeholder="Nombre del Cliente" className="w-full p-2 border" />
-                <input type="text" placeholder="Dirección" className="w-full p-2 border" />
-                <input type="text" placeholder="Ciudad" className="w-full p-2 border" />
-                <input type="text" placeholder="Medio de Pago" className="w-full p-2 border" />
-                <input type="number" placeholder="Cantidad de Producto" className="w-full p-2 border" />
-                <button className="bg-black text-white px-4 py-2 rounded">Registrar Pedido</button>
-              </form>
+              {/* Usamos el componente OrderList aquí */}
+              <OrderList />
             </div>
+            
           )}
 
-          {activeTab === "users" && (
-            <div>
-              <h2 className="text-3xl font-bold mb-4">👥 Gestión de Usuarios</h2>
-              <table className="w-full bg-gray-200 p-6 rounded-lg">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Juan Pérez</td>
-                    <td>juan@example.com</td>
-                    <td>
-                      <select className="p-1 border">
-                        <option>User</option>
-                        <option>Admin</option>
-                      </select>
-                    </td>
-                    <td>
-                      <button className="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          )}
+
+
+
+
+{activeTab === "users" && <UserManagement />}
+
 
           {activeTab === "invent" && (<Stock />
           )}
