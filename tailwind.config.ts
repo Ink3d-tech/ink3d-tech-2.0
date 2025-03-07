@@ -28,9 +28,10 @@ export default {
         "inputPrimary": "#121212",
         "inputSecondary": "#727070",
         "shadow-gray": "rgba(0, 0, 0, 0.25)",
-        "some-gray": "#B0B0B0"
+        "some-gray": "#B0B0B0",
+        "account-primary": "#727070"
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp')],
 } satisfies Config;

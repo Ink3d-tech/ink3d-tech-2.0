@@ -39,7 +39,7 @@ export default function FilterCategories({ onSelectCategory }: FilterCategoriesP
   };
 
   return (
-    <div className="mb-4">
+    <div className="my-4 px-4">
       <select
         className="p-2 border rounded-md bg-white text-gray-700"
         value={selectedCategory || ""}

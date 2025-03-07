@@ -1,24 +1,18 @@
 "use client"
 
-import React, { useState, useContext, createContext, useEffect } from "react";
+import React, { useState, useContext, createContext, useEffect, useCallback } from "react";
 import { LoginInterface } from "../interfaces/Login.interface";
 import Loading from "@/app/loading";
 import { SignupInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
 
 import { API_BACK } from "@/shared/config/api/getEnv";
+import { UserInterface } from "../interfaces/User.interface";
 
-
-// interface UserInterface {
-//     id: string,
-//     name: string,
-//     email: string,
-//     phone?: number | null,
-//     address?: string | null,
-//     city?: string | null,
-//     country?: string | null,
-//     bio?: string | null,
-//     role: string
+// enum Role {
+//     USER = "user",
+//     ADMIN = "admin",
+//     MOD = "mod"
 // }
 
 interface ResponseInterface {
@@ -27,7 +21,7 @@ interface ResponseInterface {
 }
 
 interface AuthContextInterface {
-    user: string | null
+    user: UserInterface | null 
     login: (loginForm: LoginInterface) => void
     signup: (signForm: SignupInterface) => void
     logout: () => void
@@ -40,6 +34,7 @@ interface AuthContextInterface {
 
 const AuthContext = createContext<AuthContextInterface>({
     user: null,
+    // isAdmin: false,
     login: () => {},
     logout: () => {},
     signup: () => {},
@@ -52,9 +47,24 @@ const AuthContext = createContext<AuthContextInterface>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
-    const [user, setUser] = useState<string | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+    const [user, setUser] = useState<UserInterface | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    
+
+    const getIdUser = (token: string): string => {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        return payload.userId;
+    };
+    const fetchUser = useCallback(async(token: string) => {
+        const res = await axios.get<UserInterface>(`${API_BACK}/users/${getIdUser(token)}`, {
+            headers: {
+              Authorization: `Bearer ${token}` 
+            }
+        });
+        console.log("TOKEN", token)
+        setUser(res.data)
+    }, [])
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -63,8 +73,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (token) {
             localStorage.setItem("token", token);
             setToken(token); 
+            fetchUser(token);
             setIsAuthenticated(true);
-            
             window.history.replaceState({}, document.title, window.location.pathname);
         } else {
             const storedToken = localStorage.getItem("token");
@@ -72,49 +82,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (storedToken) {
                 setToken(storedToken);
                 setIsAuthenticated(true);
+                fetchUser(storedToken); 
+              
             } else {
                 setUser(null);
                 setToken("");
                 setIsAuthenticated(false);
             }
         }
-    
+     
         setIsLoading(false);
-    }, []);
+    }, [fetchUser, setToken]);
+    
 
-    if (isLoading) return <Loading />;
+    if(isLoading) return <Loading/> 
 
     const getIsAdmin = (token: string): boolean => {
         const payload = JSON.parse(atob(token.split(".")[1]));
         return payload.role === "admin"
     };
 
-    const getIdUser = (token: string): string => {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        return payload.userId;
-    };
-
-    // const dataUser = async(token: string) => {
-    //     const idUser = getIdUser(token)
-    //     const user = await axios.get(`${API_BACK}/users/${idUser}`)
-    //     if(user) return user
-
-    // }
-
-
     const login = async (loginForm: LoginInterface) => {  
         const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm);
-        
-        const userId = getIdUser(data.token)
-        
-        if (userId) {
-            setUser(userId);
-            localStorage.setItem("user", JSON.stringify(userId));
-        }
-    
         setToken(data.token)
         setIsAuthenticated(true)
         localStorage.setItem("token", data.token)
+        localStorage.setItem("user", getIdUser(data.token)) 
+
+        fetchUser(data.token)
+
+        getIsAdmin(data.token)
+
     };
 
     const signup = async (signupForm: SignupInterface) => {
@@ -122,6 +120,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logout = () => {
+        
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setIsAuthenticated(false);
@@ -129,9 +128,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken("");
 
         window.location.reload()
+
     };
 
+
     const value = {
+        // isAdmin,
         user,
         login,
         signup,

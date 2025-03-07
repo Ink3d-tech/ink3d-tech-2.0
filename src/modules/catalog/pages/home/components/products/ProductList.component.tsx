@@ -1,69 +1,108 @@
+"use client";
 
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { API_BACK } from "@/shared/config/api/getEnv";
 import VerMas from "@/shared/components/buttons/VerMas.component";
-import ProductCard from "./ProductCard.component";
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
-  price: string;
+  price: number;
   description: string;
-  category: string;
+  category: {
+    id: string;
+    name: string;
+  };
   image: string;
 }
 
-const allProducts: Record<string, Product[]> = {
-  remeras: [
-    { id: 1, name: "Oversize JDM MAZDA RX7", price: "$39.900", description: "JDM lovers", category: "MOTORSPORT", image: "/images/remera1.png" },
-    { id: 2, name: "JDM Nissan Skyline GTR", price: "$42.500", description: "Exclusive design", category: "MOTORSPORT", image: "/images/remera1.png" },
-    { id: 3, name: "Oversize JDM MAZDA RX7", price: "$39.900", description: "JDM lovers", category: "MOTORSPORT", image: "/images/remera1.png" },
-    { id: 4, name: "JDM Nissan Skyline GTR", price: "$42.500", description: "Exclusive design", category: "MOTORSPORT", image: "/images/remera1.png" },
-    { id: 5, name: "JDM Classic Edition", price: "$45.000", description: "Limited edition", category: "MOTORSPORT", image: "/images/remera1.png" },
-    { id: 6, name: "Honda Civic Type R Shirt", price: "$38.900", description: "For Honda fans", category: "MOTORSPORT", image: "/images/remera1.png" },
-    { id: 7, name: "Toyota Supra Turbo", price: "$44.000", description: "JDM culture", category: "MOTORSPORT", image: "/images/remera1.png" },
-    { id: 8, name: "Subaru WRX STI Edition", price: "$41.500", description: "Premium quality", category: "MOTORSPORT", image: "/images/remera1.png" },
-  ],
-  buzos: [
-    { id: 1, name: "Oversize JDM MAZDA RX7", price: "$39.900", description: "JDM lovers", category: "MOTORSPORT", image: "/images/buzo1.png" },
-    { id: 2, name: "JDM Nissan Skyline GTR", price: "$42.500", description: "Exclusive design", category: "MOTORSPORT", image: "/images/buzo1.png" },
-    { id: 3, name: "Oversize JDM MAZDA RX7", price: "$39.900", description: "JDM lovers", category: "MOTORSPORT", image: "/images/buzo1.png" },
-    { id: 4, name: "JDM Nissan Skyline GTR", price: "$42.500", description: "Exclusive design", category: "MOTORSPORT", image: "/images/buzo1.png" },
-    { id: 5, name: "JDM Classic Edition", price: "$45.000", description: "Limited edition", category: "MOTORSPORT", image: "/images/buzo1.png" },
-    { id: 6, name: "Honda Civic Type R Shirt", price: "$38.900", description: "For Honda fans", category: "MOTORSPORT", image: "/images/buzo1.png" },
-    { id: 7, name: "Toyota Supra Turbo", price: "$44.000", description: "JDM culture", category: "MOTORSPORT", image: "/images/buzo1.png" },
-    { id: 8, name: "Subaru WRX STI Edition", price: "$41.500", description: "Premium quality", category: "MOTORSPORT", image: "/images/buzo1.png" },
-  ],
-  pantalones: [
-    { id: 1, name: "Oversize JDM MAZDA RX7", price: "$39.900", description: "JDM lovers", category: "MOTORSPORT", image: "/images/pantalon1.jpg" },
-    { id: 2, name: "JDM Nissan Skyline GTR", price: "$42.500", description: "Exclusive design", category: "MOTORSPORT", image: "/images/pantalon1.jpg" },
-    { id: 3, name: "Oversize JDM MAZDA RX7", price: "$39.900", description: "JDM lovers", category: "MOTORSPORT", image: "/images/pantalon1.jpg" },
-    { id: 4, name: "JDM Nissan Skyline GTR", price: "$42.500", description: "Exclusive design", category: "MOTORSPORT", image: "/images/pantalon1.jpg" },
-    { id: 5, name: "JDM Classic Edition", price: "$45.000", description: "Limited edition", category: "MOTORSPORT", image: "/images/pantalon1.jpg" },
-    { id: 6, name: "Honda Civic Type R Shirt", price: "$38.900", description: "For Honda fans", category: "MOTORSPORT", image: "/images/pantalon1.jpg" },
-    { id: 7, name: "Toyota Supra Turbo", price: "$44.000", description: "JDM culture", category: "MOTORSPORT", image: "/images/pantalon1.jpg" },
-    { id: 8, name: "Subaru WRX STI Edition", price: "$41.500", description: "Premium quality", category: "MOTORSPORT", image: "/images/pantalon1.jpg" },
-  ],
-};
+export default function ProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedCategory] = useState<string | null>(null);
 
-interface ProductListProps {
-  category: keyof typeof allProducts; 
-}
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${API_BACK}/products`);
 
-const ProductList: React.FC<ProductListProps> = ({ category }) => {
-  const products = allProducts[category] || [];
+        if (!response.ok) {
+          throw new Error("Error al obtener los productos");
+        }
+
+        const data: Product[] = await response.json();
+        setProducts(data);
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category.id === selectedCategory)
+    : products;
 
   return (
-    <div className="max-w-8xl my-6 mx-6 bg-white rounded-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">Novedades</h2>
-      <div className="w-full h-px bg-gray-300 my-4"></div>
+    <div className=" bg-gray-300 pb-2 ">
+      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md ">
+        <div className="flex justify-between items-center px-30  px-4">
+          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
+            Lista de Productos
+          </h2>
+        </div>
+        <div className="w-full h-px bg-gray-300"></div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 m-4">
-        {products.map((product) => (
-          <ProductCard key={product.id} {...product} />
-        ))}
+        {loading && (
+          <p className="text-gray-500 text-center mt-4">
+            Cargando productos...
+          </p>
+        )}
+        {error && (
+          <p className="text-red-500 text-center mt-4">Error: {error}</p>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5 px-7 py-2">
+          {filteredProducts.map((product) => (
+            <Link
+              key={product.id}
+              href={`/productDetail/${product.id}`}
+              passHref
+            >
+              <div className="relative flex flex-col bg-white overflow-hidden rounded-lg cursor-pointer transition-transform group">
+                <div className="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold uppercase px-4 py-1 rounded-br-lg opacity-0 shadow-md group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                  Asian
+                </div>
+                <div className="w-full h-96 bg-gray-100">
+                  <Image
+                    src={product.image[0] || "/placeholder-image.png"}
+                    alt={product.name}
+                    width={800}
+                    height={800}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-3 text-center">
+                  <h3 className="text-lg font-semibold">{product.name}</h3>
+                  <p className="text-gray-500 text-sm truncate">
+                    {product.description}
+                  </p>
+                  <p className="text-lg font-bold mt-1 text-green-700">
+                    ${product.price}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <VerMas href={`/products/`} />
       </div>
-      <VerMas href={`/products/${category}`} />
     </div>
   );
-};
-
-export default ProductList;
+}

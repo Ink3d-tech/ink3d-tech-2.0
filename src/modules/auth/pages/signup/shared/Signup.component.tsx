@@ -32,7 +32,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
     }
 
     return (
-        <form onSubmit={handlerSubmit} className="flex flex-col px-4 mx-auto max-w-[402px] h-screen">  
+        <form onSubmit={handlerSubmit} className="flex flex-col px-4 m-auto max-w-[402px] h-screen">  
             <FormComponent 
                 inputs={formFields} 
                 form={form} 
@@ -42,7 +42,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             <div className={`h-[34px]`}></div>
             <ButtonBase name={LoginFields.REGISTER} isLoading={isLoading} variant={BtnVariant.PRIMARY}/>
             
-            <Question href={Routes.LOGIN} question={"¿Ya tienes una contraseña?"}variant={VariantQuestion.TERCIARY}/>
+            <Question href={Routes.LOGIN} question={"¿Ya tienes una cuenta?"}variant={VariantQuestion.TERCIARY}/>
 
             <Divider letter={LoginFields.OR}/>
 

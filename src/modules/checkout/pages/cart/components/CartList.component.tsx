@@ -1,4 +1,3 @@
-import React from 'react'
 import { Product } from '../context/Cart.context'
 import CartItem from './CartItem.component'
 

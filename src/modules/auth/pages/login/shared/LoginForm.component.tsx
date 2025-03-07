@@ -59,7 +59,7 @@ export const LoginForm: React.FC<LoginProps> = ({
                 };
 
     return (
-        <form onSubmit={handlerSubmit} className="flex flex-col px-4 mx-auto max-w-[402px]">
+        <form onSubmit={handlerSubmit} className="flex flex-col px-4 m-auto max-w-[402px] h-screen">
             <FormComponent 
                 form={form}
                 handlerChange={handlerChange}
