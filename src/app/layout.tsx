@@ -6,8 +6,8 @@ import { CartProvider } from "@/modules/checkout/pages/cart/context/Cart.context
 import { CategoriesProvider } from "@/modules/user/pages/manager/context/Categories.context";
 import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.context";
 import Chatbot from "@/shared/components/Chatbot";
-import Footer from "@/shared/components/Footer/FooterView";
 import LocationPathname from "@/shared/helpers/LocationPathname";
+import Footer from "@/shared/components/footer/FooterView";
 
 
 
