@@ -1,4 +1,4 @@
-import { OrderProvider } from "@/modules/user/pages/orders/Orders.context";
+
 import ProtectedRoute from "@/shared/helpers/ProtectedRoute";
 import { Metadata } from "next";
 
@@ -10,9 +10,7 @@ export const metadata: Metadata = {
 export default function DashboardLayout({children}: {children: React.ReactNode}) {
     return (
         <ProtectedRoute title={"Hello! To view your dashboard, please log in to your account"}>
-            <OrderProvider>  
-                {children}
-            </OrderProvider>
+            {children}
         </ProtectedRoute>
     );
 }

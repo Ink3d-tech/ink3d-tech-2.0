@@ -9,6 +9,9 @@ import { ICartProduct } from "../interfaces/cartService.interface"
 
 import { useState } from "react"
 import Swal from "sweetalert2";
+import { API_BACK } from "@/shared/config/api/getEnv"
+
+
 
 export default function CartSummary() {
     const { products, emptyCart, countProducts } = useCart();
@@ -37,6 +40,7 @@ export default function CartSummary() {
             const response = await paymentCreateService(orderId, "ARS", confirmedCart, token);
             const link = Object.values(response)[0];
             window.location.href = link;
+
             emptyCart();
         } catch (error) {
             console.error("Error al confirmar la compra en cart.tsx:", error);
