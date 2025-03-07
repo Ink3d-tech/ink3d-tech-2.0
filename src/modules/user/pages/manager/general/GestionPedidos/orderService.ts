@@ -25,7 +25,7 @@ export const fetchOrders = async (token: string): Promise<OrderResponse[]> => {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (error) {
+  } catch {
     throw new Error("Hubo un error al obtener las órdenes.");
   }
 };

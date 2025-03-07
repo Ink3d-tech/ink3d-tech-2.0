@@ -20,7 +20,7 @@ export default function OrderList() {
         const data = await fetchOrders(token);
         setOrders(data);
         setLoading(false);
-      } catch (err) {
+      } catch {
         setError("Hubo un error al obtener las órdenes.");
         setLoading(false);
       }
