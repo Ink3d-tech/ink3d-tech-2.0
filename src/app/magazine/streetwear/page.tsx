@@ -1,9 +1,8 @@
-// /pages/outfitsink3d/streetwear.tsx
-
-"use client"; // Asegúrate de usar 'use client'
+"use client";
 
 import React from "react";
-import { useRouter } from "next/navigation"; // Correcto
+import { useRouter } from "next/navigation";
+import Image from "next/image"; 
 
 const StreetwearPage: React.FC = () => {
   const router = useRouter();
@@ -14,20 +13,39 @@ const StreetwearPage: React.FC = () => {
         <button onClick={() => router.push("/magazine")} className="text-xl">
           Volver
         </button>
-        <h1 className="text-2xl font-bold"> ¿Que es el Streetwear? </h1>
+        <h1 className="text-2xl font-bold">¿Qué es el Streetwear?</h1>
       </nav>
 
       <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/street1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
+          <Image 
+            src="/street1.jpg" 
+            alt="Artículo 1" 
+            width={500} 
+            height={256} 
+            className="w-full h-64 object-cover"
+            priority
+          />
           <p className="mt-4 text-center">Artículo 1</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/street2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
+          <Image 
+            src="/street2.jpg" 
+            alt="Artículo 2" 
+            width={500} 
+            height={256} 
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Artículo 2</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/street3.jpg" alt="Item 3" className="w-full h-64 object-cover" />
+          <Image 
+            src="/street3.jpg" 
+            alt="Artículo 3" 
+            width={500} 
+            height={256} 
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Artículo 3</p>
         </div>
       </div>

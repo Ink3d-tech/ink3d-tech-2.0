@@ -1,10 +1,10 @@
-// /app/magazine/woman/page.tsx
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation"; // Importa desde 'next/navigation'
+import { useRouter } from "next/navigation"; 
+import Image from "next/image"; 
 
-const woman: React.FC = () => {
+const Woman: React.FC = () => {
   const router = useRouter();
 
   return (
@@ -18,15 +18,34 @@ const woman: React.FC = () => {
 
       <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/woman1.jpg" alt="Outfit 1" className="w-full h-64 object-cover" />
+          <Image 
+            src="/woman1.jpg" 
+            alt="Outfit Elegante 1" 
+            width={500} 
+            height={256} 
+            className="w-full h-64 object-cover"
+            priority
+          />
           <p className="mt-4 text-center">Outfit Elegante 1</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/woman2.jpg" alt="Outfit 2" className="w-full h-64 object-cover" />
+          <Image 
+            src="/woman2.jpg" 
+            alt="Outfit Casual 2" 
+            width={500} 
+            height={256} 
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Outfit Casual 2</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/woman3.jpg" alt="Outfit 3" className="w-full h-64 object-cover" />
+          <Image 
+            src="/woman3.jpg" 
+            alt="Outfit Deportivo 3" 
+            width={500} 
+            height={256} 
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Outfit Deportivo 3</p>
         </div>
       </div>
@@ -34,4 +53,4 @@ const woman: React.FC = () => {
   );
 };
 
-export default woman;
+export default Woman;

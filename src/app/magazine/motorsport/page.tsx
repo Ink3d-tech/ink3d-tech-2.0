@@ -1,9 +1,8 @@
-// /pages/outfitsink3d/motorsport.tsx
-
-"use client"; // Asegúrate de usar 'use client'
+"use client"; 
 
 import React from "react";
-import { useRouter } from "next/navigation"; // Correcto
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Motorsport: React.FC = () => {
   const router = useRouter();
@@ -19,15 +18,33 @@ const Motorsport: React.FC = () => {
 
       <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/motorsport1.jpg" alt="Item 1" className="w-full h-64 object-cover" />
+          <Image
+            src="/motorsport1.jpg"
+            alt="Artículo 1"
+            width={300}
+            height={256}
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Artículo 1</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/motorsport2.jpg" alt="Item 2" className="w-full h-64 object-cover" />
+          <Image
+            src="/motorsport2.jpg"
+            alt="Artículo 2"
+            width={300}
+            height={256}
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Artículo 2</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/motorsport3.jpg" alt="Item 3" className="w-full h-64 object-cover" />
+          <Image
+            src="/motorsport3.jpg"
+            alt="Artículo 3"
+            width={300}
+            height={256}
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Artículo 3</p>
         </div>
       </div>

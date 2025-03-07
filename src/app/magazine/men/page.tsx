@@ -1,9 +1,8 @@
-// /pages/outfitsink3d/men.tsx
-
-"use client"; // Asegúrate de usar 'use client'
+"use client"; 
 
 import React from "react";
-import { useRouter } from "next/navigation"; // Correcto
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const MenPage: React.FC = () => {
   const router = useRouter();
@@ -19,15 +18,33 @@ const MenPage: React.FC = () => {
 
       <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-6">
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/man1.jpg" alt="Outfit 1" className="w-full h-64 object-cover" />
+          <Image
+            src="/man1.jpg"
+            alt="Outfit 1"
+            width={300}
+            height={256}
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Outfit Casual 1</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/man3.jpg" alt="Outfit 2" className="w-full h-64 object-cover" />
+          <Image
+            src="/man3.jpg"
+            alt="Outfit 2"
+            width={300}
+            height={256}
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Outfit Formal 2</p>
         </div>
         <div className="bg-white p-4 shadow-lg rounded-lg">
-          <img src="/man2.jpg" alt="Outfit 3" className="w-full h-64 object-cover" />
+          <Image
+            src="/man2.jpg"
+            alt="Outfit 3"
+            width={300}
+            height={256}
+            className="w-full h-64 object-cover"
+          />
           <p className="mt-4 text-center">Outfit Deportivo 3</p>
         </div>
       </div>

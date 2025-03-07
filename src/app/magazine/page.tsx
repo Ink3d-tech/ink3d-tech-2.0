@@ -47,15 +47,12 @@ const MagazinePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white p-8">
 
-         {/* Navbar */}
-         <div></div>
-         {/* Navbar */}
+
 <nav className="fixed top-0 left-0 w-full bg-white text-black shadow-md z-50">
   <div className="container mx-auto flex justify-between items-center p-4">
-    {/* Logo a la izquierda */}
     <div
       className="flex items-center cursor-pointer hover:opacity-80 transition"
-      onClick={() => router.push("/home")} // Redirige al Home
+      onClick={() => router.push("/home")} 
     >
       <Image 
         src="/logoonk3dwhite.png" 

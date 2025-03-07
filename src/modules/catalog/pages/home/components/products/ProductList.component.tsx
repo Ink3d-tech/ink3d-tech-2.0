@@ -65,12 +65,12 @@ export default function ProductList({ categoryId, title }: ProductListProps) {
               <div className="relative flex flex-col bg-white overflow-hidden rounded-lg cursor-pointer transition-transform group">
                 <div className="w-full h-96 bg-gray-100">
                   <Image
-                    src={product.image[0] || "/placeholder-image.png"}
+                    src={(Array.isArray(product.image) && product.image.length > 0 ? product.image[0] : "/placeholder-image.png")}
                     alt={product.name}
                     width={800}
                     height={800}
-                    className="w-full h-full object-cover"
                   />
+
                 </div>
                 <div className="p-3 text-center">
                   <h3 className="text-lg font-semibold">{product.name}</h3>
