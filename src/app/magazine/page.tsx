@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CarrouselMagazine from "@/shared/components/carrouselMgazine/CarrouselMagazine";
-import { useKeenSlider } from "keen-slider/react";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
 interface Article {
@@ -20,7 +19,6 @@ const MagazinePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const [sliderRef] = useKeenSlider({ loop: true });
 
   useEffect(() => {
     const fetchArticles = async () => {

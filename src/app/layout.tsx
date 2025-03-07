@@ -8,9 +8,6 @@ import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.
 import Chatbot from "@/shared/components/Chatbot";
 import LocationPathname from "@/shared/helpers/LocationPathname";
 import Footer from "@/shared/components/footer/FooterView";
-import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.context";
-import LocationPathname from "@/shared/helpers/LocationPathname";
-import Chatbot from "@/shared/components/Chatbot";
 
 
 

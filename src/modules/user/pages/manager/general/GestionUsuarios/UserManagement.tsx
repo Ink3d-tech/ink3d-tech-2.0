@@ -52,12 +52,18 @@ export default function UserManagement() {
       const url = currentStatus
         ? `${API_BACK}/users/${userId}/deactivate`  
         : `${API_BACK}/users/${userId}/activate`;   
-      const response = await axios.patch(url, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+        const response = await axios.patch(url, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          console.log("Usuario actualizado con éxito");
+        }
+        
+
+
       loadUsers();  
     } catch (err) {
       setError("Error al actualizar el estado del usuario.");

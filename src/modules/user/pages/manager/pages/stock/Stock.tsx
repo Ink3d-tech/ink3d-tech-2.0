@@ -166,7 +166,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { Package, Layers, CalendarDays, Info, Search, AlertTriangle } from "lucide-react";
+import { Package, Layers, Search } from "lucide-react";
 
 interface StockMovement {
   id: string;
