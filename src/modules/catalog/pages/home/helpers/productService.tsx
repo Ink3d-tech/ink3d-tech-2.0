@@ -21,6 +21,14 @@ export const getAllProducts = async (): Promise<Product[]> => {
   return response.json();
 };
 
+export const getAllCategories = async (): Promise<{ id: string; name: string }[]> => {
+  const response = await fetch(`${API_BACK}/categories`);
+  if (!response.ok) {
+    throw new Error("Error al obtener las categorías");
+  }
+  return response.json();
+};
+
 export const getProductById = async (id: string): Promise<Product> => {
   const response = await fetch(`${API_BACK}/products/${id}`);
   if (!response.ok) {
@@ -29,9 +37,20 @@ export const getProductById = async (id: string): Promise<Product> => {
   return response.json();
 };
 
-export const getProductsByCategory = async (categoryId: string): Promise<Product[]> => {
-  const allProducts = await getAllProducts();
-  if (categoryId === "all") return allProducts;
+export const getProductsByCategoryName = async (categoryName: string): Promise<Product[]> => {
+  try {
+    const categories = await getAllCategories();
+    const category = categories.find((cat) => cat.name.toLowerCase() === categoryName.toLowerCase());
 
-  return allProducts.filter((product) => product.category.id === categoryId);
+    if (!category) {
+      console.warn(`⚠️ No se encontró la categoría: ${categoryName}`);
+      return [];
+    }
+
+    const allProducts = await getAllProducts();
+    return allProducts.filter((product) => product.category.id === category.id);
+  } catch (error) {
+    console.error("Error obteniendo productos por categoría:", error);
+    return [];
+  }
 };
