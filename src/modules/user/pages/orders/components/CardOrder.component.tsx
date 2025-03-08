@@ -19,8 +19,7 @@ const CardProduct = ({product, status}: {product: ProductInterface | undefined, 
       <Image src={product.image[0]} alt={product.name} width={60} height={60} className="rounded-md" />
       <div className="flex flex-col w-48">
         <div className="flex justify-end w-full">
-          <p className="w-20 text-green-600 font-semibold capitalize bg-green-100 rounded-full text-center">{status}</p>
-
+          <p className="w-20 font-semibold capitalize rounded-full text-center">{status}</p>
         </div>
         {/* <p className="font-semibold">Llegó el {arrivalDate}</p>
         <p className="text-gray-600 text-sm">Podés devolverlo hasta el {returnDate}</p> */}
@@ -48,7 +47,7 @@ const CardProduct = ({product, status}: {product: ProductInterface | undefined, 
 
 const OrderCard = ({ order }: { order: IOrder }) => {
   const { getProductById } = useProducts();
-  const { createdAt, status, orderDetails, id } = order;
+  const { createdAt, status } = order;
 
   return (
     <div className="p-4 w-full max-w-lg border rounded-lg shadow-md">
