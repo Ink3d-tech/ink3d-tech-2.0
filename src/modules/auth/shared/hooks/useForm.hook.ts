@@ -5,7 +5,7 @@ import React, { useState } from "react"
 
 import { ErrorsInterface } from "../interfaces/Error.interface"
 import { Mixin } from "../components/MixinAlert"
-import { CustomError } from "../helpers/customError"
+
 
 /**
  * Interfaz que define las propiedades requeridas para usar el hook "useForm"
@@ -72,15 +72,13 @@ export function useForm<T>({
             try {
                 setIsLoading(true)
 
-                await authAction(form)
 
+                await authAction(form)
    
                 Mixin.fire(messageSuccess, "", "success")
                 router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
             } catch (error) {
-                const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"
-                
-
+                const errorMessage = error instanceof Error ? error.message : "Error interno"
                 Mixin.fire("", errorMessage, "error")
             } finally {
                 setIsLoading(false)

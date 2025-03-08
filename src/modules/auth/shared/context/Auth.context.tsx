@@ -109,14 +109,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const token = data.token;
             setToken(token);
             setIsAuthenticated(true);
+
             localStorage.setItem("token", token);
             localStorage.setItem("user", getIdUser(token));
 
             fetchUser(token);
             getIsAdmin(token);
         } catch (error) {
-            console.error("Error logging in:", error);
             setIsAuthenticated(false);
+            throw new Error(error instanceof Error ? error.message : "Error interno del servidor");
         }
     };
     const signup = async (signupForm: SignupInterface) => {
