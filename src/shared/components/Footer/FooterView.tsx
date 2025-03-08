@@ -3,10 +3,9 @@ import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 export default function Footer() {
   return (
-    <footer className="bg-black text-white w-full py-6 px-4 md:px-8 fixed bottom-0">
+    <footer className="bg-black text-white w-full py-6 px-4 md:px-8  bottom-0">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         
-        {/* Texto descriptivo */}
         <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-0">
         Comprar ropa por internet nunca fue tan fácil  
        

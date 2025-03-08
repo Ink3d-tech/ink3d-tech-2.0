@@ -38,7 +38,9 @@ export default function RootLayout({
                         <Chatbot />
                         {children}
                       </main>
-                    
+
+                      
+                    <Footer />
                   
                 </LocationPathname>
               </ProductsProvider>

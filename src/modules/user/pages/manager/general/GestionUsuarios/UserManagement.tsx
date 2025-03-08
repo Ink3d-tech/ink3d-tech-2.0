@@ -1,24 +1,27 @@
 "use client";
-import { useEffect, useState } from "react";
-import { fetchUsers, User } from "./userService"; 
-import { API_BACK } from "@/shared/config/api/getEnv"; 
+
+import { fetchUsers, User } from "./userService";
+import { API_BACK } from "@/shared/config/api/getEnv";
 import axios from "axios";
 import UserOrders from "./UserOrders";
 import Image from "next/image";
+import { useEffect, useState, useCallback } from "react";
+
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const [selectedUserName, setSelectedUserName] = useState<string | null>(null); 
-  const [searchQuery, setSearchQuery] = useState(""); 
-  const [currentPage, setCurrentPage] = useState(1); 
-  const [totalUsers, setTotalUsers] = useState(0); 
-  const [usersPerPage] = useState(10); 
+  const [selectedUserName, setSelectedUserName] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [usersPerPage] = useState(10);
 
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) {
       setError("No se encontró el token de autenticación.");
       return;
@@ -28,11 +31,12 @@ export default function UserManagement() {
     try {
       const usersResponse = await fetchUsers(searchQuery, token);
       const filteredUsers = usersResponse.allUsers;
-      const admins = filteredUsers.filter(user => user.role === 'admin');
-      const nonAdmins = filteredUsers.filter(user => user.role !== 'admin');
-      const sortedUsers = [...admins, ...nonAdmins];
+      const sortedUsers = [
+        ...filteredUsers.filter(user => user.role === "admin"),
+        ...filteredUsers.filter(user => user.role !== "admin"),
+      ];
       const offset = (currentPage - 1) * usersPerPage;
-      setUsers(sortedUsers.slice(offset, offset + usersPerPage)); 
+      setUsers(sortedUsers.slice(offset, offset + usersPerPage));
       setTotalUsers(sortedUsers.length);
     } catch (err) {
       setError("Error al cargar los usuarios. Asegúrate de tener permisos de administrador.");
@@ -40,31 +44,34 @@ export default function UserManagement() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchQuery, currentPage, usersPerPage]);
+
+
+
+  // Función para activar o desactivar un usuario
   const toggleUserStatus = async (userId: string, currentStatus: boolean) => {
     if (!token) {
       setError("No se encontró el token de autenticación.");
       return;
     }
+
     setLoading(true);
     setError("");
+
     try {
       const url = currentStatus
-        ? `${API_BACK}/users/${userId}/deactivate`  
-        : `${API_BACK}/users/${userId}/activate`;   
-        const response = await axios.patch(url, {}, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.status === 200) {
-          console.log("Usuario actualizado con éxito");
-        }
-        
+        ? `${API_BACK}/users/${userId}/deactivate`
+        : `${API_BACK}/users/${userId}/activate`;
+
+      await axios.patch(url, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
 
-      loadUsers();  
+      loadUsers();
     } catch (err) {
       setError("Error al actualizar el estado del usuario.");
       console.error(err);
@@ -72,15 +79,18 @@ export default function UserManagement() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     loadUsers();
-  }, [searchQuery, currentPage]); 
+  }, [loadUsers]);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value); 
+    setSearchQuery(e.target.value);
   };
+
   const handleSearchClick = () => {
-    setCurrentPage(1); 
-    loadUsers(); 
+    setCurrentPage(1);
+    loadUsers();
   };
 
   const goToPage = (page: number) => {
@@ -135,17 +145,16 @@ export default function UserManagement() {
                       className="w-10 h-10 rounded-full"
                       width={800}
                       height={800}
-                      />
+                    />
                     <span className="font-medium uppercase">{user.name}</span>
                   </td>
                   <td className="py-4 px-4 lowercase">{user.email.toLowerCase()}</td>
                   <td className="py-4 px-4 uppercase">{user.role}</td>
                   <td className="py-4 px-4">
                     <button
-                      onClick={() => toggleUserStatus(user.id, user.isActive)} 
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        user.isActive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
-                      }`}
+                      onClick={() => toggleUserStatus(user.id, user.isActive)}
+                      className={`px-3 py-1 rounded-full text-sm font-semibold ${user.isActive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
+                        }`}
                     >
                       {user.isActive ? "Activo" : "Inactivo"}
                     </button>
@@ -155,7 +164,7 @@ export default function UserManagement() {
                       className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm"
                       onClick={() => {
                         setSelectedUserId(user.id);
-                        setSelectedUserName(user.name); 
+                        setSelectedUserName(user.name);
                       }}
                     >
                       Ver Órdenes
@@ -182,7 +191,7 @@ export default function UserManagement() {
         >
           Anterior
         </button>
-        
+
         <span>
           Página {currentPage} de {Math.ceil(totalUsers / usersPerPage)}
         </span>
