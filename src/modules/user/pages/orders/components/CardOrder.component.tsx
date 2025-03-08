@@ -18,7 +18,9 @@ const CardProduct = ({product, status}: {product: ProductInterface | undefined, 
     <div className="flex gap-4 items-center">
       <Image src={product.image[0]} alt={product.name} width={60} height={60} className="rounded-md" />
       <div className="flex flex-col w-48">
-        <p className="text-green-600 font-semibold">{status}</p>
+        <div className="flex justify-end w-full">
+          <p className="w-20 font-semibold capitalize rounded-full text-center">{status}</p>
+        </div>
         {/* <p className="font-semibold">Llegó el {arrivalDate}</p>
         <p className="text-gray-600 text-sm">Podés devolverlo hasta el {returnDate}</p> */}
         <p className="text-gray-800 font-medium truncate">{product.name}</p>

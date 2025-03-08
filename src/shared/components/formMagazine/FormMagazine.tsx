@@ -9,9 +9,11 @@ import StarterKit from "@tiptap/starter-kit";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
 import Strike from "@tiptap/extension-strike";
+import Image from "next/image";
 
 interface FormData {
   id?: string;
+  category: string,
   author: string;
   title: string;
   description: string;
@@ -23,16 +25,20 @@ export default function FormMagazine() {
   const { token, isAuthenticated } = useAuth();
 
   const [formData, setFormData] = useState<FormData>({
+    category: "",
     author: "",
     title: "",
     description: "",
     image: "",
     isActive: true,
+
   });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [articles, setArticles] = useState<FormData[]>([]);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const categories = ["MOTORSPORT", "MUNDO ASIAN", "STREETWEAR", "ACERCA DE NOSOTROS"];
 
   const editor = useEditor({
     extensions: [StarterKit, Bold, Italic, Strike],
@@ -106,6 +112,7 @@ export default function FormMagazine() {
     }
 
     const formDataToSend = {
+      category: formData.category,
       title: formData.title,
       content: formData.description,
       image: imageUrl,
@@ -113,8 +120,10 @@ export default function FormMagazine() {
       isActive: formData.isActive,
     };
 
+
     try {
       if (selectedId) {
+        console.log(API_BACK)
         await axios.patch(`${API_BACK}/api/magazine/${selectedId}`, formDataToSend, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -125,13 +134,13 @@ export default function FormMagazine() {
         });
         console.log("Artículo publicado:", formDataToSend);
       }
-      setFormData({ author: "", title: "", description: "", image: "", isActive: true });
+      setFormData({ category: "", author: "", title: "", description: "", image: "", isActive: true });
       setSelectedId(null);
       setImagePreview("");
       setSelectedFile(null);
       fetchArticles();
-    } catch (error: any) {
-      console.error("Error al enviar el formulario:", error.response?.data || error.message);
+    } catch {
+      console.error("Error al enviar el formulario:");
     }
   };
 
@@ -166,12 +175,43 @@ export default function FormMagazine() {
         <div className="flex justify-between space-x-4">
           <div className="w-3/5">
             <label className="block">
+              Categoría:
+              <select
+                name="category"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                className="border p-2 w-full"
+                required
+              >
+                <option value="" disabled>Selecciona una categoría</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </label>
+            <label className="block">
               Autor:
               <input type="text" name="author" value={formData.author} onChange={(e) => setFormData({ ...formData, author: e.target.value })} className="border p-2 w-full" required />
             </label>
             <label className="block">
               Título:
               <input type="text" name="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="border p-2 w-full" required />
+            </label>
+            <label className="block mt-4">
+              Categoría:
+              <select
+                name="category"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                className="border p-2 w-full"
+                required
+              >
+                <option value="">Selecciona una categoría</option>
+                <option value="Mundo Asian">Mundo Asian</option>
+                <option value="Motor Sport">Motor Sport</option>
+                <option value="Streetwear">Streetwear</option>
+                <option value="Acerca de Nosotros">Acerca de Nosotros</option>
+              </select>
             </label>
           </div>
           <div className="w-2/5">
@@ -191,10 +231,17 @@ export default function FormMagazine() {
                 />
               </div>
             </label>
+
             {imagePreview && (
               <div className="mt-3">
                 <p className="text-gray-500 text-sm">Vista previa:</p>
-                <img src={imagePreview} alt="Vista previa" className="w-32 h-32 object-cover border rounded-md" />
+                <Image
+                  src={imagePreview}
+                  alt="Vista previa"
+                  width={128}
+                  height={128}
+                  className="w-32 h-32 object-cover border rounded-md"
+                />
               </div>
             )}
           </div>
@@ -237,9 +284,9 @@ export default function FormMagazine() {
                     setFormData(article);
                     setSelectedId(article.id || null);
                     setImagePreview(article.image);
-                    console.log("Artículo seleccionado con ID:", article.id); 
+                    console.log("Artículo seleccionado con ID:", article.id);
                   }}
-                  className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  className=" px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                 >
                   Editar
                 </button>
