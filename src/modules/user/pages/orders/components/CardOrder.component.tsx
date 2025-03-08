@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
 import { ProductInterface, useProducts } from "../../manager/context/Products.context";
@@ -18,13 +20,15 @@ const CardProduct = ({product, status}: {product: ProductInterface | undefined, 
     <div className="flex gap-4 items-center">
       <Image src={product.image[0]} alt={product.name} width={60} height={60} className="rounded-md" />
       <div className="flex flex-col w-48">
-        <p className="text-green-600 font-semibold">{status}</p>
+        <div className="flex justify-end w-full">
+          <p className="w-20 font-semibold capitalize rounded-full text-center">{status}</p>
+        </div>
         {/* <p className="font-semibold">Llegó el {arrivalDate}</p>
         <p className="text-gray-600 text-sm">Podés devolverlo hasta el {returnDate}</p> */}
         <p className="text-gray-800 font-medium truncate">{product.name}</p>
         <p className="text-gray-400 text-sm cursor-pointer line-clamp-2">{product.description}</p>
       </div>
-      <div className="flex justify-end w-full">
+      {/* <div className="flex justify-end w-full">
         <div className="flex flex-col gap-2 border">
           <button className="bg-blue-100 text-blue-600 px-4 py-1 rounded text-sm" disabled>
               <Link href={`/productDetail/${product.id}`}>
@@ -36,24 +40,37 @@ const CardProduct = ({product, status}: {product: ProductInterface | undefined, 
             Ver compra
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
 
-const OrderCard = ({order} : {order: IOrder}) => {
-  const { getProductById } = useProducts()
-  const { createdAt, status } = order
+const OrderCard = ({ order }: { order: IOrder }) => {
+  const { getProductById } = useProducts();
+  const { createdAt, status, orderDetails, id } = order;
 
   return (
     <div className="p-4 w-full max-w-lg border rounded-lg shadow-md">
-      <p className="text-gray-900 text-md font-semibold ">{formatDate(createdAt)}</p>
-      <hr className="my-2"/>
+      <p className="text-gray-900 text-md font-semibold">{formatDate(createdAt)}</p>
+      <hr className="my-2" />
+
       <div className="flex flex-col gap-10">
-        {order.orderDetails.map((detail) => <CardProduct key={detail.productId} product={getProductById(detail.productId)} status={status}/>)}
+        {orderDetails.map((detail) => (
+          <CardProduct key={detail.productId} product={getProductById(detail.productId)} status={status} />
+        ))}
       </div>
+
+      {status === "pending" && (
+        <div className="mt-4">
+          <Link href={`/checkout?orderId=${id}`}>
+            <button className="bg-yellow-500 text-white px-4 py-2 rounded w-full">
+              Retomar compra
+            </button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
 
-export default OrderCard;
+export default OrderCard
