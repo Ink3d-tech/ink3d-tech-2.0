@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
-// Definir tipos de datos
 interface Product {
   id: string;
   name: string;
@@ -103,8 +102,6 @@ export default function Stock() {
       <h2 className="text-3xl font-semibold text-red-500 mb-4">
         Movimientos de Stock 
       </h2>
-
-      {/* Filtro de categorías */}
       <div className="mb-4">
         <label className="text-white">Filtrar por categoría: </label>
         <select

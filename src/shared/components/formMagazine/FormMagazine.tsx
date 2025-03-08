@@ -37,6 +37,8 @@ export default function FormMagazine() {
   const [imagePreview, setImagePreview] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  const categories = ["MOTORSPORT", "MUNDO ASIAN", "STREETWEAR", "ACERCA DE NOSOTROS"];
+
   const editor = useEditor({
     extensions: [StarterKit, Bold, Italic, Strike],
     content: formData.description,
@@ -109,14 +111,14 @@ export default function FormMagazine() {
     }
 
     const formDataToSend = {
-      category: formData.category, 
+      category: formData.category,
       title: formData.title,
       content: formData.description,
       image: imageUrl,
       author: formData.author,
       isActive: formData.isActive,
     };
-    
+
 
     try {
       if (selectedId) {
@@ -130,12 +132,12 @@ export default function FormMagazine() {
         });
         console.log("Artículo publicado:", formDataToSend);
       }
-      setFormData({    category: "", author: "", title: "", description: "", image: "", isActive: true });
+      setFormData({ category: "", author: "", title: "", description: "", image: "", isActive: true });
       setSelectedId(null);
       setImagePreview("");
       setSelectedFile(null);
       fetchArticles();
-    } catch{
+    } catch {
       console.error("Error al enviar el formulario:");
     }
   };
@@ -170,9 +172,20 @@ export default function FormMagazine() {
       <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-md shadow-md">
         <div className="flex justify-between space-x-4">
           <div className="w-3/5">
-          <label className="block">
-              Categoria:
-              <input type="text" name="category" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="border p-2 w-full" required />
+            <label className="block">
+              Categoría:
+              <select
+                name="category"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                className="border p-2 w-full"
+                required
+              >
+                <option value="" disabled>Selecciona una categoría</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
             </label>
             <label className="block">
               Autor:
@@ -255,7 +268,7 @@ export default function FormMagazine() {
                     setImagePreview(article.image);
                     console.log("Artículo seleccionado con ID:", article.id);
                   }}
-                  className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  className=" px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                 >
                   Editar
                 </button>

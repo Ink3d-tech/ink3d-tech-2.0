@@ -1,4 +1,3 @@
-import { OrderProvider } from "@/modules/user/pages/orders/Orders.context";
 import ProtectedRoute from "@/shared/helpers/ProtectedRoute";
 import { Metadata } from "next";
 
