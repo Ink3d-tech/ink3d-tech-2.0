@@ -24,18 +24,23 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <CategoriesProvider>
-            <CartProvider>
-              <ProductsProvider>
-                <LocationPathname redirectRoutes={["/login", "/signup"]}>
-                  <NavBar />
-                  <main className="bg-[#D9D9D9] min-h-screen">
-                    <Chatbot />
-                    {children}
-                  </main>
-                  <Footer />
-                </LocationPathname>
-              </ProductsProvider>
-            </CartProvider>
+
+              <CartProvider>
+                <ProductsProvider>
+                  <LocationPathname redirectRoutes={["/login", "/signup"]}>
+
+                      <NavBar />
+                      
+                        <main className="bg-[#D9D9D9] min-h-screen">
+                          <Chatbot />
+                          {children}
+                        </main>
+                      
+                      <Footer/>
+
+                  </LocationPathname>
+                </ProductsProvider>
+              </CartProvider>
           </CategoriesProvider>
         </AuthProvider>
       </body>
