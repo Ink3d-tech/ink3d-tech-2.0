@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { CardOrder } from "./components/CardOrder.component";
 import { useAuth } from "../../../auth/shared/context/Auth.context";
+import OrderCard from "./components/CardOrder.component";
 
 
 export default function Dashboard() {
   const { user } = useAuth()
-
 
   return (
         <div className="bg-[#ECE7E7] mx-auto p-4 h-[100%] text-gray-900">
@@ -16,7 +15,7 @@ export default function Dashboard() {
               <h2 className="text-xl font-semibold mb-2">Mis compras</h2>
               {user?.orders ? (
                 <div className="transition-opacity duration-500">
-                  { user?.orders.map(order => (<CardOrder key={order.id} order={order}/> )) }
+                  { user?.orders.map(order => (<OrderCard key={order.id} order={order}/> )) }
                 </div>
               ) : (
                 <div>

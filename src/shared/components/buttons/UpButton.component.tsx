@@ -13,10 +13,8 @@ const ScrollToTop = () => {
       setIsVisible(window.scrollY > 300);
       setIsScrolling(true);
 
-      // Limpiamos el timeout previo para evitar parpadeos
       clearTimeout(timeout);
 
-      // Espera 1.5s después de que el usuario deja de mover la página
       timeout = setTimeout(() => {
         setIsScrolling(false);
       }, 1500);
@@ -34,18 +32,19 @@ const ScrollToTop = () => {
   };
 
   return (
-    <button
-      onClick={scrollToTop}
-      className={`fixed bottom-20 right-5 bg-blue-500 text-white p-3 rounded-full shadow-lg z-50 transition-all duration-500
-        ${isVisible ? (isScrolling ? "opacity-100" : "opacity-50") : "opacity-0 pointer-events-none"}
-        hover:opacity-100 hover:scale-110 hover:shadow-xl`}>
-      
-      {/* Icono grande para pantallas medianas y grandes */}
-      <ArrowUp size={24} className="hidden sm:block" />
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-16 sm:bottom-20 right-5 bg-blue-500 text-white p-3 rounded-full shadow-lg z-50 transition-all duration-500
+          ${isVisible ? (isScrolling ? "opacity-100" : "opacity-50") : "opacity-0 pointer-events-none"}
+          hover:opacity-100 hover:scale-110 hover:shadow-xl`}
+      >
+        {/* Icono grande para pantallas medianas y grandes */}
+        <ArrowUp size={24} className="hidden sm:block" />
 
-      {/* Icono pequeño para pantallas chicas */}
-      <ArrowUp size={15} className="sm:hidden" />
-    </button>
+        {/* Icono pequeño para pantallas chicas */}
+        <ArrowUp size={15} className="sm:hidden" />
+      </button>
+
   );  
 };
 

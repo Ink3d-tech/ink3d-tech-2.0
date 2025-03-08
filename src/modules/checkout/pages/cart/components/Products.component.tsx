@@ -8,21 +8,22 @@ import { getRoute } from "./getRoute";
 
 export const CardProductComponent = ({ product }: { product: ProductInterface }) => {
     const { name, image, price } = product;
+
     return (
         <div className="relative">
-            
-            <div className="relative group">
+            <div className="group overflow-hidden w-full">
                 <Image
-                    className="w-full h-64 object-contain rounded transition duration-300 transform group-hover:scale-105"
+                    className="w-full h-64 object-contain rounded transition duration-300 transform group-hover:scale-150"
                     src={image[0]}
                     alt={name}
                     width={500}
                     height={500}
                 />
               
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-40 transition duration-300">
+                {/* <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-40 transition duration-300">
                     <ButtonBase name="View details"/>
-                </div>
+                </div> */}
+
             </div>
             
             <div className="mt-4">
@@ -59,7 +60,7 @@ export const ProductsComponent = () => {
                     }
                 </div>
                 <div className="flex justify-center mt-10">
-                    <ButtonBase name="See more products" href={"/products"} />
+                    <ButtonBase name="Ver más productos" href={"/products"} />
                 </div>
             </div>
         </section>

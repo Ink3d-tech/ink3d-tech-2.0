@@ -100,10 +100,6 @@ export const ManagmentProductForm = () => {
         });
     };
 
-
-
-
-    
     const handleCreateCategory = (e: React.SyntheticEvent) => {
         e.preventDefault()
 
@@ -111,9 +107,15 @@ export const ManagmentProductForm = () => {
             Mixin.fire("El campo no puede quedar vacio", "", "error")
             return
         }
+
+        const categoryExists = categories.some(cat => cat.name.toLowerCase() === newCategory.toLowerCase());
+        if (categoryExists) {
+            Mixin.fire("La categoría ya existe", "", "warning");
+            return;
+        }
         
         if(error) {
-            Mixin.fire("Error al crear la categoria", error, "error")
+            Mixin.fire("Salida por aca", error, "error")
             return
         }
        
@@ -196,9 +198,8 @@ export const ManagmentProductForm = () => {
             <div className="space-y-4 p-6 rounded-lg bg-white shadow-lg">
                 <Title title="Nombre y descripción"/>
                 <input name="name" value={formProduct.name} onChange={handleChangeProduct} type="text"  placeholder="Nombre del Producto" className="w-full p-2 border"/>
-                <textarea name="description" value={formProduct.description} onChange={handleChangeProduct} placeholder="Escribe la descripción aquí..." className="w-full p-2 border resize-none h-60" ></textarea>
+                <textarea name="description" value={formProduct.description} onChange={handleChangeProduct} placeholder="Escribe la descripción aquí..." className="w-full p-2 border resize-none h-60 whitespace-pre-line" ></textarea>                
             </div>
-
 
 
             {/* ############################### IMAGENES ############################### */}
@@ -261,10 +262,10 @@ export const ManagmentProductForm = () => {
         
             <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
                 <Title title="Categorías"/>
-    
+                    
                 <select name="category" value={formProduct.category} onChange={handleChangeProduct} className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" >
                     <option value={""} disabled>Seleccionar una categoría</option>
-                    { categories.map((cat) => <option key={cat.id} value={cat.name}>{cat.name}</option>) }
+                    { categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.name}</option>) }
                 </select>
 
                 <button 

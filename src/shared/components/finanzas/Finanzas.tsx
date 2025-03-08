@@ -1,84 +1,161 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+"use client";
+import { useEffect, useState } from "react";
 
-const Finanzas = () => {
-  const transactions = [
-    { id: 1, producto: "Jogger", precio: 49.99, cantidad: 10, total: 499.9 },
-    { id: 2, producto: "Remera", precio: 19.99, cantidad: 15, total: 299.85 },
-    { id: 3, producto: "Buzo", precio: 39.99, cantidad: 8, total: 319.92 },
-  ];
+interface Transaction {
+  id: string;
+  amount: number;
+  status: string;
+  date: string;
+}
 
-  const chartData = transactions.map((t) => ({
-    name: t.producto,
-    ventas: t.total,
-  }));
+interface Product {
+  producto: string;
+  cantidad_vendida: number;
+}
+
+interface SalesDetail {
+  venta_id: string;
+  producto: string;
+  precio: number;
+  cantidad: number;
+  total: number;
+}
+
+interface CategorySales {
+  categoria: string;
+  cantidad_vendida: number;
+}
+
+export default function FinanzasDashboard() {
+  const [totalVentas, setTotalVentas] = useState<number>(0);
+  const [ticketPromedio, setTicketPromedio] = useState<number>(0);
+  const [productoMasVendido, setProductoMasVendido] = useState<Product | null>(null);
+  const [productosPorCategoria, setProductosPorCategoria] = useState<CategorySales[]>([]);
+  const [transacciones, setTransacciones] = useState<Transaction[]>([]);
+  const [detalleVentas, setDetalleVentas] = useState<SalesDetail[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ventasRes, ticketRes, productoRes, categoriasRes, transRes, detallesRes] = await Promise.all([
+          fetch("/api/finance/total-ventas").then(res => res.json()),
+          fetch("/api/finance/ticket-promedio").then(res => res.json()),
+          fetch("/api/finance/producto-mas-vendido").then(res => res.json()),
+          fetch("/api/finance/productos-vendidos-categoria").then(res => res.json()),
+          fetch("/api/finance/transacciones").then(res => res.json()),
+          fetch("/api/finance/detalle-ventas").then(res => res.json()),
+        ]);
+
+        setTotalVentas(ventasRes.total || 0);
+        setTicketPromedio(ticketRes.ticket_promedio || 0);
+        setProductoMasVendido(productoRes || null);
+        setProductosPorCategoria(categoriasRes || []);
+        setTransacciones(transRes || []);
+        setDetalleVentas(detallesRes || []);
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
-      <main className="flex-grow p-6">
-        <h2 className="text-3xl font-semibold mb-4 text-red-500">📊 Finanzas</h2>
+    <div className="p-6 bg-zinc-100 min-h-screen text-white">
+      <h1 className=" text-black text-3xl font-bold mb-6">Dashboard Financiero</h1>
 
-        {/* Contenedor de métricas */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-red-500 text-white p-4 rounded-md shadow-md">
-            <h3 className="text-lg font-semibold">Total Ventas</h3>
-            <p className="text-xl">$1,119.67</p>
-          </div>
-          <div className="bg-white text-black p-4 rounded-md shadow-md">
-            <h3 className="text-lg font-semibold">Productos Vendidos</h3>
-            <p className="text-xl">33</p>
-          </div>
-          <div className="bg-red-500 text-white p-4 rounded-md shadow-md">
-            <h3 className="text-lg font-semibold">Ganancias Netas</h3>
-            <p className="text-xl">$560.45</p>
-          </div>
+      {/* Métricas principales */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-pink-500 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-black"> Total Ventas</h2>
+          <p className="text-2xl">${totalVentas.toFixed(2)}</p>
         </div>
-
-        {/* Gráfico de ventas */}
-        <div className="bg-white p-4 rounded-md shadow-md text-black mb-6">
-          <h3 className="text-xl font-semibold mb-2 text-center">📊 Ventas por Producto</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <XAxis dataKey="name" stroke="black" />
-              <YAxis stroke="black" />
-              <Tooltip />
-              <Bar dataKey="ventas" fill="#1a1a1a" />
-            </BarChart>
-          </ResponsiveContainer>
+        <div className="bg-orange-500 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-black"> Ticket Promedio</h2>
+          <p className="text-2xl">${ticketPromedio.toFixed(2)}</p>
         </div>
+        <div className="bg-violet-500 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-black"> Producto Más Vendido</h2>
+          <p className="text-xl">{productoMasVendido?.producto || "N/A"}</p>
+          <p className="text-sm">Cantidad: {productoMasVendido?.cantidad_vendida || 0}</p>
+        </div>
+      </div>
 
-        {/* Tabla de transacciones con altura ajustada */}
-        <div className="bg-white text-black p-10s rounded-md shadow-lg overflow-auto max-h-[400px]">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-red-500 text-white">
-                <th className="p-3">ID</th>
-                <th className="p-3">Producto</th>
-                <th className="p-3">Precio</th>
-                <th className="p-3">Cantidad</th>
-                <th className="p-3">Total</th>
+      {/* Productos vendidos por categoría */}
+<h2 className="text-2xl font-bold mt-6 text-black">📦 Productos por Categoría</h2>
+
+<div className="overflow-x-auto mt-4">
+  <table className="min-w-full bg-orange-500 rounded-lg">
+    <thead>
+      <tr className="border-b border-gray-600">
+        <th className="p-3 text-left text-white">Categoría</th>
+        <th className="p-3 text-left text-white">Cantidad Vendida</th>
+      </tr>
+    </thead>
+    <tbody>
+      {productosPorCategoria.map((item, index) => (
+        <tr key={index} className="border-b border-orange-700">
+          <td className="p-3 text-black">{item.categoria}</td>
+          <td className="p-3 text-black">{item.cantidad_vendida}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+      {/* Últimas transacciones */}
+      <h2 className="text-2xl font-bold mt-6 text-black"> Últimas Transacciones</h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-pink-500 rounded-lg">
+          <thead>
+            <tr className="border-b border-pink-500">
+              <th className="p-3 text-left">ID</th>
+              <th className="p-3 text-left">Monto</th>
+              <th className="p-3 text-left">Estado</th>
+              <th className="p-3 text-left">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transacciones.map(trans => (
+              <tr key={trans.id} className="border-b border-pink-500">
+                <td className="p-3">{trans.id}</td>
+                <td className="p-3">${trans.amount.toFixed(2)}</td>
+                <td className={`p-3 ${trans.status === "completed" ? "text-green-400" : "text-red-400"}`}>
+                  {trans.status}
+                </td>
+                <td className="p-3">{new Date(trans.date).toLocaleDateString()}</td>
               </tr>
-            </thead>
-            <tbody>
-              {transactions.map((t) => (
-                <tr key={t.id} className="text-center border-b">
-                  <td className="p-3">{t.id}</td>
-                  <td className="p-3">{t.producto}</td>
-                  <td className="p-3">${t.precio.toFixed(2)}</td>
-                  <td className="p-3">{t.cantidad}</td>
-                  <td className="p-3">${t.total.toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </main>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Footer siempre en la parte inferior */}
-      <footer className="bg-red-500 text-white text-center p-4 mt-auto">
-        © 2024 Mi Tienda - Finanzas
-      </footer>
+      {/* Detalle de ventas */}
+      <h2 className="text-2xl font-bold mt-6 text-black"> Detalle de Ventas</h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-orange-500 rounded-lg">
+          <thead>
+            <tr className="border-b border-pink-600">
+              <th className="p-3 text-left">Venta ID</th>
+              <th className="p-3 text-left">Producto</th>
+              <th className="p-3 text-left">Precio</th>
+              <th className="p-3 text-left">Cantidad</th>
+              <th className="p-3 text-left">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {detalleVentas.map((detalle, index) => (
+              <tr key={index} className="border-b border-gray-700">
+                <td className="p-3">{detalle.venta_id}</td>
+                <td className="p-3">{detalle.producto}</td>
+                <td className="p-3">${detalle.precio.toFixed(2)}</td>
+                <td className="p-3">{detalle.cantidad}</td>
+                <td className="p-3">${detalle.total.toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-};
-
-export default Finanzas;
+}

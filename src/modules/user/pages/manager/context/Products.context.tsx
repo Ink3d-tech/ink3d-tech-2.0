@@ -8,7 +8,7 @@ import { getAuthHeaders } from "./getAuthHeaders";
 
 export interface CategoryInterface {
     id?: string
-    name: string
+    name?: string
 }
 
 export interface ProductInterface {
@@ -25,7 +25,18 @@ export interface ProductInterface {
     isActive?: boolean
 }
 
-export type ProductWithoutId = Omit<ProductInterface, "id">
+export type ProductWithoutId = {
+    name: string
+    description: string
+    price: number | ""
+    stock: number | ""
+    image: string[]
+    size: string
+    color: string
+    discount?: number | ""
+    category: string
+    isActive?: boolean
+}
 
 interface ProductsContextType {
     products: ProductInterface[];
@@ -70,7 +81,13 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
 
     const createProduct = async (product: ProductWithoutId): Promise<void> => {      
         try {
-            const res = await axios.post<ProductInterface>(`${API_BACK}/products`, product,  getAuthHeaders());
+            const formattedProduct  = {
+                ...product,
+                category : {
+                    id: product.category
+                }
+            }
+            const res = await axios.post<ProductInterface>(`${API_BACK}/products`, formattedProduct,  getAuthHeaders());
             setProducts(prev => [...prev, res.data]);
         } catch (error) {
             setError(error instanceof Error ? error.message : "Error al crear el producto");

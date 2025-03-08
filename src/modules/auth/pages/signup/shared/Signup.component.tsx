@@ -32,7 +32,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
     }
 
     return (
-        <form onSubmit={handlerSubmit} className="flex flex-col px-4 mx-auto max-w-[402px] h-screen">  
+        <form onSubmit={handlerSubmit} className="flex flex-col px-4 m-auto max-w-[402px] h-screen">  
             <FormComponent 
                 inputs={formFields} 
                 form={form} 

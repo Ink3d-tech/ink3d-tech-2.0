@@ -9,12 +9,12 @@ interface Category {
 }
 
 interface FilterCategoriesProps {
-  onSelectCategory: (categoryId: string | null) => void;
+  selectedCategory: string | null;
+  onSelectCategory: (categoryName: string | null) => void;
 }
 
-export default function FilterCategories({ onSelectCategory }: FilterCategoriesProps) {
+export default function FilterCategories({ selectedCategory, onSelectCategory }: FilterCategoriesProps) {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -33,21 +33,16 @@ export default function FilterCategories({ onSelectCategory }: FilterCategoriesP
     fetchCategories();
   }, []);
 
-  const handleCategoryChange = (categoryId: string | null) => {
-    setSelectedCategory(categoryId);
-    onSelectCategory(categoryId);
-  };
-
   return (
-    <div className="mb-4">
+    <div className="my-4 px-4">
       <select
         className="p-2 border rounded-md bg-white text-gray-700"
         value={selectedCategory || ""}
-        onChange={(e) => handleCategoryChange(e.target.value || null)}
+        onChange={(e) => onSelectCategory(e.target.value || null)}
       >
         <option value="">Todas las categorías</option>
         {categories.map((category) => (
-          <option key={category.id} value={category.id}>
+          <option key={category.id} value={category.name}>
             {category.name}
           </option>
         ))}

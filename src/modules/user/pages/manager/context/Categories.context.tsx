@@ -54,9 +54,11 @@ export const CategoriesProvider = ({children}: {children: React.ReactNode}) => {
 
     const createCategory = async (category: CategoryInterface) => { 
         try {
-            const res = await axios.post<CategoryInterface>(`${API_BACK}/categories`, category);
+            const res = await axios.post<CategoryInterface>(`${API_BACK}/categories`, category,
+                getAuthHeaders()
+            );
 
-            setCategories(prev => [...prev, res.data]);
+            setCategories([...categories, res.data]);
         } catch (error) {
             Mixin.fire("Error al crear la categoria", "", "error")
             setError(error instanceof Error ? error.message : "Error al crear la categoria");

@@ -32,6 +32,7 @@ const StaticCarousel = ({ imageIds }: CarouselProps) => {
   const filteredImages = images.filter((img) => imageIds.includes(img.id));
 
   return (
+    <div className="max-w-7xl mx-auto my-6">
     <Swiper
       className="relative w-full mx-6"
       pagination={{ clickable: true }}
@@ -64,6 +65,7 @@ const StaticCarousel = ({ imageIds }: CarouselProps) => {
         </SwiperSlide>
       ))}
     </Swiper>
+    </div>
   );
 };
 
