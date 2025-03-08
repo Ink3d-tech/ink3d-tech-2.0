@@ -197,22 +197,6 @@ export default function FormMagazine() {
               Título:
               <input type="text" name="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="border p-2 w-full" required />
             </label>
-            <label className="block mt-4">
-              Categoría:
-              <select
-                name="category"
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="border p-2 w-full"
-                required
-              >
-                <option value="">Selecciona una categoría</option>
-                <option value="Mundo Asian">Mundo Asian</option>
-                <option value="Motor Sport">Motor Sport</option>
-                <option value="Streetwear">Streetwear</option>
-                <option value="Acerca de Nosotros">Acerca de Nosotros</option>
-              </select>
-            </label>
           </div>
           <div className="w-2/5">
             <label className="block">
