@@ -1,5 +1,3 @@
-"use client";
-import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
@@ -43,9 +41,14 @@ export default function Stock() {
           `${API_BACK}/stock-movements`
         );
         setStockMovements(response.data);
-      } catch (error) {
-        console.error(" Error al obtener movimientos de stock:", error);
-        alert("Hubo un error al cargar los movimientos de stock.");
+      } catch (error: any) {
+        console.error("❌ Error al obtener movimientos de stock:", error);
+
+        if (error.response?.status === 401) {
+          alert("⚠️ Sesión expirada o no autorizada. Inicia sesión nuevamente.");
+        } else {
+          alert("Hubo un error al cargar los movimientos de stock.");
+        }
       } finally {
         setLoading(false);
       }
@@ -61,7 +64,6 @@ export default function Stock() {
     };
 
     fetchStockMovements();
-    fetchCategories();
   }, []);
 
   // Filtrar productos por categoría seleccionada
@@ -163,4 +165,6 @@ export default function Stock() {
       </table>
     </div>
   );
-}
+};
+
+export default Stock;

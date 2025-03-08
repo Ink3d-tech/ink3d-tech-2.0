@@ -1,115 +1,161 @@
-import { API_BACK } from '@/shared/config/api/getEnv';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+"use client";
+import { useEffect, useState } from "react";
 
-// Interfaces
-type ITransaction = {
-    id: number;
-    description: string;
-    amount: number;
-    date: string;
-};
+interface Transaction {
+  id: string;
+  amount: number;
+  status: string;
+  date: string;
+}
 
-type IDetailsVenta = {
-    id: number;
-    product: string;
-    quantity: number;
-    price: number;
-};
+interface Product {
+  producto: string;
+  cantidad_vendida: number;
+}
 
-// Servicios API
-const fetchTransactions = async (): Promise<ITransaction[]> => {
-    try {
-        const response = await axios.get(`${API_BACK}/transactions`);
-        if (!Array.isArray(response.data)) throw new Error("Datos incorrectos en transactions");
-        return response.data as ITransaction[];
-    } catch (error) {
-        console.error('Error fetching transactions:', error);
-        return [];
-    }
-};
+interface SalesDetail {
+  venta_id: string;
+  producto: string;
+  precio: number;
+  cantidad: number;
+  total: number;
+}
 
-const fetchDetailsVenta = async (): Promise<IDetailsVenta[]> => {
-    try {
-        const response = await axios.get(`${API_BACK}/details-venta`);
-        if (!Array.isArray(response.data)) throw new Error("Datos incorrectos en details venta");
-        return response.data as IDetailsVenta[];
-    } catch (error) {
-        console.error('Error fetching details venta:', error);
-        return [];
-    }
-};
+interface CategorySales {
+  categoria: string;
+  cantidad_vendida: number;
+}
 
-// Componente de Finanzas
-const Finanzas = () => {
-    const [transactions, setTransactions] = useState<ITransaction[]>([]);
-    const [details, setDetails] = useState<IDetailsVenta[]>([]);
+export default function FinanzasDashboard() {
+  const [totalVentas, setTotalVentas] = useState<number>(0);
+  const [ticketPromedio, setTicketPromedio] = useState<number>(0);
+  const [productoMasVendido, setProductoMasVendido] = useState<Product | null>(null);
+  const [productosPorCategoria, setProductosPorCategoria] = useState<CategorySales[]>([]);
+  const [transacciones, setTransacciones] = useState<Transaction[]>([]);
+  const [detalleVentas, setDetalleVentas] = useState<SalesDetail[]>([]);
 
-    useEffect(() => {
-        const loadData = async () => {
-            const transactionsData = await fetchTransactions();
-            setTransactions(transactionsData);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ventasRes, ticketRes, productoRes, categoriasRes, transRes, detallesRes] = await Promise.all([
+          fetch("/api/finance/total-ventas").then(res => res.json()),
+          fetch("/api/finance/ticket-promedio").then(res => res.json()),
+          fetch("/api/finance/producto-mas-vendido").then(res => res.json()),
+          fetch("/api/finance/productos-vendidos-categoria").then(res => res.json()),
+          fetch("/api/finance/transacciones").then(res => res.json()),
+          fetch("/api/finance/detalle-ventas").then(res => res.json()),
+        ]);
 
-            const detailsData = await fetchDetailsVenta();
-            setDetails(detailsData);
-        };
-        loadData();
-    }, []);
+        setTotalVentas(ventasRes.total || 0);
+        setTicketPromedio(ticketRes.ticket_promedio || 0);
+        setProductoMasVendido(productoRes || null);
+        setProductosPorCategoria(categoriasRes || []);
+        setTransacciones(transRes || []);
+        setDetalleVentas(detallesRes || []);
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+      }
+    };
 
-    return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-4">Resumen Financiero</h1>
+    fetchData();
+  }, []);
 
-            {/* Tarjetas con información clave */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-white shadow-lg rounded-lg p-4">
-                    <h2 className="text-lg font-semibold">Total Transacciones</h2>
-                    <p className="text-2xl">{transactions.length}</p>
-                </div>
-                <div className="bg-white shadow-lg rounded-lg p-4">
-                    <h2 className="text-lg font-semibold">Ingresos Totales</h2>
-                    <p className="text-2xl">${transactions.reduce((acc, t) => acc + t.amount, 0)}</p>
-                </div>
-            </div>
+  return (
+    <div className="p-6 bg-zinc-100 min-h-screen text-white">
+      <h1 className=" text-black text-3xl font-bold mb-6">Dashboard Financiero</h1>
 
-            {/* Gráfico de ventas */}
-            <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
-                <h2 className="text-xl font-semibold mb-4">Transacciones por Categoría</h2>
-                <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={transactions}>
-                        <XAxis dataKey="description" />
-                        <YAxis />
-                        <Tooltip />
-                        <Bar dataKey="amount" fill="#4F46E5" />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-
-            {/* Tabla de detalles de venta */}
-            <div className="bg-white shadow-lg rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Detalles de Venta</h2>
-                <table className="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr className="bg-gray-200">
-                            <th className="border border-gray-300 px-4 py-2">Producto</th>
-                            <th className="border border-gray-300 px-4 py-2">Cantidad</th>
-                            <th className="border border-gray-300 px-4 py-2">Precio</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {details.map((d) => (
-                            <tr key={d.id} className="border border-gray-300">
-                                <td className="px-4 py-2">{d.product}</td>
-                                <td className="px-4 py-2">{d.quantity}</td>
-                                <td className="px-4 py-2">${d.price}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+      {/* Métricas principales */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-pink-500 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-black"> Total Ventas</h2>
+          <p className="text-2xl">${totalVentas.toFixed(2)}</p>
         </div>
-    );
-};
+        <div className="bg-orange-500 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-black"> Ticket Promedio</h2>
+          <p className="text-2xl">${ticketPromedio.toFixed(2)}</p>
+        </div>
+        <div className="bg-violet-500 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-black"> Producto Más Vendido</h2>
+          <p className="text-xl">{productoMasVendido?.producto || "N/A"}</p>
+          <p className="text-sm">Cantidad: {productoMasVendido?.cantidad_vendida || 0}</p>
+        </div>
+      </div>
 
-export default Finanzas;
+      {/* Productos vendidos por categoría */}
+<h2 className="text-2xl font-bold mt-6 text-black">📦 Productos por Categoría</h2>
+
+<div className="overflow-x-auto mt-4">
+  <table className="min-w-full bg-orange-500 rounded-lg">
+    <thead>
+      <tr className="border-b border-gray-600">
+        <th className="p-3 text-left text-white">Categoría</th>
+        <th className="p-3 text-left text-white">Cantidad Vendida</th>
+      </tr>
+    </thead>
+    <tbody>
+      {productosPorCategoria.map((item, index) => (
+        <tr key={index} className="border-b border-orange-700">
+          <td className="p-3 text-black">{item.categoria}</td>
+          <td className="p-3 text-black">{item.cantidad_vendida}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+      {/* Últimas transacciones */}
+      <h2 className="text-2xl font-bold mt-6 text-black"> Últimas Transacciones</h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-pink-500 rounded-lg">
+          <thead>
+            <tr className="border-b border-pink-500">
+              <th className="p-3 text-left">ID</th>
+              <th className="p-3 text-left">Monto</th>
+              <th className="p-3 text-left">Estado</th>
+              <th className="p-3 text-left">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transacciones.map(trans => (
+              <tr key={trans.id} className="border-b border-pink-500">
+                <td className="p-3">{trans.id}</td>
+                <td className="p-3">${trans.amount.toFixed(2)}</td>
+                <td className={`p-3 ${trans.status === "completed" ? "text-green-400" : "text-red-400"}`}>
+                  {trans.status}
+                </td>
+                <td className="p-3">{new Date(trans.date).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Detalle de ventas */}
+      <h2 className="text-2xl font-bold mt-6 text-black"> Detalle de Ventas</h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-orange-500 rounded-lg">
+          <thead>
+            <tr className="border-b border-pink-600">
+              <th className="p-3 text-left">Venta ID</th>
+              <th className="p-3 text-left">Producto</th>
+              <th className="p-3 text-left">Precio</th>
+              <th className="p-3 text-left">Cantidad</th>
+              <th className="p-3 text-left">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {detalleVentas.map((detalle, index) => (
+              <tr key={index} className="border-b border-gray-700">
+                <td className="p-3">{detalle.venta_id}</td>
+                <td className="p-3">{detalle.producto}</td>
+                <td className="p-3">${detalle.precio.toFixed(2)}</td>
+                <td className="p-3">{detalle.cantidad}</td>
+                <td className="p-3">${detalle.total.toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

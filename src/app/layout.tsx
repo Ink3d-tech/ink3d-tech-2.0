@@ -39,8 +39,7 @@ export default function RootLayout({
                         {children}
                       </main>
                     
-                    <Footer/>
-
+                  
                 </LocationPathname>
               </ProductsProvider>
             </CartProvider>

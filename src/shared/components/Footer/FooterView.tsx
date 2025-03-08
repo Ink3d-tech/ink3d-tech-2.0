@@ -1,69 +1,50 @@
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-
+import { FaHeart } from "react-icons/fa";
 export default function Footer() {
   return (
-    <footer className="bg-black text-white py-10">
-      <div className="container mx-auto px-6 lg:px-20">
+    <footer className="bg-black text-white w-full py-6 px-4 md:px-8 fixed bottom-0">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         
-        {/* Sección superior */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-          
-          {/* Logo y descripción */}
-          <div>
-            <h2 className="text-3xl font-bold mb-3">Ink3D Fashion</h2>
-            <p className="text-gray-400">
-              Innovación y estilo en cada prenda.
-            </p>
-          </div>
+        {/* Texto descriptivo */}
+        <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-0">
+        Comprar ropa por internet nunca fue tan fácil  
+       
+        </p>
+        <FaHeart className="text-red-500 inline-block " />
+        
 
-          {/* Enlaces rápidos */}
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Enlaces</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/about" className="text-gray-400 hover:text-white transition">
-                  Sobre Nosotros
-                </Link>
-              </li>
-              <li>
-                <Link href="/home" className="text-gray-400 hover:text-white transition">
-                  Tienda
-                </Link>
-              </li>
-              <li>
-                <Link href="/manager/magazine" className="text-gray-400 hover:text-white transition">
-                  Magazine
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Redes sociales */}
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Síguenos</h3>
-            <div className="flex justify-center md:justify-start space-x-4">
-              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
-                <FaFacebook />
-              </a>
-              <a href="https://www.instagram.com/ink3d_asian/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
-                <FaInstagram />
-              </a>
-              <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
-                <FaTwitter />
-              </a>
-            </div>
-          </div>
+        {/* Enlaces rápidos */}
+        <div className="flex space-x-6">
+          <Link href="/magazine/acercaDeNosotros" className="text-gray-400 hover:text-white transition">
+            Acerca de nosotros
+          </Link>
+          <Link href="/home" className="text-gray-400 hover:text-white transition">
+            Tienda
+          </Link>
+          <Link href="/magazine" className="text-gray-400 hover:text-white transition">
+            Magazine
+          </Link>
         </div>
 
-        {/* Línea divisoria */}
-        <div className="border-t border-gray-700 my-6"></div>
-
-        {/* Sección inferior */}
-        <p className="text-center text-gray-500 text-sm">
-          © {new Date().getFullYear()} Ink3D Fashion. Todos los derechos reservados.
-        </p>
+        {/* Redes sociales */}
+        <div className="flex space-x-4 mt-4 md:mt-0">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
+            <FaFacebook />
+          </a>
+          <a href="https://www.instagram.com/ink3d_asian/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
+            <FaInstagram />
+          </a>
+          <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">
+            <FaTwitter />
+          </a>
+        </div>
       </div>
+
+      {/* Derechos de autor */}
+      <p className="text-center text-gray-500 text-xs mt-4">
+        © {new Date().getFullYear()} Ink3D Fashion. Todos los derechos reservados.
+      </p>
     </footer>
   );
 }

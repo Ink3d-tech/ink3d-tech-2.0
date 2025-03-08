@@ -47,9 +47,9 @@ const Motorsport: React.FC = () => {
           />
           <p className="mt-4 text-center">Artículo 3</p>
         </div>
-      </div>
+      ) : (
+        <p className="text-center text-gray-500">No hay artículos disponibles</p>
+      )}
     </div>
   );
-};
-
-export default Motorsport;
+}

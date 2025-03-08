@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import CarrouselMagazine from "@/shared/components/carrouselMgazine/CarrouselMagazine";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import NavBar from "@/shared/components/navbar/NavBar.component";
+import { Link } from "lucide-react";
 
 interface Article {
   id: number;
