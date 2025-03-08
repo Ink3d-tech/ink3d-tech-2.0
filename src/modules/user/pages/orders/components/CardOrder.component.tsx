@@ -56,6 +56,16 @@ const OrderCard = ({ order }: { order: IOrder }) => {
       <div className="flex flex-col gap-10">
         {order.orderDetails.map((detail) => <CardProduct key={detail.productId} product={getProductById(detail.productId)} status={status}/>)}
       </div>
+
+      {status === "pending" && (
+        <div className="mt-4">
+          <Link href={`/checkout?orderId=`}>
+            <button className="bg-yellow-500 text-white px-4 py-2 rounded w-full">
+              Retomar compra
+            </button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
