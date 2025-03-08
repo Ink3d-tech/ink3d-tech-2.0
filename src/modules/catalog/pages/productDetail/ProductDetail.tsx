@@ -27,20 +27,27 @@ export default function ProductDetail() {
 
   useEffect(() => {
     if (!id) return;
-
+  
     const fetchProduct = async () => {
       try {
         const response = await fetch(`${API_BACK}/products/${id}`);
+        if (!response.ok) throw new Error("Error al obtener el producto");
+        
         const data: Product = await response.json();
+  
+        if (!data || !data.image || !Array.isArray(data.image)) {
+          throw new Error("El producto no tiene imágenes disponibles");
+        }
+  
         setProduct(data);
-        setSelectedImage(data.image[0] || "/placeholder-image.png");
-
+        setSelectedImage(data.image.length > 0 ? data.image[0] : "/placeholder-image.png");
+  
         const responseAllProducts = await fetch(`${API_BACK}/products`);
+        if (!responseAllProducts.ok) throw new Error("Error al obtener los productos");
+  
         const allProducts: Product[] = await responseAllProducts.json();
-        const sameNameProducts = allProducts.filter(
-          (item) => item.name === data.name
-        );
-
+        const sameNameProducts = allProducts.filter((item) => item.name === data.name);
+  
         setAvailableSizes(sameNameProducts);
         setSelectedSize(data.size || null);
       } catch (error) {
@@ -49,14 +56,15 @@ export default function ProductDetail() {
         setLoading(false);
       }
     };
-
+  
     fetchProduct();
   }, [id]);
+  
 
   const { handleAddToCart } = useCart();
 
   const handleImageClick = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
+    setSelectedImage(imageUrl || "/placeholder-image.png"); // ✅ Evita src vacío
   };
 
   const handleFavoriteClick = () => {
@@ -81,7 +89,7 @@ export default function ProductDetail() {
   return (
     <div>
       <BackButton tab="Producto" />
-      <div className=" flex items-center justify-center pt-10 pb-2">
+      <div className="flex items-center justify-center pt-10 pb-2">
         <div className="bg-white shadow-xl rounded-lg p-8 max-w-6xl w-full flex flex-col md:flex-row gap-10 relative">
           <button
             className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
@@ -105,7 +113,7 @@ export default function ProductDetail() {
           <div className="flex flex-col items-center gap-4 w-full md:w-3/5">
             <div className="rounded-lg bg-white flex items-center justify-center w-[500px] h-[500px]">
               <Image
-                src={selectedImage}
+                src={selectedImage || "/placeholder-image.png"}
                 alt={product.name}
                 width={500}
                 height={500}
@@ -114,14 +122,14 @@ export default function ProductDetail() {
             </div>
 
             <div className="flex gap-3 overflow-x-auto">
-              {product.image.slice(0, 5).map((img, index) => (
+              {product.image?.slice(0, 5).map((img, index) => (
                 <button
                   key={index}
                   onClick={() => handleImageClick(img)}
                   className="focus:outline-none"
                 >
                   <Image
-                    src={img}
+                    src={img || "/placeholder-image.png"}
                     alt={`Vista ${index + 1}`}
                     width={90}
                     height={90}
@@ -141,7 +149,7 @@ export default function ProductDetail() {
                 Asian
               </span>
             </div>
-            <p className="text-gray-500 text-lg">{product.description}</p>
+            <p className="text-gray-500 text-lg whitespace-pre-line">{product.description}</p>
             <p className="text-4xl font-bold text-black mt-2">
               ${product.price}
             </p>
@@ -176,20 +184,12 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            <div className="bg-gray-100 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg mt-3">
               <h3 className="text-lg font-semibold">Cuidado del producto</h3>
               <p className="text-gray-600 text-sm mt-2">
                 Para prolongar la vida útil de esta prenda, lavar a mano o en
                 ciclo delicado con agua fría. No usar blanqueador ni secadora.
                 Planchar a baja temperatura si es necesario.
-              </p>
-            </div>
-
-            <div className="bg-gray-100 p-4 rounded-lg mt-2">
-              <h3 className="text-lg font-semibold">Guía de talles</h3>
-              <p className="text-gray-600 text-sm mt-2">
-                Consulta nuestra guía de talles para asegurarte de elegir la
-                mejor opción para ti.
               </p>
             </div>
 
@@ -203,26 +203,9 @@ export default function ProductDetail() {
         </div>
       </div>
 
-
       <div className="mt-10">
         <ProductsComponent />
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(-5px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.3s ease-in-out;
-        }
-      `}</style>
     </div>
   );
 }

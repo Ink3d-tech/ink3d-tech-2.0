@@ -16,7 +16,7 @@ export default function Welcome({ handleToggle }: WelcomeProps) {
 
 
     return (
-        <div className='flex flex-col  bg-black px-5'>
+        <div className='flex mb-4 flex-col bg-black px-5'>
                 <div className='flex flex-row my-3 gap-4 items-center'>
                     <Image src={logoEx} className='h-14 rounded-full' alt='inkedlogo' width={56} height={56}/>
                     

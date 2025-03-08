@@ -18,7 +18,7 @@ export default function Logout() {
                     <Settings color='white'/> 
                 </div>
                 <p className='font-light'>{user?.id}</p>
-                <Link href={"/login"} className='flex grow justify-end' onClick={handleLogout}> 
+                <Link href={"/login"} className='flex ml-auto' onClick={handleLogout}> 
                     <Power color='black' onClick={handleLogout}/>
                 </Link>
             </div>

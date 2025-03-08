@@ -75,8 +75,6 @@ export function CommentPanel() {
 
   return (
     <div className="w-full max-w-[600px] md:w-[350px] lg:max-w-[400px] bg-white rounded-3xl shadow-xl overflow-hidden border border-indigo-50">
-
-    {/* <div className="w-full md:w-[350px] bg-white rounded-3xl shadow-xl overflow-hidden border border-indigo-50"> */}
       <div className="flex flex-col h-[calc(100vh-2rem)] md:h-[800px]">
         <div className="px-6 py-4 bg-gradient-to-r from-indigo-500 to-purple-500">
           <h2 className="text-xl font-semibold text-white flex items-center gap-2">Comentarios</h2>

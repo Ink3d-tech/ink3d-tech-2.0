@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // ⬅️ Importamos para leer query params
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
 import FilterCategories from "./components/FilterCategories.component";
@@ -36,12 +36,15 @@ export default function ProductsPage() {
           throw new Error("Error al obtener los productos");
         }
         const data: Product[] = await response.json();
+        
         setProducts(data);
       } catch (error) {
         setError((error as Error).message);
       } finally {
         setLoading(false);
       }
+      
+      
     };
     fetchProducts();
   }, []);
@@ -74,6 +77,7 @@ export default function ProductsPage() {
                     height={800}
                     className="w-full h-full object-cover"
                   />
+                  
                 </div>
                 <div className="p-3 text-center">
                   <h3 className="text-lg font-semibold">{product.name}</h3>

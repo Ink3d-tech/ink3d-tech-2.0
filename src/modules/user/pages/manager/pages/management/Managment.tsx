@@ -198,9 +198,8 @@ export const ManagmentProductForm = () => {
             <div className="space-y-4 p-6 rounded-lg bg-white shadow-lg">
                 <Title title="Nombre y descripción"/>
                 <input name="name" value={formProduct.name} onChange={handleChangeProduct} type="text"  placeholder="Nombre del Producto" className="w-full p-2 border"/>
-                <textarea name="description" value={formProduct.description} onChange={handleChangeProduct} placeholder="Escribe la descripción aquí..." className="w-full p-2 border resize-none h-60" ></textarea>
+                <textarea name="description" value={formProduct.description} onChange={handleChangeProduct} placeholder="Escribe la descripción aquí..." className="w-full p-2 border resize-none h-60 whitespace-pre-line" ></textarea>                
             </div>
-
 
 
             {/* ############################### IMAGENES ############################### */}

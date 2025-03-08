@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -11,6 +10,19 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  Boxes,
+  Newspaper,
+  BarChart3,
+  ShieldCheck,
+  List, // Nuevo icono en lugar de Menu
+  X, // Para cerrar el menú
+} from "lucide-react";
+
 import Finanzas from "@/shared/components/finanzas/Finanzas";
 import FormMagazine from "@/shared/components/formMagazine/FormMagazine";
 import SeguridadConfiguracion from "@/shared/components/seguridadConfiguracion/SeguridadConfiguracion";
@@ -18,12 +30,12 @@ import Stock from "./pages/stock/Stock";
 import { ManagmentProductForm } from "./pages/management/Managment";
 import ProtectedRouteAdmin from "@/shared/helpers/ProtectedRouteAdmin";
 import Image from "next/image";
-
-
+import UserManagement from "./general/GestionUsuarios/UserManagement";
+import OrderList from "./general/GestionPedidos/OrderList";
 
 export default function Manager() {
   const [activeTab, setActiveTab] = useState("overview");
-  // const [darkMode, setDarkMode] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const salesData = [
     { name: "Ene", ventas: 4000 },
@@ -33,66 +45,71 @@ export default function Manager() {
     { name: "May", ventas: 6000 },
   ];
 
-  // const userData = [
-  //   { name: "Ene", usuarios: 100 },
-  //   { name: "Feb", usuarios: 150 },
-  //   { name: "Mar", usuarios: 300 },
-  //   { name: "Abr", usuarios: 250 },
-  //   { name: "May", usuarios: 400 },
-  // ];
-
   return (
     <ProtectedRouteAdmin>
-      {/* <div className={`flex ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}> */}
-      <div className={`flex bg-white text-black`}>
-        {/* <nav className={`w-64 p-4 space-y-3 ${darkMode ? "bg-gray-900" : "bg-black"} text-white`}> */}
-        <nav className={`w-64 p-4 space-y-3 bg-black text-white`}>
+<div className="flex bg-white text-black min-h-screen overflow-hidden">
+        
+        {/* Botón del menú hamburguesa (ajustado para que no esté arriba del todo) */}
+        <button 
+          className="md:hidden fixed top-25 left-4 z-50 bg-gray-800 text-white p-3 rounded-full shadow-lg transition-transform active:scale-95"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X size={24} /> : <List size={24} />}
+        </button>
 
-          <Image src="/Logoink3d.png" alt="Logo" className="w-32 mx-auto  mt-10 mb-4" width={200}
-              height={200}/>
-          <h2 className="text-white"> General </h2>
+        {/* Menú lateral */}
+        <nav className={`fixed md:relative bg-black p-6 border-r border-gray-800 transition-transform
+  ${menuOpen ? "translate-x-0 w-3/4 sm:w-1/2 md:w-80" : "-translate-x-full"} 
+  md:translate-x-0 md:w-80 md:block h-screen overflow-y-auto`}
+>
 
+          <Image src="/Logoink3d.png" alt="Logo" className="w-32 mx-auto mb-6" width={200} height={200} />
+          
+          {/* Sección General */}
+          <h2 className="text-gray-400 text-sm uppercase mb-2">General</h2>
           {[
-            { name: "📊 Panel de Control", id: "overview" },
-            { name: "🛍️ Gestión de Productos", id: "products" },
-            { name: "📦 Gestión de Pedidos", id: "orders" },
-            { name: "👥 Gestión de Usuarios", id: "users" },
+            { icon: <LayoutDashboard />, name: "Panel de Control", id: "overview" },
+            { icon: <Package />, name: "Gestión de Productos", id: "products" },
+            { icon: <ShoppingCart />, name: "Gestión de Pedidos", id: "orders" },
+            { icon: <Users />, name: "Gestión de Usuarios", id: "users" },
           ].map((tab) => (
             <button
               key={tab.id}
-              className={`w-full text-left px-3 py-2 rounded-lg ${activeTab === tab.id ? "bg-gray-700" : ""
-                }`}
-              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center px-4 py-3 rounded-lg w-full transition-all 
+              ${activeTab === tab.id 
+                ? "bg-black text-white border-l-4 border-gray-400" 
+                : "bg-black text-gray-300 hover:bg-gray-800"}`}
+              onClick={() => { setActiveTab(tab.id); setMenuOpen(false); }}
             >
-              {tab.name}
+              <span className="mr-3">{tab.icon}</span> {tab.name}
             </button>
           ))}
-          <h2 className="text-white mt-4">Mi Negocio</h2>
+          
+          {/* Sección Mi Negocio */}
+          <h2 className="text-gray-400 text-sm uppercase mt-6 mb-2">Mi Negocio</h2>
           {[
-            { name: "💲 finanzas", id: "finance" },
-            { name: " 🏷️ stock", id: "invent" },
-            { name: "💬 Magazine", id: "forum" },
-            { name: "🔐 Seguridad y Configuración", id: "settings" },
+            { icon: <BarChart3 />, name: "Finanzas", id: "finance" },
+            { icon: <Boxes />, name: "Stock", id: "invent" },
+            { icon: <Newspaper />, name: "Magazine", id: "forum" },
+            { icon: <ShieldCheck />, name: "Seguridad", id: "settings" },
           ].map((tab) => (
             <button
               key={tab.id}
-              className={`w-full text-left px-3 py-2 rounded-lg ${activeTab === tab.id ? "bg-gray-700" : ""
-                }`}
-              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center px-4 py-3 rounded-lg w-full transition-all 
+              ${activeTab === tab.id 
+                ? "bg-black text-white border-l-4 border-gray-400" 
+                : "bg-black text-gray-300 hover:bg-gray-800"}`}
+              onClick={() => { setActiveTab(tab.id); setMenuOpen(false); }}
             >
-              {tab.name}
+              <span className="mr-3">{tab.icon}</span> {tab.name}
             </button>
           ))}
         </nav>
 
-
-        <div className="flex-1 p-6"
-
-        >
-          <h2 className="general text-white"> </h2>
+        {/* Contenido Principal */}
+        <div className="flex-1 p-6 overflow-auto">
           {activeTab === "overview" && (
             <div>
-
               <h2 className="text-3xl font-bold mb-4">📊 Panel de Control</h2>
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-gray-200 p-4 rounded-lg">
@@ -120,74 +137,13 @@ export default function Manager() {
             </div>
           )}
 
-          {activeTab === "orders" && (
-            <div>
-              <h2 className="text-3xl font-bold mb-4">📦 Gestión de Pedidos</h2>
-              <form className="space-y-4 bg-gray-200 p-6 rounded-lg">
-                <input type="text" placeholder="Nombre del Cliente" className="w-full p-2 border" />
-                <input type="text" placeholder="Dirección" className="w-full p-2 border" />
-                <input type="text" placeholder="Ciudad" className="w-full p-2 border" />
-                <input type="text" placeholder="Medio de Pago" className="w-full p-2 border" />
-                <input type="number" placeholder="Cantidad de Producto" className="w-full p-2 border" />
-                <button className="bg-black text-white px-4 py-2 rounded">Registrar Pedido</button>
-              </form>
-            </div>
-          )}
-
-          {activeTab === "users" && (
-            <div>
-              <h2 className="text-3xl font-bold mb-4">👥 Gestión de Usuarios</h2>
-              <table className="w-full bg-gray-200 p-6 rounded-lg">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Juan Pérez</td>
-                    <td>juan@example.com</td>
-                    <td>
-                      <select className="p-1 border">
-                        <option>User</option>
-                        <option>Admin</option>
-                      </select>
-                    </td>
-                    <td>
-                      <button className="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {activeTab === "invent" && (<Stock />
-          )}
-
-
-
-          {activeTab === "finance" && (<Finanzas />
-
-          )}
-
-          {activeTab === "products" && (
-            <div >
-              <h1 className="text-white"> Mi negocio</h1>
-              <h2 className="text-3xl font-bold mb-4">🛍️ Gestión de Productos</h2>
-              <ManagmentProductForm />
-            </div>
-          )}
-
-
-
-          {activeTab === "forum" && (<FormMagazine />)}
-
-
-          {activeTab === "settings" && (<SeguridadConfiguracion />)}
+          {activeTab === "orders" && <OrderList />}
+          {activeTab === "users" && <UserManagement />}
+          {activeTab === "invent" && <Stock />}
+          {activeTab === "finance" && <Finanzas />}
+          {activeTab === "products" && <ManagmentProductForm />}
+          {activeTab === "forum" && <FormMagazine />}
+          {activeTab === "settings" && <SeguridadConfiguracion />}
         </div>
       </div>
     </ProtectedRouteAdmin>
