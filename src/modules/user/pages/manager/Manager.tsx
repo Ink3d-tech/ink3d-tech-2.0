@@ -29,7 +29,6 @@ import SeguridadConfiguracion from "@/shared/components/seguridadConfiguracion/S
 import Stock from "./pages/stock/Stock";
 import { ManagmentProductForm } from "./pages/management/Managment";
 import ProtectedRouteAdmin from "@/shared/helpers/ProtectedRouteAdmin";
-import Image from "next/image";
 import UserManagement from "./general/GestionUsuarios/UserManagement";
 import OrderList from "./general/GestionPedidos/OrderList";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
 import { ProductInterface, useProducts } from "../../manager/context/Products.context";
