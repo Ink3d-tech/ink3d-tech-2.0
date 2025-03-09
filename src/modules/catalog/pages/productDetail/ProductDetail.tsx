@@ -38,44 +38,57 @@ export default function ProductDetail() {
 
   useEffect(() => {
     if (!id) return;
-  
+
     const fetchProduct = async () => {
       try {
         const response = await fetch(`${API_BACK}/products/${id}`);
         if (!response.ok) throw new Error("Error al obtener el producto");
-        
+
         const data: Product = await response.json();
-  
+
         if (!data || !data.image || !Array.isArray(data.image)) {
           throw new Error("El producto no tiene imágenes disponibles");
         }
-  
+
         setProduct(data);
-        setSelectedImage(data.image.length > 0 ? data.image[0] : "/placeholder-image.png");
-  
+        setSelectedImage(
+          data.image.length > 0 ? data.image[0] : "/placeholder-image.png"
+        );
+
         const responseAllProducts = await fetch(`${API_BACK}/products`);
-        if (!responseAllProducts.ok) throw new Error("Error al obtener los productos");
-  
+        if (!responseAllProducts.ok)
+          throw new Error("Error al obtener los productos");
+
         const allProducts: Product[] = await responseAllProducts.json();
-        const sameNameProducts = allProducts.filter((item) => item.name === data.name);
-  
+        const sameNameProducts = allProducts.filter(
+          (item) => item.name === data.name
+        );
+
         setAvailableSizes(sameNameProducts);
-        setSelectedSize(data.size || null);
+
+        const allSizesOutOfStock = sameNameProducts.every(
+          (item) => item.stock === 0
+        );
+        if (allSizesOutOfStock) {
+          setSelectedSize(null);
+        } else {
+          setSelectedSize(data.size || null);
+        }
+
       } catch (error) {
         setError((error as Error).message);
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchProduct();
   }, [id]);
-  
 
   const { handleAddToCart } = useCart();
 
   const handleImageClick = (imageUrl: string) => {
-    setSelectedImage(imageUrl || "/placeholder-image.png"); // ✅ Evita src vacío
+    setSelectedImage(imageUrl || "/placeholder-image.png");
   };
 
   const handleFavoriteClick = () => {
@@ -102,6 +115,11 @@ export default function ProductDetail() {
       <BackButton tab="Producto" />
       <div className="flex items-center justify-center pt-10 pb-2">
         <div className="bg-white shadow-xl rounded-lg p-8 max-w-6xl w-full flex flex-col md:flex-row gap-10 relative">
+          {product.stock === 0 && (
+            <div className="absolute top-3 left-0 bg-gray-800 text-white text-xs font-semibold uppercase px-4 py-1 rounded-br-lg rounded-tr-lg shadow-md">
+              Sin Stock
+            </div>
+          )}
           <button
             className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
             onClick={handleFavoriteClick}
@@ -160,7 +178,9 @@ export default function ProductDetail() {
                 {product.style || "Sin estilo"}
               </span>              
             </div>
-            <p className="text-gray-500 text-lg whitespace-pre-line">{product.description}</p>
+            <p className="text-gray-500 text-lg whitespace-pre-line">
+              {product.description}
+            </p>
             <p className="text-4xl font-bold text-black mt-2">
               ${product.price}
             </p>
@@ -172,8 +192,7 @@ export default function ProductDetail() {
                   const productWithSize = availableSizes.find(
                     (item) => item.size === size
                   );
-                  const isAvailable =
-                    productWithSize && productWithSize.stock > 0;
+                  const isAvailable = productWithSize && productWithSize.stock > 0;
 
                   return (
                     <button
@@ -205,10 +224,16 @@ export default function ProductDetail() {
             </div>
 
             <button
-              className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition mt-4"
+              className={`px-6 py-3 rounded-lg transition mt-4 
+                ${
+                  product.stock > 0
+                    ? "bg-black text-white hover:bg-gray-700"
+                    : "bg-black text-white cursor-not-allowed opacity-90"
+                }`}
               onClick={() => handleAddToCart(product)}
+              disabled={product.stock === 0 || !selectedSize}
             >
-              Agregar al carrito 🛒
+              {product.stock > 0 ? "Agregar al carrito 🛒" : "Sin stock"}
             </button>
           </div>
         </div>
