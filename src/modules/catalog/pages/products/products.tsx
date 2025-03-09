@@ -17,8 +17,7 @@ interface Product {
     id: string;
     name: string;
   };
-  image: string;
-  stock: number;
+  image: string[];
   style: string;
 }
 
@@ -29,12 +28,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category") || null;
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    initialCategory
-  );
-
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null); 
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -62,19 +56,14 @@ export default function ProductsPage() {
     : products;
 
   return (
-
-    <div className="min-h-screen bg-gray-300 pb-2 ">
-      <BackButton tab="Asian" />
-      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md ">
-        <div className="flex justify-between items-center px-30 px-4">
-          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3 ">
-            Lista de Productos
+    <div className="min-h-screen bg-gray-300 pb-2">
+      <BackButton tab={selectedStyle || "Productos"} />
+      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md">
+        <div className="flex justify-between items-center px-4">
+          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
+            Lista de Productos - {selectedStyle}
           </h2>
-          <FilterCategories
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
-          />
-
+          <FilterCategories selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
         </div>
         <div className="w-full h-px bg-gray-300"></div>
 
