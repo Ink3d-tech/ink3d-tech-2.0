@@ -10,7 +10,8 @@ interface Product {
       name: string;
     };
     image: string;
-    size: string
+    size: string;
+    stock: number;
   }
 
 export const getAllProducts = async (): Promise<Product[]> => {
