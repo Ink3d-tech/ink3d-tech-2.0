@@ -1,8 +1,8 @@
 import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
 import { X, Truck, Calendar, CreditCard } from "lucide-react";
 import { formatDate, StatusBadge } from "./CardOrder.component";
-import { getProductById } from "@/modules/catalog/pages/home/helpers/productService";
 import { ProductInterface, useProducts } from "../../manager/context/Products.context";
+import { FaAddressCard } from "react-icons/fa";
 
 
 const CardProductDetail = ({product, quantity}: {product: ProductInterface | undefined, quantity: number}) => {
@@ -36,14 +36,13 @@ if(!product) return null;
 
 
 const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: any}) => {
-    const { createdAt, status, orderDetails} = order;
     const { getProductById } = useProducts()
   
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           <div className="sticky top-0 bg-white border-b border-gray-100 p-4 rounded-t-2xl flex items-center justify-between">
-            <h2 className="text-xl font-bold">Order Details #{order.id}</h2>
+            <h2 className="text-xl font-bold">Order Details #{order.id.slice(0,10)}</h2>
             <button 
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -64,7 +63,7 @@ const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: any}) =>
             {/* Order Items */}
             <div className="space-y-4">
               <h3 className="font-semibold text-lg">Productos</h3>
-                {orderDetails.map((detail) => (
+                {order.orderDetails.map((detail) => (
                     <CardProductDetail key={detail.productId} product={getProductById(detail.productId)} quantity={detail.quantity} />
                 ))}
             </div>
@@ -76,11 +75,11 @@ const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: any}) =>
                 Detalles del envío
               </h3>
               <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="text-gray-700">{"PROXIMAMENTE"}</p>
+                <p className="text-gray-700">{"PROXIMAMENTE Dirección"}</p>
                 {/* {order.shippingAddress} */}
                 <div className="mt-2 flex items-center gap-2 text-gray-600">
                   <Calendar className="w-4 h-4" />
-                  <span>Entrega estimada: PROXIMAMENTE</span>
+                  <span>Entrega estimada: PROXIMAMENTE tiempo de envio</span>
                   {/* {order.estimatedDelivery} */}
                 </div>
               </div>
@@ -95,7 +94,8 @@ const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: any}) =>
               <div className="bg-gray-50 p-4 rounded-xl">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Método de pago</span>
-                  <span>{order.currency}</span>
+                  {/* Metodo de pago PROXIMAMENTE */}
+                  <span>{order.currency}</span> 
                 </div>
                 <div className="flex justify-between items-center mt-2">
                   <span className="text-gray-600">Importe total</span>
