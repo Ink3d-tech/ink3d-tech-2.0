@@ -25,29 +25,45 @@ export default function ProductDetail() {
   const [availableSizes, setAvailableSizes] = useState<Product[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
 
+  const getStyleClasses = (style: string | undefined) => {
+    if (!style) return "bg-blue-500 text-white"; // Azul por defecto
+
+    const normalizedStyle = style.trim().toLowerCase();
+
+    const styleColors: Record<string, string> = {
+      motorsport: "bg-red-500 text-white", // Rojo con letras blancas
+      asian: "text-green-700 bg-green-200", // Verde claro con verde oscuro
+      streetwear: "bg-black text-white", // Negro con letras blancas
+    };
+
+    return styleColors[normalizedStyle] || "bg-blue-500 text-white"; // Azul por defecto si no coincide
+  };
+
+
+
   useEffect(() => {
     if (!id) return;
-  
+
     const fetchProduct = async () => {
       try {
         const response = await fetch(`${API_BACK}/products/${id}`);
         if (!response.ok) throw new Error("Error al obtener el producto");
-        
+
         const data: Product = await response.json();
-  
+
         if (!data || !data.image || !Array.isArray(data.image)) {
           throw new Error("El producto no tiene imágenes disponibles");
         }
-  
+
         setProduct(data);
         setSelectedImage(data.image.length > 0 ? data.image[0] : "/placeholder-image.png");
-  
+
         const responseAllProducts = await fetch(`${API_BACK}/products`);
         if (!responseAllProducts.ok) throw new Error("Error al obtener los productos");
-  
+
         const allProducts: Product[] = await responseAllProducts.json();
         const sameNameProducts = allProducts.filter((item) => item.name === data.name);
-  
+
         setAvailableSizes(sameNameProducts);
         setSelectedSize(data.size || null);
       } catch (error) {
@@ -56,10 +72,10 @@ export default function ProductDetail() {
         setLoading(false);
       }
     };
-  
+
     fetchProduct();
   }, [id]);
-  
+
 
   const { handleAddToCart } = useCart();
 
@@ -133,9 +149,8 @@ export default function ProductDetail() {
                     alt={`Vista ${index + 1}`}
                     width={90}
                     height={90}
-                    className={`rounded-md border-2 ${
-                      selectedImage === img ? "border-black" : "border-gray-300"
-                    } transition-all`}
+                    className={`rounded-md border-2 ${selectedImage === img ? "border-black" : "border-gray-300"
+                      } transition-all`}
                   />
                 </button>
               ))}
@@ -145,9 +160,13 @@ export default function ProductDetail() {
           <div className="flex flex-col justify-between flex-grow gap-2 w-full md:w-2/5">
             <h2 className="text-4xl font-bold">{product.name}</h2>
             <div className="flex gap-2">
-              <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 uppercase mt-2 inline-block">
-                Asian
+
+
+              <span className={`text-xs font-bold px-2 py-1 uppercase mt-2 inline-block rounded-md ${getStyleClasses(product.style)}`} >
+                {product.style || "Sin estilo"}
               </span>
+
+
             </div>
             <p className="text-gray-500 text-lg whitespace-pre-line">{product.description}</p>
             <p className="text-4xl font-bold text-black mt-2">
@@ -168,13 +187,12 @@ export default function ProductDetail() {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`px-4 py-2 border rounded-md transition ${
-                        selectedSize === size
+                      className={`px-4 py-2 border rounded-md transition ${selectedSize === size
                           ? "bg-black text-white border-black"
                           : isAvailable
-                          ? "hover:bg-gray-200"
-                          : "bg-gray-300 cursor-not-allowed"
-                      }`}
+                            ? "hover:bg-gray-200"
+                            : "bg-gray-300 cursor-not-allowed"
+                        }`}
                       disabled={!isAvailable}
                     >
                       {size}
