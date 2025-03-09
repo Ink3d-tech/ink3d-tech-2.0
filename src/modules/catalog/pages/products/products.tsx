@@ -17,48 +17,49 @@ interface Product {
     id: string;
     name: string;
   };
-  image: string;
+  image: string[];
+  style: string;
 }
 
 export default function ProductsPage() {
+  const searchParams = useSearchParams();
+  const selectedStyle = searchParams.get("style") || null; 
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const searchParams = useSearchParams(); // ⬅️ Obtener los parámetros de la URL
-  const initialCategory = searchParams.get("category") || null; // ⬅️ Leer la categoría inicial
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null); 
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${API_BACK}/products`);
+        const response = await fetch(`${API_BACK}/products/style/${selectedStyle}`);
         if (!response.ok) {
           throw new Error("Error al obtener los productos");
         }
         const data: Product[] = await response.json();
-        
         setProducts(data);
       } catch (error) {
         setError((error as Error).message);
       } finally {
         setLoading(false);
       }
-      
-      
     };
-    fetchProducts();
-  }, []);
+    if (selectedStyle) fetchProducts();
+  }, [selectedStyle]);
 
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category.name.toLowerCase() === selectedCategory.toLowerCase())
     : products;
 
   return (
-    <div className="min-h-screen bg-gray-300 pb-2 ">
-      <BackButton tab="Asian" />
-      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md ">
-        <div className="flex justify-between items-center px-30 px-4">
-          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3 ">Lista de Productos</h2>
+    <div className="min-h-screen bg-gray-300 pb-2">
+      <BackButton tab={selectedStyle || "Productos"} />
+      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md">
+        <div className="flex justify-between items-center px-4">
+          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
+            Lista de Productos - {selectedStyle}
+          </h2>
           <FilterCategories selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
         </div>
         <div className="w-full h-px bg-gray-300"></div>
@@ -77,7 +78,6 @@ export default function ProductsPage() {
                     height={800}
                     className="w-full h-full object-cover"
                   />
-                  
                 </div>
                 <div className="p-3 text-center">
                   <h3 className="text-lg font-semibold">{product.name}</h3>
