@@ -18,6 +18,7 @@ interface Product {
     name: string;
   };
   image: string[];
+  stock: number;
   style: string;
 }
 
