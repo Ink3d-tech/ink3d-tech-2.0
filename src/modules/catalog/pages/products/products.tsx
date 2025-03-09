@@ -25,11 +25,9 @@ interface Product {
 export default function ProductsPage() {
   const searchParams = useSearchParams();
   const selectedStyle = searchParams.get("style") || null; 
-
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category") || null;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     initialCategory
