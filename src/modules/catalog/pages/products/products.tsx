@@ -19,9 +19,13 @@ interface Product {
   };
   image: string;
   stock: number;
+  style: string;
 }
 
 export default function ProductsPage() {
+  const searchParams = useSearchParams();
+  const selectedStyle = searchParams.get("style") || null; 
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,15 +35,15 @@ export default function ProductsPage() {
     initialCategory
   );
 
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${API_BACK}/products`);
+        const response = await fetch(`${API_BACK}/products/style/${selectedStyle}`);
         if (!response.ok) {
           throw new Error("Error al obtener los productos");
         }
         const data: Product[] = await response.json();
-
         setProducts(data);
       } catch (error) {
         setError((error as Error).message);
@@ -47,8 +51,8 @@ export default function ProductsPage() {
         setLoading(false);
       }
     };
-    fetchProducts();
-  }, []);
+    if (selectedStyle) fetchProducts();
+  }, [selectedStyle]);
 
   const filteredProducts = selectedCategory
     ? products.filter(
@@ -58,6 +62,7 @@ export default function ProductsPage() {
     : products;
 
   return (
+
     <div className="min-h-screen bg-gray-300 pb-2 ">
       <BackButton tab="Asian" />
       <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md ">
@@ -69,6 +74,7 @@ export default function ProductsPage() {
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
           />
+
         </div>
         <div className="w-full h-px bg-gray-300"></div>
 
