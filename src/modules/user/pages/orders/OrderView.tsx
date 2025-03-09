@@ -10,7 +10,7 @@ import OrderDetailsModal from "./components/CardOrderModal.component";
 
 
 export default function OrdersView() {
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {

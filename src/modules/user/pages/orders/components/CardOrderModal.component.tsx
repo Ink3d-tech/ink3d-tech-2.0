@@ -2,7 +2,7 @@ import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.int
 import { X, Truck, Calendar, CreditCard } from "lucide-react";
 import { formatDate, StatusBadge } from "./CardOrder.component";
 import { ProductInterface, useProducts } from "../../manager/context/Products.context";
-import { FaAddressCard } from "react-icons/fa";
+import Image from "next/image";
 
 
 const CardProductDetail = ({product, quantity}: {product: ProductInterface | undefined, quantity: number}) => {
@@ -11,10 +11,12 @@ if(!product) return null;
   return (
     <div className="flex gap-4 p-4 bg-gray-50 rounded-xl">
         <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-        <img 
+        <Image 
             src={product.image[0]} 
             alt={product.name}
             className="w-full h-full object-cover"
+            width={100}
+            height={100}
         />
         </div>
         <div className="flex-1">
@@ -35,7 +37,7 @@ if(!product) return null;
 }
 
 
-const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: any}) => {
+const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: () => void}) => {
     const { getProductById } = useProducts()
   
     return (
