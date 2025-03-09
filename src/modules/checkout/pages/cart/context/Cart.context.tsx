@@ -12,6 +12,7 @@ export interface Product {
     price: number;
     size: string;
     stock: number;
+    style: string;
     units: number;
     description: string;
     category: {
