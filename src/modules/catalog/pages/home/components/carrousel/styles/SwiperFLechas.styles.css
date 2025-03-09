@@ -1,0 +1,71 @@
+/* 🔹 Estilos para los botones de navegación */
+.custom-prev, .custom-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+}
+
+.custom-prev {
+  left: 5px;
+}
+.custom-prev::before {
+  content: "◀︎";
+  font-size: 16px;
+  color: #444;
+}
+
+.custom-next {
+  right: 5px;
+}
+.custom-next::before {
+  content: "▶︎";
+  font-size: 16px;
+  color: #444;
+}
+
+.group:hover .custom-prev,
+.group:hover .custom-next {
+  opacity: 1;
+  visibility: visible;
+}
+
+.custom-prev:hover, 
+.custom-next:hover {
+  background-color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .custom-prev, .custom-next {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .custom-prev::before, .custom-next::before {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-prev, .custom-next {
+    width: 25px;
+    height: 25px;
+  }
+
+  .custom-prev::before, .custom-next::before {
+    font-size: 12px;
+  }
+}
