@@ -1,91 +1,104 @@
-// // components/DashboardPanel.tsx
-// import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-
-// const salesData = [
-//   { name: "Ene", ventas: 4000 },
-//   { name: "Feb", ventas: 3000 },
-//   { name: "Mar", ventas: 5000 },
-//   { name: "Abr", ventas: 2000 },
-//   { name: "May", ventas: 6000 },
-// ];
-
-// export default function DashboardPanel() {
-//   return (
-//     <div>
-//       <h2 className="text-3xl font-bold mb-4">📊 Panel de Control</h2>
-//       <div className="grid grid-cols-3 gap-4">
-//         <div className="bg-gray-200 p-4 rounded-lg">
-//           <h3>💰 Ventas Totales</h3>
-//           <p>$1,234,567</p>
-//         </div>
-//         <div className="bg-gray-200 p-4 rounded-lg">
-//           <h3>📦 Pedidos Pendientes</h3>
-//           <p>45</p>
-//         </div>
-//         <div className="bg-gray-200 p-4 rounded-lg">
-//           <h3>🔄 Devoluciones</h3>
-//           <p>12</p>
-//         </div>
-//       </div>
-//       <ResponsiveContainer width="100%" height={300}>
-//         <LineChart data={salesData}>
-//           <XAxis dataKey="name" />
-//           <YAxis />
-//           <Tooltip />
-//           <CartesianGrid strokeDasharray="3 3" />
-//           <Line type="monotone" dataKey="ventas" stroke="#8884d8" strokeWidth={2} />
-//         </LineChart>
-//       </ResponsiveContainer>
-//     </div>
-//   );
-// }
-
-
 // "use client";
 
 // import { useEffect, useState } from "react";
 // import axios from "axios";
 // import { API_BACK } from "@/shared/config/api/getEnv";
+// import { format, addMinutes } from "date-fns";
+// import { Ticket, Plus, Trash, Search, Calendar } from "lucide-react";
 
-// type Discount = {
+// // Definir el tipo de datos del descuento
+// interface Discount {
 //   id: string;
 //   amount: number;
-//   status: string;
-//   expiresAt: string;
-//   userId: string;
-// };
+//   isUsed: boolean;
+//   createdAt: string;
+//   expiresAt: string | null;
+//   status: "active" | "expired" | "used" | "inactive";
+//   userId: string | null;
+// }
 
-// const DashboardPanel = () => {
+// function DiscountsApp() {
 //   const [discounts, setDiscounts] = useState<Discount[]>([]);
-//   const [newDiscount, setNewDiscount] = useState<Partial<Discount>>({
-//     amount: 0,
-//     status: "active",
-//     expiresAt: "",
-//     userId: "",
-//   });
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState<string | null>(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState("");
+//   const [newAmount, setNewAmount] = useState("");
+//   const [expiresAt, setExpiresAt] = useState<string | null>(null);
+//   const [searchId, setSearchId] = useState("");
 
+//   // Obtener los descuentos
 //   const fetchDiscounts = async () => {
-//     setLoading(true);
 //     try {
-//       const response = await axios.get<Discount[]>(`${API_BACK}/discounts`);
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         setError("No hay token de autenticación.");
+//         return;
+//       }
+//       const response = await axios.get(`${API_BACK}/discounts`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
 //       setDiscounts(response.data);
 //     } catch (error) {
-//       console.error("❌ Error al obtener descuentos:", error);
-//       setError("Hubo un error al cargar los descuentos.");
+//       setError("Error al cargar los descuentos.");
 //     } finally {
 //       setLoading(false);
 //     }
 //   };
 
+//   // Crear un descuento con expiración automática en 1 minuto
 //   const createDiscount = async () => {
+//     if (!newAmount || Number(newAmount) < 1 || Number(newAmount) > 100) {
+//       alert("El porcentaje debe estar entre 1 y 100");
+//       return;
+//     }
 //     try {
-//       await axios.post(`${API_BACK}/discounts`, newDiscount);
-//       fetchDiscounts();
+//       const token = localStorage.getItem("token");
+//       const expirationDate = expiresAt
+//         ? new Date(expiresAt).toISOString()
+//         : addMinutes(new Date(), 1).toISOString(); // Expira en 1 minuto si no se define una fecha
+
+//       const response = await axios.post(
+//         `${API_BACK}/discounts`,
+//         {
+//           amount: Number(newAmount),
+//           isUsed: false,
+//           status: "active",
+//           expiresAt: expirationDate,
+//         },
+//         { headers: { Authorization: `Bearer ${token}` } }
+//       );
+
+//       setDiscounts([...discounts, response.data]);
+//       setNewAmount("");
+//       setExpiresAt(null);
 //     } catch (error) {
-//       console.error("❌ Error al crear descuento:", error);
-//       setError("Hubo un error al crear el descuento.");
+//       alert("Error al crear el descuento");
+//     }
+//   };
+
+//   // Eliminar un descuento
+//   const deleteDiscount = async (id: string) => {
+//     try {
+//       const token = localStorage.getItem("token");
+//       await axios.delete(`${API_BACK}/discounts/${id}`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+//       setDiscounts(discounts.filter((discount) => discount.id !== id));
+//     } catch (error) {
+//       alert("Error al eliminar el descuento");
+//     }
+//   };
+
+//   // Buscar un descuento por ID
+//   const searchDiscount = async () => {
+//     if (!searchId) return;
+//     try {
+//       const token = localStorage.getItem("token");
+//       const response = await axios.get(`${API_BACK}/discounts/${searchId}`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+//       setDiscounts([response.data]);
+//     } catch (error) {
+//       alert("Descuento no encontrado");
 //     }
 //   };
 
@@ -93,168 +106,295 @@
 //     fetchDiscounts();
 //   }, []);
 
-//   return (
-//     <div className="p-6">
-//       <h1 className="text-2xl font-bold">Gestión de Descuentos</h1>
-//       {loading && <p>Cargando descuentos...</p>}
-//       {error && <p className="text-red-500">{error}</p>}
-//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-//         {discounts.map((discount) => (
-//           <div key={discount.id} className="border rounded-lg p-4 shadow-md">
-//             <p>Monto: {discount.amount}</p>
-//             <p>Estado: {discount.status}</p>
-//             <p>
-//               Expira:{" "}
-//               {discount.expiresAt
-//                 ? new Date(discount.expiresAt).toLocaleDateString()
-//                 : "No disponible"}
-//             </p>
-//           </div>
-//         ))}
-//       </div>
-//       <div className="mt-6 p-4 border rounded-lg">
-//         <h2 className="text-lg font-semibold">Crear Nuevo Descuento</h2>
-//         <input
-//           className="border p-2 rounded-md w-full"
-//           placeholder="Monto"
-//           value={newDiscount.amount}
-//           onChange={(e) => setNewDiscount({ ...newDiscount, amount: Number(e.target.value) })}
-//         />
-//         <input
-//           className="border p-2 rounded-md w-full mt-2"
-//           placeholder="Fecha de expiración"
-//           type="datetime-local"
-//           value={newDiscount.expiresAt}
-//           onChange={(e) => setNewDiscount({ ...newDiscount, expiresAt: e.target.value })}
-//         />
-//         <input
-//           className="border p-2 rounded-md w-full mt-2"
-//           placeholder="ID de usuario"
-//           value={newDiscount.userId}
-//           onChange={(e) => setNewDiscount({ ...newDiscount, userId: e.target.value })}
-//         />
-//         <button className="bg-blue-500 text-white px-4 py-2 rounded-md mt-2" onClick={createDiscount}>
-//           Crear
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default DashboardPanel;
-
-
-// "use client";
-
-// import React, { useState } from "react";
-// import { QRCodeSVG } from "qrcode.react";
-// import { format } from "date-fns";
-// import { Ticket, Plus, X, QrCode, Check, Calendar } from "lucide-react";
-
-// interface Discount {
-//   id: string;
-//   code: string;
-//   amount: number;
-//   status: "active" | "used" | "expired";
-//   expiresAt: string;
-//   createdAt: string;
-// }
-
-// function DiscountsApp() {
-//   const [discounts, setDiscounts] = useState<Discount[]>([]);
-//   const [showForm, setShowForm] = useState<boolean>(false);
-//   const [amount, setAmount] = useState<string>("");
-//   const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null);
-
-//   const createDiscount = () => {
-//     if (!amount || isNaN(parseFloat(amount))) return;
-
-//     const newDiscount: Discount = {
-//       id: Math.random().toString(36).substr(2, 9),
-//       code: Math.random().toString(36).substr(2, 8).toUpperCase(),
-//       amount: parseFloat(amount),
-//       status: "active",
-//       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-//       createdAt: new Date().toISOString(),
-//     };
-
-//     setDiscounts([...discounts, newDiscount]);
-//     setShowForm(false);
-//     setAmount("");
-//   };
+//   if (loading) return <p>Cargando descuentos...</p>;
+//   if (error) return <p>{error}</p>;
 
 //   return (
 //     <div className="min-h-screen bg-gray-100 p-6">
 //       <header className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg">
 //         <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-//           <Ticket className="h-6 w-6 mr-2 text-indigo-600" /> Sistema de Descuentos
+//           <Ticket className="h-6 w-6 mr-2 text-indigo-600" /> Lista de Descuentos
 //         </h1>
-//         <button
-//           onClick={() => setShowForm(true)}
-//           className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-md flex items-center hover:bg-indigo-700 transition"
-//         >
-//           <Plus className="h-5 w-5 mr-2" /> Nuevo Descuento
-//         </button>
 //       </header>
 
-//       {showForm && (
-//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-//           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-//             <div className="flex justify-between items-center mb-4">
-//               <h2 className="text-xl font-bold text-gray-800">Crear Nuevo Descuento</h2>
-//               <button onClick={() => setShowForm(false)} className="text-gray-600 hover:text-gray-800">
-//                 <X className="h-6 w-6" />
-//               </button>
-//             </div>
-//             <input
-//               type="number"
-//               placeholder="Monto del descuento"
-//               value={amount}
-//               onChange={(e) => setAmount(e.target.value)}
-//               className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-//             />
-//             <button
-//               onClick={createDiscount}
-//               className="w-full mt-4 bg-indigo-600 text-white py-2 rounded-md shadow-md flex items-center justify-center hover:bg-indigo-700 transition"
-//             >
-//               <Check className="h-5 w-5 mr-2" /> Crear Descuento
-//             </button>
-//           </div>
-//         </div>
-//       )}
+//       {/* Crear un descuento */}
+//       <div className="flex gap-4 my-4">
+//         <input
+//           type="number"
+//           value={newAmount}
+//           onChange={(e) => setNewAmount(e.target.value)}
+//           placeholder="% de descuento"
+//           className="border p-2 rounded w-full"
+//         />
+//         <input
+//           type="datetime-local"
+//           value={expiresAt ? expiresAt : ""}
+//           onChange={(e) => setExpiresAt(e.target.value)}
+//           className="border p-2 rounded w-full"
+//         />
+//         <button onClick={createDiscount} className="bg-blue-500 text-white px-4 py-2 rounded flex items-center">
+//           <Plus className="h-5 w-5 mr-2" /> Crear
+//         </button>
+//       </div>
 
-//       {selectedDiscount && (
-//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-//           <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
-//             <h2 className="text-xl font-bold text-gray-800 mb-4">Código QR del Descuento</h2>
-//             <QRCodeSVG value={selectedDiscount.code} size={200} />
-//             <p className="mt-4 text-gray-700 font-semibold">Código: {selectedDiscount.code}</p>
-//             <p className="text-gray-500">Monto: ${selectedDiscount.amount}</p>
-//             <button
-//               onClick={() => setSelectedDiscount(null)}
-//               className="mt-4 bg-red-500 text-white py-2 rounded-md shadow-md w-full hover:bg-red-600 transition"
-//             >
-//               Cerrar
-//             </button>
-//           </div>
-//         </div>
-//       )}
+//       {/* Buscar un descuento */}
+//       <div className="flex gap-4 my-4">
+//         <input
+//           type="text"
+//           value={searchId}
+//           onChange={(e) => setSearchId(e.target.value)}
+//           placeholder="Buscar por ID"
+//           className="border p-2 rounded w-full"
+//         />
+//         <button onClick={searchDiscount} className="bg-green-500 text-white px-4 py-2 rounded flex items-center">
+//           <Search className="h-5 w-5 mr-2" /> Buscar
+//         </button>
+//       </div>
 
-//       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//       {/* Mostrar los descuentos */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 //         {discounts.map((discount) => (
-//           <div key={discount.id} className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
-//             <div>
-//               <span className="bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full text-xs font-semibold">
-//                 {discount.status}
-//               </span>
-//               <p className="text-lg font-semibold mt-2">${discount.amount}</p>
-//               <p className="text-gray-500 text-sm">Expira: {format(new Date(discount.expiresAt), "dd/MM/yyyy")}</p>
-//             </div>
+//           <div key={discount.id} className="bg-white p-4 rounded-lg shadow-md border-l-4 border-indigo-600">
+//             <h2 className="text-xl font-semibold text-gray-800">{discount.amount}% de descuento</h2>
+//             <p className="text-sm text-gray-500">ID: {discount.id}</p>
+//             <p className="text-sm text-gray-500">Creado: {format(new Date(discount.createdAt), "dd/MM/yyyy HH:mm")}</p>
+//             {discount.expiresAt ? (
+//               <p className="text-sm text-red-500">Expira: {format(new Date(discount.expiresAt), "dd/MM/yyyy HH:mm")}</p>
+//             ) : (
+//               <p className="text-sm text-green-500">No expira</p>
+//             )}
+//             <p className={`text-sm font-semibold ${discount.status === "expired" ? "text-red-500" : "text-green-500"}`}>
+//               Estado: {discount.status}
+//             </p>
 //             <button
-//               onClick={() => setSelectedDiscount(discount)}
-//               className="p-2 bg-indigo-600 text-white rounded-full shadow-md hover:bg-indigo-700 transition"
+//               onClick={() => deleteDiscount(discount.id)}
+//               className="bg-red-500 text-white px-4 py-2 mt-2 rounded flex items-center"
 //             >
-//               <QrCode className="h-5 w-5" />
+//               <Trash className="h-5 w-5 mr-2" /> Eliminar
+//             </button>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default DiscountsApp;
+
+
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import axios from "axios";
+// import { API_BACK } from "@/shared/config/api/getEnv";
+// import { format, addMinutes } from "date-fns";
+// import { Ticket, Plus, Trash, Search } from "lucide-react";
+
+// // Definir el tipo de datos del descuento
+// interface Discount {
+//   id: string;
+//   amount: number;
+//   isUsed: boolean;
+//   createdAt: string;
+//   expiresAt: string | null;
+//   status: "active" | "expired" | "used" | "inactive";
+//   userId: string | null;
+// }
+
+// function DiscountsApp() {
+//   const [discounts, setDiscounts] = useState<Discount[]>([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState("");
+//   const [newAmount, setNewAmount] = useState("");
+//   const [expiresAt, setExpiresAt] = useState<string | null>(null);
+//   const [searchId, setSearchId] = useState("");
+//   const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null);
+
+//   // Obtener los descuentos
+//   const fetchDiscounts = async () => {
+//     try {
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         setError("No hay token de autenticación.");
+//         return;
+//       }
+//       const response = await axios.get(`${API_BACK}/discounts`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+
+//       setDiscounts(response.data);
+//     } catch (error) {
+//       setError("Error al cargar los descuentos.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // Crear un descuento con expiración opcional
+//   const createDiscount = async () => {
+//     if (!newAmount || Number(newAmount) < 1 || Number(newAmount) > 100) {
+//       alert("El porcentaje debe estar entre 1 y 100");
+//       return;
+//     }
+
+//     const minExpiration = addMinutes(new Date(), 5);
+//     if (expiresAt && new Date(expiresAt) < minExpiration) {
+//       alert("La fecha de expiración debe ser al menos 5 minutos en el futuro.");
+//       return;
+//     }
+
+//     try {
+//       const token = localStorage.getItem("token");
+//       const expirationDate = expiresAt ? new Date(expiresAt).toISOString() : null;
+
+//       const response = await axios.post(
+//         `${API_BACK}/discounts`,
+//         {
+//           amount: Number(newAmount),
+//           isUsed: false,
+//           status: "active",
+//           expiresAt: expirationDate,
+//         },
+//         { headers: { Authorization: `Bearer ${token}` } }
+//       );
+
+//       setDiscounts([...discounts, response.data]);
+//       setNewAmount("");
+//       setExpiresAt(null);
+//     } catch (error) {
+//       alert("Error al crear el descuento");
+//     }
+//   };
+
+//   // Eliminar un descuento
+//   const deleteDiscount = async (id: string) => {
+//     try {
+//       const token = localStorage.getItem("token");
+//       await axios.delete(`${API_BACK}/discounts/${id}`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+
+//       setDiscounts(discounts.filter((discount) => discount.id !== id));
+//     } catch (error) {
+//       alert("Error al eliminar el descuento");
+//     }
+//   };
+
+//   // Buscar un descuento por ID
+//   const searchDiscount = async () => {
+//     if (!searchId) return;
+//     try {
+//       const token = localStorage.getItem("token");
+//       const response = await axios.get(`${API_BACK}/discounts/${searchId}`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+
+//       setSelectedDiscount(response.data);
+//     } catch (error) {
+//       alert("Descuento no encontrado");
+//     }
+//   };
+
+//   // Agrupar descuentos por porcentaje
+//   const groupedDiscounts = discounts.reduce((acc, discount) => {
+//     if (!acc[discount.amount]) {
+//       acc[discount.amount] = [];
+//     }
+//     acc[discount.amount].push(discount);
+//     return acc;
+//   }, {} as Record<number, Discount[]>);
+
+//   useEffect(() => {
+//     fetchDiscounts();
+//   }, []);
+
+//   if (loading) return <p className="text-center text-lg">Cargando descuentos...</p>;
+//   if (error) return <p className="text-center text-red-500">{error}</p>;
+
+//   return (
+//     <div className="min-h-screen bg-gray-100 p-6">
+//       <header className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg">
+//         <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+//           <Ticket className="h-6 w-6 mr-2 text-indigo-600" /> Lista de Descuentos
+//         </h1>
+//       </header>
+
+//       {/* Formulario estilizado */}
+//       <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+//         <h2 className="text-lg font-semibold text-gray-700 mb-4">Crear nuevo descuento</h2>
+//         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+//           <input
+//             type="number"
+//             value={newAmount}
+//             onChange={(e) => setNewAmount(e.target.value)}
+//             placeholder="% de descuento"
+//             className="border p-2 rounded w-full"
+//           />
+//           <input
+//             type="datetime-local"
+//             value={expiresAt ? expiresAt : ""}
+//             onChange={(e) => setExpiresAt(e.target.value)}
+//             className="border p-2 rounded w-full"
+//           />
+//           <button onClick={createDiscount} className="bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center">
+//             <Plus className="h-5 w-5 mr-2" /> Crear
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Buscar un descuento */}
+//       <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+//         <h2 className="text-lg font-semibold text-gray-700 mb-4">Buscar descuento por ID</h2>
+//         <div className="flex gap-4">
+//           <input
+//             type="text"
+//             value={searchId}
+//             onChange={(e) => setSearchId(e.target.value)}
+//             placeholder="ID del descuento"
+//             className="border p-2 rounded w-full"
+//           />
+//           <button onClick={searchDiscount} className="bg-green-500 text-white px-4 py-2 rounded flex items-center justify-center">
+//             <Search className="h-5 w-5 mr-2" /> Buscar
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Mostrar descuento seleccionado */}
+//       {selectedDiscount && (
+//         <div className="bg-white p-6 rounded-lg shadow-md mt-6 border-l-4 border-indigo-600">
+//           <h2 className="text-xl font-bold">{selectedDiscount.amount}% de descuento</h2>
+//           <p className="text-sm text-gray-500">ID: {selectedDiscount.id}</p>
+//           <p className="text-sm text-gray-500">
+//             Creado: {format(new Date(selectedDiscount.createdAt), "dd/MM/yyyy HH:mm")}
+//           </p>
+//           {selectedDiscount.expiresAt && (
+//             <p className="text-sm text-red-500">
+//               Expira: {format(new Date(selectedDiscount.expiresAt), "dd/MM/yyyy HH:mm")}
+//             </p>
+//           )}
+//         </div>
+//       )}
+
+//       {/* Lista de descuentos agrupados */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//         {discounts.map((discount) => (
+//           <div key={discount.id} className="bg-white p-4 rounded-lg shadow-md border-l-4 border-indigo-600">
+//             <h2 className="text-xl font-semibold text-gray-800">{discount.amount}% de descuento</h2>
+//             <p className="text-sm text-gray-500">ID: {discount.id}</p>
+//             <p className="text-sm text-gray-500">Creado: {format(new Date(discount.createdAt), "dd/MM/yyyy HH:mm")}</p>
+//             {discount.expiresAt ? (
+//               <p className="text-sm text-red-500">Expira: {format(new Date(discount.expiresAt), "dd/MM/yyyy HH:mm")}</p>
+//             ) : (
+//               <p className="text-sm text-green-500">No expira</p>
+//             )}
+//             <p className={`text-sm font-semibold ${discount.status === "expired" ? "text-red-500" : "text-green-500"}`}>
+//               Estado: {discount.status}
+//             </p>
+//             <button
+//               onClick={() => deleteDiscount(discount.id)}
+//               className="bg-red-500 text-white px-4 py-2 mt-2 rounded flex items-center"
+//             >
+//               <Trash className="h-5 w-5 mr-2" /> Eliminar
 //             </button>
 //           </div>
 //         ))}
@@ -269,61 +409,134 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-/////estoy pribando esto //////
-
+"use client";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { format } from "date-fns";
-import { BadgeCheck, XCircle, Calendar, Ticket, Hash } from "lucide-react";
+import { format, addMinutes } from "date-fns";
+import { Ticket, Plus, Trash, Search } from "lucide-react";
+
+// Definir el tipo de datos del descuento
+interface Discount {
+  id: string;
+  amount: number;
+  isUsed: boolean;
+  createdAt: string;
+  expiresAt: string | null;
+  status: "active" | "expired" | "used" | "inactive";
+  userId: string | null;
+}
 
 function DiscountsApp() {
-  const [discounts, setDiscounts] = useState([]);
+  const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [newAmount, setNewAmount] = useState("");
+  const [expiresAt, setExpiresAt] = useState<string | null>(null);
+  const [searchId, setSearchId] = useState("");
+  const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null);
 
+  // Obtener los descuentos
   const fetchDiscounts = async () => {
     try {
-      console.log("🔍 Fetching discounts...");
       const token = localStorage.getItem("token");
       if (!token) {
-        console.error("❌ No token found!");
         setError("No hay token de autenticación.");
         return;
       }
-
       const response = await axios.get(`${API_BACK}/discounts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("✅ Data received:", response.data);
       setDiscounts(response.data);
     } catch (error) {
-      console.error("❌ Error fetching discounts:", error);
       setError("Error al cargar los descuentos.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Crear un descuento con expiración opcional
+  const createDiscount = async () => {
+    if (!newAmount || Number(newAmount) < 1 || Number(newAmount) > 100) {
+      alert("El porcentaje debe estar entre 1 y 100");
+      return;
+    }
+
+    const minExpiration = addMinutes(new Date(), 5);
+    if (expiresAt && new Date(expiresAt) < minExpiration) {
+      alert("La fecha de expiración debe ser al menos 5 minutos en el futuro.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const expirationDate = expiresAt ? new Date(expiresAt).toISOString() : null;
+
+      const response = await axios.post(
+        `${API_BACK}/discounts`,
+        {
+          amount: Number(newAmount),
+          isUsed: false,
+          status: "active",
+          expiresAt: expirationDate,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setDiscounts([...discounts, response.data]);
+      setNewAmount("");
+      setExpiresAt(null);
+    } catch (error) {
+      alert("Error al crear el descuento");
+    }
+  };
+
+  // Eliminar un descuento
+  const deleteDiscount = async (id: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_BACK}/discounts/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setDiscounts(discounts.filter((discount) => discount.id !== id));
+    } catch (error) {
+      alert("Error al eliminar el descuento");
+    }
+  };
+
+  // Buscar un descuento por ID
+  const searchDiscount = async () => {
+    if (!searchId) return;
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_BACK}/discounts/${searchId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setSelectedDiscount(response.data);
+    } catch (error) {
+      alert("Descuento no encontrado");
+    }
+  };
+
+  // Agrupar descuentos por porcentaje
+  const groupedDiscounts = discounts.reduce((acc, discount) => {
+    if (!acc[discount.amount]) {
+      acc[discount.amount] = [];
+    }
+    acc[discount.amount].push(discount);
+    return acc;
+  }, {} as Record<number, Discount[]>);
+
   useEffect(() => {
     fetchDiscounts();
   }, []);
 
-  if (loading) return <p className="text-center text-gray-500">Cargando descuentos...</p>;
-  if (error) return <p className="text-red-500 text-center">{error}</p>;
+  if (loading) return <p className="text-center text-lg">Cargando descuentos...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -333,53 +546,104 @@ function DiscountsApp() {
         </h1>
       </header>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {discounts.length === 0 ? (
-          <p className="text-center col-span-3 text-gray-500">No hay descuentos disponibles.</p>
-        ) : (
-          discounts.map((discount) => (
-            <div key={discount.id} className="bg-white p-4 rounded-lg shadow-md border-l-4 border-indigo-600">
-              <div className="flex justify-between items-center">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    discount.isUsed ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
-                  }`}
-                >
-                  {discount.isUsed ? "Usado" : "Disponible"}
-                </span>
-              </div>
-
-              {/* ID del Descuento */}
-              <div className="flex items-center text-gray-500 text-sm mt-2">
-                <Hash className="h-4 w-4 mr-1 text-indigo-500" />
-                <span className="font-mono">{discount.id}</span>
-              </div>
-
-              {/* Porcentaje de Descuento */}
-              <h2 className="text-xl font-semibold text-gray-800 mt-2">{discount.amount}% de descuento</h2>
-
-              {/* Fecha de Creación */}
-              <div className="flex items-center text-gray-500 text-sm mt-1">
-                <Calendar className="h-4 w-4 mr-1" />
-                Creado: {format(new Date(discount.createdAt), "dd/MM/yyyy")}
-              </div>
-
-              {/* Fecha de Expiración */}
-              {discount.expiresAt ? (
-                <div className="flex items-center text-gray-500 text-sm mt-1">
-                  <XCircle className="h-4 w-4 mr-1 text-red-500" />
-                  Expira: {format(new Date(discount.expiresAt), "dd/MM/yyyy")}
-                </div>
-              ) : (
-                <div className="flex items-center text-gray-500 text-sm mt-1">
-                  <BadgeCheck className="h-4 w-4 mr-1 text-green-500" />
-                  No expira
-                </div>
-              )}
-            </div>
-          ))
-        )}
+      {/* Formulario estilizado */}
+      <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">Crear nuevo descuento</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input
+            type="number"
+            value={newAmount}
+            onChange={(e) => setNewAmount(e.target.value)}
+            placeholder="% de descuento"
+            className="border p-2 rounded w-full"
+          />
+          <input
+            type="datetime-local"
+            value={expiresAt ? expiresAt : ""}
+            onChange={(e) => setExpiresAt(e.target.value)}
+            className="border p-2 rounded w-full"
+          />
+          <button onClick={createDiscount} className="bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center">
+            <Plus className="h-5 w-5 mr-2" /> Crear
+          </button>
+        </div>
       </div>
+
+      {/* Buscar un descuento */}
+      <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">Buscar descuento por ID</h2>
+        <div className="flex gap-4">
+          <input
+            type="text"
+            value={searchId}
+            onChange={(e) => setSearchId(e.target.value)}
+            placeholder="ID del descuento"
+            className="border p-2 rounded w-full"
+          />
+          <button onClick={searchDiscount} className="bg-green-500 text-white px-4 py-2 rounded flex items-center justify-center">
+            <Search className="h-5 w-5 mr-2" /> Buscar
+          </button>
+        </div>
+      </div>
+
+      {/* Mostrar descuento seleccionado */}
+      {selectedDiscount && (
+        <div className="bg-white p-6 rounded-lg shadow-md mt-6 border-l-4 border-indigo-600">
+          <h2 className="text-xl font-bold">{selectedDiscount.amount}% de descuento</h2>
+          <p className="text-sm text-gray-500">ID: {selectedDiscount.id}</p>
+          <p className="text-sm text-gray-500">
+            Creado: {format(new Date(selectedDiscount.createdAt), "dd/MM/yyyy HH:mm")}
+          </p>
+          {selectedDiscount.expiresAt && (
+            <p className="text-sm text-red-500">
+              Expira: {format(new Date(selectedDiscount.expiresAt), "dd/MM/yyyy HH:mm")}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Lista de descuentos agrupados */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {Object.entries(groupedDiscounts).map(([amount, discountList]) => {
+    // Ordenamos para encontrar el último creado
+    const sortedDiscounts = discountList.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    const latestDiscount = sortedDiscounts[0];
+
+    // Contadores de estado
+    const totalCreated = discountList.length;
+    const expiringSoon = discountList.filter(d => d.expiresAt !== null && d.status === "active").length;
+    const expired = discountList.filter(d => d.status === "expired").length;
+    const noExpiration = discountList.filter(d => d.expiresAt === null).length;
+
+    return (
+      <div key={latestDiscount.id} className="bg-white p-4 rounded-lg shadow-md border-l-4 border-indigo-600">
+        <h2 className="text-xl font-semibold text-gray-800">{latestDiscount.amount}% de descuento</h2>
+        <p className="text-sm text-gray-500">ID: {latestDiscount.id}</p>
+        <p className="text-sm text-gray-500">Creado: {format(new Date(latestDiscount.createdAt), "dd/MM/yyyy HH:mm")}</p>
+
+        {/* Contadores de estado */}
+        <div className="mt-4 space-y-2">
+          <p className="text-sm text-gray-700 font-semibold">Total creados: {totalCreated}</p>
+          {expiringSoon > 0 && (
+            <p className="text-sm text-yellow-500 font-semibold">Próximas a vencer: {expiringSoon}</p>
+          )}
+          {expired > 0 && <p className="text-sm text-red-500 font-semibold">Expirados: {expired}</p>}
+          {noExpiration > 0 && <p className="text-sm text-green-500 font-semibold">Sin expiración: {noExpiration}</p>}
+        </div>
+
+        <button
+          onClick={() => deleteDiscount(latestDiscount.id)}
+          className="bg-red-500 text-white px-4 py-2 mt-2 rounded flex items-center"
+        >
+          <Trash className="h-5 w-5 mr-2" /> Eliminar
+        </button>
+      </div>
+    );
+  })}
+</div>
+
     </div>
   );
 }
