@@ -23,6 +23,7 @@ export interface ProductInterface {
     discount?: number | ""
     category: string
     isActive?: boolean
+    style: string
 }
 
 export type ProductWithoutId = {
