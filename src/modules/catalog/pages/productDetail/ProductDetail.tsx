@@ -24,6 +24,17 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [availableSizes, setAvailableSizes] = useState<Product[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const getStyleClasses = (style: string | undefined) => {
+    if (!style) return "bg-blue-500 text-white";
+    const normalizedStyle = style.trim().toLowerCase();
+    const styleColors: Record<string, string> = {
+      motorsport: "bg-red-500 text-white", 
+      asian: "text-green-700 bg-green-200", 
+      streetwear: "bg-black text-white", 
+   };
+  
+    return styleColors[normalizedStyle] || "bg-blue-500 text-white"; 
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -144,10 +155,10 @@ export default function ProductDetail() {
 
           <div className="flex flex-col justify-between flex-grow gap-2 w-full md:w-2/5">
             <h2 className="text-4xl font-bold">{product.name}</h2>
-            <div className="flex gap-2">
-              <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 uppercase mt-2 inline-block">
-                Asian
-              </span>
+            <div className="flex gap-2">              
+             <span className={`text-xs font-bold px-2 py-1 uppercase mt-2 inline-block rounded-md ${getStyleClasses(product.style)}`} >
+                {product.style || "Sin estilo"}
+              </span>              
             </div>
             <p className="text-gray-500 text-lg whitespace-pre-line">{product.description}</p>
             <p className="text-4xl font-bold text-black mt-2">
