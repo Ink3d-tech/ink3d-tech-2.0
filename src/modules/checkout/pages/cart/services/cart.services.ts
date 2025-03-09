@@ -59,6 +59,12 @@ export const paymentCreateService = async (
     confirmedCart: ICartProduct[],
     token: string | null
 ): Promise<IPaymentResponse> => {
+    
+    if (!orderId || !currency) throw new Error("Faltan datos obligatorios para procesar el pago.");
+    if (!confirmedCart.length) throw new Error("El carrito está vacío.");
+    if (!token) throw new Error("Token de autenticación no proporcionado.");
+
+
     try {
         const body = {
             orderId,
@@ -72,7 +78,7 @@ export const paymentCreateService = async (
         };
 
 
-        // console.log("Body de la request MP:", JSON.stringify(body, null, 2));
+        console.log("Body de la request MP:", JSON.stringify(body, null, 2));
         // console.log(`token ${token}`);
 
         const { data } = await axios.post<IPaymentResponse>(

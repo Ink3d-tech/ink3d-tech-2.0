@@ -22,22 +22,26 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <CategoriesProvider>
-            <CartProvider>
-              <ProductsProvider>
+        
+        <ProductsProvider>
+          <AuthProvider>
+            <CategoriesProvider>
+              <CartProvider>
                 <LocationPathname redirectRoutes={["/login", "/signup"]}>
                   <NavBar />
+                      
                   <main className="bg-[#D9D9D9] min-h-screen">
                     <Chatbot />
                     {children}
                   </main>
-                  <Footer />
+                      
+                  <Footer/>
                 </LocationPathname>
-              </ProductsProvider>
-            </CartProvider>
-          </CategoriesProvider>
-        </AuthProvider>
+              </CartProvider>
+            </CategoriesProvider>
+          </AuthProvider>
+        </ProductsProvider>
+              
       </body>
     </html>
   );

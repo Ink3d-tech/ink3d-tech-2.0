@@ -39,24 +39,24 @@ export const LoginForm: React.FC<LoginProps> = ({
 
     const [isClient, setIsClient] = useState(false);
     
-        // useEffect para actualizar el estado cuando el componente se monte
-        useEffect(() => {
-            setIsClient(true);  // Cambiamos a true una vez que el componente se haya montado en el cliente
-        }, []);
+    // useEffect para actualizar el estado cuando el componente se monte
+    useEffect(() => {
+        setIsClient(true);  // Cambiamos a true una vez que el componente se haya montado en el cliente
+    }, []);
 
     const handleGoogleAuth = () => {
-                    if (isClient) {  
-                        Swal.fire({
-                            title: "Redirigiendo...",
-                            text: "Te estamos redirigiendo a Google para iniciar sesión",
-                            icon: "info",
-                            timer: 2000,
-                            showConfirmButton: false
-                        }).then(() => {
-                            window.location.href = `${API_BACK}/auth/google/login`;
-                        });
-                    }
-                };
+        if (isClient) {  
+            Swal.fire({
+                title: "Redirigiendo...",
+                text: "Te estamos redirigiendo a Google para iniciar sesión",
+                icon: "info",
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = `${API_BACK}/auth/google/login`;
+            });
+        }
+    };
 
     return (
         <form onSubmit={handlerSubmit} className="flex flex-col px-4 m-auto max-w-[402px] h-screen">
