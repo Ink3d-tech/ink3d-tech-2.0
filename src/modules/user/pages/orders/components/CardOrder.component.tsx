@@ -40,7 +40,7 @@ export const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
-const formatDate = (date: string) =>
+export const formatDate = (date: string) =>
   new Date(date).toLocaleDateString(undefined, {
     year: "numeric",
     month: "long",
@@ -51,13 +51,13 @@ const CardProduct = ({product}: {product: ProductInterface | undefined}) => {
   if(!product) return
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 mb-4">
       <div className="w-24 h-24 rounded-lg overflow-hidden">
         <Image src={product.image[0]} alt={product.name} width={60} height={60} className="w-full h-full object-cover" />
       </div>
       <div className="flex-1">
           <h3 className="font-bold text-lg">{product.name}</h3>
-          <p className="text-gray-600 text-sm line-clamp-3">{product.description}</p>
+          <p className="text-gray-600 text-sm">{product.description}</p>
       </div>
     </div>
   )
@@ -69,7 +69,7 @@ const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: R
   const { createdAt, status, orderDetails, id } = order;
 
   const preferenceID = new URLSearchParams(window.location.search).get('preference_id');
-  console.log(preferenceID)
+
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 mb-6">

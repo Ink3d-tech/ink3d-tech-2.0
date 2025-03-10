@@ -72,7 +72,7 @@ export const paymentCreateService = async (
             products: confirmedCart.map(({ id, name, price, units }) => ({
                 id,
                 title: name,
-                price,
+                price: price * units,
                 quantity: units,
             })),
         };
