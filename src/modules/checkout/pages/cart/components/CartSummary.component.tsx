@@ -20,6 +20,7 @@ export default function CartSummary() {
     const [showDiscountInput, setShowDiscountInput] = useState(false);
     const [discountCode, setDiscountCode] = useState("");
     const [validDiscount, setValidDiscount] = useState("");
+    const [discountAmount, setDiscountAmount] = useState(0);
     
     const totalPrice = products.reduce((total, product) => total + (Number(product.price) * product.units), 0);
 
@@ -37,7 +38,7 @@ export default function CartSummary() {
             const userBuyer = getIdUser(localStorage.getItem("token") || "");
             const confirmedCart: ICartProduct[] = JSON.parse(localStorage.getItem(`cart_${userBuyer}`) || "[]");
             const { orderId } = await confirmOrderService(userBuyer, confirmedCart, token, validDiscount);
-            const response = await paymentCreateService(orderId, "ARS", confirmedCart, token);
+            const response = await paymentCreateService(orderId, "ARS", confirmedCart, token, discountAmount);
             const link = Object.values(response)[0];
             window.location.href = link;
 
@@ -64,6 +65,7 @@ export default function CartSummary() {
                 setValidDiscount(discountCode);
                 setDiscountPrice(totalPrice - (totalPrice * discountAmount) / 100);
                 setShowDiscountInput(!showDiscountInput);
+                setDiscountAmount(discountAmount);
                 
             } else if (fetchDiscount?.status === "used") {
                 Swal.fire({
@@ -72,6 +74,9 @@ export default function CartSummary() {
                     icon: "error",
                     confirmButtonText: "OK",
                 });
+
+                setValidDiscount("");
+
             } else if (fetchDiscount?.status === "expired") {
                 Swal.fire({
                     title: "Código expirado",
@@ -79,6 +84,9 @@ export default function CartSummary() {
                     icon: "error",
                     confirmButtonText: "OK",
                 });
+
+                setValidDiscount("");
+                
             } else if (fetchDiscount?.status === "invalid") {
                 Swal.fire({
                     title: "Código inválido",

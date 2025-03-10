@@ -20,7 +20,7 @@ interface StockMovement {
     stock: number;
     image: string[];
     size: string;
-  } | null; // Aseguramos que product pueda ser null
+  } | null; 
 }
 
 export default function StockMovements() {

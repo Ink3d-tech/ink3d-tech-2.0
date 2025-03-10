@@ -17,7 +17,7 @@ interface Product {
     id: string;
     name: string;
   };
-  image: string;
+  image: string[];
   stock: number;
   style: string;
 }
@@ -79,11 +79,7 @@ export default function ProductsPage() {
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3 ">
             Lista de Productos
           </h2>
-          <FilterCategories
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
-          />
-
+          <FilterCategories selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
         </div>
         <div className="w-full h-px bg-gray-300"></div>
 
