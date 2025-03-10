@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import { useProducts } from "@/modules/user/pages/manager/context/Products.context";
 
 interface Product {
   id: string;

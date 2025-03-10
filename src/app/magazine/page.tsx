@@ -94,22 +94,20 @@ const MagazinePage: React.FC = () => {
     <div className="min-h-screen bg-white p-8">
       {/* Navbar */}
       <nav className=" bg-white text-black shadow-md z-50">
-    <div className="container mx-auto flex justify-between items-center p-4">
-      
-
-      <ul className="flex gap-6 text-sm uppercase">
-        {categories.map((cat) => (
-          <li
-            key={cat}
-            className={`cursor-pointer transition ${category === cat ? "text-red-500 font-bold" : "hover:text-red-500"}`}
-            onClick={() => router.push(cat === "Todas" ? "/magazine" : `/magazine?category=${cat}`)}
-          >
-            {cat}
-          </li>
-        ))}
-      </ul>
-    </div>
-  </nav>
+        <div className="container mx-auto flex justify-between items-center p-4">
+          <ul className="flex  gap-6 text-sm uppercase">
+            {categories.map((cat) => (
+              <li
+                key={cat}
+                className={`cursor-pointer transition ${category === cat ? "text-red-500 font-bold" : "hover:text-red-500"}`}
+                onClick={() => router.push(cat === "Todas" ? "/magazine" : `/magazine?category=${cat}`)}
+              >
+                {cat}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
       <h1 className="text-5xl font-bold text-center uppercase tracking-widest py-5 mt-20 mb-10">
         {category && category !== "Todas" ? category : "INK3D Magazine"}
       </h1>

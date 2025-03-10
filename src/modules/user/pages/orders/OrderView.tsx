@@ -7,8 +7,31 @@ import { useEffect, useState } from "react";
 import OrderCard from "./components/CardOrder.component";
 import axios from "axios";
 import OrderDetailsModal from "./components/CardOrderModal.component";
+import { ShoppingBasket, ArrowRight } from "lucide-react";
 
 
+const EmptyState = () => {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+      <div className="bg-gray-100 p-6 rounded-full mb-6">
+        <ShoppingBasket className="w-12 h-12 text-gray-600" />
+      </div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-3">No hay pedidos todavía</h2>
+      <p className="text-gray-600 mb-8 max-w-md">
+        Parece que aún no has realizado ninguna compra. Echa un vistazo a nuestros últimos lanzamientos y comienza a crear tu colección.
+      </p>
+      <button 
+        onClick={() => window.location.href = '/products'}
+        className="bg-black text-white px-8 py-3 rounded-xl font-semibold 
+          hover:bg-gray-800 transform hover:scale-[1.02] transition-all duration-200
+          flex items-center gap-2 shadow-lg hover:shadow-xl"
+      >
+        Explorar tienda
+        <ArrowRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
+};
 
 export default function OrdersView() {
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -50,12 +73,16 @@ export default function OrdersView() {
           <h1 className="text-4xl font-bold tracking-tight">Mis compras</h1>
           <p className="text-gray-600 mt-2">Seguimiento de tus compras de ropa urbana</p>
         </div>
-        
-        <div className="space-y-6">
-          {allOrders.map(order => (
-            <OrderCard key={order.id} order={order}  onViewDetails={setSelectedOrder}/>
-          ))}
-        </div>
+
+        {allOrders.length === 0 ? (
+          <EmptyState />
+        ) :  (
+          <div className="space-y-6">
+            {allOrders.reverse().map(order => (
+              <OrderCard key={order.id} order={order}  onViewDetails={setSelectedOrder}/>
+            ))}
+          </div>
+        )}
       </div>
 
       {selectedOrder && (
