@@ -29,7 +29,7 @@ const styleImages: Record<string, string[]> = {
   ],
 };
 
-// Imágenes predeterminadas (solo si no hay imágenes en styleImages)
+// Imágenes predeterminadas si no hay imágenes en styleImages
 const defaultImages: Record<string, string> = {
   Motorsport: "/images/LogoMotorsport.png",
   Asian: "/images/LogoAsian.png",
@@ -69,7 +69,7 @@ export default function Categories() {
     fetchProducts();
   }, []);
 
-  // Cambiar la imagen de cada estilo cada 5 segundos si tiene varias imágenes
+  // Cambiar la imagen de cada estilo cada 10 segundos si tiene varias imágenes
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImages((prevIndexes) => {
@@ -86,9 +86,16 @@ export default function Categories() {
     return () => clearInterval(interval);
   }, [styles]);
 
-  return (
-    <div className="min-h-screen bg-black">
+  let gridClass = "grid-cols-1";
 
+  if (styles.length === 3) {
+    gridClass = "md:grid-cols-3";
+  } else if (styles.length === 4) {
+    gridClass = "md:grid-cols-2";
+  }
+
+  return (
+    <div className="min-h-screen bg-black -mb-44">
       {/* Barra de navegación de estilos */}
       <div className="flex overflow-x-auto space-x-2 p-4 bg-black shadow-md sticky top-0 z-10">
         <Link href="/products" className="px-4 py-2 text-white rounded-full text-sm hover:bg-gray-900">
@@ -105,8 +112,8 @@ export default function Categories() {
       {loading && <p className="text-center text-gray-500 mt-4">Cargando estilos...</p>}
       {error && <p className="text-center text-red-500 mt-4">Error: {error}</p>}
 
-      {/* Tarjetas de estilos GIGANTES con imágenes dinámicas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+      {/* Contenedor de imágenes con reglas dinámicas */}
+      <div className={`grid ${gridClass} gap-4 w-full px-4`}>
         {styles.map((style) => {
           // Seleccionamos las imágenes disponibles
           const images = styleImages[style] || [];
@@ -116,16 +123,18 @@ export default function Categories() {
 
           return (
             <Link key={style} href={`/products?style=${style}`} passHref>
-              <div className="relative w-full h-[80vh] cursor-pointer transition-transform transform hover:scale-105">
-                <Image
-                  src={imageToShow}
-                  alt={style}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-none"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                  <p className="text-white font-extrabold text-3xl uppercase text-center">{style}</p>
+              <div className="group overflow-hidden">
+                <div className="relative w-full h-[70vh] cursor-pointer transition-transform transform group-hover:scale-105">
+                  <Image
+                    src={imageToShow}
+                    alt={style}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-none"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <p className="text-white font-extrabold text-3xl uppercase text-center">{style}</p>
+                  </div>
                 </div>
               </div>
             </Link>

@@ -29,6 +29,17 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const initialCategory = searchParams.get("category") || null;
+  const getStyleClasses = (style: string | undefined) => {
+    if (!style) return "bg-blue-500 text-white";
+    const normalizedStyle = style.trim().toLowerCase();
+    const styleColors: Record<string, string> = {
+      motorsport: "bg-red-500 text-white",
+      asian: "text-green-600 bg-green-100",
+      streetwear: "bg-black text-white",
+    };
+
+    return styleColors[normalizedStyle] || "bg-blue-500 text-white";
+  };
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     initialCategory
   );
@@ -62,7 +73,7 @@ export default function ProductsPage() {
   return (
 
     <div className="min-h-screen bg-gray-300 pb-2 ">
-      <BackButton tab="Asian" />
+      <BackButton tab="" />
       <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md ">
         <div className="flex justify-between items-center px-30 px-4">
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3 ">
@@ -92,13 +103,17 @@ export default function ProductsPage() {
               passHref
             >
               <div className="relative flex flex-col bg-white overflow-hidden rounded-lg cursor-pointer transition-transform group">
-                <div
-                  className="absolute top-3 right-0 bg-green-100 text-green-600 text-xs font-semibold uppercase px-4 py-1 
+              <div className="flex gap-2 ">
+                  <span
+                    className={`absolute top-3 right-0 text-xs font-semibold uppercase px-4 py-1 
                rounded-bl-lg rounded-tl-lg opacity-0 shadow-md
                group-hover:opacity-100 
-               transition-opacity duration-300 ease-in-out"
-                >
-                  Asian
+               transition-opacity duration-300 ease-in-out ${getStyleClasses(
+                 product.style
+               )}`}
+                  >
+                    {product.style || "Sin estilo"}
+                  </span>
                 </div>
                 {product.stock === 0 && (
                   <div

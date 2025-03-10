@@ -3,8 +3,42 @@
 import Image from "next/image";
 import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
 import { ProductInterface, useProducts } from "../../manager/context/Products.context";
-import Link from "next/link";
+import { AlertCircle, ArrowRight, CheckCircle2, Clock, Package, ShoppingBag } from "lucide-react";
 
+export const StatusBadge = ({ status }: { status: string }) => {
+  const getStatusStyles = () => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-100 text-green-800 border-green-300';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      case 'failed':
+        return 'bg-red-100 text-red-800 border-red-300';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-300';
+    }
+  };
+
+  const getStatusIcon = () => {
+    switch (status) {
+      case 'completed':
+        return <CheckCircle2 className="w-4 h-4" />;
+      case 'pending':
+        return <Clock className="w-4 h-4" />;
+      case 'failed':
+        return <AlertCircle className="w-4 h-4" />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getStatusStyles()}`}>
+      {getStatusIcon()}
+      {status.charAt(0).toUpperCase() + status.slice(1)}
+    </span>
+  );
+};
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString(undefined, {
@@ -13,62 +47,74 @@ const formatDate = (date: string) =>
     day: "numeric",
   });
 
-const CardProduct = ({product, status}: {product: ProductInterface | undefined, status: string}) => {
+const CardProduct = ({product}: {product: ProductInterface | undefined}) => {
   if(!product) return
 
   return (
-    <div className="flex gap-4 items-center">
-      <Image src={product.image[0]} alt={product.name} width={60} height={60} className="rounded-md" />
-      <div className="flex flex-col w-48">
-        <div className="flex justify-end w-full">
-          <p className="w-20 font-semibold capitalize rounded-full text-center">{status}</p>
-        </div>
-        {/* <p className="font-semibold">Llegó el {arrivalDate}</p>
-        <p className="text-gray-600 text-sm">Podés devolverlo hasta el {returnDate}</p> */}
-        <p className="text-gray-800 font-medium truncate">{product.name}</p>
-        <p className="text-gray-400 text-sm cursor-pointer line-clamp-2">{product.description}</p>
+    <div className="flex items-center gap-4">
+      <div className="w-24 h-24 rounded-lg overflow-hidden">
+        <Image src={product.image[0]} alt={product.name} width={60} height={60} className="w-full h-full object-cover" />
       </div>
-      {/* <div className="flex justify-end w-full">
-        <div className="flex flex-col gap-2 border">
-          <button className="bg-blue-100 text-blue-600 px-4 py-1 rounded text-sm" disabled>
-              <Link href={`/productDetail/${product.id}`}>
-                Volver a comprar
-              </Link>
-          </button>
-
-          <button className="bg-blue-600 text-white px-4 py-1 rounded text-sm">
-            Ver compra
-          </button>
-        </div>
-      </div> */}
+      <div className="flex-1">
+          <h3 className="font-bold text-lg">{product.name}</h3>
+          <p className="text-gray-600 text-sm line-clamp-3">{product.description}</p>
+      </div>
     </div>
   )
 }
 
-const OrderCard = ({ order }: { order: IOrder }) => {
+const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: React.Dispatch<React.SetStateAction<IOrder | null>>}) => {
   const { getProductById } = useProducts();
+
   const { createdAt, status, orderDetails, id } = order;
 
+  const preferenceID = new URLSearchParams(window.location.search).get('preference_id');
+  console.log(preferenceID)
+
   return (
-    <div className="p-4 w-full max-w-lg border rounded-lg shadow-md">
-      <p className="text-gray-900 text-md font-semibold">{formatDate(createdAt)}</p>
-      <hr className="my-2" />
-
-      <div className="flex flex-col gap-10">
-        {orderDetails.map((detail) => (
-          <CardProduct key={detail.productId} product={getProductById(detail.productId)} status={status} />
-        ))}
-      </div>
-
-      {status === "pending" && (
-        <div className="mt-4">
-          <Link href={`/checkout?orderId=${id}`}>
-            <button className="bg-yellow-500 text-white px-4 py-2 rounded w-full">
-              Retomar compra
-            </button>
-          </Link>
+    <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 mb-6">
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Package className="w-5 h-5 text-gray-600" />
+            <span className="text-sm text-gray-600">
+              Order #{id.slice(0,10)} • {formatDate(createdAt)}
+            </span>
+          </div>
+          <StatusBadge status={status} />
         </div>
-      )}
+        
+        {orderDetails.map((detail) => (
+            <CardProduct key={detail.productId} product={getProductById(detail.productId)} />
+        ))}
+        
+        <div className="mt-6 flex justify-end">
+          <button  onClick={() => onViewDetails(order)} className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2">
+            <ShoppingBag className="w-4 h-4" />
+            View Details
+          </button>
+        </div>
+
+        {order.status !== "completed" && (
+          <div className="mt-4 border-t pt-4">
+            <button 
+              onClick={() => {
+                const redirect = `https://sandbox.mercadopago.com.co/checkout/v1/redirect/4b07ef5b-bdeb-4433-ae9f-9b99664060a4/payment-option-form-v2/?preference-id=${preferenceID}&router-request-id=eb333355-2232-4975-81fe-bcbfde9e0ebc&p=018583ef1cf6cc0aa5040ec91a1781dd`
+                window.location.href = redirect
+              }}
+              className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-3 px-6 rounded-xl 
+                hover:from-yellow-500 hover:to-yellow-600 transform hover:scale-[1.02] transition-all duration-200
+                flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+            >
+              Reanudar compra
+              <ArrowRight className="w-5 h-5" />
+            </button>
+            <p className="text-center text-sm text-gray-500 mt-2">
+              Complete su pedido para asegurar sus artículos
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
