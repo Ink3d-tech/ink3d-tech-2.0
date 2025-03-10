@@ -17,6 +17,7 @@ export interface IOrder {
     createdAt: string;
     updatedAt: string;
     orderDetails: IOrderDetail[];
+    externalReference?: string; // Puede ser `undefined`
 }
 
 // Tipado de los detalles de la orden
