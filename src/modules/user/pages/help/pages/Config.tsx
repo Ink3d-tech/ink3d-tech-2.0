@@ -7,7 +7,8 @@ export default function Refund() {
     <div>
       <BackButton tab='Configuracion de la cuenta'/>
       <div className='p-40'>
-        <div className='flex flex-col justify-center p-10 bg-white'>
+        <div className='flex flex-col justify-center p-10 bg-[#ff2800]
+        '>
           <div className='flex items-center gap-4 mb-4'>
           <HelpCircle/>
             <h2 className='text-2xl'>Configuracion de la cuenta</h2>
