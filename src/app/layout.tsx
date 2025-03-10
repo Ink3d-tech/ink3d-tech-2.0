@@ -8,6 +8,7 @@ import { ProductsProvider } from "@/modules/user/pages/manager/context/Products.
 import Chatbot from "@/shared/components/Chatbot";
 import LocationPathname from "@/shared/helpers/LocationPathname";
 import Footer from "@/shared/components/footer/footer";
+import ScrollToTop from "@/shared/components/buttons/UpButton.component";
 
 export const metadata: Metadata = {
   title: "The Ink3d project",
@@ -31,6 +32,7 @@ export default function RootLayout({
                   <NavBar />
                       
                   <main className="bg-[#D9D9D9] min-h-screen">
+                    <ScrollToTop />
                     <Chatbot />
                     {children}
                   </main>

@@ -11,7 +11,7 @@ export default function Footer() {
         </p>
         <FaHeart className="text-red-500 inline-block " />
                 <div className="flex space-x-6">
-          <Link href="/magazine/acercaDeNosotros" className="text-gray-400 hover:text-white transition">
+          <Link href="/aboutus" className="text-gray-400 hover:text-white transition">
             Acerca de nosotros
           </Link>
           <Link href="/home" className="text-gray-400 hover:text-white transition">

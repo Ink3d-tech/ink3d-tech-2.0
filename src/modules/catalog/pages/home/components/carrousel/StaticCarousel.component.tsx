@@ -1,72 +1,142 @@
 "use client";
 
-import "./styles/SwiperFLechas.styles.css"
+import "./styles/SwiperFLechas.styles.css";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { API_BACK } from "@/shared/config/api/getEnv";
+import { useRouter } from "next/navigation";
 
-interface IImage {
-  id: number;
-  name: string;
+interface Article {
+  id: string;
+  title: string;
+  author: string;
+  image: string;
+  category: string;
 }
-
-const images: IImage[] = [
-  { id: 1, name: "/images/carrousel2.png" },
-  { id: 2, name: "/images/carrousel2.png" },
-  { id: 3, name: "/images/carrousel2.png" },
-  { id: 4, name: "/images/carrousel2.png" },
-  { id: 5, name: "/images/carrousel2.png" },
-  { id: 6, name: "/images/carrousel2.png" },
-  { id: 7, name: "/images/carrousel3.png" },
-  { id: 8, name: "/images/carrousel3.png" },
-  { id: 9, name: "/images/carrousel3.png" },
-];
 
 interface CarouselProps {
-  imageIds: number[];
+  category: string;
 }
 
-const StaticCarousel = ({ imageIds }: CarouselProps) => {
-  const filteredImages = images.filter((img) => imageIds.includes(img.id));
+const DynamicCarousel = ({ category }: CarouselProps) => {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [validCategory, setValidCategory] = useState(false);
+  const [firstSlide, setFirstSlide] = useState(true);
+
+  const router = useRouter();
+
+  const handleSlideChange = () => {
+    if (firstSlide) setFirstSlide(false);
+  };
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch(`${API_BACK}/api/magazine`);
+        if (!response.ok)
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+
+        const data: Article[] = await response.json();
+
+        // Verificar si la categoría proporcionada existe en la API
+        const isValidCategory = data.some(
+          (article) => article.category === category
+        );
+
+        setValidCategory(isValidCategory);
+
+        if (isValidCategory) {
+          setArticles(data.filter((article) => article.category === category));
+        }
+      } catch (err) {
+        console.error("Error fetching articles:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, [category]);
+
+  if (loading)
+    return <p className="text-center text-gray-500">Cargando carrusel...</p>;
+  if (!validCategory)
+    return (
+      <p className="text-center text-gray-500">
+        La categoría {category} no existe.
+      </p>
+    );
+  if (articles.length === 0)
+    return (
+      <p className="text-center text-gray-500">
+        No hay imágenes en esta categoría.
+      </p>
+    );
+
+  const handleImageClick = (id: string) => {
+    router.push(`/magazine/${id}`);
+  };
 
   return (
-    <div className="max-w-7xl mx-auto my-6">
-    <Swiper
-      className="relative w-full mx-6"
-      pagination={{ clickable: true }}
-      slidesPerView={1}
-      spaceBetween={20}
-      modules={[Pagination]}
-      breakpoints={{
-        640: { slidesPerView: 1 },
-        768: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 },
-      }}
-    >
-      {filteredImages.map((image, index) => (
-        <SwiperSlide key={`${image.id}-${index}`} className="relative flex items-center justify-center">
-          <figure className="flex justify-center">
-            <Image
-              className="object-contain rounded-lg shadow-lg"
-              src={image.name}
-              alt={`imagen-${image.id}-${index}`}
-              loading="eager"
-              width={1920}
-              height={500}
-              style={{
-                width: "100%",
-                maxHeight: "500px",
-                minWidth: "300px",
-              }}
-            />
-          </figure>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className="w-full px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto max-w-7xl">
+        <Swiper
+          loop={true}
+          autoplay={{ delay: 4000, reverseDirection: true }}
+          speed={500}
+          pagination={{ clickable: true }}
+          navigation={{ nextEl: ".custom-next", prevEl: ".custom-prev" }}
+          slidesPerView={1}
+          centeredSlides={true}
+          spaceBetween={20}
+          keyboard={{ enabled: true }}
+          modules={[Pagination, Navigation, Autoplay]}
+          observer={true}
+          observeParents={true}
+          onSlideChange={handleSlideChange}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+        >
+          {articles.map((article) => (
+            <SwiperSlide
+              key={article.id}
+              className="relative flex items-center justify-center"
+            >
+              <figure className="flex justify-center">
+                <a onClick={() => handleImageClick(article.id)}>
+                  <Image
+                    className="object-cover rounded-lg shadow-lg"
+                    src={article.image}
+                    alt={`imagen-${article.id}`}
+                    loading="eager"
+                    width={1920}
+                    height={500}
+                    style={{ maxHeight: "500px", minWidth: "300px" }}
+                  />
+                </a>
+              </figure>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
+                <h2 className="text-xl font-semibold">{article.title}</h2>
+                <p>{article.author}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        <button className="custom-prev absolute left-4"></button>
+        <button className="custom-next absolute right-4"></button>
+      </div>
     </div>
   );
 };
 
-export default StaticCarousel;
+export default DynamicCarousel;

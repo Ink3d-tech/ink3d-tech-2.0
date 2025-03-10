@@ -9,7 +9,7 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 
 interface Article {
   id: number;
@@ -24,8 +24,8 @@ const Carousel = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [firstSlide, setFirstSlide] = useState(true);
-  
-  const router = useRouter(); 
+
+  const router = useRouter();
 
   const handleSlideChange = () => {
     if (firstSlide) {
@@ -52,7 +52,8 @@ const Carousel = () => {
     fetchArticles();
   }, []);
 
-  if (loading) return <p className="text-center text-gray-500">Cargando carrusel...</p>;
+  if (loading)
+    return <p className="text-center text-gray-500">Cargando carrusel...</p>;
 
   const handleImageClick = (id: number) => {
     router.push(`/magazine/${id}`);
@@ -63,7 +64,7 @@ const Carousel = () => {
       <Swiper
         loop={true}
         autoplay={{
-          delay: firstSlide ? 1 : 4000,
+          delay: 4000,
           reverseDirection: true,
         }}
         speed={500}
@@ -84,11 +85,12 @@ const Carousel = () => {
         }}
       >
         {articles.map((article) => (
-          <SwiperSlide key={article.id} className="relative flex items-center justify-center">
+          <SwiperSlide
+            key={article.id}
+            className="relative flex items-center justify-center"
+          >
             <figure className="flex justify-center">
-              <a
-                onClick={() => handleImageClick(article.id)} 
-              >
+              <a onClick={() => handleImageClick(article.id)}>
                 <Image
                   className="object-cover rounded-lg shadow-lg"
                   src={article.image}
@@ -97,7 +99,6 @@ const Carousel = () => {
                   width={1920}
                   height={500}
                   style={{
-
                     maxHeight: "500px",
                     minWidth: "300px",
                   }}

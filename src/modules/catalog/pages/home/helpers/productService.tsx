@@ -12,6 +12,7 @@ interface Product {
     image: string;
     size: string;
     stock: number;
+    style: string;
   }
 
 export const getAllProducts = async (): Promise<Product[]> => {

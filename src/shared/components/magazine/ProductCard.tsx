@@ -19,7 +19,7 @@ export function ProductCard({ products, small = false }: { products: Product[]; 
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 ">
       <div className={`grid ${small ? "grid-cols-4 gap-2 overflow-x-auto flex-nowrap" : "grid-cols-1 gap-4"}`}>
         {products.slice(-4).map(({ id, name, price, image }) => (
           <div
@@ -53,7 +53,7 @@ export function ProductCard({ products, small = false }: { products: Product[]; 
                 <button
                   className="p-2 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors"
                   onClick={(e) => {
-                    e.stopPropagation(); // 🔹 Evita que el clic en el botón afecte el onClick de la tarjeta
+                    e.stopPropagation();
                     router.push(`/productDetail/${id}`);
                   }}
                 >

@@ -13,17 +13,12 @@ export const CardProductComponent = ({ product }: { product: ProductInterface })
         <div className="relative">
             <div className="group overflow-hidden w-full">
                 <Image
-                    className="w-full h-64 object-contain rounded transition duration-300 transform group-hover:scale-150"
+                    className="w-full h-64 object-contain rounded transition duration-300 transform group-hover:scale-110"
                     src={image[0]}
                     alt={name}
                     width={500}
                     height={500}
                 />
-              
-                {/* <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-40 transition duration-300">
-                    <ButtonBase name="View details"/>
-                </div> */}
-
             </div>
             
             <div className="mt-4">
@@ -60,7 +55,7 @@ export const ProductsComponent = () => {
                     }
                 </div>
                 <div className="flex justify-center mt-10">
-                    <ButtonBase name="Ver más productos" href={"/products"} />
+                    <ButtonBase name="Ver más" href={"/products"} />
                 </div>
             </div>
         </section>

@@ -4,6 +4,9 @@ import Image from "next/image";
 import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
 import { ProductInterface, useProducts } from "../../manager/context/Products.context";
 import { AlertCircle, ArrowRight, CheckCircle2, Clock, Package, ShoppingBag } from "lucide-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { API_BACK } from "@/shared/config/api/getEnv";
 
 export const StatusBadge = ({ status }: { status: string }) => {
   const getStatusStyles = () => {
@@ -65,11 +68,17 @@ const CardProduct = ({product}: {product: ProductInterface | undefined}) => {
 
 const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: React.Dispatch<React.SetStateAction<IOrder | null>>}) => {
   const { getProductById } = useProducts();
+  const [orderPref, setOrderPref] = useState<string | undefined>(undefined);
 
   const { createdAt, status, orderDetails, id } = order;
-
-  const preferenceID = new URLSearchParams(window.location.search).get('preference_id');
-
+  
+  useEffect(() => {
+    const fetchOrderId = async() => {
+      const res = await axios.get<IOrder>(`${API_BACK}/orders/${order.id}`);
+      setOrderPref(res.data.externalReference);
+    }
+    fetchOrderId()
+  }, [order.id])
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 mb-6">
@@ -99,7 +108,7 @@ const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: R
           <div className="mt-4 border-t pt-4">
             <button 
               onClick={() => {
-                const redirect = `https://sandbox.mercadopago.com.co/checkout/v1/redirect/4b07ef5b-bdeb-4433-ae9f-9b99664060a4/payment-option-form-v2/?preference-id=${preferenceID}&router-request-id=eb333355-2232-4975-81fe-bcbfde9e0ebc&p=018583ef1cf6cc0aa5040ec91a1781dd`
+                const redirect = `https://www.mercadopago.com.co/checkout/v1/redirect?pref_id=${orderPref}`
                 window.location.href = redirect
               }}
               className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-3 px-6 rounded-xl 
