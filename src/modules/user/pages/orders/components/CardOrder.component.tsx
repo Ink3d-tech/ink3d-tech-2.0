@@ -78,7 +78,7 @@ const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: R
       setOrderPref(res.data.externalReference);
     }
     fetchOrderId()
-  }, [])
+  }, [order.id])
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 mb-6">
