@@ -57,7 +57,8 @@ export const paymentCreateService = async (
     orderId: string,
     currency: string,
     confirmedCart: ICartProduct[],
-    token: string | null
+    token: string | null,
+    discountAmount: number
 ): Promise<IPaymentResponse> => {
     
     if (!orderId || !currency) throw new Error("Faltan datos obligatorios para procesar el pago.");
