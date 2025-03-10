@@ -51,7 +51,8 @@ const FORM_PRODUCT_INTIAL: ProductInterface = {
     category: "",
     size: "",
     isActive: false,
-    color: ""
+    color: "",
+    style: ""
 }
 
 
@@ -256,6 +257,16 @@ export const ManagmentProductForm = () => {
             <Title title="Precio y stock"/>
                 <input name="price" value={formProduct.price} onChange={handleChangeProduct}  type="number" placeholder="Price" className="w-full p-2 border" min="0" onKeyDown={handleOnKeyDown}/>
                 <input name="stock" value={formProduct.stock} onChange={handleChangeProduct} type="number" placeholder="Stock" className="w-full p-2 border" min="0" onKeyDown={handleOnKeyDown} />
+            </div>
+
+            {/* ############################### STYLE ############################### */}
+
+            <div className="space-y-4 p-6 rounded-lg bg-white flex flex-col gap-4 shadow-lg">
+                <Title title="Estilo"/>
+                <select name="style" value={formProduct.style} onChange={handleChangeProduct} className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" >
+                    <option value={""} disabled>Seleccionar una categoría</option>
+                    { ["Asian", "Streetwear", "MotorSport"].map((cat, index) => <option key={index} value={cat}>{cat}</option>) }
+                </select>
             </div>
 
             {/* ############################### CATEGORIA ############################### */}
