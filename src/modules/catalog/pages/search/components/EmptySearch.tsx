@@ -22,7 +22,7 @@ export default function EmptySearch() {
                 <input
                     type="text"
                     placeholder="Buscar..."
-                    className="p-2 rounded-md bg-white text-black border w-3/4 lg:w-48 transition-all duration-300 ease-in-out"
+                    className="p-2 rounded-md bg-white text-black border w-3/4 transition-all duration-300 ease-in-out"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleSearch}
