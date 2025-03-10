@@ -3,11 +3,18 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 
 interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image?: string;
-  stock: number;
+  id?: string
+  name: string
+  description: string
+  price: number | ""
+  stock: number | ""
+  image: string[]
+  size: string
+  color: string
+  discount?: number | ""
+  category: string
+  isActive?: boolean
+  style: string
 }
 
 interface ProductCardProps {
@@ -21,7 +28,7 @@ const SearchProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="w-full overflow-hidden h-64 bg-gray-100 flex items-center justify-center">
           {product.image ? (
             <Image
-              src={product.image}
+              src={product.image[0]}
               alt={product.name}
               width={300}
               height={300}

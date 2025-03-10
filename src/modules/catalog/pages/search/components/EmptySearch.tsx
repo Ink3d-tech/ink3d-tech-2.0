@@ -16,8 +16,6 @@ export default function EmptySearch() {
 
     return (
         <div className="text-center py-10">
-            <div className='block md:hidden'>
-            </div>
                 <h2 className="text-2xl font-bold mb-12">Encuentra tus productos</h2>
                 <input
                     type="text"
