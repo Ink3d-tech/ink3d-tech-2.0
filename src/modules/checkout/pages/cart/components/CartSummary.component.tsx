@@ -74,6 +74,9 @@ export default function CartSummary() {
                     icon: "error",
                     confirmButtonText: "OK",
                 });
+
+                setValidDiscount("");
+
             } else if (fetchDiscount?.status === "expired") {
                 Swal.fire({
                     title: "Código expirado",
@@ -81,6 +84,9 @@ export default function CartSummary() {
                     icon: "error",
                     confirmButtonText: "OK",
                 });
+
+                setValidDiscount("");
+                
             } else if (fetchDiscount?.status === "invalid") {
                 Swal.fire({
                     title: "Código inválido",

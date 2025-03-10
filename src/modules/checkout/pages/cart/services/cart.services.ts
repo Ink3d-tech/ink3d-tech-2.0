@@ -73,7 +73,7 @@ export const paymentCreateService = async (
             products: confirmedCart.map(({ id, name, price, units }) => ({
                 id,
                 title: name,
-                price: (price - (price * discountAmount) / 100),
+                price: Math.trunc(price - (price * discountAmount) / 100),
                 quantity: units,
             })),
         };
