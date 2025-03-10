@@ -9,7 +9,7 @@ export default function Footer() {
         <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-0">
         Comprar ropa por internet nunca fue tan fácil 
         </p>
-        <FaHeart className="text-red-500 inline-block " />
+        
                 <div className="flex space-x-6">
           <Link href="/aboutus" className="text-gray-400 hover:text-white transition">
             Acerca de nosotros

@@ -23,7 +23,7 @@ import {
   X, 
 } from "lucide-react";
 
-import Finanzas from "@/shared/components/finanzas/Finanzas";
+
 import FormMagazine from "@/shared/components/formMagazine/FormMagazine";
 import SeguridadConfiguracion from "@/shared/components/seguridadConfiguracion/SeguridadConfiguracion";
 import Stock from "./pages/stock/Stock";
@@ -131,7 +131,7 @@ export default function Manager() {
           {activeTab === "orders" && <OrderList />}
           {activeTab === "users" && <UserManagement />}
           {activeTab === "invent" && <Stock />}
-          {activeTab === "finance" && <Finanzas />}
+          
           {activeTab === "products" && <ManagmentProductForm />}
           {activeTab === "forum" && <FormMagazine />}
           {activeTab === "settings" && <SeguridadConfiguracion />}
