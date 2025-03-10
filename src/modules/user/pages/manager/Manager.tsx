@@ -149,8 +149,8 @@ import { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import MainContent from "./components/MainContent";
 import ProtectedRouteAdmin from "@/shared/helpers/ProtectedRouteAdmin";
-import UserManagement from "./general/GestionUsuarios/UserManagement";
-import OrderList from "./general/GestionPedidos/OrderList";
+// import UserManagement from "./general/GestionUsuarios/UserManagement";
+// import OrderList from "./general/GestionPedidos/OrderList";
 
 export default function Manager() {
   const [activeTab, setActiveTab] = useState("overview");

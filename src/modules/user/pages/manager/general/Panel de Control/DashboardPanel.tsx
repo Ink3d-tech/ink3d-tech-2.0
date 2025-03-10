@@ -289,7 +289,7 @@ function DiscountsApp() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDiscounts(response.data);
-    } catch (error) {
+    } catch {
       setError("Error al cargar los descuentos.");
     } finally {
       setLoading(false);
@@ -340,7 +340,7 @@ const createDiscount = async () => {
     setNewCode(""); // Limpiar campo de código
     setNewMaxUses("1"); // Restablecer usos máximos
     setExpiresAt(null);
-  } catch (error) {
+  } catch {
     alert("Error al crear el descuento");
   }
 };
@@ -356,7 +356,7 @@ const createDiscount = async () => {
       });
 
       setDiscounts(discounts.filter((discount) => discount.id !== id));
-    } catch (error) {
+    } catch {
       alert("Error al eliminar el descuento");
     }
   };
@@ -373,7 +373,7 @@ const createDiscount = async () => {
       );
   
       setSelectedDiscount(response.data);
-    } catch (error) {
+    } catch {
       alert("Descuento no encontrado");
     }
   };
@@ -386,7 +386,7 @@ const createDiscount = async () => {
     acc[discount.amount].push(discount);
     return acc;
   }, {} as Record<number, Discount[]>);
-
+  
   useEffect(() => {
     fetchDiscounts();
   }, []);
@@ -476,49 +476,51 @@ const createDiscount = async () => {
       )}
 
       {/* Lista de descuentos agrupados */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Object.entries(groupedDiscounts).map(([amount, discountList]) => {
-          // Ordenamos para encontrar el último creado
-          const sortedDiscounts = discountList.sort(
-            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-          const latestDiscount = sortedDiscounts[0];
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {Object.entries(groupedDiscounts).map(([amount, discountList]) => {
+    // Convertimos 'amount' a número
+    const numericAmount = parseInt(amount);
 
-          // Contadores de estado
-          const totalCreated = discountList.length;
-          const expiringSoon = discountList.filter(d => d.expiresAt !== null && d.status === "active").length;
-          const expired = discountList.filter(d => d.status === "expired").length;
-          const noExpiration = discountList.filter(d => d.expiresAt === null).length;
+    // Ordenamos para encontrar el último creado
+    const sortedDiscounts = discountList.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    const latestDiscount = sortedDiscounts[0];
 
-          return (
-            <div key={latestDiscount.id} className="bg-white p-4 rounded-lg shadow-md border-l-4 border-indigo-600">
-              <h2 className="text-xl font-semibold text-gray-800">{latestDiscount.amount}% de descuento</h2>
-              <p className="text-sm text-gray-500">ID: {latestDiscount.id}</p>
-              <p className="text-sm text-gray-500">Creado: {format(new Date(latestDiscount.createdAt), "dd/MM/yyyy HH:mm")}</p>
-              <p className="text-sm text-gray-700 font-semibold">Código: {latestDiscount.code}</p>
-              <p className="text-sm text-gray-700 font-semibold">Usos: {latestDiscount.currentUses} / {latestDiscount.maxUses}</p>
+    // Contadores de estado
+    const totalCreated = discountList.length;
+    const expiringSoon = discountList.filter(d => d.expiresAt !== null && d.status === "active").length;
+    const expired = discountList.filter(d => d.status === "expired").length;
+    const noExpiration = discountList.filter(d => d.expiresAt === null).length;
 
+    return (
+      <div key={latestDiscount.id} className="bg-white p-4 rounded-lg shadow-md border-l-4 border-indigo-600">
+        <h2 className="text-xl font-semibold text-gray-800">{numericAmount}% de descuento</h2>
+        <p className="text-sm text-gray-500">ID: {latestDiscount.id}</p>
+        <p className="text-sm text-gray-500">Creado: {format(new Date(latestDiscount.createdAt), "dd/MM/yyyy HH:mm")}</p>
+        <p className="text-sm text-gray-700 font-semibold">Código: {latestDiscount.code}</p>
+        <p className="text-sm text-gray-700 font-semibold">Usos: {latestDiscount.currentUses} / {latestDiscount.maxUses}</p>
 
-              {/* Contadores de estado */}
-              <div className="mt-4 space-y-2">
-                <p className="text-sm text-gray-700 font-semibold">Total creados: {totalCreated}</p>
-                {expiringSoon > 0 && (
-                  <p className="text-sm text-yellow-500 font-semibold">Próximas a vencer: {expiringSoon}</p>
-                )}
-                {expired > 0 && <p className="text-sm text-red-500 font-semibold">Expirados: {expired}</p>}
-                {noExpiration > 0 && <p className="text-sm text-green-500 font-semibold">Sin expiración: {noExpiration}</p>}
-              </div>
+        {/* Contadores de estado */}
+        <div className="mt-4 space-y-2">
+          <p className="text-sm text-gray-700 font-semibold">Total creados: {totalCreated}</p>
+          {expiringSoon > 0 && (
+            <p className="text-sm text-yellow-500 font-semibold">Próximas a vencer: {expiringSoon}</p>
+          )}
+          {expired > 0 && <p className="text-sm text-red-500 font-semibold">Expirados: {expired}</p>}
+          {noExpiration > 0 && <p className="text-sm text-green-500 font-semibold">Sin expiración: {noExpiration}</p>}
+        </div>
 
-              <button
-                onClick={() => deleteDiscount(latestDiscount.id)}
-                className="bg-red-500 text-white px-4 py-2 mt-2 rounded flex items-center"
-              >
-                <Trash className="h-5 w-5 mr-2" /> Eliminar
-              </button>
-            </div>
-          );
-        })}
+        <button
+          onClick={() => deleteDiscount(latestDiscount.id)}
+          className="bg-red-500 text-white px-4 py-2 mt-2 rounded flex items-center"
+        >
+          <Trash className="h-5 w-5 mr-2" /> Eliminar
+        </button>
       </div>
+    );
+  })}
+</div>
 
     </div>
   );

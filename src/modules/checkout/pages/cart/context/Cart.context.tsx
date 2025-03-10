@@ -14,6 +14,7 @@ export interface Product {
     stock: number;
     style: string;
     units: number;
+    discount: number;
     description: string;
     category: {
       id: string;

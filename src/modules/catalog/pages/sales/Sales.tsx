@@ -73,24 +73,18 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { Gift, ShoppingBag, Gamepad2 } from "lucide-react";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import DiscountGames from "@/shared/components/trivia/DiscountGames";
+import { Product } from "@/modules/checkout/pages/cart/context/Cart.context";
+import Image from "next/image";
+// import DiscountGames from "@/shared/components/trivia/DiscountGames";
 
 export default function Sales() {
-  const [products, setProducts] = useState([]);
-  const [showGamesModal, setShowGamesModal] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  // const [showGamesModal, setShowGamesModal] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BACK}/products`)
@@ -113,7 +107,10 @@ export default function Sales() {
           </div>
           <div className="flex space-x-4">
             <Gift className="h-6 w-6 text-white" />
-            <button onClick={() => setShowGamesModal(true)} className="flex items-center bg-red-700 px-4 py-2 rounded-lg text-white hover:bg-red-800 transition">
+            <button
+              // onClick={() => setShowGamesModal(true)}
+              className="flex items-center bg-red-700 px-4 py-2 rounded-lg text-white hover:bg-red-800 transition"
+            >
               <Gamepad2 className="h-5 w-5 mr-2" /> Juega y Gana
             </button>
           </div>
@@ -128,12 +125,20 @@ export default function Sales() {
               key={product.id}
               className="bg-gray-900 rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105"
             >
-              <img src={product.image[0]} alt={product.name} className="w-full h-48 object-cover" />
+              <Image
+                src={product.image[0]}
+                alt={product.name}
+                width={300}
+                height={300}
+                className="w-full h-48 object-cover"
+              />
               <div className="p-6">
                 <h3 className="text-xl font-semibold">{product.name}</h3>
                 <p className="text-gray-400">{product.description}</p>
                 <div className="flex justify-between items-center mt-4">
-                  <span className="text-2xl font-bold text-red-500">${product.price}</span>
+                  <span className="text-2xl font-bold text-red-500">
+                    ${product.price}
+                  </span>
                   {product.discount > 0 && (
                     <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
                       {product.discount}% OFF
@@ -146,8 +151,11 @@ export default function Sales() {
         </div>
       </main>
 
-      {/* Modales de Juegos */}
-      <DiscountGames showGamesModal={showGamesModal} setShowGamesModal={setShowGamesModal} />
+      {/* Modales de Juegos
+      <DiscountGames
+        showGamesModal={showGamesModal}
+        setShowGamesModal={setShowGamesModal}
+      /> */}
     </div>
   );
 }
