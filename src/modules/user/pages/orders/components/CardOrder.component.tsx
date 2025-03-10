@@ -63,7 +63,7 @@ const CardProduct = ({product}: {product: ProductInterface | undefined}) => {
   )
 }
 
-const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: any}) => {
+const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: React.Dispatch<React.SetStateAction<IOrder | null>>}) => {
   const { getProductById } = useProducts();
 
   const { createdAt, status, orderDetails, id } = order;

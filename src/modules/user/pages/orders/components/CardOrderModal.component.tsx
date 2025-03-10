@@ -1,8 +1,8 @@
 import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
 import { X, Truck, Calendar, CreditCard } from "lucide-react";
 import { StatusBadge } from "./CardOrder.component";
-import { getProductById } from "@/modules/catalog/pages/home/helpers/productService";
 import { ProductInterface, useProducts } from "../../manager/context/Products.context";
+import Image from "next/image";
 
 
 const CardProductDetail = ({product, quantity}: {product: ProductInterface | undefined, quantity: number}) => {
@@ -11,9 +11,11 @@ if(!product) return null;
   return (
     <div className="flex gap-4 p-4 bg-gray-50 rounded-xl">
         <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-        <img 
+        <Image 
             src={product.image[0]} 
             alt={product.name}
+            width={200}
+            height={200}
             className="w-full h-full object-cover"
         />
         </div>
@@ -35,8 +37,8 @@ if(!product) return null;
 }
 
 
-const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: any}) => {
-    const { createdAt, status, orderDetails, id,  } = order;
+const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: () => void}) => {
+    const { orderDetails } = order;
     const { getProductById } = useProducts()
   
     return (

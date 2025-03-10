@@ -34,7 +34,7 @@ const EmptyState = () => {
 };
 
 export default function OrdersView() {
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export default function OrdersView() {
         ) :  (
           <div className="space-y-6">
             {allOrders.reverse().map(order => (
-              <OrderCard key={order.id} order={order}  onViewDetails={setSelectedOrder}/>
+              <OrderCard key={order.id} order={order} onViewDetails={setSelectedOrder}/>
             ))}
           </div>
         )}
