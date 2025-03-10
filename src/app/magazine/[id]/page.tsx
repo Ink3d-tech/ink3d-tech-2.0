@@ -21,7 +21,7 @@ interface Product {
   name: string;
   image: string | string[];
   price: number;
-  rating?: number; 
+  rating?: number;
 }
 
 const ArticlePage = () => {
@@ -39,7 +39,8 @@ const ArticlePage = () => {
     const fetchArticle = async () => {
       try {
         const response = await fetch(`${API_BACK}/api/magazine/${id}`);
-        if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+        if (!response.ok)
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
         const data: Article = await response.json();
         setArticle(data);
       } catch (err) {
@@ -54,7 +55,6 @@ const ArticlePage = () => {
         const res = await fetch(`${API_BACK}/products`);
         if (!res.ok) throw new Error("Error al obtener los productos");
         const products: Product[] = await res.json();
-        console.log("Productos recibidos:", products);
         setLatestProducts(products.slice(-4));
       } catch (err) {
         console.error(err);
@@ -65,17 +65,20 @@ const ArticlePage = () => {
     fetchProducts();
   }, [id]);
 
-  if (loading) return <p className="text-center text-gray-500">Cargando artículo...</p>;
+  if (loading)
+    return <p className="text-center text-gray-500">Cargando artículo...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <div className="max-w-screen-xl w-full mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <aside className="lg:col-span-2 xl:col-span-2">
+          <aside className="hidden lg:block lg:col-span-2 xl:col-span-2">
             <div className="bg-white rounded-3xl p-6 shadow-lg border border-indigo-50">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Últimos Productos</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Últimos Productos
+                </h2>
                 <button
                   className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1"
                   onClick={() => router.push("/products")}
@@ -83,12 +86,14 @@ const ArticlePage = () => {
                   Ver todos <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
-              <div className="hidden lg:block space-y-3">
+              <div className="space-y-3">
                 <ProductCard
-                  products={latestProducts.map(product => ({
+                  products={latestProducts.map((product) => ({
                     ...product,
-                    image: Array.isArray(product.image) ? product.image[0] : product.image || "/placeholder-image.png",
-                    rating: product.rating ?? 0, 
+                    image: Array.isArray(product.image)
+                      ? product.image[0]
+                      : product.image || "/placeholder-image.png",
+                    rating: product.rating ?? 0,
                   }))}
                 />
               </div>
@@ -112,9 +117,13 @@ const ArticlePage = () => {
                 </h1>
               </div>
               <div className="p-8">
-                <p className="text-gray-600">{article?.date} · {article?.author}</p>
+                <p className="text-gray-600">
+                  {article?.date} · {article?.author}
+                </p>
                 <div className="prose max-w-none">
-                  <div dangerouslySetInnerHTML={{ __html: article?.content || "" }} />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: article?.content || "" }}
+                  />
                 </div>
               </div>
             </article>
@@ -147,20 +156,36 @@ const ArticlePage = () => {
           </div>
         )}
 
-        <div className="lg:hidden mt-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Últimos Productos</h2>
-          <div className="overflow-x-auto">
-            <div className="flex gap-4">
-              <ProductCard
-                products={latestProducts.map(product => ({
-                  ...product,
-                  image: Array.isArray(product.image) ? product.image[0] : product.image || "/placeholder-image.png",
-                  rating: product.rating ?? 0,
-                }))}
-              />
-            </div>
-          </div>
+<div className="lg:hidden mt-8 flex items-center justify-between w-full">
+  <aside className="w-full">
+    <div className="bg-white rounded-3xl p-6 shadow-lg border border-indigo-50">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-900">Últimos Productos</h2>
+        <button
+          className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1"
+          onClick={() => router.push("/products")}
+        >
+          Ver todos <ArrowRight className="w-5 h-5" />
+        </button>
+      </div>
+      <div className="overflow-x-auto">
+        <div className="flex gap-4">
+          <ProductCard
+            products={latestProducts.map((product) => ({
+              ...product,
+              image: Array.isArray(product.image)
+                ? product.image[0]
+                : product.image || "/placeholder-image.png",
+              rating: product.rating ?? 0,
+            }))}
+            small={true}
+          />
         </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
       </div>
     </div>
   );

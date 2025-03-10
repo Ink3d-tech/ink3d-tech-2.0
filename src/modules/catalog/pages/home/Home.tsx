@@ -28,11 +28,11 @@ export default function Home() {
       </div>
       <Carousel />
       <ButtonsMini />
-      <ProductList categoryName="Buzos" title="Buzos" />
-      <StaticCarousel imageIds={[4, 5, 6]} />
-      <ProductList categoryName="Pantalones" title="Pantalones" />
-      <StaticCarousel imageIds={[7, 8, 9]} />
-      <ProductList categoryName="Remeras" title="Remeras" />
+      <ProductList categoryName="Ropa" title="Ropa" />
+      <StaticCarousel category="MUNDO ASIAN" />
+      <ProductList categoryName="Calzado" title="Calzado" />
+      <StaticCarousel category="STREETWEAR" />
+      <ProductList categoryName="Accesorios" title="Accesorios" />
       <ScrollToTop />
     </div>
   );
