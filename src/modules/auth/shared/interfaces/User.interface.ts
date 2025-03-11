@@ -17,3 +17,10 @@ export interface UserInterface {
     orders: IOrder[]
     favorites: string[]
 }
+
+export interface UpdateDataUserShipmentInterface {
+    phone?: string
+    address?: string
+    city?: string
+    country?: string
+}

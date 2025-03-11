@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useContext, createContext, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import { LoginInterface } from "../interfaces/Login.interface";
 import Loading from "@/app/loading";
 import { SignupInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { UserInterface } from "../interfaces/User.interface";
+import { UpdateDataUserShipmentInterface, UserInterface } from "../interfaces/User.interface";
+import { getAuthHeaders } from '@/modules/user/pages/manager/context/getAuthHeaders';
 interface ResponseInterface {
     token: string;
     message: string;
@@ -22,17 +23,19 @@ interface AuthContextInterface {
     isLoading: boolean;
     getIdUser: (token: string) => string;
     getIsAdmin: (token: string) => boolean;
+    updateDataUserShipment: (updateDataUserShipment: UpdateDataUserShipmentInterface) => Promise<void>
 }
 const AuthContext = createContext<AuthContextInterface>({
     user: null,
-    login: () => {},
-    logout: () => {},
-    signup: () => {},
+    login: () => { },
+    logout: () => { },
+    signup: () => { },
     isAuthenticated: false,
     isLoading: true,
     token: "",
     getIdUser: () => "",
     getIsAdmin: () => false,
+    updateDataUserShipment: async () => { }
 });
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
@@ -44,7 +47,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
             const expirationDate = new Date(payload.exp * 1000);
-            return expirationDate > new Date();  
+            return expirationDate > new Date();
         } catch {
             return false;
         }
@@ -64,8 +67,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
             console.error("Error fetching user:", error);
             setUser(null);
-            setIsAuthenticated(false);  
-            router.push('/'); 
+            setIsAuthenticated(false);
+            router.push('/');
         }
     }, [router]);
     useEffect(() => {
@@ -88,7 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setUser(null);
                 setToken("");
                 setIsAuthenticated(false);
-                router.push('/'); 
+                router.push('/');
             }
         }
         setIsLoading(false);
@@ -103,6 +106,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             return false;
         }
     };
+
+    const updateDataUserShipment = async (updateDataUserShipment: UpdateDataUserShipmentInterface) => {
+        
+        /// Para saber que es lo que voy actualizar
+        if (updateDataUserShipment.phone !== user?.phone || updateDataUserShipment.address !== user?.address || updateDataUserShipment.city !== user?.city || updateDataUserShipment.country !== user?.country) {
+            await axios.patch(`${API_BACK}/users/${getIdUser(token)}`, updateDataUserShipment, getAuthHeaders())
+            return
+        }
+        return
+    }
+
     const login = async (loginForm: LoginInterface) => {
         try {
             const { data } = await axios.post<ResponseInterface>(`${API_BACK}/auth/signin`, loginForm);
@@ -134,7 +148,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
         setToken("");
 
-        router.push('/'); 
+        router.push('/');
     };
     const value = {
         user,
@@ -146,6 +160,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         token,
         getIdUser,
         getIsAdmin,
+        updateDataUserShipment
     };
     return (
         <AuthContext.Provider value={value}>
