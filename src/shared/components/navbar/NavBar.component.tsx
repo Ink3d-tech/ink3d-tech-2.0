@@ -100,7 +100,9 @@ export default function NavBar() {
 
                 {/* Íconos en móviles */}
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-4 md:hidden">
-                    <Search size="24" color="gray" onClick={toggleSearch} className="cursor-pointer" />
+                    <Link href={"/search"}>
+                        <Search size="24" color="gray" className="cursor-pointer" />
+                    </Link>
                     <Link href="/cart">
                         <ShoppingCart size="24" color="gray" />
                     </Link>
