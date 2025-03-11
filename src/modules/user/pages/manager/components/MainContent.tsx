@@ -1,4 +1,4 @@
-import FinanzasDashboard from "@/shared/components/finanzas/Finanzas";
+// import FinanzasDashboard from "@/shared/components/finanzas/Finanzas";
 import OrderList from "../general/GestionPedidos/OrderList";
 import UserManagement from "../general/GestionUsuarios/UserManagement";
 import StockMovements from "../pages/stock/Stock";
@@ -18,7 +18,7 @@ export default function MainContent({ activeTab }: MainContentProps) {
       {activeTab === "orders" && <OrderList />}
       {activeTab === "users" && <UserManagement />}
       {activeTab === "invent" && <StockMovements />}
-      {activeTab === "finance" && <FinanzasDashboard />}
+      {/* {activeTab === "finance" && <FinanzasDashboard />} */}
       {activeTab === "products" && <ManagementProductForm />}
       {activeTab === "forum" && <FormMagazine />}
       {activeTab === "settings" && <SeguridadConfiguracion />}

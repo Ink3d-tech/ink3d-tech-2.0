@@ -66,7 +66,9 @@ export const LoginForm: React.FC<LoginProps> = ({
                 inputs={formFields}
                 formErrors={formErrors}
             />
-            <Question question={LoginFields.PASSWORD} href={"#"} variant={VariantQuestion.PRIMARY}/>
+            {/* <Question question={""} href={"#"} variant={VariantQuestion.PRIMARY}/> */}
+
+            <div className="mb-6"></div>
 
             <ButtonBase name={LoginFields.ENTER} isLoading={isLoading} variant={BtnVariant.PRIMARY}/>
 
@@ -84,7 +86,7 @@ export const LoginForm: React.FC<LoginProps> = ({
 
             <Spacer value={34}/>
             
-            <div className="flex mx-auto">
+            <div className="flex gap-2 mx-auto">
                 <Question question={LoginFields.NEWACCOUNT} href={Routes.SIGNUP} variant={VariantQuestion.SECONDARY}/>
                 <Question question={LoginFields.REGISTER} href={Routes.SIGNUP} variant={VariantQuestion.PRIMARY}/>
             </div>

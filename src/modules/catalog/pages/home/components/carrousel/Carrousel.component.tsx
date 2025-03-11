@@ -105,7 +105,7 @@ const Carousel = () => {
                 />
               </a>
             </figure>
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
+            <div onClick={() => handleImageClick(article.id)} className="cursor-pointer absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
               <h2 className="text-xl font-semibold">{article.title}</h2>
               <p>{article.author}</p>
             </div>

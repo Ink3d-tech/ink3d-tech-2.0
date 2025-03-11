@@ -3,8 +3,7 @@
 // Habra que agregar los Links y corregir las rutas que evalua pathname
 // en cuanto sepamos bien las rutas
 
-import React from "react";
-import { Bell, FileText, Globe2Icon, Heart, HelpCircle, Home, List, Search, Shirt, ShoppingBag, Star, Tag, User 
+import { FileText, HelpCircle, Home, List, Search, ShoppingBag, Tag, User 
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -26,18 +25,18 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
                 {pathname === "/search" ? <Search color="#0865F0" size={24} /> : <Search size={24} color="black" />}
                 <p className="font-semibold">Buscar</p>
             </Link>
-            <div onClick={handleToggle} className="flex gap-5">
+            {/* <div onClick={handleToggle} className="flex gap-5">
                 {pathname === "/notifications" ? <Bell color="#0865F0" size={24} /> : <Bell size={24} color="black" />}
                 <p className="font-semibold">Notificaciones</p>
-            </div>
+            </div> */}
             <Link href={"/orders"} onClick={handleToggle} className="flex gap-5">
                 {pathname === "/orders" ? <ShoppingBag color="#0865F0" size={24} /> : <ShoppingBag size={24} color="black" />}
                 <p className="font-semibold">Mis compras</p>
             </Link >
-            <div onClick={handleToggle} className="flex gap-5">
+            {/* <div onClick={handleToggle} className="flex gap-5">
                 {pathname === "/favs" ? <Heart color="#0865F0" size={24} /> : <Heart size={24} color="black" />}
                 <p className="font-semibold">Favoritos</p>
-            </div>
+            </div> */}
             <Link href={"/sales"} onClick={handleToggle} className="flex gap-5">
                 {pathname === "/sales" ? <Tag color="#0865F0" size={24} /> : <Tag size={24} color="black" />}
                 <p className="font-semibold">Ofertas </p>
@@ -52,8 +51,8 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
                     <p className="font-semibold">Ayuda</p>
                 </div>
             </Link>
-            <div onClick={handleToggle} className="flex gap-5 border-b-2 border-gray-300"></div>
-            <div onClick={handleToggle} className="flex gap-5">
+            <div className="flex gap-5 border-b-2 border-gray-300"></div>
+            {/* <div onClick={handleToggle} className="flex gap-5">
                 {pathname === "/fashion" ? <Shirt color="#0865F0" size={24} /> : <Shirt size={24} color="black" />}
                 <p className="font-semibold">Moda</p>
             </div>
@@ -64,7 +63,7 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
             <div onClick={handleToggle} className="flex gap-5">
                 {pathname === "/bestsellers" ? <Star color="#0865F0" size={24} /> : <Star size={24} color="black" />}
                 <p className="font-semibold">Más vendidos</p>
-            </div>
+            </div> */}
             <Link href={"/magazine"} onClick={handleToggle} className="flex gap-5">
                 {pathname === "/magazine" ? <FileText color="#0865F0" size={24} /> : <FileText size={24} color="black" />}
                 <p className="font-semibold">Magazine </p>
