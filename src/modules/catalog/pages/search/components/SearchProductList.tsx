@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "./SearchProductCard";
 import EmptySearch from "./EmptySearch";
@@ -29,7 +27,6 @@ export default function SearchProductList() {
   const query = searchParams.get("query") || "";
   const [shownProducts, setShownProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { products } = useProducts();
 
       const [searchQuery, setSearchQuery] = useState("");
@@ -67,12 +64,11 @@ export default function SearchProductList() {
       {query ? (
         <div className="md:w-3/4 w-5/6 mx-auto my-6 bg-white rounded-lg p-4 border border-gray-300 shadow-md">
           <h2 className="text-2xl font-semibold text-gray-800 text-left">
-            Resultados para: "{query}"
+            Resultados para: {query}
           </h2>
           <div className="w-full h-px bg-gray-300 my-2"></div>
 
           {loading && <p className="text-gray-500 text-center mt-4">Cargando productos...</p>}
-          {error && <p className="text-red-500 text-center mt-4">Error: {error}</p>}
 
           {shownProducts?.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
