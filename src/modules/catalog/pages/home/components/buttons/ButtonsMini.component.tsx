@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Newspaper, ShieldCheck, List, CreditCard } from "lucide-react";
+import { Newspaper, List, ShoppingBag, Percent } from "lucide-react";
 import React from "react";
 
 const buttons = [
   { label: "Magazine", icon: <Newspaper />, href: "/magazine", highlight: true },
-  { label: "Compra protegida", icon: <ShieldCheck />, href: "/proteccion" },
   { label: "Categorias", icon: <List />, href: "/categories" },
-  { label: "Metodos de pago", icon: <CreditCard />, href: "/pagos" },
+  { label: "Ofertas", icon: <Percent />, href: "/sales" },
+  { label: "Mis compras", icon: <ShoppingBag />, href: "/orders" },
 ];
 
 const ButtonsMini = () => {
