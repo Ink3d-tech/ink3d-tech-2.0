@@ -77,7 +77,7 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
 
     const handleAddToCart = (product: Product) => {
         if (!isAuthenticated) {
-          getAlert("Inciar sesión", () => {} ,"/login", "Debes estar logueado para agregar productos al carrito");
+          getAlert("Inciar sesión", () => {} ,"login", "Debes estar logueado para agregar productos al carrito");
           return;
         }
         addProductToCart(product)

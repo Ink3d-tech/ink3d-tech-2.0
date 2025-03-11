@@ -81,7 +81,7 @@ export default function Categories() {
         });
         return newIndexes;
       });
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [styles]);
@@ -113,9 +113,8 @@ export default function Categories() {
       {error && <p className="text-center text-red-500 mt-4">Error: {error}</p>}
 
       {/* Contenedor de imágenes con reglas dinámicas */}
-      <div className={`grid ${gridClass} gap-4 w-full px-4`}>
-        {styles.map((style) => {
-          // Seleccionamos las imágenes disponibles
+      <div className={`grid ${gridClass} gap-0 w-full px-4`}>
+        {styles.map((style, index) => {
           const images = styleImages[style] || [];
           const hasCustomImages = images.length > 0;
           const currentImageIndex = currentImages[style] || 0;
@@ -123,8 +122,11 @@ export default function Categories() {
 
           return (
             <Link key={style} href={`/products?style=${style}`} passHref>
-              <div className="group overflow-hidden">
-                <div className="relative w-full h-[70vh] cursor-pointer transition-transform transform group-hover:scale-105">
+              <div
+                className={`group relative overflow-visible transform transition-all duration-300 ease-in-out 
+                      -m-2 hover:z-20 hover:scale-108`}
+              >
+                <div className="relative w-full h-[70vh] cursor-pointer">
                   <Image
                     src={imageToShow}
                     alt={style}
@@ -141,6 +143,7 @@ export default function Categories() {
           );
         })}
       </div>
+
     </div>
   );
 }
