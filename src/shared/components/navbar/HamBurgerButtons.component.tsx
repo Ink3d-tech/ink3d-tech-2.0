@@ -22,10 +22,10 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
                 {pathname === "/home" ? <Home color="#0865F0" size={24} /> : <Home size={24} color="black" />}
                 <p className="font-semibold">Inicio</p>
             </Link>
-            <div onClick={handleToggle} className="flex gap-5">
+            <Link href={"/search"} onClick={handleToggle} className="flex gap-5">
                 {pathname === "/search" ? <Search color="#0865F0" size={24} /> : <Search size={24} color="black" />}
                 <p className="font-semibold">Buscar</p>
-            </div>
+            </Link>
             <div onClick={handleToggle} className="flex gap-5">
                 {pathname === "/notifications" ? <Bell color="#0865F0" size={24} /> : <Bell size={24} color="black" />}
                 <p className="font-semibold">Notificaciones</p>
