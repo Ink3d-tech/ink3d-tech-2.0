@@ -55,7 +55,7 @@ export const ProductsComponent = () => {
                     }
                 </div>
                 <div className="flex justify-center mt-10">
-                    <ButtonBase name="Ver más productos" href={"/products"} />
+                    <ButtonBase name="Ver más" href={"/products"} />
                 </div>
             </div>
         </section>
