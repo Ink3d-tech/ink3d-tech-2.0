@@ -52,8 +52,10 @@ export default function SearchProductList() {
 
   return (
     <div>
-
-      <input
+      
+      {query ? (
+        <div>
+          <input
           type="text"
           placeholder="Buscar..."
           className="flex md:hidden p-2 mx-auto mt-10 rounded-md bg-white text-black border w-3/4 transition-all duration-300 ease-in-out"
@@ -61,7 +63,6 @@ export default function SearchProductList() {
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={handleSearch}
       />
-      {query ? (
         <div className="md:w-3/4 w-5/6 mx-auto my-6 bg-white rounded-lg p-4 border border-gray-300 shadow-md">
           <h2 className="text-2xl font-semibold text-gray-800 text-left">
             Resultados para: {query}
@@ -80,7 +81,7 @@ export default function SearchProductList() {
             <p className="text-gray-500 text-center mt-4">No se encontraron resultados.</p>
           )}
         </div> 
-      ) : <EmptySearch />}
+      </div>) : <EmptySearch />}
       
     </div>
   );
