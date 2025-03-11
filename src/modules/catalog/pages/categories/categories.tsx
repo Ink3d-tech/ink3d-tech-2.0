@@ -114,7 +114,7 @@ export default function Categories() {
 
       {/* Contenedor de imágenes con reglas dinámicas */}
       <div className={`grid ${gridClass} gap-0 w-full px-4`}>
-        {styles.map((style, index) => {
+        {styles.map((style) => {
           const images = styleImages[style] || [];
           const hasCustomImages = images.length > 0;
           const currentImageIndex = currentImages[style] || 0;

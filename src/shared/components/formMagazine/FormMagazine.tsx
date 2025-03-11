@@ -44,34 +44,6 @@ export default function FormMagazine() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!isAuthenticated || !token) {
-      console.error("No hay un usuario autenticado o falta el token.");
-      return;
-    }
-
-    try {
-      const response = selectedId
-        ? await axios.patch(`${API_BACK}/api/magazine/${selectedId}`, formData, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-        : await axios.post(`${API_BACK}/api/magazine`, formData, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-      console.log(`Artículo ${selectedId ? "actualizado" : "publicado"}:`, response.data);
-
-      setFormData({ category: "", author: "", title: "", description: "", image: "", isActive: true });
-      setSelectedId(null);
-      setImagePreview("");
-      fetchArticles();
-    } catch (error) {
-      console.error("Error al enviar el formulario:", error);
-    }
-  };
-
   const handleToggleActive = async (articleId: string) => {
     try {
       await axios.patch(`${API_BACK}/api/magazine/active/${articleId}`, {}, {

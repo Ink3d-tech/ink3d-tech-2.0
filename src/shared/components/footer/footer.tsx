@@ -55,7 +55,6 @@ export default function Footer() {
   const [size, setSize] = useState(24); 
   const [y, setY] = useState(0); 
   const maxSize = 120; 
-  const maxY = -200; 
   const resetTime = 1000; 
 
   useEffect(() => {
