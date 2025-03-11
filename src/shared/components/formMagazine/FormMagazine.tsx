@@ -16,7 +16,7 @@ export interface FormData {
 }
 
 export default function FormMagazine() {
-  const { token, isAuthenticated } = useAuth();
+  const { token } = useAuth();
 
   const [formData, setFormData] = useState<FormData>({
     category: "",
@@ -29,7 +29,6 @@ export default function FormMagazine() {
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [articles, setArticles] = useState<FormData[]>([]);
-  const [imagePreview, setImagePreview] = useState<string>("");
 
   useEffect(() => {
     fetchArticles();
@@ -71,7 +70,6 @@ export default function FormMagazine() {
         onEdit={(article) => {
           setFormData(article);
           setSelectedId(article.id || null);
-          setImagePreview(article.image);
           console.log("Artículo seleccionado con ID:", article.id);
         }}
         onToggleActive={handleToggleActive}

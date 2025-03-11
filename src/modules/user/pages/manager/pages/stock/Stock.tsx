@@ -202,7 +202,7 @@ interface StockMovement {
 
 export default function StockMovements() {
   const [stockMovements, setStockMovements] = useState<StockMovement[]>([]);
-  const [selectedMovement, setSelectedMovement] = useState<StockMovement | null>(null);
+  // const [selectedMovement, setSelectedMovement] = useState<StockMovement | null>(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -226,7 +226,7 @@ export default function StockMovements() {
         setStockMovements(response.data);
 
         if (response.data.length > 0) {
-          setSelectedMovement(response.data[response.data.length - 1]);
+          // setSelectedMovement(response.data[response.data.length - 1]);
         }
       } catch (error) {
         console.error("❌ Error al obtener movimientos de stock:", error);
@@ -318,7 +318,7 @@ export default function StockMovements() {
                       <tr
                         key={movement.id}
                         className="cursor-pointer hover:bg-gray-100"
-                        onClick={() => setSelectedMovement(movement)}
+                        // onClick={() => setSelectedMovement(movement)}
                       >
                         <td className="border p-2">{movement.product.name}</td>
                         <td className="border p-2">{stockInicial}</td>

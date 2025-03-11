@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ProductInterface, useProducts } from "@/modules/user/pages/manager/context/Products.context";
 import { getRoute } from "./getRoute";
 import { ArrowRight } from "lucide-react";
-import Loading from "@/app/loading";
 
 export const CardProductComponent = ({ product }: { product: ProductInterface }) => {
     const getStyleClasses = (style: string | undefined) => {
