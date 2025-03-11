@@ -7,7 +7,7 @@ import Swal from 'sweetalert2'
 import { MouseEvent, JSX } from 'react'
 
 export default function Logout(): JSX.Element {
-    const { logout, user } = useAuth()
+    const { logout } = useAuth()
 
     const handleLogout = (event: MouseEvent<HTMLAnchorElement>): void => {
         event.preventDefault();
