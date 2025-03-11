@@ -13,11 +13,12 @@ const ButtonsMini = () => {
   return (
     <div className="w-full bg-black py-6 flex justify-center mt-6">
       <div className="max-w-4xl w-full flex justify-evenly">
+
         {buttons.map(({ label, icon, href, highlight }, index) => (
           <Link
             key={index}
             href={href}
-            className={`relative flex flex-col items-center text-white transition transform hover:scale-110 ${
+            className={`relative flex flex-col items-center text-white transition transform hover:scale-110  ${
               highlight ? "highlight-button" : ""
             }`}
           >

@@ -4,7 +4,9 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { CommentPanel } from "@/shared/components/magazine/CommentPanel";
+import { CommentPanel2 } from "@/shared/components/magazine/CommentPanel2";
 import { ProductCard } from "@/shared/components/magazine/ProductCard";
+import { ProductCard2 } from "@/shared/components/magazine/ProductCard2";
 import { ArrowRight, MessageSquare } from "lucide-react";
 
 interface Article {
@@ -31,7 +33,22 @@ const ArticlePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [latestProducts, setLatestProducts] = useState<Product[]>([]);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments2, setShowComments2] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);  // Estado para controlar el tamaño de la pantalla
+
+  // Efecto para detectar el tamaño de la pantalla
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);  // Cambia el valor si prefieres otro tamaño de pantalla para mobile
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();  // Llamada inicial para establecer el tamaño correcto al cargar
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -55,7 +72,7 @@ const ArticlePage = () => {
         const res = await fetch(`${API_BACK}/products`);
         if (!res.ok) throw new Error("Error al obtener los productos");
         const products: Product[] = await res.json();
-        setLatestProducts(products.slice(-4));
+        setLatestProducts(products.slice(-5));
       } catch (err) {
         console.error(err);
       }
@@ -73,6 +90,7 @@ const ArticlePage = () => {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <div className="max-w-screen-xl w-full mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Sidebar de productos */}
           <aside className="hidden lg:block lg:col-span-2 xl:col-span-2">
             <div className="bg-white rounded-3xl p-6 shadow-lg border border-indigo-50">
               <div className="flex items-center justify-between mb-4">
@@ -86,22 +104,21 @@ const ArticlePage = () => {
                   Ver todos <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
-              <div className="space-y-3">
-                <ProductCard
-                  products={latestProducts.map((product) => ({
-                    ...product,
-                    image: Array.isArray(product.image)
-                      ? product.image[0]
-                      : product.image || "/placeholder-image.png",
-                    rating: product.rating ?? 0,
-                  }))}
-                />
-              </div>
+              <ProductCard
+                products={latestProducts.map((product) => ({
+                  ...product,
+                  image: Array.isArray(product.image)
+                    ? product.image[0]
+                    : product.image || "/placeholder-image.png",
+                  rating: product.rating ?? 0,
+                }))}
+              />
             </div>
           </aside>
 
+          {/* Contenido del artículo */}
           <main className="lg:col-span-6 xl:col-span-6">
-            <article className="bg-white rounded-3xl shadow-xl border border-indigo-50 overflow-hidden">
+            <article className="rounded-3xl shadow-xl border border-indigo-50 overflow-hidden">
               <div className="relative aspect-video overflow-hidden">
                 <Image
                   src={article?.image || "/placeholder-image.png"}
@@ -125,67 +142,60 @@ const ArticlePage = () => {
                     dangerouslySetInnerHTML={{ __html: article?.content || "" }}
                   />
                 </div>
+
+                {/* Contenedor relativo para los comentarios y el botón */}
+                <div className="relative">
+                  {/* Botón para abrir/ocultar comentarios */}
+                  <button
+                    className="lg:hidden bg-indigo-600 text-white p-3 rounded-full shadow-lg flex items-center gap-2 mt-4"
+                    onClick={() => setShowComments2(!showComments2)}
+                  >
+                    <MessageSquare className="w-5 h-5" />
+                    {showComments2 ? "Ocultar comentarios" : "Ver comentarios"}
+                  </button>
+
+                  {/* Panel de comentarios, dentro del contenedor */}
+                  {isMobile && showComments2 && (
+                    <div className="mt-4 w-full h-auto overflow-hidden">
+                      <CommentPanel2 />
+                    </div>
+                  )}
+                </div>
               </div>
             </article>
           </main>
 
+          {/* Panel de comentarios para pantallas grandes */}
           <aside className="hidden lg:block lg:col-span-1 xl:col-span-1">
             <CommentPanel />
           </aside>
         </div>
 
-        <button
-          className="lg:hidden fixed bottom-6 right-6 bg-indigo-600 text-white p-3 rounded-full shadow-lg flex items-center gap-2"
-          onClick={() => setShowComments(true)}
-        >
-          <MessageSquare className="w-5 h-5" />
-          {showComments ? "Ocultar" : "Ver comentarios"}
-        </button>
-
-        {showComments && (
-          <div className="lg:hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white w-11/12 max-w-lg max-h-[80vh] overflow-y-auto rounded-3xl shadow-lg p-6 relative">
+        {/* ProductCard2 - Visible en pantallas pequeñas */}
+        <div className="lg:hidden mt-8">
+          <div className="bg-white rounded-3xl p-6 shadow-lg border border-indigo-50">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Últimos Productos
+              </h2>
               <button
-                className="absolute top-3 right-3 text-gray-600 hover:text-gray-800"
-                onClick={() => setShowComments(false)}
+                className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1"
+                onClick={() => router.push("/products")}
               >
-                ✕
+                Ver todos <ArrowRight className="w-5 h-5" />
               </button>
-              <CommentPanel />
             </div>
+            <ProductCard2
+              products={latestProducts.map((product) => ({
+                ...product,
+                image: Array.isArray(product.image)
+                  ? product.image[0]
+                  : product.image || "/placeholder-image.png",
+                rating: product.rating ?? 0,
+              }))}
+            />
           </div>
-        )}
-
-<div className="lg:hidden mt-8 flex items-center justify-between w-full">
-  <aside className="w-full">
-    <div className="bg-white rounded-3xl p-6 shadow-lg border border-indigo-50">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">Últimos Productos</h2>
-        <button
-          className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1"
-          onClick={() => router.push("/products")}
-        >
-          Ver todos <ArrowRight className="w-5 h-5" />
-        </button>
-      </div>
-      <div className="overflow-x-auto">
-        <div className="flex gap-4">
-          <ProductCard
-            products={latestProducts.map((product) => ({
-              ...product,
-              image: Array.isArray(product.image)
-                ? product.image[0]
-                : product.image || "/placeholder-image.png",
-              rating: product.rating ?? 0,
-            }))}
-            small={true}
-          />
         </div>
-      </div>
-    </div>
-  </aside>
-</div>
-
       </div>
     </div>
   );
