@@ -2,10 +2,10 @@ import FinanzasDashboard from "@/shared/components/finanzas/Finanzas";
 import OrderList from "../general/GestionPedidos/OrderList";
 import UserManagement from "../general/GestionUsuarios/UserManagement";
 import StockMovements from "../pages/stock/Stock";
-import { ManagmentProductForm } from "../pages/management/Managment";
 import FormMagazine from "@/shared/components/formMagazine/FormMagazine";
 import SeguridadConfiguracion from "@/shared/components/seguridadConfiguracion/SeguridadConfiguracion";
 import DashboardPanel from "../general/Panel de Control/DashboardPanel";
+import { ManagementProductForm } from "../pages/management/Managment";
 
 interface MainContentProps {
   activeTab: string;
@@ -19,7 +19,7 @@ export default function MainContent({ activeTab }: MainContentProps) {
       {activeTab === "users" && <UserManagement />}
       {activeTab === "invent" && <StockMovements />}
       {activeTab === "finance" && <FinanzasDashboard />}
-      {activeTab === "products" && <ManagmentProductForm />}
+      {activeTab === "products" && <ManagementProductForm />}
       {activeTab === "forum" && <FormMagazine />}
       {activeTab === "settings" && <SeguridadConfiguracion />}
     </div>
