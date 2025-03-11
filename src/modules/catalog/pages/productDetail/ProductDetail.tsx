@@ -171,7 +171,7 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          <div className="flex flex-col justify-between flex-grow gap-2 w-full md:w-2/5">
+          <div className="flex flex-col justify-between flex-grow gap-2 w-full md:w-2/5 ">
             <h2 className="text-4xl font-bold">{product.name}</h2>
             <div className="flex gap-2">
 
@@ -182,7 +182,7 @@ export default function ProductDetail() {
 
 
             </div>
-            <p className="text-gray-500 text-lg whitespace-pre-line">
+            <p className="text-gray-500 text-lg whitespace-pre-line line-clamp-6">
               {product.description}
             </p>
             <p className="text-4xl font-bold text-black mt-2">
