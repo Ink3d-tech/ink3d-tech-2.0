@@ -27,13 +27,7 @@ const DynamicCarousel = ({ category }: CarouselProps) => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [validCategory, setValidCategory] = useState(false);
-  const [firstSlide, setFirstSlide] = useState(true);
-
   const router = useRouter();
-
-  const handleSlideChange = () => {
-    if (firstSlide) setFirstSlide(false);
-  };
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -44,16 +38,15 @@ const DynamicCarousel = ({ category }: CarouselProps) => {
 
         const data: Article[] = await response.json();
 
-        // Verificar si la categoría proporcionada existe en la API
-        const isValidCategory = data.some(
+        // Filtrar artículos por categoría
+        const filteredArticles = data.filter(
           (article) => article.category === category
         );
 
-        setValidCategory(isValidCategory);
+        setValidCategory(filteredArticles.length > 0);
 
-        if (isValidCategory) {
-          setArticles(data.filter((article) => article.category === category));
-        }
+        // Limitar a los últimos 4 artículos
+        setArticles(filteredArticles.slice(-4));
       } catch (err) {
         console.error("Error fetching articles:", err);
       } finally {
@@ -88,7 +81,7 @@ const DynamicCarousel = ({ category }: CarouselProps) => {
       <div className="container mx-auto max-w-7xl">
         <Swiper
           loop={true}
-          autoplay={{ delay: 4000, reverseDirection: true }}
+          autoplay={{ delay: 4000 }}
           speed={500}
           pagination={{ clickable: true }}
           navigation={{ nextEl: ".custom-next", prevEl: ".custom-prev" }}
@@ -99,7 +92,6 @@ const DynamicCarousel = ({ category }: CarouselProps) => {
           modules={[Pagination, Navigation, Autoplay]}
           observer={true}
           observeParents={true}
-          onSlideChange={handleSlideChange}
           breakpoints={{
             640: { slidesPerView: 1 },
             768: { slidesPerView: 2 },
@@ -109,20 +101,19 @@ const DynamicCarousel = ({ category }: CarouselProps) => {
           {articles.map((article) => (
             <SwiperSlide
               key={article.id}
-              className="relative flex items-center justify-center"
+              className="relative flex items-center justify-center cursor-pointer"
+              onClick={() => handleImageClick(article.id)}
             >
               <figure className="flex justify-center">
-                <a onClick={() => handleImageClick(article.id)}>
-                  <Image
-                    className="object-cover rounded-lg shadow-lg"
-                    src={article.image}
-                    alt={`imagen-${article.id}`}
-                    loading="eager"
-                    width={1920}
-                    height={500}
-                    style={{ maxHeight: "500px", minWidth: "300px" }}
-                  />
-                </a>
+                <Image
+                  className="object-cover rounded-lg shadow-lg"
+                  src={article.image}
+                  alt={`imagen-${article.id}`}
+                  loading="eager"
+                  width={1920}
+                  height={500}
+                  style={{ maxHeight: "500px", minWidth: "300px" }}
+                />
               </figure>
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
                 <h2 className="text-xl font-semibold">{article.title}</h2>
