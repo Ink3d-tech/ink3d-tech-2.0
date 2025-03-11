@@ -7,6 +7,7 @@ import { AlertCircle, ArrowRight, CheckCircle2, Clock, Package, ShoppingBag } fr
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import { getAuthHeaders } from "../../manager/context/getAuthHeaders";
 
 export const StatusBadge = ({ status }: { status: string }) => {
   const getStatusStyles = () => {
@@ -69,16 +70,15 @@ const CardProduct = ({product}: {product: ProductInterface | undefined}) => {
 const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: React.Dispatch<React.SetStateAction<IOrder | null>>}) => {
   const { getProductById } = useProducts();
   const [orderPref, setOrderPref] = useState<string | undefined>(undefined);
-
   const { createdAt, status, orderDetails, id } = order;
   
   useEffect(() => {
     const fetchOrderId = async() => {
-      const res = await axios.get<IOrder>(`${API_BACK}/orders/${order.id}`);
+      const res = await axios.get<IOrder>(`${API_BACK}/orders/${order.id}`, getAuthHeaders());
       setOrderPref(res.data.externalReference);
     }
     fetchOrderId()
-  }, [])
+  }, [order.id])
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 mb-6">
