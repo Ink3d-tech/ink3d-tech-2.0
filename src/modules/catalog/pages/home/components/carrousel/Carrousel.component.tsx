@@ -36,12 +36,12 @@ const Carousel = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch(`${API_BACK}/api/magazine/active`);
+        const response = await fetch(`${API_BACK}/api/magazine`);
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-        const data = await response.json();
-        setArticles(data);
+        const data: Article[] = await response.json();
+        setArticles(data.slice(-9)); // ⬅️ Solo los últimos 9 artículos
       } catch (err) {
         console.error("Error fetching articles:", err);
       } finally {
@@ -63,10 +63,7 @@ const Carousel = () => {
     <div className="relative w-full mx-auto group">
       <Swiper
         loop={true}
-        autoplay={{
-          delay: 4000,
-          reverseDirection: true,
-        }}
+        autoplay={{ delay: 4000 }}
         speed={500}
         pagination={{ clickable: true }}
         navigation={{ nextEl: ".custom-next", prevEl: ".custom-prev" }}
@@ -85,12 +82,13 @@ const Carousel = () => {
         }}
       >
         {articles.map((article) => (
-          <SwiperSlide
-            key={article.id}
-            className="relative flex items-center justify-center"
-          >
-            <figure className="flex justify-center">
-              <a onClick={() => handleImageClick(article.id)}>
+          <SwiperSlide key={article.id}>
+            {/* Toda la tarjeta es clickeable */}
+            <div
+              className="relative flex items-center justify-center cursor-pointer"
+              onClick={() => handleImageClick(article.id)}
+            >
+              <figure className="flex justify-center">
                 <Image
                   className="object-cover rounded-lg shadow-lg"
                   src={article.image}
@@ -103,11 +101,11 @@ const Carousel = () => {
                     minWidth: "300px",
                   }}
                 />
-              </a>
-            </figure>
-            <div onClick={() => handleImageClick(article.id)} className="cursor-pointer absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
-              <h2 className="text-xl font-semibold">{article.title}</h2>
-              <p>{article.author}</p>
+              </figure>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
+                <h2 className="text-xl font-semibold">{article.title}</h2>
+                <p>{article.author}</p>
+              </div>
             </div>
           </SwiperSlide>
         ))}
