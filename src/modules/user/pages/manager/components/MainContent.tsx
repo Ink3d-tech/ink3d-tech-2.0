@@ -2,7 +2,6 @@ import FinanzasDashboard from "@/shared/components/finanzas/Finanzas";
 import OrderList from "../general/GestionPedidos/OrderList";
 import UserManagement from "../general/GestionUsuarios/UserManagement";
 import StockMovements from "../pages/stock/Stock";
-// import { ManagmentProductForm } from "../pages/management/Managment";
 import FormMagazine from "@/shared/components/formMagazine/FormMagazine";
 import SeguridadConfiguracion from "@/shared/components/seguridadConfiguracion/SeguridadConfiguracion";
 import DashboardPanel from "../general/Panel de Control/DashboardPanel";
