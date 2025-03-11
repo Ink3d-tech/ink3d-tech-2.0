@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuth } from '@/modules/auth/shared/context/Auth.context'
-import { LogOutIcon, Power, Settings } from 'lucide-react'
+import { LogOutIcon, Power } from 'lucide-react'
 import Link from 'next/link'
 import Swal from 'sweetalert2'
 import { MouseEvent, JSX } from 'react'

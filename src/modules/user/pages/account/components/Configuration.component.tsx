@@ -1,6 +1,5 @@
-import { HelpCircle, Settings, User } from 'lucide-react'
+import { HelpCircle, User } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 
 export default function Configuration() {
     return (

@@ -3,8 +3,7 @@
 // Habra que agregar los Links y corregir las rutas que evalua pathname
 // en cuanto sepamos bien las rutas
 
-import React from "react";
-import { Bell, FileText, Globe2Icon, Heart, HelpCircle, Home, List, Search, Shirt, ShoppingBag, Star, Tag, User 
+import { FileText, HelpCircle, Home, List, Search, ShoppingBag, Tag, User 
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";

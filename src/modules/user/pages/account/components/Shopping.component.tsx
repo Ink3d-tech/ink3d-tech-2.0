@@ -1,6 +1,5 @@
-import { LucideMessageSquare, ShoppingBag, Star } from 'lucide-react'
+import { ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 
 export default function Shopping() {
     return (
