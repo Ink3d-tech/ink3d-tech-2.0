@@ -12,12 +12,12 @@ export default function Configuration() {
                 </div>
                     <p className='font-light'>Mi perfil</p>              
             </Link>
-            <Link href={"/settings"} className='flex gap-4 items-center mr-auto'>
+            {/* <Link href={"/settings"} className='flex gap-4 items-center mr-auto'>
                 <div className='rounded-full bg-gray-500 p-2'>
                     <Settings  color='white'/> 
                 </div>
                 <p className='font-light'>Ajustes</p>
-            </Link>
+            </Link> */}
             <Link href={"help"} className='flex gap-4 items-center mr-auto'>
                 <div className='rounded-full bg-gray-500 p-2'>
                     <HelpCircle  color='white'/> 
