@@ -124,7 +124,7 @@ export default function Categories() {
             <Link key={style} href={`/products?style=${style}`} passHref>
               <div
                 className={`group relative overflow-visible transform transition-all duration-300 ease-in-out 
-                      -m-2 hover:z-20 hover:scale-108`}
+                      -m-2 hover:z-20 hover:scale-90`}
               >
                 <div className="relative w-full h-[70vh] cursor-pointer">
                   <Image

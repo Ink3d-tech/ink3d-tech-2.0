@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Boxes, Newspaper, ShieldCheck, List, X } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Users, Boxes, Newspaper, ShieldCheck, List, X } from "lucide-react";
 
 interface SidebarProps {
   activeTab: string;
@@ -16,7 +16,7 @@ export default function Sidebar({ activeTab, setActiveTab, menuOpen, setMenuOpen
   ];
 
   const tabsBusiness = [
-    { icon: <BarChart3 />, name: "Finanzas", id: "finance" },
+    // { icon: <BarChart3 />, name: "Finanzas", id: "finance" },
     { icon: <Boxes />, name: "Stock", id: "invent" },
     { icon: <Newspaper />, name: "Magazine", id: "forum" },
     { icon: <ShieldCheck />, name: "Seguridad", id: "settings" },
