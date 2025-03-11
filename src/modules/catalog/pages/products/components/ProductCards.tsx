@@ -23,44 +23,55 @@ interface ProductCardProps {
 export default function ProductCards({ product, getStyleClasses }: ProductCardProps) {
   return (
     <Link key={product.id} href={`/productDetail/${product.id}`} passHref>
-      <div className="relative flex flex-col bg-white overflow-hidden rounded-lg cursor-pointer transition-transform group">
-        {/* Etiqueta de estilo */}
-        <div className="flex gap-2">
-          <span
-            className={`absolute top-3 right-0 text-xs font-semibold uppercase px-4 py-1 
+<div className="relative flex flex-col bg-white overflow-hidden rounded-lg cursor-pointer transition-transform group">
+            <div className="flex gap-2 ">
+                <span
+                    className={`absolute top-3 right-0 text-xs font-semibold uppercase px-4 py-1 
             rounded-bl-lg rounded-tl-lg opacity-0 shadow-md
             group-hover:opacity-100 
-            transition-opacity duration-300 ease-in-out ${getStyleClasses(product.style)}`}
-          >
-            {product.style || "Sin estilo"}
-          </span>
-        </div>
+            transition-opacity duration-300 ease-in-out z-[100] ${getStyleClasses(
+                        product.style
+                    )}`}
+                >
+                    {product.style || "Sin estilo"}
+                </span>
+            </div>
+            {product.stock === 0 && (
+                <div
+                    className="absolute top-3 left-0 bg-gray-800 text-white text-xs font-semibold uppercase px-4 py-1 
+    rounded-br-lg rounded-tr-lg shadow-md opacity-100"
+                >
+                    Sin Stock
+                </div>
+            )}
 
-        {/* Etiqueta de "Sin Stock" */}
-        {product.stock === 0 && (
-          <div className="absolute top-3 left-0 bg-gray-800 text-white text-xs font-semibold uppercase px-4 py-1 rounded-br-lg rounded-tr-lg shadow-md opacity-100">
-            Sin Stock
-          </div>
-        )}
+            <div className="overflow-hidden w-full">
+                <Image
+                    src={product.image[0]}
+                    alt={product.name}
+                    width={800}
+                    height={800}
+                    className="w-full h-64 object-cover rounded transition duration-300 transform group-hover:scale-110"
+                />
 
-        {/* Imagen del producto */}
-        <div className="w-full h-96 bg-gray-100">
-          <Image
-            src={product.image[0] || "/placeholder-image.png"}
-            alt={product.name}
-            width={800}
-            height={800}
-            className="w-full h-full object-cover"
-          />
+                <Image
+                    src={product.image[1]}
+                    alt={product.name}
+                    width={800}
+                    height={800}
+                    className="w-full h-64 object-cover rounded transition duration-300 absolute top-0 left-0 opacity-0 group-hover:opacity-100"
+                />
+            </div>
+            <div className="p-3 text-center">
+                <h3 className="text-lg font-semibold">{product.name}</h3>
+                <p className="text-gray-500 text-sm truncate">
+                    {product.description}
+                </p>
+                <p className="text-lg font-bold mt-1 text-green-700">
+                    ${product.price}
+                </p>
+            </div>
         </div>
-
-        {/* Información del producto */}
-        <div className="p-3 text-center">
-          <h3 className="text-lg font-semibold">{product.name}</h3>
-          <p className="text-gray-500 text-sm truncate">{product.description}</p>
-          <p className="text-lg font-bold mt-1 text-green-700">${product.price}</p>
-        </div>
-      </div>
     </Link>
   );
 }
