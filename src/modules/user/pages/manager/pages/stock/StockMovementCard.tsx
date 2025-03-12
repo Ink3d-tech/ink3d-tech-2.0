@@ -1,5 +1,138 @@
-import Image from "next/image";
-import { Package, Layers } from "lucide-react";
+// "use client";
+// import { useState, useEffect } from "react";
+// import axios from "axios";
+// import { API_BACK } from "@/shared/config/api/getEnv";
+// import { StockMovement } from "./types";
+
+// interface Product {
+//   id: string;
+//   name: string;
+//   description: string;
+//   price: string;
+//   stock: number;
+//   image: string[];
+//   size: string;
+//   style: string;
+//   discount: number;
+//   isActive: boolean;
+//   category: {
+//     id: string;
+//     name: string;
+//   };
+// }
+
+
+
+// export default function useStockMovements() {
+//   const [stockMovements, setStockMovements] = useState<StockMovement[]>([]);
+//   const [selectedMovement, setSelectedMovement] = useState<StockMovement | null>(null);
+//   const [search, setSearch] = useState("");
+//   const [loading, setLoading] = useState<boolean>(true);
+//   const [error, setError] = useState<string | null>(null);
+//   const [consolidatedStock, setConsolidatedStock] = useState<any[]>([]);
+
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+
+//     if (!token) {
+//       setError("❌ No se ha encontrado el token de autenticación.");
+//       setLoading(false);
+//       return;
+//     }
+
+//     const fetchStockMovements = async () => {
+//       try {
+//         const response = await axios.get<StockMovement[]>(`${API_BACK}/stock-movements`, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+//         const movements = response.data;
+//         setStockMovements(movements);
+//         setConsolidatedStock(consolidateStockByProduct(movements));
+//       } catch (error) {
+//         console.error("❌ Error al obtener movimientos de stock:", error);
+//         setError("Hubo un error al cargar los movimientos de stock.");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchStockMovements();
+//   }, []);
+
+//   const consolidateStockByProduct = (movements: StockMovement[]) => {
+//     const consolidated: any = {};
+
+//     movements.forEach((movement) => {
+//       if (!movement.product) return;
+//       const productId = movement.product.id;
+//       const size = movement.product.size || "Sin Talla";
+
+//       if (!consolidated[productId]) {
+//         consolidated[productId] = { product: movement.product, sizes: {} };
+//       }
+
+//       if (!consolidated[productId].sizes[size]) {
+//         consolidated[productId].sizes[size] = {
+//           stockInicial: 0,
+//           vendidos: 0,
+//           stockActual: 0,
+//         };
+//       }
+
+//       if (movement.type === "initial_stock") {
+//         consolidated[productId].sizes[size].stockInicial += movement.newStock;
+//       } else if (movement.type === "order_creation") {
+//         consolidated[productId].sizes[size].vendidos += Math.abs(movement.quantity);
+//       }
+//     });
+
+//     Object.keys(consolidated).forEach((productId) => {
+//       Object.keys(consolidated[productId].sizes).forEach((size) => {
+//         const data = consolidated[productId].sizes[size];
+//         data.stockActual = data.stockInicial - data.vendidos;
+//       });
+//     });
+
+//     return consolidated;
+//   };
+
+//   const filteredStock: StockMovement[] = Object.values(consolidatedStock)
+//   .flatMap((productData: any) =>
+//     Object.entries(productData.sizes).map(([size, stockData]) => ({
+//       id: `generated-${productData.product.id}-${size}`, // Se genera un ID único si falta
+//       product: productData.product,
+//       size,
+//       createdAt: new Date().toISOString(), // Se genera una fecha de creación si falta
+//       type: "consolidated", // Asigna un tipo genérico si falta
+//       reason: "consolidated calculation", // Asigna una razón si falta
+//     }))
+//   )
+//   .filter((item) =>
+//     item.product.name.toLowerCase().includes(search.toLowerCase())
+//   );
+
+
+//   return {
+//     stockMovements,
+//     selectedMovement,
+//     setSelectedMovement,
+//     search,
+//     setSearch,
+//     loading,
+//     error,
+//     filteredStock,
+//   };
+// }
+
+ 
+
+
+
+"use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { API_BACK } from "@/shared/config/api/getEnv";
+import { StockMovement } from "./types";
 
 interface Product {
   id: string;
@@ -18,76 +151,132 @@ interface Product {
   };
 }
 
-interface StockMovement {
-  id: string;
-  quantity: number;
-  type: string;
-  reason: string;
-  createdAt: string;
-  product: Product | null;
+interface StockData {
+  stockInicial: number;
+  vendidos: number;
+  stockActual: number;
 }
 
-interface StockMovementCardProps {
-  movement: StockMovement;
-}
+export default function useStockMovements() {
+  const [stockMovements, setStockMovements] = useState<StockMovement[]>([]);
+  const [selectedMovement, setSelectedMovement] = useState<StockMovement | null>(null);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [consolidatedStock, setConsolidatedStock] = useState<Record<string, { product: Product; sizes: Record<string, StockData> }>>({});
 
-export default function StockMovementCard({ movement }: StockMovementCardProps) {
-  if (!movement.product) return null;
+  useEffect(() => {
+    const token = localStorage.getItem("token");
 
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-300 w-80 mx-auto">
-      <h3 className="text-lg font-semibold text-gray-800 text-center">
-        {movement.product.name}
-      </h3>
+    if (!token) {
+      setError("❌ No se ha encontrado el token de autenticación.");
+      setLoading(false);
+      return;
+    }
 
-      <div className="relative w-full h-80 rounded-md overflow-hidden my-3">
-        {movement.product.image.length > 0 && (
-          <Image
-            src={movement.product.image[0]}
-            alt={movement.product.name}
-            layout="fill"
-            objectFit="cover"
-            className="rounded-md"
-          />
-        )}
-      </div>
+    const fetchStockMovements = async () => {
+      try {
+        const response = await axios.get<StockMovement[]>(`${API_BACK}/stock-movements`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const movements = response.data;
+        setStockMovements(movements);
+        setConsolidatedStock(consolidateStockByProduct(movements));
+      } catch (error) {
+        console.error("❌ Error al obtener movimientos de stock:", error);
+        setError("Hubo un error al cargar los movimientos de stock.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      <p className="text-gray-500 text-sm text-center">{movement.product.description}</p>
-      <p className="text-teal-600 text-lg font-bold text-center mt-1">${movement.product.price}</p>
+    fetchStockMovements();
+  }, []);
 
-      <div className="mt-4 space-y-2">
-        <div className="flex items-center text-gray-600 text-sm">
-          <Layers className="w-4 h-4 text-teal-500 mr-2" />
-          <span>
-            Stock Inicial: <strong>{movement.product.stock + movement.quantity}</strong>
-          </span>
-        </div>
-        <div className="flex items-center text-gray-600 text-sm">
-          <Package className="w-4 h-4 text-blue-500 mr-2" />
-          <span>
-            Productos Vendidos: <strong>{Math.abs(movement.quantity)}</strong>
-          </span>
-        </div>
-        <div className="flex items-center text-gray-600 text-sm">
-          <Layers className="w-4 h-4 text-teal-500 mr-2" />
-          <span>
-            Stock Actual: <strong>{movement.product.stock}</strong>
-          </span>
-        </div>
-      </div>
 
-      <p className="text-gray-500 text-sm text-center">
-        🏷️ Categoría: {movement.product.category?.name || "Sin categoría"}
-      </p>
-      <p className="text-gray-500 text-sm text-center">
-        🎨 Estilo: {movement.product.style || "No especificado"}
-      </p>
+  const consolidateStockByProduct = (movements: StockMovement[]) => {
+    const consolidated: Record<string, { product: Product; sizes: Record<string, StockData> }> = {};
+  
+    movements.forEach((movement) => {
+      if (!movement.product) return;
+      
+      const productId = movement.product.id;
+      const size = movement.size || "Sin Talla";
+  
+      // Verificar que movement.product tiene todas las propiedades de Product
+      const completeProduct: Product = {
+        id: movement.product.id,
+        name: movement.product.name,
+        description: movement.product.description || "Sin descripción",
+        price: movement.product.price || "0",
+        stock: (movement.product as Product).stock ?? 0, // Si es undefined, usa 0
+        image: movement.product.image || [],
+        size: (movement.product as Product).size || "Única",
+        style: (movement.product as Product).style || "Genérico",
+        discount: (movement.product as Product).discount ?? 0, // Si es undefined, usa 0
+        isActive: (movement.product as Product).isActive ?? true,
+        category: (movement.product as Product).category || { id: "unknown", name: "Sin Categoría" },
+      };
+  
+      if (!consolidated[productId]) {
+        consolidated[productId] = { product: completeProduct, sizes: {} };
+      }
+  
+      if (!consolidated[productId].sizes[size]) {
+        consolidated[productId].sizes[size] = {
+          stockInicial: 0,
+          vendidos: 0,
+          stockActual: 0,
+        };
+      }
+  
+      if (movement.type === "initial_stock") {
+        consolidated[productId].sizes[size].stockInicial += movement.newStock;
+      } else if (movement.type === "order_creation") {
+        consolidated[productId].sizes[size].vendidos += Math.abs(movement.quantity);
+      }
+    });
+  
+    Object.keys(consolidated).forEach((productId) => {
+      Object.keys(consolidated[productId].sizes).forEach((size) => {
+        const data = consolidated[productId].sizes[size];
+        data.stockActual = data.stockInicial - data.vendidos;
+      });
+    });
+  
+    return consolidated;
+  };
+  
 
-      {movement.product.discount > 0 && (
-        <p className="text-red-500 text-sm text-center">
-          🔥 Descuento: {movement.product.discount}%
-        </p>
-      )}
-    </div>
-  );
+  const filteredStock: StockMovement[] = Object.values(consolidatedStock)
+    .flatMap((productData) =>
+      Object.entries(productData.sizes).map(([size, stockData]: [string, StockData]) => ({
+        id: `generated-${productData.product.id}-${size}`, // ID generado si falta
+        product: productData.product,
+        size,
+        stockInicial: stockData.stockInicial,
+        vendidos: stockData.vendidos,
+        stockActual: stockData.stockActual,
+        createdAt: new Date().toISOString(), // Fecha de creación generada
+        quantity: stockData.vendidos,
+        type: "consolidated", // Tipo genérico
+        reason: "consolidated calculation", // Razón genérica
+        previousStock: stockData.stockInicial,
+        newStock: stockData.stockActual,
+      }))
+    )
+    .filter((item) =>
+      item.product.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+  return {
+    stockMovements,
+    selectedMovement,
+    setSelectedMovement,
+    search,
+    setSearch,
+    loading,
+    error,
+    filteredStock,
+  };
 }
