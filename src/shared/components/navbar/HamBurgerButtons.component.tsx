@@ -3,7 +3,7 @@
 // Habra que agregar los Links y corregir las rutas que evalua pathname
 // en cuanto sepamos bien las rutas
 
-import { FileText, HelpCircle, Home, List, Search, ShoppingBag, Tag, User 
+import { FileText, Gamepad, HelpCircle, Home, List, Search, ShoppingBag, User 
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -38,7 +38,7 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
                 <p className="font-semibold">Favoritos</p>
             </div> */}
             <Link href={"/sales"} onClick={handleToggle} className="flex gap-5">
-                {pathname === "/sales" ? <Tag color="#0865F0" size={24} /> : <Tag size={24} color="black" />}
+                {pathname === "/sales" ? <Gamepad color="#0865F0" size={24} /> : <Gamepad size={24} color="black" />}
                 <p className="font-semibold">Juega y Gana</p>
             </Link>
             <Link href={"/account"} onClick={handleToggle} className="flex gap-5">
