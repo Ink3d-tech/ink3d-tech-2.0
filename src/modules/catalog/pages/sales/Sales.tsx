@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import ProductCards from "../products/components/ProductCards";
@@ -140,7 +140,7 @@ export default function Sales() {
       )}
 
       {/* Modal Resultado */}
-      {isCompleted && (
+      {isCompleted && showModal &&  (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
         >
