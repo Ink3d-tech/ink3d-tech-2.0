@@ -1,3 +1,5 @@
+"use client"
+
 import Swal from "sweetalert2";
 
 export const getAlert = (confirmButtonText?: string, action?: () => void, route?: string, text?: string) => {
@@ -12,7 +14,7 @@ export const getAlert = (confirmButtonText?: string, action?: () => void, route?
             confirmButtonText: confirmButtonText ?? "Cerrar sesion!"
         }).then((result) => {
             if(result.isConfirmed && action && route) {
-                window.location.href = `https://ink3d-tech-2-0.vercel.app/${route}`
+                // window.location.replace("/login")
                 action();
             }
             if (result.isConfirmed && action) {
