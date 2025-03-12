@@ -39,9 +39,6 @@ const ButtonsMini = () => {
           ))}
         </div>
       </div>
-
-      {/* Gradiente Invertido debajo de ButtonsMini */}
-
     </div>
   );
 };

@@ -1,1 +1,0 @@
-export { default } from "@/modules/user/pages/profile/details/Details"
