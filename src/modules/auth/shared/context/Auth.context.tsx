@@ -7,14 +7,43 @@ import Loading from "@/app/loading";
 import { SignupInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import { UpdateDataUserShipmentInterface, UserInterface } from "../interfaces/User.interface";
+import { UpdateDataProfileInterface, UpdateDataUserShipmentInterface, UserInterface } from "../interfaces/User.interface";
 import { getAuthHeaders } from '@/modules/user/pages/manager/context/getAuthHeaders';
+
+
+
 interface ResponseInterface {
     token: string;
     message: string;
 }
+
+export interface ErrorResponse {
+    message: string;
+    statusCode?: number;  
+    error?: string; 
+}
+
+const defaultUser: UserInterface = {
+    id: '',
+    name: '',
+    email: '',
+    role: '',
+    image: '',
+    phone: '',
+    address: '',
+    city: '',
+    bio: '',
+    country: '',
+    orders: [],
+    isActive: false,
+    favorites: [],
+    createdAt: '',
+    updatedAt: ''
+};
+
+
 interface AuthContextInterface {
-    user: UserInterface | null;
+    user: UserInterface;
     login: (loginForm: LoginInterface) => void;
     signup: (signForm: SignupInterface) => void;
     logout: () => void;
@@ -24,9 +53,10 @@ interface AuthContextInterface {
     getIdUser: (token: string) => string;
     getIsAdmin: (token: string) => boolean;
     updateDataUserShipment: (updateDataUserShipment: UpdateDataUserShipmentInterface) => Promise<void>
+    updateDataUser: (updateDataUser: UpdateDataProfileInterface) => Promise<void>
 }
 const AuthContext = createContext<AuthContextInterface>({
-    user: null,
+    user: defaultUser,
     login: () => { },
     logout: () => { },
     signup: () => { },
@@ -35,14 +65,16 @@ const AuthContext = createContext<AuthContextInterface>({
     token: "",
     getIdUser: () => "",
     getIsAdmin: () => false,
-    updateDataUserShipment: async () => { }
+    updateDataUserShipment: async () => { },
+    updateDataUser: async() => { }
 });
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
-    const [user, setUser] = useState<UserInterface | null>(null);
+    const [user, setUser] = useState<UserInterface>(defaultUser);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const router = useRouter();
+
     const checkTokenValidity = (token: string): boolean => {
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
@@ -66,7 +98,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(res.data);
         } catch (error) {
             console.error("Error fetching user:", error);
-            setUser(null);
+            setUser(defaultUser);
             setIsAuthenticated(false);
             router.push('/');
         }
@@ -88,7 +120,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setIsAuthenticated(true);
                 fetchUser(storedToken);
             } else {
-                setUser(null);
+                setUser(defaultUser);
                 setToken("");
                 setIsAuthenticated(false);
                 router.push('/');
@@ -107,14 +139,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const updateDataUserShipment = async (updateDataUserShipment: UpdateDataUserShipmentInterface) => {
-        
-        /// Para saber que es lo que voy actualizar
-        if (updateDataUserShipment.phone !== user?.phone || updateDataUserShipment.address !== user?.address || updateDataUserShipment.city !== user?.city || updateDataUserShipment.country !== user?.country) {
-            await axios.patch(`${API_BACK}/users/${getIdUser(token)}`, updateDataUserShipment, getAuthHeaders())
-            return
+    const updateDataUser = async(updateDataUser: UpdateDataProfileInterface) => {
+        const updatedFields: Partial<UpdateDataProfileInterface> = {};
+    
+        if (updateDataUser.name !== user?.name) updatedFields.name = updateDataUser.name;
+        if (updateDataUser.email !== user?.email) updatedFields.email = updateDataUser.email;
+        if (updateDataUser.phone !== user?.phone) updatedFields.phone = updateDataUser.phone;
+        if (updateDataUser.address !== user?.address) updatedFields.address = updateDataUser.address;
+        if (updateDataUser.country !== user?.country) updatedFields.country = updateDataUser.country;
+        if (updateDataUser.image !== user?.image) updatedFields.image = updateDataUser.image;
+    
+
+        if (Object.keys(updatedFields).length > 0) {
+            await axios.patch(`${API_BACK}/users/${getIdUser(token)}`, updatedFields, getAuthHeaders());
         }
-        return
+    }
+
+    const updateDataUserShipment = async (updateDataUserShipment: UpdateDataUserShipmentInterface) => {
+        const updatedFields: Partial<UpdateDataUserShipmentInterface> = {};
+
+        if (updateDataUserShipment.phone !== user?.phone) updatedFields.phone = updateDataUserShipment.phone;
+        if (updateDataUserShipment.address !== user?.address) updatedFields.address = updateDataUserShipment.address;
+        if (updateDataUserShipment.city !== user?.city) updatedFields.city = updateDataUserShipment.city;
+        if (updateDataUserShipment.country !== user?.country) updatedFields.country = updateDataUserShipment.country;
+    
+
+        if (Object.keys(updatedFields).length > 0) {
+            await axios.patch(`${API_BACK}/users/${getIdUser(token)}`, updatedFields, getAuthHeaders());
+        }
     }
 
     const login = async (loginForm: LoginInterface) => {
@@ -135,17 +187,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
     const signup = async (signupForm: SignupInterface) => {
-        try {
-            await axios.post(`${API_BACK}/auth/signup`, signupForm);
-        } catch (error) {
-            console.error("Error signing up:", error);
-        }
+        await axios.post(`${API_BACK}/auth/signup`, signupForm);
     };
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setIsAuthenticated(false);
-        setUser(null);
+        setUser(defaultUser);
         setToken("");
 
         router.push('/');
@@ -160,7 +208,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         token,
         getIdUser,
         getIsAdmin,
-        updateDataUserShipment
+        updateDataUserShipment,
+        updateDataUser
     };
     return (
         <AuthContext.Provider value={value}>

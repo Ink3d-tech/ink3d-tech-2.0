@@ -7,6 +7,23 @@ import { ErrorsInterface } from "../interfaces/Error.interface"
 import { Mixin } from "../components/MixinAlert"
 
 
+
+interface AxiosErrorResponse {
+    message: string;
+    statusCode?: number;
+    error?: string;
+  }
+  
+  interface AxiosErrorWithResponse {
+    response?: {
+      data: AxiosErrorResponse;
+      status: number;
+      statusText: string;
+      headers: Record<string, string>;
+    };
+
+  }
+
 /**
  * Interfaz que define las propiedades requeridas para usar el hook "useForm"
  *
@@ -35,6 +52,11 @@ interface UseFormProps<T> {
     messageSuccess: string
     redirectSuccessRoute?: string
 }
+
+// interface ErrorInterface {
+//     error: { response : { data : { message: string } } }
+// }
+
 
 export function useForm<T>({
     formInitial,
@@ -72,19 +94,22 @@ export function useForm<T>({
             try {
                 setIsLoading(true)
 
-
                 await authAction(form)
    
                 Mixin.fire(messageSuccess, "", "success")
                 router.replace(redirectSuccessRoute ? redirectSuccessRoute : "")
             } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : "Error interno"
-                Mixin.fire("", errorMessage, "error")
+                const axiosError = error as AxiosErrorWithResponse; 
+                const errorMessage: string = axiosError.response?.data?.message || "Error interno del servidor"
+                const errorMessageSpanish = errorMessage === "Email already in use" ? "Correo electrónico ya en uso" : "Credenciales inválidas"
+                Mixin.fire("", errorMessageSpanish, "error")
             } finally {
                 setIsLoading(false)
             }
         }
     } 
+
+    
 
     /**
      * Maneja los cambios en los campos del formulario.

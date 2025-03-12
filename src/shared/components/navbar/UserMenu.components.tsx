@@ -60,9 +60,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatarUrl }) => {
                 <span>Panel de administrador</span>
               </Link>
             )}
-            <Link onClick={closeDropdown} href="/account" className="flex gap-2 items-center text-gray-700 hover:text-black mt-2">
+            <Link onClick={closeDropdown} href="/profile" className="flex gap-2 items-center text-gray-700 hover:text-black mt-2">
               <User size={20} />
-              <span>Mi cuenta</span>
+              <span>Mi perfil</span>
             </Link>
             <Link onClick={closeDropdown} href="/orders" className="flex gap-2 items-center text-gray-700 hover:text-black mt-2">
               <ShoppingBag size={20} />
