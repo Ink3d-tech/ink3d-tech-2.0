@@ -6,7 +6,7 @@ import ProtectedRoute from "@/shared/helpers/ProtectedRoute";
 
 export default function Cart() {
   return (
-    <ProtectedRoute title="Debes inciar sesion o registrarte para ingresar al carrito">
+    <ProtectedRoute>
       <div className="min-h-screen bg-gray-300 pb-2">
         <BackButton tab="Producto"/>
         <div className="relative py-14">

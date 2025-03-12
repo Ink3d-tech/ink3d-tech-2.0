@@ -91,7 +91,7 @@ export default function Sales() {
   };
 
   return (
-    <ProtectedRoute title="">
+    <ProtectedRoute>
     <div className="min-h-screen text-white relative -my-23">
       <div
         className="absolute inset-0 bg-repeat blur-xl "
