@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import BackButton from "@/shared/components/buttons/BackButton.component";
 import FilterCategories from "./components/FilterCategories.component";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import ProductCards from "./components/ProductCards";
+import Link from "next/link";
 
 interface Product {
   id: string;
@@ -30,6 +30,9 @@ export default function ProductsPage() {
   const initialCategory = searchParams.get("category") || null;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
 
+  // Lista fija de estilos (todos los estilos disponibles)
+  const allStyles = ["Streetwear", "Asian", "Motorsport"];
+
   const getStyleClasses = (style: string | undefined) => {
     if (!style) return "bg-blue-500 text-white";
     const normalizedStyle = style.trim().toLowerCase();
@@ -45,7 +48,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const endpoint = selectedStyle ? `/products/style/${selectedStyle}` : "/products";
+        const endpoint = "/products";  // No dependemos de un estilo para la búsqueda
         const response = await fetch(`${API_BACK}${endpoint}`);
         if (!response.ok) {
           throw new Error("Error al obtener los productos");
@@ -60,19 +63,50 @@ export default function ProductsPage() {
     };
 
     fetchProducts();
-  }, [selectedStyle]);
+  }, []);
 
-  const filteredProducts = selectedCategory
-    ? products.filter((product) => product.category.name.toLowerCase() === selectedCategory.toLowerCase())
-    : products;
+  // Filtrar productos por estilo seleccionado
+  const filteredProducts = products.filter((product) => {
+    if (selectedStyle) {
+      return product.style.toLowerCase() === selectedStyle.toLowerCase();
+    }
+    return true;
+  });
 
+  // Filtrar productos por categoría seleccionada
+  const filteredByCategory = selectedCategory
+    ? filteredProducts.filter((product) => product.category.name.toLowerCase() === selectedCategory.toLowerCase())
+    : filteredProducts;
+
+  // Eliminar duplicados por nombre (si hay productos con el mismo nombre)
   const uniqueProducts = Array.from(
-    new Map(filteredProducts.map((product) => [product.name, product])).values()
+    new Map(filteredByCategory.map((product) => [product.name, product])).values()
   );
 
   return (
     <div className="min-h-screen bg-gray-300 pb-2">
-      <BackButton tab="" />
+<div className="flex overflow-x-auto space-x-2 p-4 bg-black shadow-md sticky top-0 z-10">
+  <Link
+    href="/products"
+    className={`px-4 py-2 text-white rounded-full text-sm hover:bg-gray-900 ${
+      !selectedStyle ? "border-b-2 border-white" : ""
+    }`}
+  >
+    Todos
+  </Link>
+  {allStyles.map((style) => (
+    <Link
+      key={style}
+      href={`/products?style=${style}`}
+      className={`px-4 py-2 text-white rounded-full text-sm hover:bg-gray-900 ${
+        selectedStyle?.toLowerCase() === style.toLowerCase() ? "border-b-2 border-white" : ""
+      }`}
+    >
+      {style}
+    </Link>
+  ))}
+</div>
+
       <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md pb-5">
         <div className="flex justify-between items-center px-30 px-4">
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
@@ -86,9 +120,13 @@ export default function ProductsPage() {
         {error && <p className="text-red-500 text-center mt-4">Error: {error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5 px-7 py-2">
-          {uniqueProducts.map((product) => (
-            <ProductCards key={product.id} product={product} getStyleClasses={getStyleClasses} />
-          ))}
+          {uniqueProducts.length === 0 ? (
+            <p className="text-gray-500 text-center mt-4">No hay productos disponibles con estos filtros.</p>
+          ) : (
+            uniqueProducts.map((product) => (
+              <ProductCards key={product.id} product={product} getStyleClasses={getStyleClasses} />
+            ))
+          )}
         </div>
       </div>
     </div>
