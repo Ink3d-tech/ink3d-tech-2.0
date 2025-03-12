@@ -9,34 +9,10 @@ import { useEffect, useState } from "react";
 import { formatDate } from "../orders/components/CardOrder.component";
 
 export const ProfileView = () => {
-    const {  user } = useAuth()
-
-    const { updateDataUser } = useAuth()
+    const { user, updateDataUser } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState<UpdateDataProfileInterface>({
-      phone: user.phone,
-      address: user.address,
-      city: user.city,
-      country: user.country,
-      image: user.image,
-      email: user.email,
-      name: user.name
-    });
+    const [formData, setFormData] = useState<UpdateDataProfileInterface>(() => ({ ...user }));
 
-    const [emailError, setEmailError] = useState("");
-
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailRegex.test(value)) {
-        setEmailError("Ingrese un email válido (ejemplo@correo.com).");
-      } else {
-        setEmailError("");
-      }
-
-      handleChange(e);
-    };
       
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -62,9 +38,9 @@ export const ProfileView = () => {
       }));
     };
 
-    useEffect(() => {
-      setFormData(user);
-    }, [user]);
+   useEffect(() => {
+  if (user) setFormData({ ...user });
+}, [user]);
   
     return (
       <div className="max-w-4xl mx-auto py-12 px-4">
@@ -120,13 +96,9 @@ export const ProfileView = () => {
                       type="email"
                       id="email"
                       name="email"
-                      value={formData.email ?? ""}
-                      onChange={handleEmailChange}
-                      className={`w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all ${
-                        emailError ? "border-red-500" : ""
-                      }`}
-                      required
-                      placeholder="Ingrese su email"
+                      value={formData.email}
+                      readOnly // Aquí el email es solo lectura
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-100 cursor-not-allowed"
                     />
                   </div>
   
