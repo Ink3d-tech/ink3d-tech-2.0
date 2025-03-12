@@ -10,6 +10,7 @@ import { formatDate } from "../orders/components/CardOrder.component";
 
 export const ProfileView = () => {
     const {  user } = useAuth()
+
     const { updateDataUser } = useAuth()
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState<UpdateDataProfileInterface>({
@@ -27,6 +28,8 @@ export const ProfileView = () => {
       try {
         await updateDataUser(formData);
         setIsEditing(false);
+
+        setTimeout(()=>{ window.location.reload() }, 500)
         
         Mixin.fire('Perfil actualizado con éxito')
       } catch (error) {

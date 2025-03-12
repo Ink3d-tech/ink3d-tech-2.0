@@ -13,7 +13,6 @@ export default function Home() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-    console.log(token);
     
 
     if (token) {

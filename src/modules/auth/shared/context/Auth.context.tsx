@@ -54,6 +54,7 @@ interface AuthContextInterface {
     getIsAdmin: (token: string) => boolean;
     updateDataUserShipment: (updateDataUserShipment: UpdateDataUserShipmentInterface) => Promise<void>
     updateDataUser: (updateDataUser: UpdateDataProfileInterface) => Promise<void>
+    sendEmailResetPassword: (email: string) => Promise<void>
 }
 const AuthContext = createContext<AuthContextInterface>({
     user: defaultUser,
@@ -66,7 +67,8 @@ const AuthContext = createContext<AuthContextInterface>({
     getIdUser: () => "",
     getIsAdmin: () => false,
     updateDataUserShipment: async () => { },
-    updateDataUser: async() => { }
+    updateDataUser: async() => { },
+    sendEmailResetPassword: async() => {}
 });
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
@@ -198,6 +200,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         router.push('/');
     };
+
+    const sendEmailResetPassword = async (email: string) => {
+        await axios.post(`${API_BACK}/auth/request-password-reset`, email)
+    } 
+
     const value = {
         user,
         login,
@@ -209,7 +216,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         getIdUser,
         getIsAdmin,
         updateDataUserShipment,
-        updateDataUser
+        updateDataUser,
+        sendEmailResetPassword
     };
     return (
         <AuthContext.Provider value={value}>
