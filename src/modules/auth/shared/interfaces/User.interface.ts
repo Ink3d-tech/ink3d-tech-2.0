@@ -26,11 +26,11 @@ export interface UpdateDataUserShipmentInterface {
 }
 
 export interface UpdateDataProfileInterface {
-    phone?: string
-    address?: string
-    city?: string
-    country?: string
-    name?: string
-    image?: string
-    email?: string
+    phone: string
+    address: string
+    city: string
+    country: string
+    name: string
+    image: string
+    email: string
 }

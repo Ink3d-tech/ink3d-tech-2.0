@@ -12,7 +12,15 @@ export const ProfileView = () => {
     const {  user } = useAuth()
     const { updateDataUser } = useAuth()
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState<UpdateDataProfileInterface>(user);
+    const [formData, setFormData] = useState<UpdateDataProfileInterface>({
+      phone: user.phone,
+      address: user.address,
+      city: user.city,
+      country: user.country,
+      image: user.image,
+      email: user.email,
+      name: user.name
+    });
   
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -21,7 +29,6 @@ export const ProfileView = () => {
         setIsEditing(false);
         
         Mixin.fire('Perfil actualizado con éxito')
-        setTimeout(() => { window.location.reload() }, 1000)
       } catch (error) {
         console.error('Error updating profile:', error);
         Mixin.fire('No se pudo actualizar el perfil. Inténtalo de nuevo.', "", "error");
@@ -74,13 +81,13 @@ export const ProfileView = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      Full Name
+                      Nombre
                     </label>
                     <input
                       type="text"
                       id="name"
                       name="name"
-                      value={formData.name}
+                      value={formData.name ?? "Sin asignar"}
                       onChange={handleChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
@@ -89,13 +96,13 @@ export const ProfileView = () => {
   
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Email
+                      Correo electrónico
                     </label>
                     <input
                       type="email"
                       id="email"
                       name="email"
-                      value={formData.email}
+                      value={formData.email ?? "Sin asignar"}
                       onChange={handleChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
@@ -104,13 +111,13 @@ export const ProfileView = () => {
   
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone
+                      Teléfono
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
-                      value={formData.phone}
+                      value={formData.phone ?? "Sin asignar"}
                       onChange={handleChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
@@ -119,13 +126,13 @@ export const ProfileView = () => {
   
                   <div>
                     <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                      Address
+                      Domicilio
                     </label>
                     <input
                       type="text"
                       id="address"
                       name="address"
-                      value={formData.address}
+                      value={formData.address ?? "Sin asignar"}
                       onChange={handleChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
@@ -134,13 +141,13 @@ export const ProfileView = () => {
   
                   <div>
                     <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                      City
+                      Ciudad
                     </label>
                     <input
                       type="text"
                       id="city"
                       name="city"
-                      value={formData.city}
+                      value={formData.city ?? "Sin asignar"}
                       onChange={handleChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
@@ -149,13 +156,13 @@ export const ProfileView = () => {
   
                   <div>
                     <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
-                      Country
+                      Pais
                     </label>
                     <input
                       type="text"
                       id="country"
                       name="country"
-                      value={formData.country}
+                      value={formData.country ?? "Sin asignar"}
                       onChange={handleChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
@@ -169,13 +176,13 @@ export const ProfileView = () => {
                     onClick={() => setIsEditing(false)}
                     className="px-6 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
                   >
-                    Cancel
+                    Cancelar
                   </button>
                   <button
                     type="submit"
                     className="px-6 py-2 rounded-xl bg-black text-white hover:bg-gray-800 transition-colors"
                   >
-                    Save Changes
+                    Guardar cambios
                   </button>
                 </div>
               </form>
@@ -186,7 +193,7 @@ export const ProfileView = () => {
                     <User className="w-5 h-5 text-gray-600" />
                     <div>
                       <p className="text-sm text-gray-600">Full Name</p>
-                      <p className="font-medium">{user.name}</p>
+                      <p className="font-medium">{user.name ?? "Sin asignar"}</p>
                     </div>
                   </div>
   
@@ -194,7 +201,7 @@ export const ProfileView = () => {
                     <Mail className="w-5 h-5 text-gray-600" />
                     <div>
                       <p className="text-sm text-gray-600">Email</p>
-                      <p className="font-medium">{user.email}</p>
+                      <p className="font-medium">{user.email ?? "Sin asignar"}</p>
                     </div>
                   </div>
   
@@ -202,7 +209,7 @@ export const ProfileView = () => {
                     <Phone className="w-5 h-5 text-gray-600" />
                     <div>
                       <p className="text-sm text-gray-600">Phone</p>
-                      <p className="font-medium">{user.phone}</p>
+                      <p className="font-medium">{user.phone ?? "Sin asignar"}</p>
                     </div>
                   </div>
   
@@ -210,7 +217,7 @@ export const ProfileView = () => {
                     <MapPin className="w-5 h-5 text-gray-600" />
                     <div>
                       <p className="text-sm text-gray-600">Address</p>
-                      <p className="font-medium">{user.address}</p>
+                      <p className="font-medium">{user.address ?? "Sin asignar"}</p>
                     </div>
                   </div>
   
@@ -218,7 +225,7 @@ export const ProfileView = () => {
                     <Building className="w-5 h-5 text-gray-600" />
                     <div>
                       <p className="text-sm text-gray-600">City</p>
-                      <p className="font-medium">{user.city}</p>
+                      <p className="font-medium">{user.city ?? "Sin asignar"}</p>
                     </div>
                   </div>
   
@@ -226,7 +233,7 @@ export const ProfileView = () => {
                     <Globe className="w-5 h-5 text-gray-600" />
                     <div>
                       <p className="text-sm text-gray-600">Country</p>
-                      <p className="font-medium">{user.country}</p>
+                      <p className="font-medium">{user.country ?? "Sin asignar"}</p>
                     </div>
                   </div>
                 </div>
