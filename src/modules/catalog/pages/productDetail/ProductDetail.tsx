@@ -24,17 +24,22 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [availableSizes, setAvailableSizes] = useState<Product[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
+
   const getStyleClasses = (style: string | undefined) => {
-    if (!style) return "bg-blue-500 text-white";
+    if (!style) return "bg-blue-500 text-white"; // Azul por defecto
+
     const normalizedStyle = style.trim().toLowerCase();
+
     const styleColors: Record<string, string> = {
-      motorsport: "bg-red-500 text-white", 
-      asian: "text-green-700 bg-green-200", 
-      streetwear: "bg-black text-white", 
-   };
-  
-    return styleColors[normalizedStyle] || "bg-blue-500 text-white"; 
+      motorsport: "bg-red-500 text-white", // Rojo con letras blancas
+      asian: "text-green-700 bg-green-200", // Verde claro con verde oscuro
+      streetwear: "bg-black text-white", // Negro con letras blancas
+    };
+
+    return styleColors[normalizedStyle] || "bg-blue-500 text-white"; // Azul por defecto si no coincide
   };
+
+
 
   useEffect(() => {
     if (!id) return;
@@ -51,18 +56,13 @@ export default function ProductDetail() {
         }
 
         setProduct(data);
-        setSelectedImage(
-          data.image.length > 0 ? data.image[0] : "/placeholder-image.png"
-        );
+        setSelectedImage(data.image.length > 0 ? data.image[0] : "/placeholder-image.png");
 
         const responseAllProducts = await fetch(`${API_BACK}/products`);
-        if (!responseAllProducts.ok)
-          throw new Error("Error al obtener los productos");
+        if (!responseAllProducts.ok) throw new Error("Error al obtener los productos");
 
         const allProducts: Product[] = await responseAllProducts.json();
-        const sameNameProducts = allProducts.filter(
-          (item) => item.name === data.name
-        );
+        const sameNameProducts = allProducts.filter((item) => item.name === data.name);
 
         setAvailableSizes(sameNameProducts);
 
@@ -84,6 +84,7 @@ export default function ProductDetail() {
 
     fetchProduct();
   }, [id]);
+
 
   const { handleAddToCart } = useCart();
 
@@ -113,8 +114,22 @@ export default function ProductDetail() {
   return (
     <div>
       <BackButton tab="Producto" />
-      <div className="flex items-center justify-center pt-10 pb-2">
+      <div className="relative py-14">
+      {/* 🎨 Fondo con desenfoque (ahora correctamente detrás) */}
+      <div
+    className="absolute inset-0 bg-repeat blur-xl "
+    style={{
+      backgroundImage: "url('/images/textures/8.jpg')",
+      backgroundSize: "1000px", // Ajusta el tamaño del mosaico a tu gusto
+      backgroundPosition: "center",
+      backgroundRepeat: "repeat", // Hace que la imagen se repita en mosaico
+      filter: "blur(10px)", // Aplica el desenfoque
+    }}
+  />
+      <div className="absolute inset-0 bg-white/30"></div>
+      <div className="flex items-center justify-center py-10 pb-2">
         <div className="bg-white shadow-xl rounded-lg p-8 max-w-6xl w-full flex flex-col md:flex-row gap-10 relative">
+          
           {product.stock === 0 && (
             <div className="absolute top-3 left-0 bg-gray-800 text-white text-xs font-semibold uppercase px-4 py-1 rounded-br-lg rounded-tr-lg shadow-md">
               Sin Stock
@@ -162,23 +177,26 @@ export default function ProductDetail() {
                     alt={`Vista ${index + 1}`}
                     width={90}
                     height={90}
-                    className={`rounded-md border-2 ${
-                      selectedImage === img ? "border-black" : "border-gray-300"
-                    } transition-all`}
+                    className={`rounded-md border-2 ${selectedImage === img ? "border-black" : "border-gray-300"
+                      } transition-all`}
                   />
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col justify-between flex-grow gap-2 w-full md:w-2/5">
+          <div className="flex flex-col justify-between flex-grow gap-2 w-full md:w-2/5 ">
             <h2 className="text-4xl font-bold">{product.name}</h2>
-            <div className="flex gap-2">              
-             <span className={`text-xs font-bold px-2 py-1 uppercase mt-2 inline-block rounded-md ${getStyleClasses(product.style)}`} >
+            <div className="flex gap-2">
+
+
+              <span className={`text-xs font-bold px-2 py-1 uppercase mt-2 inline-block rounded-md ${getStyleClasses(product.style)}`} >
                 {product.style || "Sin estilo"}
-              </span>              
+              </span>
+
+
             </div>
-            <p className="text-gray-500 text-lg whitespace-pre-line">
+            <p className="text-gray-500 text-lg whitespace-pre-line line-clamp-6">
               {product.description}
             </p>
             <p className="text-4xl font-bold text-black mt-2">
@@ -198,13 +216,12 @@ export default function ProductDetail() {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`px-4 py-2 border rounded-md transition ${
-                        selectedSize === size
+                      className={`px-4 py-2 border rounded-md transition ${selectedSize === size
                           ? "bg-black text-white border-black"
                           : isAvailable
-                          ? "hover:bg-gray-200"
-                          : "bg-gray-300 cursor-not-allowed"
-                      }`}
+                            ? "hover:bg-gray-200"
+                            : "bg-gray-300 cursor-not-allowed"
+                        }`}
                       disabled={!isAvailable}
                     >
                       {size}
@@ -238,10 +255,11 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-
-      <div className="mt-10">
+      </div>
+      <div className="relative index-10">
         <ProductsComponent />
       </div>
     </div>
+    
   );
 }

@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { useAuth } from "@/modules/auth/shared/context/Auth.context";
-import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
-import { API_BACK } from "@/shared/config/api/getEnv";
 import { useEffect, useState } from "react";
 import OrderCard from "./components/CardOrder.component";
 import axios from "axios";
 import OrderDetailsModal from "./components/CardOrderModal.component";
+import { useAuth } from "@/modules/auth/shared/context/Auth.context";
+import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
+import { API_BACK } from "@/shared/config/api/getEnv";
 import { ShoppingBasket, ArrowRight } from "lucide-react";
 
 
@@ -33,6 +33,7 @@ const EmptyState = () => {
   );
 };
 
+
 export default function OrdersView() {
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const { user } = useAuth();
@@ -40,29 +41,21 @@ export default function OrdersView() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const externalReference = urlParams.get('external_reference');
-    const statusMp = urlParams.get('status');
+    const paymentId = urlParams.get('payment_id');
     
-
     if (externalReference) {
       const fetchPaymentStatus = async () => {
-       
         try {
-          const STATUS_MP = statusMp === "approved" ? "completed" : statusMp === "in_process" ? "pending" : statusMp === "rejected" ? "failed" : "pending";
-
-          await axios.patch(`${API_BACK}/finance/transaction/${externalReference}`, { status: STATUS_MP });
-          await axios.patch<IOrder>(`${API_BACK}/orders/${externalReference}/status`, { status: STATUS_MP })
-
+          await axios.post(`${API_BACK}/payment-methods/webhook`, { paymentId });
         } catch (error) {
           console.error("Error al obtener el estado del pago", error);
         } 
       };
-
       fetchPaymentStatus();
     }
   }, [user?.orders]);
 
-
-  if(user?.orders === undefined) return 
+  if (!user?.orders) return null;
 
   const allOrders = user.orders || []
 

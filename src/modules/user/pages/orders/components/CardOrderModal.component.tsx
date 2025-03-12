@@ -1,6 +1,6 @@
 import { IOrder } from "@/modules/checkout/pages/cart/interfaces/cartService.interface";
 import { X, Truck, Calendar, CreditCard } from "lucide-react";
-import { StatusBadge } from "./CardOrder.component";
+import { formatDate, StatusBadge } from "./CardOrder.component";
 import { ProductInterface, useProducts } from "../../manager/context/Products.context";
 import Image from "next/image";
 
@@ -14,14 +14,14 @@ if(!product) return null;
         <Image 
             src={product.image[0]} 
             alt={product.name}
-            width={200}
-            height={200}
             className="w-full h-full object-cover"
+            width={100}
+            height={100}
         />
         </div>
         <div className="flex-1">
         <h4 className="font-bold text-lg">{product.name}</h4>
-        <p className="text-gray-600 line-clamp-3">{product.description}</p>
+        <p className="text-gray-600">{product.description}</p>
         <div className="mt-2 flex items-center gap-4">
             <span className="text-sm bg-gray-200 px-3 py-1 rounded-full">
             Size: {product.size}
@@ -38,14 +38,13 @@ if(!product) return null;
 
 
 const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: () => void}) => {
-    const { orderDetails } = order;
     const { getProductById } = useProducts()
   
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           <div className="sticky top-0 bg-white border-b border-gray-100 p-4 rounded-t-2xl flex items-center justify-between">
-            <h2 className="text-xl font-bold">Order Details #{order.id}</h2>
+            <h2 className="text-xl font-bold">Order Details #{order.id.slice(0,10)}</h2>
             <button 
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -59,30 +58,30 @@ const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: () => vo
             <div className="flex items-center justify-between">
               <StatusBadge status={order.status} />
               <span className="text-gray-600">
-                Ordered on {new Date(order.createdAt).toLocaleDateString()}
+                Pedido el {formatDate(order.createdAt)}
               </span>
             </div>
   
             {/* Order Items */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-lg">Items</h3>
-                {orderDetails.map((detail) => (
+              <h3 className="font-semibold text-lg">Productos</h3>
+                {order.orderDetails.map((detail) => (
                     <CardProductDetail key={detail.productId} product={getProductById(detail.productId)} quantity={detail.quantity} />
-                ))}get
+                ))}
             </div>
   
             {/* Shipping Info */}
             <div className="space-y-3">
               <h3 className="font-semibold text-lg flex items-center gap-2">
                 <Truck className="w-5 h-5" />
-                Shipping Details
+                Detalles del envío
               </h3>
               <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="text-gray-700">{"PROXIMAMENTE"}</p>
+                <p className="text-gray-700">{"PROXIMAMENTE Dirección"}</p>
                 {/* {order.shippingAddress} */}
                 <div className="mt-2 flex items-center gap-2 text-gray-600">
                   <Calendar className="w-4 h-4" />
-                  <span>Estimated Delivery: PROXIMAMENTE</span>
+                  <span>Entrega estimada: PROXIMAMENTE tiempo de envio</span>
                   {/* {order.estimatedDelivery} */}
                 </div>
               </div>
@@ -92,15 +91,16 @@ const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: () => vo
             <div className="space-y-3">
               <h3 className="font-semibold text-lg flex items-center gap-2">
                 <CreditCard className="w-5 h-5" />
-                Payment Details
+                Detalles de pago
               </h3>
               <div className="bg-gray-50 p-4 rounded-xl">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Payment Method</span>
-                  <span>{order.currency}</span>
+                  <span className="text-gray-600">Método de pago</span>
+                  {/* Metodo de pago PROXIMAMENTE */}
+                  <span>{order.currency}</span> 
                 </div>
                 <div className="flex justify-between items-center mt-2">
-                  <span className="text-gray-600">Total Amount</span>
+                  <span className="text-gray-600">Importe total</span>
                   <span className="font-bold">${order.totalPrice}</span>
                 </div>
               </div>
@@ -112,7 +112,7 @@ const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: () => vo
               onClick={onClose}
               className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
             >
-              Close
+              Cerrar
             </button>
           </div>
         </div>

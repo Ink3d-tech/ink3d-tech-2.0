@@ -81,7 +81,7 @@ export default function Categories() {
         });
         return newIndexes;
       });
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [styles]);
@@ -113,9 +113,8 @@ export default function Categories() {
       {error && <p className="text-center text-red-500 mt-4">Error: {error}</p>}
 
       {/* Contenedor de imágenes con reglas dinámicas */}
-      <div className={`grid ${gridClass} gap-4 w-full px-4`}>
+      <div className={`grid ${gridClass} gap-0 w-full px-4`}>
         {styles.map((style) => {
-          // Seleccionamos las imágenes disponibles
           const images = styleImages[style] || [];
           const hasCustomImages = images.length > 0;
           const currentImageIndex = currentImages[style] || 0;
@@ -123,20 +122,23 @@ export default function Categories() {
 
           return (
             <Link key={style} href={`/products?style=${style}`} passHref>
-              <div className="group overflow-hidden">
-                <div className="relative w-full h-[70vh] cursor-pointer transition-transform transform group-hover:scale-105">
+              <div
+                className={`group relative overflow-hidden transform hover:scale-[1.01] transition-all duration-200`}
+              >
+                <div className="relative w-full h-[70vh] cursor-pointer overflow-hidden">
                   <Image
                     src={imageToShow}
                     alt={style}
                     layout="fill"
                     objectFit="cover"
-                    className="rounded-none"
+                    className="group-hover:scale-110 transition-all duration-300 ease-in-out"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                     <p className="text-white font-extrabold text-3xl uppercase text-center">{style}</p>
                   </div>
                 </div>
               </div>
+                <div className="bg-black h-10 relative index-90"></div>
             </Link>
           );
         })}

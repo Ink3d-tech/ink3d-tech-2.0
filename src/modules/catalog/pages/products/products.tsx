@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
-import BackButton from "@/shared/components/buttons/BackButton.component";
 import FilterCategories from "./components/FilterCategories.component";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import ProductCards from "./components/ProductCards";
+import Link from "next/link";
 
 interface Product {
   id: string;
@@ -17,18 +16,23 @@ interface Product {
     id: string;
     name: string;
   };
-  image: string;
+  image: string[];
   stock: number;
   style: string;
 }
 
 export default function ProductsPage() {
   const searchParams = useSearchParams();
-  const selectedStyle = searchParams.get("style") || null; 
+  const selectedStyle = searchParams.get("style") || null;
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const initialCategory = searchParams.get("category") || null;
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
+
+  // Lista fija de estilos (todos los estilos disponibles)
+  const allStyles = ["Streetwear", "Asian", "Motorsport"];
+
   const getStyleClasses = (style: string | undefined) => {
     if (!style) return "bg-blue-500 text-white";
     const normalizedStyle = style.trim().toLowerCase();
@@ -40,15 +44,12 @@ export default function ProductsPage() {
 
     return styleColors[normalizedStyle] || "bg-blue-500 text-white";
   };
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    initialCategory
-  );
-
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${API_BACK}/products/style/${selectedStyle}`);
+        const endpoint = "/products";  // No dependemos de un estilo para la búsqueda
+        const response = await fetch(`${API_BACK}${endpoint}`);
         if (!response.ok) {
           throw new Error("Error al obtener los productos");
         }
@@ -60,93 +61,88 @@ export default function ProductsPage() {
         setLoading(false);
       }
     };
-    if (selectedStyle) fetchProducts();
-  }, [selectedStyle]);
 
-  const filteredProducts = selectedCategory
-    ? products.filter(
-        (product) =>
-          product.category.name.toLowerCase() === selectedCategory.toLowerCase()
-      )
-    : products;
+    fetchProducts();
+  }, []);
+
+  // Filtrar productos por estilo seleccionado
+  const filteredProducts = products.filter((product) => {
+    if (selectedStyle) {
+      return product.style.toLowerCase() === selectedStyle.toLowerCase();
+    }
+    return true;
+  });
+
+  // Filtrar productos por categoría seleccionada
+  const filteredByCategory = selectedCategory
+    ? filteredProducts.filter((product) => product.category.name.toLowerCase() === selectedCategory.toLowerCase())
+    : filteredProducts;
+
+  // Eliminar duplicados por nombre (si hay productos con el mismo nombre)
+  const uniqueProducts = Array.from(
+    new Map(filteredByCategory.map((product) => [product.name, product])).values()
+  );
 
   return (
+<div className="relative flex flex-col min-h-screen">
+  {/* Capa de fondo con imagen y blur */}
+  <div
+    className="absolute inset-0 bg-repeat blur-xl "
+    style={{
+      backgroundImage: "url('/images/textures/8.jpg')",
+      backgroundSize: "1000px", // Ajusta el tamaño del mosaico a tu gusto
+      backgroundPosition: "center",
+      backgroundRepeat: "repeat", // Hace que la imagen se repita en mosaico
+      filter: "blur(10px)", // Aplica el desenfoque
+    }}
+  />
+  <div className="absolute inset-0 bg-white/30"></div>
+    <div className="min-h-screen pb-2 relative index-90">
+<div className="flex overflow-x-auto space-x-2 p-4 bg-black shadow-md sticky top-0 z-10">
+  <Link
+    href="/products"
+    className={`px-4 py-2 text-white rounded-full text-sm hover:bg-gray-900 ${
+      !selectedStyle ? "border-b-2 border-white" : ""
+    }`}
+  >
+    Todos
+  </Link>
+  {allStyles.map((style) => (
+    <Link
+      key={style}
+      href={`/products?style=${style}`}
+      className={`px-4 py-2 text-white rounded-full text-sm hover:bg-gray-900 ${
+        selectedStyle?.toLowerCase() === style.toLowerCase() ? "border-b-2 border-white" : ""
+      }`}
+    >
+      {style}
+    </Link>
+  ))}
+</div>
 
-    <div className="min-h-screen bg-gray-300 pb-2 ">
-      <BackButton tab="" />
-      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md ">
+      <div className="max-w-9xl mx-auto my-6 bg-gray-100 rounded-lg p-0 border border-gray-300 shadow-md pb-5">
         <div className="flex justify-between items-center px-30 px-4">
-          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3 ">
+          <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
             Lista de Productos
           </h2>
-          <FilterCategories
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
-          />
-
+          <FilterCategories selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
         </div>
         <div className="w-full h-px bg-gray-300"></div>
 
-        {loading && (
-          <p className="text-gray-500 text-center mt-4">
-            Cargando productos...
-          </p>
-        )}
-        {error && (
-          <p className="text-red-500 text-center mt-4">Error: {error}</p>
-        )}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5 px-7 py-2">
-          {filteredProducts.map((product) => (
-            <Link
-              key={product.id}
-              href={`/productDetail/${product.id}`}
-              passHref
-            >
-              <div className="relative flex flex-col bg-white overflow-hidden rounded-lg cursor-pointer transition-transform group">
-              <div className="flex gap-2 ">
-                  <span
-                    className={`absolute top-3 right-0 text-xs font-semibold uppercase px-4 py-1 
-               rounded-bl-lg rounded-tl-lg opacity-0 shadow-md
-               group-hover:opacity-100 
-               transition-opacity duration-300 ease-in-out ${getStyleClasses(
-                 product.style
-               )}`}
-                  >
-                    {product.style || "Sin estilo"}
-                  </span>
-                </div>
-                {product.stock === 0 && (
-                  <div
-                    className="absolute top-3 left-0 bg-gray-800 text-white text-xs font-semibold uppercase px-4 py-1 
-      rounded-br-lg rounded-tr-lg shadow-md opacity-100"
-                  >
-                    Sin Stock
-                  </div>
-                )}
+        {loading && <p className="text-gray-500 text-center mt-4">Cargando productos...</p>}
+        {error && <p className="text-red-500 text-center mt-4">Error: {error}</p>}
 
-                <div className="w-full h-96 bg-gray-100">
-                  <Image
-                    src={product.image[0] || "/placeholder-image.png"}
-                    alt={product.name}
-                    width={800}
-                    height={800}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-3 text-center">
-                  <h3 className="text-lg font-semibold">{product.name}</h3>
-                  <p className="text-gray-500 text-sm truncate">
-                    {product.description}
-                  </p>
-                  <p className="text-lg font-bold mt-1 text-green-700">
-                    ${product.price}
-                  </p>
-                </div>
-              </div>
-            </Link>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5 px-7 py-2">
+          {uniqueProducts.length === 0 ? (
+            <p className="text-gray-500 text-center mt-4">No hay productos disponibles con estos filtros.</p>
+          ) : (
+            uniqueProducts.map((product) => (
+              <ProductCards key={product.id} product={product} getStyleClasses={getStyleClasses} />
+            ))
+          )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

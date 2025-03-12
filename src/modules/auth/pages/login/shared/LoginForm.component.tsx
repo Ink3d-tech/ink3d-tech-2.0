@@ -11,11 +11,12 @@ import { API_BACK } from "@/shared/config/api/getEnv";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 
+
 export enum LoginFields {
     ENTER = "Entrar",
     GOOGLE = "Inciar sesión con Google",
     PASSWORD = "¿Olvidaste tu contraseña?",
-    ACCOUNT = "¿Ya tienes una contraseña?",
+    ACCOUNT = "¿Ya tienes una cuenta?",
     NEWACCOUNT = "¿No tienes una cuenta?",
     REGISTER = "Registrarte",
     OR = "o"
@@ -38,6 +39,7 @@ export const LoginForm: React.FC<LoginProps> = ({
 }) => {
 
     const [isClient, setIsClient] = useState(false);
+    // const [isOpen, setIsOpen] = useState(false)
     
     // useEffect para actualizar el estado cuando el componente se monte
     useEffect(() => {
@@ -66,13 +68,15 @@ export const LoginForm: React.FC<LoginProps> = ({
                 inputs={formFields}
                 formErrors={formErrors}
             />
-            <Question question={LoginFields.PASSWORD} href={"#"} variant={VariantQuestion.PRIMARY}/>
+            {/* <Question question={LoginFields.PASSWORD} variant={VariantQuestion.SECONDARY} />
+            {
+                isOpen ? <ModalResetPassword setIsOpen={setIsOpen}/> : null
+
+            } */}
+            <div className="mb-6"></div>
 
             <ButtonBase name={LoginFields.ENTER} isLoading={isLoading} variant={BtnVariant.PRIMARY}/>
-
             <Divider letter={LoginFields.OR}/>
-
-            {/* <ButtonBase name={LoginFields.GOOGLE} variant={BtnVariant.GOOGLE}/> */}
             <button
                 type="button"
                 className="flex items-center justify-center py-2 rounded-md font-medium text-[14px] bg-white text-black border-gray-400"
@@ -84,7 +88,7 @@ export const LoginForm: React.FC<LoginProps> = ({
 
             <Spacer value={34}/>
             
-            <div className="flex mx-auto">
+            <div className="flex gap-2 mx-auto">
                 <Question question={LoginFields.NEWACCOUNT} href={Routes.SIGNUP} variant={VariantQuestion.SECONDARY}/>
                 <Question question={LoginFields.REGISTER} href={Routes.SIGNUP} variant={VariantQuestion.PRIMARY}/>
             </div>

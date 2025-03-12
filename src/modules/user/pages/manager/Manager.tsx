@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+<<<<<<< HEAD
 import {
   LineChart,
   Line,
@@ -28,24 +29,19 @@ import FormMagazine from "@/shared/components/formMagazine/FormMagazine";
 import SeguridadConfiguracion from "@/shared/components/seguridadConfiguracion/SeguridadConfiguracion";
 import Stock from "./pages/stock/Stock";
 import { ManagmentProductForm } from "./pages/management/Managment";
+=======
+import Sidebar from "./components/Sidebar";
+import MainContent from "./components/MainContent";
+>>>>>>> 4d8fd1cbf796bb3fe2a95c5c3ef9f95e617990c7
 import ProtectedRouteAdmin from "@/shared/helpers/ProtectedRouteAdmin";
-import UserManagement from "./general/GestionUsuarios/UserManagement";
-import OrderList from "./general/GestionPedidos/OrderList";
 
 export default function Manager() {
   const [activeTab, setActiveTab] = useState("overview");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const salesData = [
-    { name: "Ene", ventas: 4000 },
-    { name: "Feb", ventas: 3000 },
-    { name: "Mar", ventas: 5000 },
-    { name: "Abr", ventas: 2000 },
-    { name: "May", ventas: 6000 },
-  ];
-
   return (
     <ProtectedRouteAdmin>
+<<<<<<< HEAD
 <div className="flex bg-white text-black min-h-screen overflow-hidden">
         <button 
           className="md:hidden fixed top-25 left-4 z-50 bg-gray-800 text-white p-3 rounded-full shadow-lg transition-transform active:scale-95"
@@ -136,6 +132,11 @@ export default function Manager() {
           {activeTab === "forum" && <FormMagazine />}
           {activeTab === "settings" && <SeguridadConfiguracion />}
         </div>
+=======
+      <div className="flex bg-white text-black min-h-screen overflow-hidden">
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <MainContent activeTab={activeTab} />
+>>>>>>> 4d8fd1cbf796bb3fe2a95c5c3ef9f95e617990c7
       </div>
     </ProtectedRouteAdmin>
   );

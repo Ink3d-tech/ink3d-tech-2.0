@@ -3,23 +3,27 @@
 import { ButtonBase } from "./ButtonBase.component"
 import { Fire, getAlert } from "./FireAlert.component"
 import { useCart } from "../context/Cart.context"
-import { confirmOrderService, paymentCreateService, validateDiscount } from "../services/cart.services"
+import { validateDiscount } from "../services/cart.services"
 import { useAuth } from "@/modules/auth/shared/context/Auth.context"
-import { ICartProduct } from "../interfaces/cartService.interface"
-
 import { useState } from "react"
 import Swal from "sweetalert2";
-
-
+import CheckoutModal from "./CheckoutModal.component"
 
 
 export default function CartSummary() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleConfirmPurchaseModal = () => {
+        setIsModalOpen(true);
+    };
+
     const { products, emptyCart, countProducts } = useCart();
-    const { getIdUser, token } = useAuth();
+    const { token } = useAuth();
     
     const [showDiscountInput, setShowDiscountInput] = useState(false);
-    const [discountCode, setDiscountCode] = useState("");
-    const [validDiscount, setValidDiscount] = useState("");
+    const [discountCode, setDiscountCode] = useState<string>("");
+    const [validDiscount, setValidDiscount] = useState<string>("");
+    const [discountAmount, setDiscountAmount] = useState(0);
     
     const totalPrice = products.reduce((total, product) => total + (Number(product.price) * product.units), 0);
 
@@ -30,21 +34,6 @@ export default function CartSummary() {
             emptyCart();
             Fire("Deleted!");
         });
-    };
-
-    const handleConfirmPurchase = async () => {
-        try {
-            const userBuyer = getIdUser(localStorage.getItem("token") || "");
-            const confirmedCart: ICartProduct[] = JSON.parse(localStorage.getItem(`cart_${userBuyer}`) || "[]");
-            const { orderId } = await confirmOrderService(userBuyer, confirmedCart, token, validDiscount);
-            const response = await paymentCreateService(orderId, "ARS", confirmedCart, token);
-            const link = Object.values(response)[0];
-            window.location.href = link;
-
-            emptyCart();
-        } catch (error) {
-            console.error("Error al confirmar la compra en cart.tsx:", error);
-        }
     };
 
     const handleAcceptDiscount = async () => {
@@ -64,6 +53,7 @@ export default function CartSummary() {
                 setValidDiscount(discountCode);
                 setDiscountPrice(totalPrice - (totalPrice * discountAmount) / 100);
                 setShowDiscountInput(!showDiscountInput);
+                setDiscountAmount(discountAmount);
                 
             } else if (fetchDiscount?.status === "used") {
                 Swal.fire({
@@ -72,6 +62,9 @@ export default function CartSummary() {
                     icon: "error",
                     confirmButtonText: "OK",
                 });
+
+                setValidDiscount("");
+
             } else if (fetchDiscount?.status === "expired") {
                 Swal.fire({
                     title: "Código expirado",
@@ -79,6 +72,9 @@ export default function CartSummary() {
                     icon: "error",
                     confirmButtonText: "OK",
                 });
+
+                setValidDiscount("");
+                
             } else if (fetchDiscount?.status === "invalid") {
                 Swal.fire({
                     title: "Código inválido",
@@ -140,8 +136,9 @@ export default function CartSummary() {
             </div>: null}
             <div className="flex justify-end gap-4 mt-4">
                 <ButtonBase name="Vaciar" onClick={handlerEmptyCart} />
-                <ButtonBase name="Continuar" onClick={handleConfirmPurchase} />
+                <ButtonBase name="Continuar" onClick={handleConfirmPurchaseModal} />
             </div>
+            {isModalOpen && <CheckoutModal setOnClose={setIsModalOpen} discountAmount={discountAmount} validDiscount={validDiscount}/>}
         </div>
     );
 }
