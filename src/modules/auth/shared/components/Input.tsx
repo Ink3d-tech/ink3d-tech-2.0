@@ -30,6 +30,14 @@ export default function Input({
         setShowPassword(prevState => !prevState); // Alterna el valor de showPassword
     };
 
+
+    const translations: Record<string, string> = {
+        "name": "nombre",
+        "email": "correo electrónico",
+        "password": "contraseña",
+        "confirmPassword": "confirmar contraseña",
+      };
+
     return (
         <div className="relative mt-6">
 
@@ -37,7 +45,7 @@ export default function Input({
                 htmlFor={String(id)}
                 className={`capitalize absolute left-[8px] transition-all duration-300 text-inputSecondary
                 ${isFocused || value?.length > 0 ? `text-xs left-3 top-0 bg-transparent px-1` : `text-base top-3 `}`}>
-                {name}
+                {translations[name]}
             </label>
 
             <input
