@@ -24,3 +24,13 @@ export interface UpdateDataUserShipmentInterface {
     city?: string
     country?: string
 }
+
+export interface UpdateDataProfileInterface {
+    phone: string
+    address: string
+    city: string
+    country: string
+    name: string
+    image: string
+    email: string
+}
