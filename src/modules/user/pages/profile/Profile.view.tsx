@@ -22,7 +22,22 @@ export const ProfileView = () => {
       email: user.email,
       name: user.name
     });
-  
+
+    const [emailError, setEmailError] = useState("");
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(value)) {
+        setEmailError("Ingrese un email válido (ejemplo@correo.com).");
+      } else {
+        setEmailError("");
+      }
+
+      handleChange(e);
+    };
+      
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       try {
@@ -92,7 +107,7 @@ export const ProfileView = () => {
                       name="name"
                       value={formData.name ?? "Sin asignar"}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="invalid:border-red-500 w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
                     />
                   </div>
@@ -105,10 +120,13 @@ export const ProfileView = () => {
                       type="email"
                       id="email"
                       name="email"
-                      value={formData.email ?? "Sin asignar"}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      value={formData.email ?? ""}
+                      onChange={handleEmailChange}
+                      className={`w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all ${
+                        emailError ? "border-red-500" : ""
+                      }`}
                       required
+                      placeholder="Ingrese su email"
                     />
                   </div>
   
@@ -120,11 +138,18 @@ export const ProfileView = () => {
                       type="tel"
                       id="phone"
                       name="phone"
-                      value={formData.phone ?? "Sin asignar"}
+                      value={formData.phone ?? ""}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all invalid:border-red-500"
+                      maxLength={10}
+                      pattern="[0-9]{10}"
                       required
+                      placeholder="Ingrese su número (10 dígitos)"
+                      title="El número debe tener exactamente 10 dígitos numéricos"
                     />
+                    <p className="text-red-500 text-sm mt-1 hidden" id="phone-error">
+                      Debe ingresar un número de 10 dígitos.
+                    </p>
                   </div>
   
                   <div>
@@ -137,7 +162,7 @@ export const ProfileView = () => {
                       name="address"
                       value={formData.address ?? "Sin asignar"}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="invalid:border-red-500 w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
                     />
                   </div>
@@ -152,7 +177,7 @@ export const ProfileView = () => {
                       name="city"
                       value={formData.city ?? "Sin asignar"}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="invalid:border-red-500 w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
                     />
                   </div>
@@ -167,7 +192,7 @@ export const ProfileView = () => {
                       name="country"
                       value={formData.country ?? "Sin asignar"}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="invalid:border-red-500 w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
                     />
                   </div>
