@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
-import ProductCards from "../products/components/ProductCards";
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
+import ProtectedRoute from "@/shared/helpers/ProtectedRoute";
 
 type Discount = {
   id: string;
@@ -14,20 +14,8 @@ type Discount = {
   expiresAt: string | null;
 };
 
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  category: { id: string; name: string };
-  image: string[];
-  stock: number;
-  style: string;
-};
-
 export default function Sales() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -53,23 +41,6 @@ export default function Sales() {
       correctAnswer: "Puma",
     },
   ];
-
-  useEffect(() => {
-    axios
-      .get<Product[]>(`${API_BACK}/products`) // Indicamos que la respuesta es de tipo Product[]
-      .then((res) => {
-        const shuffled = res.data.sort(() => 0.5 - Math.random()).slice(0, 6);
-        setProducts(shuffled);
-      })
-      .catch((error) => console.error("Error cargando productos:", error));
-  }, []);
-
-  const getStyleClasses = (style: string | undefined) => {
-    if (!style) return "bg-gray-800";
-    if (style === "vintage") return "bg-yellow-500";
-    if (style === "modern") return "bg-blue-500";
-    return "bg-gray-700";
-  };
 
   const handleAnswer = (answer: string) => {
     const newAnswers = [...userAnswers, answer];
@@ -114,12 +85,30 @@ export default function Sales() {
     setIsCompleted(true);
   };
 
+  // Redirigir al home al cerrar el modal
+  const redirectToHome = () => {
+    window.location.href = "/home";
+  };
+
   return (
-    <div className="min-h-screen text-white relative">
+    <ProtectedRoute title="">
+    <div className="min-h-screen text-white relative -my-23">
+      <div
+        className="absolute inset-0 bg-repeat blur-xl "
+        style={{
+          backgroundImage: "url('/images/textures/8.jpg')",
+          backgroundSize: "1000px", // Ajusta el tamaño del mosaico a tu gusto
+          backgroundPosition: "center",
+          backgroundRepeat: "repeat", // Hace que la imagen se repita en mosaico
+          filter: "blur(10px)", // Aplica el desenfoque
+        }}
+      />
+      <div className="absolute inset-0 bg-white/30"></div>
+
       {/* Modal Trivia */}
       {showModal && !isCompleted && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20 -mt-6"
         >
           <div className="bg-gray-800 p-6 rounded-lg text-white max-w-sm">
             <h2 className="text-xl font-bold mb-4">Trivia Motorsport</h2>
@@ -140,19 +129,26 @@ export default function Sales() {
       )}
 
       {/* Modal Resultado */}
-      {isCompleted && showModal &&  (
+      {isCompleted && showModal && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
         >
-          <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 p-8 rounded-xl text-white shadow-xl max-w-md transform transition-all scale-110 hover:scale-100">
+          <div className="bg-gradient-to-r -mt-6 from-purple-600 via-blue-600 to-indigo-600 p-8 rounded-xl text-white shadow-xl max-w-md transform transition-all scale-110 hover:scale-100">
             <h2 className="text-3xl font-bold mb-6 text-center">
-              {isCorrect ? "¡Felicidades!" : "¡Fallaste!"}
+              {isCorrect ? "¡Felicidades!" : "Fallaste :("}
             </h2>
             <p className="mb-6 text-center text-lg">
               {isCorrect
                 ? "Has completado la trivia correctamente."
                 : "Lo siento, no todas tus respuestas son correctas."}
             </p>
+
+            {/* Texto adicional al ganar */}
+            {isCorrect && (
+              <p className="mb-6 text-center text-lg  ">
+                ¡Copia el siguiente codigo para utilizarlo antes de comprar!
+              </p>
+            )}
 
             {isCorrect && rewardCode !== "No hay descuentos disponibles" ? (
               <div className="text-center">
@@ -171,10 +167,10 @@ export default function Sales() {
               </div>
             )}
 
-            {/* Botón para cerrar el modal */}
+            {/* Botón para cerrar el modal y redirigir al home */}
             <div className="mt-6 flex justify-center">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={redirectToHome} // Redirige al home
                 className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
               >
                 Cerrar
@@ -183,31 +179,7 @@ export default function Sales() {
           </div>
         </div>
       )}
-
-      {/* Background */}
-      <div
-        className="absolute inset-0 bg-repeat blur-xl z-0"
-        style={{
-          backgroundImage: "url('/images/textures/8.jpg')",
-          backgroundSize: "1000px",
-          backgroundPosition: "center",
-          backgroundRepeat: "repeat",
-          filter: "blur(10px)",
-        }}
-      />
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product) => (
-            <ProductCards
-              key={product.id}
-              product={product}
-              getStyleClasses={getStyleClasses}
-            />
-          ))}
-        </div>
-      </main>
     </div>
+    </ProtectedRoute>
   );
 }
