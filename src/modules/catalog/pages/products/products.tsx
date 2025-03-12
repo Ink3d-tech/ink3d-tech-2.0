@@ -66,10 +66,14 @@ export default function ProductsPage() {
     ? products.filter((product) => product.category.name.toLowerCase() === selectedCategory.toLowerCase())
     : products;
 
+  const uniqueProducts = Array.from(
+    new Map(filteredProducts.map((product) => [product.name, product])).values()
+  );
+
   return (
     <div className="min-h-screen bg-gray-300 pb-2">
       <BackButton tab="" />
-      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md">
+      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md pb-5">
         <div className="flex justify-between items-center px-30 px-4">
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
             Lista de Productos
@@ -82,7 +86,7 @@ export default function ProductsPage() {
         {error && <p className="text-red-500 text-center mt-4">Error: {error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5 px-7 py-2">
-          {filteredProducts.map((product) => (
+          {uniqueProducts.map((product) => (
             <ProductCards key={product.id} product={product} getStyleClasses={getStyleClasses} />
           ))}
         </div>

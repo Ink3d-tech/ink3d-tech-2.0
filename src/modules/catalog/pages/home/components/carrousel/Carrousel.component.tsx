@@ -83,7 +83,6 @@ const Carousel = () => {
       >
         {articles.map((article) => (
           <SwiperSlide key={article.id}>
-            {/* Toda la tarjeta es clickeable */}
             <div
               className="relative flex items-center justify-center cursor-pointer"
               onClick={() => handleImageClick(article.id)}

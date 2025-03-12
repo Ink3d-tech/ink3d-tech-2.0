@@ -23,11 +23,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col bg-gray-300">
+      <div className="flex flex-col bg-black">
       <div className="mb-6">
-        {/* <BackButton tab="Inicio"/> */}
       </div>
       <Carousel />
       <ButtonsMini />
+      </div>
       <ProductList categoryName="Ropa" title="Ropa" />
       <StaticCarousel category="MUNDO ASIAN" />
       <ProductList categoryName="Calzado" title="Calzado" />
