@@ -3,7 +3,6 @@
 import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { getAlert } from "../components/FireAlert.component";
 
 
 export interface Product {
