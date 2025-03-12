@@ -8,7 +8,6 @@ import SignupForm from "./shared/Signup.component"
 import { formInitial, requiredFields } from "./shared/Signup.config"
 import { validateFormSignup } from "./shared/Signup.validate"
 import Wrapper from "../../shared/components/Wrapper"
-import HeaderBackBtn from "../../shared/components/HeaderBack.component"
 import { Routes } from "../../shared/enums/Routes"
 
 
@@ -26,7 +25,7 @@ export default function Signup() {
 
     return (
         <Wrapper>
-            <HeaderBackBtn name={"Registro"} route={Routes.LOGIN}/>
+            {/* <HeaderBackBtn name={"Registro"} route={Routes.LOGIN}/> */}
             <SignupForm
                 form={form}
                 formErrors={formErrors}

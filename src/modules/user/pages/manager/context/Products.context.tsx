@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { getAuthHeaders } from "./getAuthHeaders";
+import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
 
 
 export interface CategoryInterface {
@@ -12,7 +13,7 @@ export interface CategoryInterface {
 }
 
 export interface ProductInterface {
-    id?: string
+    id?: string | "1"
     name: string
     description: string
     price: number | ""
@@ -24,6 +25,8 @@ export interface ProductInterface {
     category: string
     isActive?: boolean
     style: string
+    updatedAt?: string
+    createdAt?: string
 }
 
 export type ProductWithoutId = {
@@ -40,23 +43,27 @@ export type ProductWithoutId = {
 }
 
 interface ProductsContextType {
-    products: ProductInterface[];
-    loading: boolean;
-    error: string | undefined;
-    createProduct: (product: ProductWithoutId) => Promise<void>;
-    getProductById: (id: string) => ProductInterface | undefined;
+    products: ProductInterface[]
+    loading: boolean
+    error: string | undefined
+    createProduct: (product: ProductWithoutId) => Promise<void>
+    getProductById: (id: string) => ProductInterface | undefined
     updateProduct: (id: string, data: Partial<ProductInterface>) => Promise<void>
-    deleteProduct: (id: string) => Promise<void>;
+    deleteProduct: (id: string) => Promise<void>
+    deactivateProduct: (id: string) => Promise<void>
+    activateProduct: (id: string) => Promise<void>
 }
 
 const ProductsContext = createContext<ProductsContextType>({
     products: [],
     loading: true,
     error: undefined,
-    createProduct: async () => { },
+    createProduct: async () => {},
     getProductById: () => undefined,
-    updateProduct: async () => { },
-    deleteProduct: async () => { },
+    updateProduct: async () => {},
+    deleteProduct: async () => {},
+    deactivateProduct: async() => {},
+    activateProduct: async() => {},
 });
 
 export const ProductsProvider = ({ children }: { children: React.ReactNode }) => {
@@ -121,6 +128,36 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
         }
     }
 
+    const deactivateProduct = async(id: string): Promise<void>  => {
+        try {
+            await axios.patch(`${API_BACK}/products/${id}/deactivate`, {}, getAuthHeaders())
+            setProducts(prevProducts =>
+                prevProducts.map(product =>
+                    product.id === id ? { ...product, isActive: false } : product
+                )
+            );
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Error desactivando el producto")
+            console.error("Error al desactivar el producto")
+            Mixin.fire("Error al desactivar el product", "", "error")
+        }
+    }
+
+    const activateProduct = async(id: string): Promise<void>  => {
+        try {
+            await axios.patch(`${API_BACK}/products/${id}/activate`, {}, getAuthHeaders())
+            setProducts(prevProducts =>
+                prevProducts.map(product =>
+                    product.id === id ? { ...product, isActive: true } : product
+                )
+            );
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Error activando el producto")
+            console.error("Error al activar el producto")
+            Mixin.fire("Error al activar el product", "", "error")
+        }
+    }
+
     const value = {
         products,
         loading,
@@ -128,7 +165,9 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
         getProductById,
         updateProduct,
         createProduct,
-        deleteProduct
+        deleteProduct,
+        deactivateProduct,
+        activateProduct
     };
 
     return (

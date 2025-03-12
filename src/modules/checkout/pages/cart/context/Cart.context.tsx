@@ -14,6 +14,7 @@ export interface Product {
     style: string;
     units: number;
     discount: number;
+    isActive?: boolean
     description: string;
     category: {
       id: string;

@@ -1,0 +1,5 @@
+.custom-toast {
+    padding: 20px 30px; /* Ajusta el padding para controlar el espaciado */
+    font-size: 15px; /* Ajusta el tamaño de la fuente */
+    top: 100px !important; /* Ajusta la distancia desde el top de la pantalla */
+}

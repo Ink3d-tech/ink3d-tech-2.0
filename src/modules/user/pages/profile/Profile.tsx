@@ -6,7 +6,7 @@ import { ProfileView } from './Profile.view'
 export default function Profile() {
 
     return ( 
-        <ProtectedRoute title='Debes iniciar sesion o registrarte para ver tu perfil'>
+        <ProtectedRoute>
             <ProfileView/>
         </ProtectedRoute>
     )

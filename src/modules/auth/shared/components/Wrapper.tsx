@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { Question, QuestionInterface, VariantQuestion } from "./Question.component"
+import { QuestionInterface, VariantQuestion } from "./Question.component"
 // import Image from "next/image"
 
 export interface WrapperProps {
@@ -22,33 +22,38 @@ export const IndexQuestion: QuestionInterface[] = [
 
 export const Wrapper: React.FC<WrapperProps> = ({
     children,
-    withTopHr = true,
-    withBottomHr = true,
 }) => {
     const pathname = usePathname()
     return (
-        <>
+        <div 
+            className="h-screen w-full flex items-center justify-center bg-black"
+            style={{
+                backgroundImage: 'url("https://images.unsplash.com/photo-1523398002811-999ca8dec234?q=80&w=2000&auto=format")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
+        >
             {pathname === "/login" ? (
-                <div className="bg-primary  mx-auto py-14">
+                <div className="max-w-md w-full mx-auto p-8 backdrop-blur-sm bg-black/70 rounded-xl border border-zinc-800">
                     {/* <figure className="flex justify-center">
                         <Image src={"LogoInk3d.webp"} alt={"Logo ink3d"} width={145} height={85}/>
                     </figure> */}
                     
-                    {withTopHr && <hr className="my-4 border-transparent"/>}
+                    {/* {withTopHr && <hr className="my-4 border-transparent"/>} */}
                     {children}
-                    {withBottomHr && <hr className="my-4 border-transparent"/>}
+                    {/* {withBottomHr && <hr className="my-4 border-transparent"/>} */}
                     
-                    <div className="flex justify-center flex-wrap gap-4 text-white text-sm mt-12 px-4">{IndexQuestion.map(question => <Question key={question.question} href={question.href} question={question.question} variant={question.variant}/> )}</div>
+                    {/* <div className="flex justify-center flex-wrap gap-4 text-white text-sm mt-12 px-4">{IndexQuestion.map(question => <Question key={question.question} href={question.href} question={question.question} variant={question.variant}/> )}</div> */}
                 </div>
             ): (
-                <div className="bg-primary  mx-auto">
+                <div className="max-w-md w-full mx-auto p-8 backdrop-blur-sm bg-black/70 rounded-xl border border-zinc-800">
                     {children}
-                    {withBottomHr && <hr className="my-4 border-transparent"/>}
+                    {/* {withBottomHr && <hr className="my-4 border-transparent"/>} */}
                     
-                    <div className="flex justify-center flex-wrap gap-4 text-white text-sm mt-12 px-4"> {IndexQuestion.map(question => <Question key={question.question} href={question.href} question={question.question} variant={question.variant}/> )}</div>
+                    {/* <div className="flex justify-center flex-wrap gap-4 text-white text-sm mt-12 px-4"> {IndexQuestion.map(question => <Question key={question.question} href={question.href} question={question.question} variant={question.variant}/> )}</div> */}
                 </div> 
             )}
-        </>
+        </div>
        
     )
 }
