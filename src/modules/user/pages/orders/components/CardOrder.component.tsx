@@ -74,8 +74,13 @@ const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: R
   
   useEffect(() => {
     const fetchOrderId = async() => {
-      const res = await axios.get<IOrder>(`${API_BACK}/orders/${order.id}`, getAuthHeaders());
-      setOrderPref(res.data.externalReference);
+      try {
+        const res = await axios.get<IOrder>(`${API_BACK}/orders/${order.id}`, getAuthHeaders());
+        setOrderPref(res.data.externalReference);
+        return
+      } catch (error) {
+        console.error("Saliendo por el catch a la hora de retomar la compra")
+      }
     }
     fetchOrderId()
   }, [order.id])
