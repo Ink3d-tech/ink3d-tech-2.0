@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import ProductCard from "./SearchProductCard";
 import EmptySearch from "./EmptySearch";
 import { useProducts } from "@/modules/user/pages/manager/context/Products.context";
 import "./search.css";   // bg-color del body al gris 

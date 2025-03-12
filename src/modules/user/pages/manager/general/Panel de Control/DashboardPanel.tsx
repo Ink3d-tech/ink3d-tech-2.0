@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { format, addMinutes } from "date-fns";
 import { Ticket, Plus, Trash, Search } from "lucide-react";
+import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
 
 
 
@@ -45,6 +46,7 @@ function DiscountsApp() {
       setDiscounts(response.data);
     } catch (error) {
       setError("Error al cargar los descuentos.");
+      console.error(error)
     } finally {
       setLoading(false);
     }
@@ -83,6 +85,7 @@ function DiscountsApp() {
       setExpiresAt(null);
     } catch (error) {
       alert("Error al crear el descuento");
+      console.error(error)
     }
   };
 
@@ -96,6 +99,7 @@ function DiscountsApp() {
 
       setDiscounts(discounts.filter((discount) => discount.id !== id));
     } catch (error) {
+      console.error(error)
       alert("Error al eliminar el descuento");
     }
   };
@@ -111,7 +115,8 @@ function DiscountsApp() {
 
       setSelectedDiscount(response.data);
     } catch (error) {
-      alert("Descuento no encontrado");
+      Mixin.fire("Descuento no encontrado");
+      console.error(error)
     }
   };
 
@@ -203,7 +208,7 @@ function DiscountsApp() {
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
     const latestDiscount = sortedDiscounts[0];
-
+    console.log(amount)
     // Contadores de estado
     const totalCreated = discountList.length;
     const expiringSoon = discountList.filter(d => d.expiresAt !== null && d.status === "active").length;
