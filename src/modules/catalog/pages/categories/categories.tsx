@@ -123,27 +123,26 @@ export default function Categories() {
           return (
             <Link key={style} href={`/products?style=${style}`} passHref>
               <div
-                className={`group relative overflow-visible transform transition-all duration-300 ease-in-out 
-                      -m-2 hover:z-20 hover:scale-90`}
+                className={`group relative overflow-hidden transform hover:scale-[1.01] transition-all duration-200`}
               >
-                <div className="relative w-full h-[70vh] cursor-pointer">
+                <div className="relative w-full h-[70vh] cursor-pointer overflow-hidden">
                   <Image
                     src={imageToShow}
                     alt={style}
                     layout="fill"
                     objectFit="cover"
-                    className="rounded-none"
+                    className="group-hover:scale-110 transition-all duration-300 ease-in-out"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                     <p className="text-white font-extrabold text-3xl uppercase text-center">{style}</p>
                   </div>
                 </div>
               </div>
+                <div className="bg-black h-10 relative index-90"></div>
             </Link>
           );
         })}
       </div>
-
     </div>
   );
 }
