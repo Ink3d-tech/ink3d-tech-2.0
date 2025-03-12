@@ -23,7 +23,7 @@ export default function Cart() {
   />
         <div className="absolute inset-0 bg-white/30"></div>
         <div className="max-w-[1000px] mx-auto">
-          <div className="text-gray-900 my-8 relative z-[60]">
+          <div className="text-gray-900 my-8 relative z-[10]">
             <div className="flex flex-col gap-2 lg:flex-row lg:gap-8">
               <CartView/>
             </div>

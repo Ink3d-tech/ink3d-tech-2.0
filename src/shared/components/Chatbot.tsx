@@ -113,7 +113,7 @@ export default function Chatbot() {
   }, [onDrag, stopDrag]);
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-5 right-5 z-[99999]">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-blue-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition"

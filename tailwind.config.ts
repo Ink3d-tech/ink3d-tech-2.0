@@ -15,6 +15,11 @@ export default {
         '9xl': '96rem',  // 1536px
         '10xl': '104rem', // 1664px
       },
+      spacing: {
+        21: "5.25rem", // 21 * 0.25rem = 5.25rem (84px)
+        22: "5.5rem",  // 22 * 0.25rem = 5.5rem (88px)
+        23: "5.75rem", // 23 * 0.25rem = 5.75rem (92px)
+      },
       backgroundColor: {
         primary: "#000",
         secondary: "#FFF",

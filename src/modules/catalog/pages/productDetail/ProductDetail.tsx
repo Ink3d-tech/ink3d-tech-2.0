@@ -113,7 +113,7 @@ export default function ProductDetail() {
 
   return (
     <div>
-      <BackButton tab="" />
+      <BackButton tab="Producto" />
       <div className="relative py-14">
       {/* 🎨 Fondo con desenfoque (ahora correctamente detrás) */}
       <div
