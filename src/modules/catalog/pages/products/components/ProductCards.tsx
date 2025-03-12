@@ -40,7 +40,7 @@ export default function ProductCards({ product, getStyleClasses }: ProductCardPr
           {product.style || "Sin estilo"}
         </span>
 
-        <div className="relative w-full h-[420px] aspect-[4/5] overflow-hidden">
+        <div className="relative w-full h-[440px] aspect-[4/5] overflow-hidden">
           <Image
             src={product.image[0]}
             alt={product.name}

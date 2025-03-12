@@ -114,8 +114,22 @@ export default function ProductDetail() {
   return (
     <div>
       <BackButton tab="Producto" />
-      <div className="flex items-center justify-center pt-10 pb-2">
+      <div className="relative py-14">
+      {/* 🎨 Fondo con desenfoque (ahora correctamente detrás) */}
+      <div
+    className="absolute inset-0 bg-repeat blur-xl "
+    style={{
+      backgroundImage: "url('/images/textures/8.jpg')",
+      backgroundSize: "1000px", // Ajusta el tamaño del mosaico a tu gusto
+      backgroundPosition: "center",
+      backgroundRepeat: "repeat", // Hace que la imagen se repita en mosaico
+      filter: "blur(10px)", // Aplica el desenfoque
+    }}
+  />
+      <div className="absolute inset-0 bg-white/30"></div>
+      <div className="flex items-center justify-center py-10 pb-2">
         <div className="bg-white shadow-xl rounded-lg p-8 max-w-6xl w-full flex flex-col md:flex-row gap-10 relative">
+          
           {product.stock === 0 && (
             <div className="absolute top-3 left-0 bg-gray-800 text-white text-xs font-semibold uppercase px-4 py-1 rounded-br-lg rounded-tr-lg shadow-md">
               Sin Stock
@@ -241,10 +255,11 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-
-      <div className="mt-10">
+      </div>
+      <div className="relative index-10">
         <ProductsComponent />
       </div>
     </div>
+    
   );
 }

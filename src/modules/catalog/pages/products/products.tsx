@@ -84,7 +84,20 @@ export default function ProductsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-300 pb-2">
+<div className="relative flex flex-col min-h-screen">
+  {/* Capa de fondo con imagen y blur */}
+  <div
+    className="absolute inset-0 bg-repeat blur-xl "
+    style={{
+      backgroundImage: "url('/images/textures/8.jpg')",
+      backgroundSize: "1000px", // Ajusta el tamaño del mosaico a tu gusto
+      backgroundPosition: "center",
+      backgroundRepeat: "repeat", // Hace que la imagen se repita en mosaico
+      filter: "blur(10px)", // Aplica el desenfoque
+    }}
+  />
+  <div className="absolute inset-0 bg-white/30"></div>
+    <div className="min-h-screen pb-2 relative index-90">
 <div className="flex overflow-x-auto space-x-2 p-4 bg-black shadow-md sticky top-0 z-10">
   <Link
     href="/products"
@@ -107,7 +120,7 @@ export default function ProductsPage() {
   ))}
 </div>
 
-      <div className="max-w-7xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md pb-5">
+      <div className="max-w-9xl mx-auto my-6 bg-gray-100 rounded-lg p-0 border border-gray-300 shadow-md pb-5">
         <div className="flex justify-between items-center px-30 px-4">
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
             Lista de Productos
@@ -129,6 +142,7 @@ export default function ProductsPage() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -65,9 +65,8 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
   }, [categoryName]);
 
   return (
-    <div className="bg-gray-300 pb-2">
-      
-      <div className="max-w-10xl mx-auto my-6 bg-white rounded-lg p-0 border border-gray-300 shadow-md">
+<div className="pb-2">
+      <div className="max-w-9xl mx-auto my-6 bg-gray-100 rounded-lg p-0 border border-gray-300 shadow-md mt-10">
         <div className="flex justify-between items-center px-4">
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
             {title}
@@ -103,20 +102,20 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
                   {product.style || "Sin estilo"}
                 </span>
 
-                <div className="relative w-full h-[500px] aspect-[4/5] overflow-hidden">
+                <div className="relative w-full h-[440px] aspect-[4/5] overflow-hidden">
                   <Image
                     src={product.image[0]}
                     alt={product.name}
                     width={800}
                     height={800}
-                    className="w-full h-full object-cover rounded transition duration-300 transform group-hover:opacity-0"
+                    className="w-full h-full object-cover rounded transition duration-500 transform group-hover:opacity-0"
                   />
                   <Image
                     src={product.image[1] ? product.image[1] : product.image[0]}
                     alt={product.name}
                     width={800}
                     height={800}
-                    className="absolute top-0 left-0 w-full h-full object-cover rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    className="absolute top-0 left-0 w-full h-full object-cover rounded opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                   />
                 </div>
 
