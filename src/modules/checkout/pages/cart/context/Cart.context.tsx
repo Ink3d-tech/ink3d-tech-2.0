@@ -3,7 +3,6 @@
 import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
 import { useAuth } from "@/modules/auth/shared/context/Auth.context";
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { getAlert } from "../components/FireAlert.component";
 
 
 export interface Product {
@@ -77,7 +76,7 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
 
     const handleAddToCart = (product: Product) => {
         if (!isAuthenticated) {
-          getAlert("Inciar sesión", () => {} ,"login", "Debes estar logueado para agregar productos al carrito");
+          Mixin.fire("Debe estar logueado para agregar productos al carrito", "", "error")
           return;
         }
         addProductToCart(product)
