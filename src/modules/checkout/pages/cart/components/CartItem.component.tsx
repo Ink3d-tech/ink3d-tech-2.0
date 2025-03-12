@@ -23,7 +23,7 @@ export default function CartItem({
       <div className="grid grid-cols-12 gap-4 items-center">
         <div
           className="col-span-2 w-24 h-24 bg-contain bg-no-repeat bg-center rounded-lg"
-          style={{ backgroundImage: `url(${image})` }}
+          style={{ backgroundImage: `url(${image[0]})` }}
         ></div>
         <div className="col-span-5">
           <h2 className="text-lg font-semibold truncate max-w-[250px]">
