@@ -79,7 +79,7 @@ const OrderCard = ({ order,  onViewDetails }: { order: IOrder,  onViewDetails: R
         setOrderPref(res.data.externalReference);
         return
       } catch (error) {
-        console.error("Saliendo por el catch a la hora de retomar la compra")
+        console.error("Saliendo por el catch a la hora de retomar la compra", error)
       }
     }
     fetchOrderId()
