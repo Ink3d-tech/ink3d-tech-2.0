@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 export default function Footer() {
   const [size, setSize] = useState(24);
   const [y, setY] = useState(0);
-  const maxSize = 120;
+  // const maxSize = 120;
   const resetTime = 1000;
 
   useEffect(() => {
@@ -22,12 +22,12 @@ export default function Footer() {
     }
   }, [size, y]);
 
-  const handleClick = () => {
-    if (size < maxSize) {
-      setSize(size + 10);
-      setY(y - 20);
-    }
-  };
+  // const handleClick = () => {
+  //   if (size < maxSize) {
+  //     setSize(size + 10);
+  //     setY(y - 20);
+  //   }
+  // };
 
   return (
     <footer className="bg-black text-white w-full py-6 px-4 md:px-8 bottom-0 relative">

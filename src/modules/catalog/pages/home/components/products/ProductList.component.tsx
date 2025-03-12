@@ -6,7 +6,7 @@ import Image from "next/image";
 import VerMas from "@/shared/components/buttons/VerMas.component";
 import { getProductsByCategoryName } from "../../helpers/productService";
 
-interface Product {
+export interface Product {
   id: string;
   name: string;
   price: number;
@@ -132,6 +132,7 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
 
         <VerMas href={`/products?category=${encodeURIComponent(title)}`} />
       </div>
+
     </div>
   );
 }

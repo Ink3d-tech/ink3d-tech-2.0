@@ -50,6 +50,7 @@ export default function Home() {
     <StaticCarousel category="STREETWEAR" />
     <ProductList categoryName="Accesorios" title="Accesorios" />
     <ScrollToTop />
+    
   </div>
   </div>
 </div>
