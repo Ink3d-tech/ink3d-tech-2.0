@@ -1,5 +1,4 @@
 import Swal from "sweetalert2";
-import { API_BACK } from "@/shared/config/api/getEnv";
 
 export const getAlert = (confirmButtonText?: string, action?: () => void, route?: string, text?: string) => {
     return (
@@ -13,7 +12,7 @@ export const getAlert = (confirmButtonText?: string, action?: () => void, route?
             confirmButtonText: confirmButtonText ?? "Cerrar sesion!"
         }).then((result) => {
             if(result.isConfirmed && action && route) {
-                window.location.href = `${API_BACK}/${route}`
+                window.location.href = `https://ink3d-tech-2-0.vercel.app/${route}`
                 action();
             }
             if (result.isConfirmed && action) {
