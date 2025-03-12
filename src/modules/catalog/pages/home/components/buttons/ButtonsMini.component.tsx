@@ -5,7 +5,7 @@ import React from "react";
 const buttons = [
   { label: "Magazine", icon: <Newspaper />, href: "/magazine", highlight: true },
   { label: "Categorias", icon: <List />, href: "/categories" },
-  { label: "Ofertas", icon: <Percent />, href: "/sales" },
+  { label: "Juega y Gana", icon: <Percent />, href: "/sales" },
   { label: "Mis compras", icon: <ShoppingBag />, href: "/orders" },
 ];
 
