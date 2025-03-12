@@ -112,7 +112,7 @@ export default function NavBar() {
                 <div className="hidden md:flex items-center gap-6 px-6">
                     <Link href="/magazine" className="text-white">Magazine</Link>
                     <Link href="/categories" className="text-white">Categorías</Link>
-                    <Link href="/sales" className="text-white">Ofertas</Link>
+                    <Link href="/sales" className="text-white">Juega y Gana</Link>
                 </div>
 
                 <div className="hidden md:flex items-center gap-6 ">

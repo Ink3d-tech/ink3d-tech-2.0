@@ -6,6 +6,7 @@ import ProductCard from "./SearchProductCard";
 import EmptySearch from "./EmptySearch";
 import { useProducts } from "@/modules/user/pages/manager/context/Products.context";
 import "./search.css";   // bg-color del body al gris 
+import { CardProductComponent } from "@/modules/checkout/pages/cart/components/Products.component";
 
 interface Product {
   id?: string;
@@ -85,7 +86,7 @@ export default function SearchProductList() {
               {shownProducts?.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
                   {shownProducts.map((shownProduct) => (
-                    <ProductCard key={shownProduct.id} product={shownProduct} />
+                    <CardProductComponent key={shownProduct.id} product={shownProduct} />
                   ))}
                 </div>
               ) : (
