@@ -5,4 +5,5 @@ export enum Routes {
     SALES = "/sales",
     HELP = "/help",
     ACCOUNT = "/account",
+    MANAGER = "/manager",
 }
