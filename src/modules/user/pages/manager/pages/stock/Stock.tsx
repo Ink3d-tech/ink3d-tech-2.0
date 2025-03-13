@@ -318,7 +318,7 @@
 "use client";
 import { useState } from "react";
 import useStockMovements from "./StockMovementCard";
-import SearchBar from "./SearchBar";
+// import SearchBar from "./SearchBar";
 import ViewButtons from "./ViewButtons";
 import StockTable from "./StockTable";
 import SummaryTable from "./SummaryTable";
@@ -328,7 +328,7 @@ import { StockMovement } from "./types";
 export default function StockMovementsView() {
   const { selectedMovement, setSelectedMovement, filteredStock, loading, error } = useStockMovements(); 
   const [view, setView] = useState("byProduct");
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   if (loading) return <p className="text-gray-600 text-center">⏳ Cargando stock...</p>;
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
@@ -349,7 +349,7 @@ export default function StockMovementsView() {
     <div className="min-h-screen bg-white p-6 flex">
       <div className="w-3/4">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">📦 Movimientos de Stock</h2>
-        <SearchBar search={search} setSearch={setSearch} />
+        {/* <SearchBar search={search} setSearch={setSearch} /> */}
         <ViewButtons view={view} setView={setView} />
         {view === "byProduct" && <StockTable data={groupedByProduct} type="byProduct" setSelectedMovement={setSelectedMovement} />}
         {view === "bySize" && <StockTable data={groupedBySize} type="bySize" setSelectedMovement={setSelectedMovement} />}
