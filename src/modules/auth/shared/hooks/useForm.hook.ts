@@ -88,7 +88,7 @@ export function useForm<T>({
 
         if (keyErrors.length > 0) {
             setFormErrors(validationErrors);
-            Mixin.fire(`Is required: \n${keyErrors.join(`\n`)}`, "", "error")  
+            Mixin.fire(`Se requiere: \n${keyErrors.join(`\n`)}`, "", "error")  
             return
         } else {
             try {

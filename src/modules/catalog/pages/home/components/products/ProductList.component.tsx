@@ -129,7 +129,6 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
 
         <VerMas href={`/products?category=${encodeURIComponent(title)}`} />
       </div>
-
     </div>
   );
 }
