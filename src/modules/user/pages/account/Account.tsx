@@ -6,7 +6,7 @@ import ProtectedRoute from '@/shared/helpers/ProtectedRoute'
 
 export default function Account() {
     return (
-        <ProtectedRoute title="Debes ingresar o crear una cuenta para ver 'Mi cuenta'">
+        <ProtectedRoute>
             <div className='flex flex-col h-screen'>
                 <BackButton tab='Cuenta'/>
                 <div className='flex flex-col flex-1 overflow-y-auto bg-white'>

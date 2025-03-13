@@ -89,6 +89,7 @@ export default function AboutPage() {
               <p className="text-lg">📧 Email: contacto@ink3d.com</p>
               <p className="text-lg">📍 Ubicación: Buenos Aires, Argentina</p>
               <p className="text-lg">📞 Teléfono: +54 11 1234-5678</p>
+              {/* <Maps/> */}
             </motion.div>
           )}
 

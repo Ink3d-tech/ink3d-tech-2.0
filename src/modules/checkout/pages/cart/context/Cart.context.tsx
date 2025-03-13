@@ -14,6 +14,7 @@ export interface Product {
     style: string;
     units: number;
     discount: number;
+    isActive?: boolean
     description: string;
     category: {
       id: string;
@@ -24,6 +25,7 @@ export interface Product {
 
 interface CartContextType {
     products: Product[]
+    loading: boolean
     addProductToCart: (product: Product) => void
     removeProductFromCart: (id: string) => void
     emptyCart: () => void
@@ -36,6 +38,7 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType>({
     products: [],
+    loading: false,
     addProductToCart: () => {},
     removeProductFromCart: () => {},
     emptyCart: () => {},
@@ -48,6 +51,7 @@ const CartContext = createContext<CartContextType>({
 
 export const CartProvider = ({children}: {children: React.ReactNode}) => {
     const [products, setProducts] = useState<Product[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
     const { isAuthenticated, getIdUser, token } = useAuth()
 
     useEffect(() => { 
@@ -55,6 +59,7 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
             const userCart = localStorage.getItem(`cart_${getIdUser(token)}`)
             setProducts(userCart ? JSON.parse(userCart) : [])
         }
+        setLoading(false)
     }, [isAuthenticated, token, getIdUser])
 
 
@@ -70,6 +75,7 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
     
         return () => {
             window.removeEventListener("storage", syncCartAcrossTabs);
+            setLoading(false)
         };
     }, [token, getIdUser]);
 
@@ -162,6 +168,7 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
 
     const value = {
         products,
+        loading,
         addProductToCart,
         removeProductFromCart,
         emptyCart,

@@ -10,6 +10,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { useRouter } from "next/navigation";
+import Loading from "@/app/loading";
 
 interface Article {
   id: number;
@@ -53,7 +54,7 @@ const Carousel = () => {
   }, []);
 
   if (loading)
-    return <p className="text-center text-gray-500">Cargando carrusel...</p>;
+    return <Loading/>;
 
   const handleImageClick = (id: number) => {
     router.push(`/magazine/${id}`);

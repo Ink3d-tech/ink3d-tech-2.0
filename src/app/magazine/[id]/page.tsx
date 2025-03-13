@@ -8,6 +8,7 @@ import { CommentPanel2 } from "@/shared/components/magazine/CommentPanel2";
 import { ProductCard } from "@/shared/components/magazine/ProductCard";
 import { ProductCard2 } from "@/shared/components/magazine/ProductCard2";
 import { ArrowRight, MessageSquare } from "lucide-react";
+import SkeletonMagazineId from "./SkeletonMagazineId";
 
 interface Article {
   id: number;
@@ -82,8 +83,7 @@ const ArticlePage = () => {
     fetchProducts();
   }, [id]);
 
-  if (loading)
-    return <p className="text-center text-gray-500">Cargando artículo...</p>;
+  if (loading) return <SkeletonMagazineId/>
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
@@ -157,7 +157,7 @@ const ArticlePage = () => {
                   {/* Panel de comentarios, dentro del contenedor */}
                   {isMobile && showComments2 && (
                     <div className="mt-4 w-full h-auto overflow-hidden">
-                      <CommentPanel2 />
+                      <CommentPanel2 magazineId={Array.isArray(id) ? id[0] : id || ""} />
                     </div>
                   )}
                 </div>
@@ -167,7 +167,7 @@ const ArticlePage = () => {
 
           {/* Panel de comentarios para pantallas grandes */}
           <aside className="hidden lg:block lg:col-span-1 xl:col-span-1">
-            <CommentPanel />
+          <CommentPanel magazineId={Array.isArray(id) ? id[0] : id || ""} />
           </aside>
         </div>
 

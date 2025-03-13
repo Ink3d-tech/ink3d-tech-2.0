@@ -26,15 +26,14 @@ export default function Home() {
     className="absolute inset-0 bg-repeat blur-xl "
     style={{
       backgroundImage: "url('/images/textures/8.jpg')",
-      backgroundSize: "1000px", // Ajusta el tamaño del mosaico a tu gusto
+      backgroundSize: "1000px",
       backgroundPosition: "center",
-      backgroundRepeat: "repeat", // Hace que la imagen se repita en mosaico
-      filter: "blur(10px)", // Aplica el desenfoque
+      backgroundRepeat: "repeat",
+      filter: "blur(10px)",
     }}
   />
-
-
 <div className="absolute inset-0 bg-white/30"></div>
+
   {/* Contenido principal */}
   <div className="relative flex flex-col">
     <div className="flex flex-col bg-black">
@@ -50,6 +49,7 @@ export default function Home() {
     <StaticCarousel category="STREETWEAR" />
     <ProductList categoryName="Accesorios" title="Accesorios" />
     <ScrollToTop />
+    
   </div>
   </div>
 </div>

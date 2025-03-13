@@ -11,6 +11,8 @@ import {
 } from "@/modules/checkout/pages/cart/context/Cart.context";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import ProductsComponent from "@/modules/checkout/pages/cart/components/Products.component";
+import SkeletonProductDetail from "./SkeletonProductDetail";
+import SkeletonProducts from "@/modules/checkout/pages/cart/components/SkeletonProducts";
 
 export default function ProductDetail() {
   const params = useParams();
@@ -101,10 +103,12 @@ export default function ProductDetail() {
     }, 2000);
   };
 
-  if (loading)
-    return (
-      <p className="text-gray-500 text-center mt-10">Cargando producto...</p>
-    );
+  if (loading) return (
+    <>
+      <SkeletonProductDetail/>
+      <SkeletonProducts/>
+    </>
+  )
   if (error) return <p className="text-red-500 text-center mt-10">{error}</p>;
   if (!product)
     return (
@@ -113,7 +117,7 @@ export default function ProductDetail() {
 
   return (
     <div>
-      <BackButton tab="" />
+      <BackButton tab="Producto" />
       <div className="relative py-14">
       {/* 🎨 Fondo con desenfoque (ahora correctamente detrás) */}
       <div
