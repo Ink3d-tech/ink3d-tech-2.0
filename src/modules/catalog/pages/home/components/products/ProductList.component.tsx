@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import VerMas from "@/shared/components/buttons/VerMas.component";
 import { getProductsByCategoryName } from "../../helpers/productService";
+import Loading from "@/app/loading";
 
 export interface Product {
   id: string;
@@ -75,9 +76,7 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
         <div className="w-full h-px bg-gray-300"></div>
 
         {loading && (
-          <p className="text-gray-500 text-center mt-4">
-            Cargando productos...
-          </p>
+          <Loading/>
         )}
         {error && (
           <p className="text-red-500 text-center mt-4">Error: {error}</p>

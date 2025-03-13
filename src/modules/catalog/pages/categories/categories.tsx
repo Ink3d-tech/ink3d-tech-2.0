@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import Loading from "@/app/loading";
 
 interface Product {
   id: string;
@@ -109,7 +110,7 @@ export default function Categories() {
       </div>
 
       {/* Mostrar errores o carga */}
-      {loading && <p className="text-center text-gray-500 mt-4">Cargando estilos...</p>}
+      {loading && <Loading/>}
       {error && <p className="text-center text-red-500 mt-4">Error: {error}</p>}
 
       {/* Contenedor de imágenes con reglas dinámicas */}

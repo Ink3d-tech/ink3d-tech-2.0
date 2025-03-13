@@ -2,10 +2,30 @@
 import { PowerOff, Power } from "lucide-react";
 import { ProductInterface, useProducts } from "../../../context/Products.context";
 import Image from "next/image";
+import { useState } from "react";
+import Spinner from "@/modules/checkout/pages/cart/components/Spinner.component";
 
 
 export default function ProductRow({ product }: { product: ProductInterface }) {
     const { deactivateProduct, activateProduct } = useProducts()
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleToggleProductStatus = async () => {
+        if (!product.id) return; 
+        setIsLoading(true);
+
+        try {
+            if (product.isActive) {
+                await deactivateProduct(product.id);
+            } else {
+                await activateProduct(product.id);
+            }
+        } catch (err) {
+            console.error("Hubo un error al crear el product", err)
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <tr className="hover:bg-gray-700 transition-colors">
@@ -29,19 +49,33 @@ export default function ProductRow({ product }: { product: ProductInterface }) {
             </td>
             <td className="px-6 py-4 text-gray-200">{product.stock}</td>
             <td className="px-6 py-4 text-gray-200">{product.size}</td>
-            <td className="px-6 py-4 text-gray-200">{String(product.category[0])}</td>
+            <td className="px-6 py-4 text-gray-200">{product.category[1]}</td>
             <td className="px-6 py-4">
                 <span className={`px-3 py-1 rounded-full text-sm ${product.isActive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                    {product.isActive ? 'Active' : 'Inactive'}
+                    {product.isActive ? "Activo" : "Inactivo"}
                 </span>
             </td>
             <td className="px-6 py-4">
                 <button
-                    onClick={ () => product.isActive ? deactivateProduct(product.id ?? "") :  activateProduct(product.id ?? "")}
-                    className={`p-2 rounded-full transition-colors ${product.isActive ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-green-500/20 text-green-400 hover:bg-green-500/30'}`}
+                    onClick={handleToggleProductStatus}
+                    className={`
+                        ${isLoading ? "cursor-not-allowed" : ""}
+                        p-2 rounded-full transition-colors 
+                        ${product.isActive ? 
+                          'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 
+                          'bg-green-500/20 text-green-400 hover:bg-green-500/30'
+                        }
+                      `}
                 >
-                    {product.isActive ? <PowerOff size={18} /> : <Power size={18} />}
+                    {isLoading ? (
+                        <Spinner/>  
+                    ) : product.isActive ? (
+                        <PowerOff size={18} />
+                    ) : (
+                        <Power size={18} />
+                    )}
                 </button>
+    
             </td>
         </tr>
     )

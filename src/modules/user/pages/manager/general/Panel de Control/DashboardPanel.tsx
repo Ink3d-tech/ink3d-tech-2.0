@@ -6,6 +6,7 @@ import { API_BACK } from "@/shared/config/api/getEnv";
 import { format, addMinutes } from "date-fns";
 import { Ticket, Plus, Trash, Search } from "lucide-react";
 import { Mixin } from "@/modules/auth/shared/components/MixinAlert";
+import SkeletonDiscountsList from "./SkeletonDiscountList";
 
 
 
@@ -133,7 +134,7 @@ function DiscountsApp() {
     fetchDiscounts();
   }, []);
 
-  if (loading) return <p className="text-center text-lg">Cargando descuentos...</p>;
+  if (loading) return <SkeletonDiscountsList/>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (

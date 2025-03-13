@@ -171,6 +171,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { Search } from "lucide-react";
+import SkeletonStock from "./SkeletonStock";
 
 interface Product {
   id: string;
@@ -248,7 +249,7 @@ export default function StockMovements() {
     return acc;
   }, {} as Record<string, StockMovement[]>);
 
-  if (loading) return <p className="text-gray-600 text-center">⏳ Cargando stock...</p>;
+  if (loading) return <SkeletonStock/>
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (

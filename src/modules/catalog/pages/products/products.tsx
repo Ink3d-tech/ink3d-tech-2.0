@@ -6,6 +6,7 @@ import FilterCategories from "./components/FilterCategories.component";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import ProductCards from "./components/ProductCards";
 import Link from "next/link";
+import Loading from "@/app/loading";
 
 interface Product {
   id: string;
@@ -129,7 +130,7 @@ export default function ProductsPage() {
         </div>
         <div className="w-full h-px bg-gray-300"></div>
 
-        {loading && <p className="text-gray-500 text-center mt-4">Cargando productos...</p>}
+        {loading && <Loading/>}
         {error && <p className="text-red-500 text-center mt-4">Error: {error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5 px-7 py-2">
