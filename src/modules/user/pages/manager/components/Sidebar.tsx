@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, ShoppingCart, Users, Boxes, Newspaper, ShieldCheck, List, X } from "lucide-react";
+import { Package, ShoppingCart, Users, Boxes, Newspaper, List, X, Ticket } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,7 +11,7 @@ interface SidebarProps {
 
 export default function Sidebar({ activeTab, setActiveTab, menuOpen, setMenuOpen }: SidebarProps) {
   const tabsGeneral = [
-    { icon: <LayoutDashboard />, name: "Panel de Control", id: "overview" },
+    { icon: <Ticket />, name: "Lista de descuentos", id: "overview" },
     { icon: <Package />, name: "Productos", id: "products" },
     { icon: <ShoppingCart />, name: "Pedidos", id: "orders" },
     { icon: <Users />, name: "Usuarios", id: "users" },
@@ -20,7 +20,7 @@ export default function Sidebar({ activeTab, setActiveTab, menuOpen, setMenuOpen
   const tabsBusiness = [
     { icon: <Boxes />, name: "Stock", id: "invent" },
     { icon: <Newspaper />, name: "Magazine", id: "forum" },
-    { icon: <ShieldCheck />, name: "Seguridad", id: "settings" },
+    // { icon: <ShieldCheck />, name: "Seguridad", id: "settings" },
   ];
 
   return (
