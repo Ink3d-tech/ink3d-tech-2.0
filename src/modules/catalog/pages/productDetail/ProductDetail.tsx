@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import BackButton from "@/shared/components/buttons/BackButton.component";
-import { Heart } from "lucide-react";
+// import { Heart } from "lucide-react";
 import {
   Product,
   useCart,
@@ -21,8 +21,8 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
+  // const [isFavorited, setIsFavorited] = useState(false);
+  // const [showNotification, setShowNotification] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [availableSizes, setAvailableSizes] = useState<Product[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
@@ -94,14 +94,14 @@ export default function ProductDetail() {
     setSelectedImage(imageUrl || "/placeholder-image.png");
   };
 
-  const handleFavoriteClick = () => {
-    setIsFavorited(!isFavorited);
-    setShowNotification(true);
+  // const handleFavoriteClick = () => {
+  //   setIsFavorited(!isFavorited);
+  //   setShowNotification(true);
 
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 2000);
-  };
+  //   setTimeout(() => {
+  //     setShowNotification(false);
+  //   }, 2000);
+  // };
 
   if (loading) return (
     <>
@@ -139,7 +139,7 @@ export default function ProductDetail() {
               Sin Stock
             </div>
           )}
-          <button
+          {/* <button
             className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
             onClick={handleFavoriteClick}
           >
@@ -155,8 +155,8 @@ export default function ProductDetail() {
               {isFavorited
                 ? "Se añadió a favoritos!"
                 : "Se quitó de favoritos!"}
-            </div>
-          )}
+            </div> */}
+          {/* )} */}
 
           <div className="flex flex-col items-center gap-4 w-full md:w-3/5">
             <div className="rounded-lg bg-white flex items-center justify-center w-[500px] h-[500px]">

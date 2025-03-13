@@ -140,11 +140,11 @@ export const ProfileView = () => {
                     value={formData.phone ?? ""}
                     onChange={handleChange}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all invalid:border-red-500"
-                    maxLength={11}
-                    pattern="[0-9]{11}"
+                    maxLength={10}
+                    pattern="[0-9]{10}"
                     required
-                    placeholder="Ingrese su número (11 dígitos)"
-                    title="El número debe tener exactamente 11 dígitos numéricos"
+                    placeholder="Ingrese su número (10 dígitos)"
+                    title="El número debe tener exactamente 10 dígitos numéricos"
                   />
                   <p className="text-red-500 text-sm mt-1 hidden" id="phone-error">
                     Debe ingresar un número de 10 dígitos.
