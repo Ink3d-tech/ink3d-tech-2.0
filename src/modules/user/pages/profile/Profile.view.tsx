@@ -9,20 +9,11 @@ import { useEffect, useState } from "react";
 import { formatDate } from "../orders/components/CardOrder.component";
 
 export const ProfileView = () => {
-    const {  user } = useAuth()
-
-    const { updateDataUser } = useAuth()
+    const { user, updateDataUser } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState<UpdateDataProfileInterface>({
-      phone: user.phone,
-      address: user.address,
-      city: user.city,
-      country: user.country,
-      image: user.image,
-      email: user.email,
-      name: user.name
-    });
-  
+    const [formData, setFormData] = useState<UpdateDataProfileInterface>(() => ({ ...user }));
+
+      
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       try {
@@ -47,9 +38,9 @@ export const ProfileView = () => {
       }));
     };
 
-    useEffect(() => {
-      setFormData(user);
-    }, [user]);
+   useEffect(() => {
+  if (user) setFormData({ ...user });
+}, [user]);
   
     return (
       <div className="max-w-4xl mx-auto py-12 px-4">
@@ -92,7 +83,7 @@ export const ProfileView = () => {
                       name="name"
                       value={formData.name ?? "Sin asignar"}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="invalid:border-red-500 w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
                     />
                   </div>
@@ -105,10 +96,9 @@ export const ProfileView = () => {
                       type="email"
                       id="email"
                       name="email"
-                      value={formData.email ?? "Sin asignar"}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
-                      required
+                      value={formData.email}
+                      readOnly // Aquí el email es solo lectura
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-100 cursor-not-allowed"
                     />
                   </div>
   
@@ -120,11 +110,18 @@ export const ProfileView = () => {
                       type="tel"
                       id="phone"
                       name="phone"
-                      value={formData.phone ?? "Sin asignar"}
+                      value={formData.phone ?? ""}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all invalid:border-red-500"
+                      maxLength={10}
+                      pattern="[0-9]{10}"
                       required
+                      placeholder="Ingrese su número (10 dígitos)"
+                      title="El número debe tener exactamente 10 dígitos numéricos"
                     />
+                    <p className="text-red-500 text-sm mt-1 hidden" id="phone-error">
+                      Debe ingresar un número de 10 dígitos.
+                    </p>
                   </div>
   
                   <div>
@@ -137,7 +134,7 @@ export const ProfileView = () => {
                       name="address"
                       value={formData.address ?? "Sin asignar"}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="invalid:border-red-500 w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
                     />
                   </div>
@@ -152,7 +149,7 @@ export const ProfileView = () => {
                       name="city"
                       value={formData.city ?? "Sin asignar"}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="invalid:border-red-500 w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
                     />
                   </div>
@@ -167,7 +164,7 @@ export const ProfileView = () => {
                       name="country"
                       value={formData.country ?? "Sin asignar"}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                      className="invalid:border-red-500 w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                       required
                     />
                   </div>

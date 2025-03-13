@@ -42,21 +42,44 @@ export const CardProductComponent = ({ product }: { product: ProductInterface })
             )}
 
             <div className="overflow-hidden w-full">
-                <Image
-                    src={product.image[0]}
-                    alt={product.name}
-                    width={800}
-                    height={800}
-                    className="w-full h-64 object-cover rounded transition duration-300 transform group-hover:scale-110"
-                />
+                {product.image.length === 1 ? (
+                    <>
+                        <Image
+                        src={product.image[0]}
+                        alt={product.name}
+                        width={800}
+                        height={800}
+                        className="w-full h-64 object-cover rounded transition duration-300 transform group-hover:scale-110"
+                        />
+        
+                        <Image
+                            src={product.image[0]}
+                            alt={product.name}
+                            width={800}
+                            height={800}
+                            className="w-full h-64 object-cover rounded transition duration-300 absolute top-0 left-0 opacity-0 group-hover:opacity-100"
+                        />
+                    </>
+                ) : (
+                    <>
+                        <Image
+                        src={product.image[0]}
+                        alt={product.name}
+                        width={800}
+                        height={800}
+                        className="w-full h-64 object-cover rounded transition duration-300 transform group-hover:scale-110"
+                        />
 
-                <Image
-                    src={product.image[1]}
-                    alt={product.name}
-                    width={800}
-                    height={800}
-                    className="w-full h-64 object-cover rounded transition duration-300 absolute top-0 left-0 opacity-0 group-hover:opacity-100"
-                />
+                        <Image
+                            src={product.image[1]}
+                            alt={product.name}
+                            width={800}
+                            height={800}
+                            className="w-full h-64 object-cover rounded transition duration-300 absolute top-0 left-0 opacity-0 group-hover:opacity-100"
+                        />
+                    </>
+                )}
+               
             </div>
             <div className="p-3 text-center">
                 <h3 className="text-lg font-semibold">{product.name}</h3>

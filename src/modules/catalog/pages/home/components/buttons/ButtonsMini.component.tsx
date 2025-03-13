@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { Newspaper, List, ShoppingBag, Percent } from "lucide-react";
+import { Newspaper, List, ShoppingBag, Gamepad } from "lucide-react";
 import React from "react";
 
 const buttons = [
   { label: "Magazine", icon: <Newspaper />, href: "/magazine", highlight: true },
   { label: "Categorias", icon: <List />, href: "/categories" },
-  { label: "Ofertas", icon: <Percent />, href: "/sales" },
+  { label: "Juega y Gana", icon: <Gamepad />, href: "/sales" },
   { label: "Mis compras", icon: <ShoppingBag />, href: "/orders" },
 ];
 

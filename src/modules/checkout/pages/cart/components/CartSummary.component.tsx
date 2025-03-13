@@ -30,9 +30,9 @@ export default function CartSummary() {
     const [discountPrice, setDiscountPrice] = useState(totalPrice);
 
     const handlerEmptyCart = () => {
-        getAlert("Clear cart", () => {
+        getAlert("Vaciar carrito", () => {
             emptyCart();
-            Fire("Deleted!");
+            Fire("Limpiar!");
         });
     };
 
