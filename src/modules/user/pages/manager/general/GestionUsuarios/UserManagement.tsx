@@ -6,6 +6,7 @@ import axios from "axios";
 import UserOrders from "./UserOrders";
 import Image from "next/image";
 import { useEffect, useState, useCallback } from "react";
+import SkeletonTable from "./SkeletonUser";
 
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([]);
@@ -121,7 +122,7 @@ export default function UserManagement() {
           Buscar
         </button>
       </div>
-      {loading && <p className="text-gray-600">Cargando usuarios...</p>}
+      {loading && <SkeletonTable/>}
       {error && <p className="text-red-500">{error}</p>}
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <table className="w-full">

@@ -121,7 +121,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
 
     const deleteProduct = async (id: string): Promise<void> => {
         try {
-            await axios.delete(`${API_BACK}/products/${id}`, getAuthHeaders())
+            await axios.delete(`${API_BACK}/products/${id}`,getAuthHeaders())
             setProducts(prev => prev.filter(product => product.id !== id));
         } catch (error) {
             setError(error instanceof Error ? error.message : "Error eliminando el producto")
@@ -136,6 +136,7 @@ export const ProductsProvider = ({ children }: { children: React.ReactNode }) =>
                     product.id === id ? { ...product, isActive: false } : product
                 )
             );
+            
         } catch (error) {
             setError(error instanceof Error ? error.message : "Error desactivando el producto")
             console.error("Error al desactivar el producto")

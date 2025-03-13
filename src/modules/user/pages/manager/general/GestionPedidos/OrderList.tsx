@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchOrders, OrderResponse } from './orderService';
 import OrderItem from './OrderItem';
+import SkeletonOrdersList from './OrderSkeleton';
 
 export default function OrderList() {
   const [orders, setOrders] = useState<OrderResponse[]>([]);
@@ -29,7 +30,7 @@ export default function OrderList() {
     getOrders();
   }, []);
 
-  if (loading) return <div className="text-center text-lg">Cargando...</div>;
+  if (loading) return <SkeletonOrdersList/>;
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (

@@ -12,7 +12,7 @@ interface SidebarProps {
 export default function Sidebar({ activeTab, setActiveTab, menuOpen, setMenuOpen }: SidebarProps) {
   const tabsGeneral = [
     { icon: <LayoutDashboard />, name: "Panel de Control", id: "overview" },
-    { icon: <Package />, name: "Crear Productos", id: "products" },
+    { icon: <Package />, name: "Productos", id: "products" },
     { icon: <ShoppingCart />, name: "Pedidos", id: "orders" },
     { icon: <Users />, name: "Usuarios", id: "users" },
   ];

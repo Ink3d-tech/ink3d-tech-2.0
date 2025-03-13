@@ -10,6 +10,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { useRouter } from "next/navigation";
+import CarouselSkeleton from "./SkeletonCarrousel";
 
 interface Article {
   id: string;
@@ -57,8 +58,8 @@ const DynamicCarousel = ({ category }: CarouselProps) => {
     fetchArticles();
   }, [category]);
 
-  if (loading)
-    return <p className="text-center text-gray-500">Cargando carrusel...</p>;
+  if (loading) return <CarouselSkeleton/>;
+  
   if (!validCategory)
     return (
       <p className="text-center text-gray-500">

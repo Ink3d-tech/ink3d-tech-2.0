@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ProductInterface, useProducts } from "@/modules/user/pages/manager/context/Products.context";
 import { getRoute } from "./getRoute";
 import { ArrowRight } from "lucide-react";
+import SkeletonProducts from "./SkeletonProducts";
 
 export const CardProductComponent = ({ product }: { product: ProductInterface }) => {
     const getStyleClasses = (style: string | undefined) => {
@@ -95,7 +96,9 @@ export const CardProductComponent = ({ product }: { product: ProductInterface })
 };
 
 export const ProductsComponent = () => {
-    const { products } = useProducts();
+    const { products, loading } = useProducts();
+
+    if(loading) return <SkeletonProducts/>
 
     return (
         <section className="bg-gray-50 py-12 z-0">
@@ -105,18 +108,14 @@ export const ProductsComponent = () => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {
-                        !products.length
-                            ? (Array.from({ length: 4 }).map((_, index) => (
-                                <div key={index} className="w-full h-64 bg-gray-200 animate-pulse rounded"></div>
-                            )))
-                            : (products.slice(0, 4).map((product) => (
+                        products.slice(0, 4).map((product) => (
                                 <Link key={product.id} href={product.id ? getRoute("/productDetail/:id", { id: product.id }) : ""}>
                                     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                                         <CardProductComponent product={product} />
                                     </div>
                                 </Link>
-                            )
-                            ))
+                        ))
+                            
                     }
                 </div>
                 <div className="flex justify-center mt-10">

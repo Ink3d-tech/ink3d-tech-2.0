@@ -10,6 +10,7 @@ import { ProductInterface, useProducts } from "../../../context/Products.context
 import { PlusOption } from "./PlusOption.component";
 import { Title } from "./Title";
 import Image from "next/image";
+import axios from "axios";
 
 
 interface Size {
@@ -53,6 +54,7 @@ export default function FormCreateProduct() {
     const { createProduct } = useProducts()
     const { categories, createCategory, error } = useCategories()
     const [cloudinary, setCloudinary] = useState<string[]>([])
+
     const handleCloudinary = async (file: File) => {
         const formData = new FormData();
         formData.append('file', file);
@@ -76,7 +78,7 @@ export default function FormCreateProduct() {
     };
     const handleChangeProduct = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        console.log(formProduct)
+
         setFormProduct({
             ...formProduct,
             [name]: value
@@ -115,6 +117,7 @@ export default function FormCreateProduct() {
                 setImages(images.map((img, i) => (i === index ? imageUrl : img)))
             };
         }
+
     };
     // MANEJADOR PARA REMOVER LA IMAGEN (CRUZ)
     const handleRemoveImage = (index: number) => {
@@ -127,7 +130,6 @@ export default function FormCreateProduct() {
             ...formProduct,
             image: cloudinary
         };
-        console.log(formData)
         if (Object.values(formData).some(value => value === "" || value === undefined || value === null)) {
             Mixin.fire("Error", "Por favor, completa todos los campos correctamente.", "error");
             return;
@@ -142,6 +144,7 @@ export default function FormCreateProduct() {
             setCloudinary([]);
             setImages(Array(MAX_IMAGES).fill(null));
 
+            console.log(formData)
             Mixin.fire("Producto creado con éxito", "", "success");
         } catch (error) {
             const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"

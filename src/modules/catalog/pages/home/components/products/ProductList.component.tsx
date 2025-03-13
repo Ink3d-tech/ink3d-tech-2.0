@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import VerMas from "@/shared/components/buttons/VerMas.component";
 import { getProductsByCategoryName } from "../../helpers/productService";
+import Loading from "@/app/loading";
 
 export interface Product {
   id: string;
@@ -65,8 +66,8 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
   }, [categoryName]);
 
   return (
-<div className="pb-2">
-      <div className="max-w-9xl mx-auto my-6 bg-gray-100 rounded-lg p-0 border border-gray-300 shadow-md mt-10">
+    <div className="pb-2">
+      <div className="max-w-7xl mx-auto my-6 bg-gray-100 rounded-lg p-0 border border-gray-300 shadow-md mt-10">
         <div className="flex justify-between items-center px-4">
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
             {title}
@@ -74,11 +75,7 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
         </div>
         <div className="w-full h-px bg-gray-300"></div>
 
-        {loading && (
-          <p className="text-gray-500 text-center mt-4">
-            Cargando productos...
-          </p>
-        )}
+        {loading && <Loading />}
         {error && (
           <p className="text-red-500 text-center mt-4">Error: {error}</p>
         )}
@@ -87,7 +84,7 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
           {products.slice(0, 8).map((product) => (
             <Link key={product.id} href={`/productDetail/${product.id}`} passHref>
               <div className="relative flex flex-col bg-white overflow-hidden rounded-lg cursor-pointer transition-transform group shadow-md">
-                
+
                 {product.stock === 0 && (
                   <div className="absolute top-3 left-0 bg-gray-800 text-white text-xs font-semibold uppercase px-4 py-1 rounded-br-lg rounded-tr-lg shadow-md">
                     Sin Stock
@@ -128,7 +125,7 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
             </Link>
           ))}
         </div>
-        
+
 
         <VerMas href={`/products?category=${encodeURIComponent(title)}`} />
       </div>

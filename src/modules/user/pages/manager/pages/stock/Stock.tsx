@@ -325,11 +325,90 @@ import SummaryTable from "./SummaryTable";
 import ProductPreview from "./ProductPreview";
 import { StockMovement } from "./types";
 
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { API_BACK } from "@/shared/config/api/getEnv";
+import { Search } from "lucide-react";
+import SkeletonStock from "./SkeletonStock";
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  stock: number;
+  image: string[];
+  size: string;
+  style: string;
+  discount: number;
+  isActive: boolean;
+  category: {
+    id: string;
+    name: string;
+  };
+}
+
+interface StockMovement {
+  id: string;
+  quantity: number;
+  type: string;
+  reason: string;
+  createdAt: string;
+  previousStock: number;
+  newStock: number;
+  product: Product | null;
+}
+
 export default function StockMovementsView() {
   const { selectedMovement, setSelectedMovement, filteredStock, loading, error } = useStockMovements(); 
   const [view, setView] = useState("byProduct");
   const [search, setSearch] = useState("");
   if (loading) return <p className="text-gray-600 text-center">⏳ Cargando stock...</p>;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setError("❌ No se ha encontrado el token de autenticación.");
+      setLoading(false);
+      return;
+    }
+
+    const fetchStockMovements = async () => {
+      try {
+        const response = await axios.get<StockMovement[]>(`${API_BACK}/stock-movements`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("📦 Movimientos de stock recibidos:", response.data);
+
+        setStockMovements(response.data);
+
+        if (response.data.length > 0) {
+          // setSelectedMovement(response.data[response.data.length - 1]);
+        }
+      } catch (error) {
+        console.error("❌ Error al obtener movimientos de stock:", error);
+        setError("Hubo un error al cargar los movimientos de stock.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStockMovements();
+  }, []);
+
+  // Agrupar movimientos por talla
+  const groupBySize = stockMovements.reduce((acc, movement) => {
+    if (!movement.product) return acc;
+    const size = movement.product.size || "Sin Talla";
+    if (!acc[size]) acc[size] = [];
+    acc[size].push(movement);
+    return acc;
+  }, {} as Record<string, StockMovement[]>);
+
+  if (loading) return <SkeletonStock/>
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   const groupedByProduct = filteredStock.reduce((acc: Record<string, StockMovement[]>, stock) => {

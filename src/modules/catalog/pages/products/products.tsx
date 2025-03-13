@@ -6,6 +6,7 @@ import FilterCategories from "./components/FilterCategories.component";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import ProductCards from "./components/ProductCards";
 import Link from "next/link";
+import SkeletonProducts from "@/modules/checkout/pages/cart/components/SkeletonProducts";
 
 interface Product {
   id: string;
@@ -119,7 +120,6 @@ export default function ProductsPage() {
     </Link>
   ))}
 </div>
-
       <div className="max-w-9xl mx-auto my-6 bg-gray-100 rounded-lg p-0 border border-gray-300 shadow-md pb-5">
         <div className="flex justify-between items-center px-30 px-4">
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
@@ -129,7 +129,7 @@ export default function ProductsPage() {
         </div>
         <div className="w-full h-px bg-gray-300"></div>
 
-        {loading && <p className="text-gray-500 text-center mt-4">Cargando productos...</p>}
+        {loading && <SkeletonProducts/>}
         {error && <p className="text-red-500 text-center mt-4">Error: {error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5 px-7 py-2">

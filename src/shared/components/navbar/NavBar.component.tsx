@@ -9,9 +9,11 @@ import UserMenu from "./UserMenu.components";
 import { useRouter } from "next/navigation";
 import "@/shared/styles/Alert.style.css";
 import HamburguerMenu from "./HamburguerMenu.components";
+import { useCart } from "@/modules/checkout/pages/cart/context/Cart.context";
 
 export default function NavBar() {
   const { isAuthenticated } = useAuth();
+  const { countProducts } = useCart()
   const router = useRouter();
 
   const [menu, setMenu] = useState(false);
@@ -122,7 +124,12 @@ export default function NavBar() {
               onKeyDown={handleSearch}
             />
           )}
-          <Link href="/cart">
+          <Link href="/cart" className="relative">
+            {isAuthenticated && countProducts() > 0 ? <div className="bg-[#0FCBB8] w-4 h-4 rounded-full flex justify-center items-center absolute mt-3">
+              <span className="text-[10px] font-semibold text-gray-900">
+                {countProducts()}
+              </span>
+            </div> : null}
             <ShoppingCart size="24" color="gray" />
           </Link>
           <Link href="/help">
