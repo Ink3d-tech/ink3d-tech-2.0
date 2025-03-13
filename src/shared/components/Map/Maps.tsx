@@ -23,7 +23,7 @@ const ChangeView = ({ center }: { center: [number, number] }) => {
 };
 
 const Map = () => {
-  // 📌 Coordenadas exactas de Gelly y Obes 1014, Muñiz, Buenos Aires
+  // 📌 Coordenadas exactas de david jaja 
   const position: [number, number] = [-34.5526706, -58.7121091];
 
   return (
