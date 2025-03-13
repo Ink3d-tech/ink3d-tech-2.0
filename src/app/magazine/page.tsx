@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { API_BACK } from "@/shared/config/api/getEnv";
+import MagazineSkeleton from "./SkeletonMagazine";
 
 interface Article {
   id: number;
@@ -35,7 +36,7 @@ const MagazinePage: React.FC = () => {
         setArticles(data);
 
         const uniqueCategories = Array.from(new Set(data.map((article) => article.category))).filter(Boolean);
-        setCategories(["Todas", ...uniqueCategories]); 
+        setCategories(["Todas", ...uniqueCategories]);
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -87,29 +88,29 @@ const MagazinePage: React.FC = () => {
     fetchFilteredArticles();
   }, [category]);
 
-  if (loading) return <p className="text-center text-gray-500">Cargando artículos...</p>;
+  if (loading) return <MagazineSkeleton/>
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
     <div className="min-h-screen bg-white p-8">
       {/* Navbar */}
       <nav className=" bg-white text-black shadow-md z-50">
-    <div className="container mx-auto flex justify-between items-center p-4">
-      
+        <div className="container mx-auto flex justify-between items-center p-4">
 
-      <ul className="flex gap-6 text-sm uppercase">
-        {categories.map((cat) => (
-          <li
-            key={cat}
-            className={`cursor-pointer transition ${category === cat ? "text-red-500 font-bold" : "hover:text-red-500"}`}
-            onClick={() => router.push(cat === "Todas" ? "/magazine" : `/magazine?category=${cat}`)}
-          >
-            {cat}
-          </li>
-        ))}
-      </ul>
-    </div>
-  </nav>
+
+          <ul className="flex gap-6 text-sm uppercase">
+            {categories.map((cat) => (
+              <li
+                key={cat}
+                className={`cursor-pointer transition ${category === cat ? "text-red-500 font-bold" : "hover:text-red-500"}`}
+                onClick={() => router.push(cat === "Todas" ? "/magazine" : `/magazine?category=${cat}`)}
+              >
+                {cat}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
       <h1 className="text-5xl font-bold text-center uppercase tracking-widest py-5 mt-20 mb-10">
         {category && category !== "Todas" ? category : "INK3D Magazine"}
       </h1>

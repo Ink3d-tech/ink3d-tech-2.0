@@ -6,6 +6,8 @@ import EmptySearch from "./EmptySearch";
 import { useProducts } from "@/modules/user/pages/manager/context/Products.context";
 import "./search.css";   // bg-color del body al gris 
 import { CardProductComponent } from "@/modules/checkout/pages/cart/components/Products.component";
+import Loading from "@/app/loading";
+import Link from "next/link";
 
 interface Product {
   id?: string;
@@ -80,12 +82,14 @@ export default function SearchProductList() {
               </h2>
               <div className="w-full h-px bg-gray-300 my-2"></div>
 
-              {loading && <p className="text-gray-500 text-center mt-4">Cargando productos...</p>}
+              {loading && <Loading/>}
 
               {shownProducts?.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
                   {shownProducts.map((shownProduct) => (
-                    <CardProductComponent key={shownProduct.id} product={shownProduct} />
+                    <Link key={shownProduct.id} href={`/productDetail/${shownProduct.id}`}>
+                      <CardProductComponent  product={shownProduct} />
+                    </Link>
                   ))}
                 </div>
               ) : (

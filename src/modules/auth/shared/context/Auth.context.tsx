@@ -3,12 +3,13 @@
 import React, { useState, useContext, createContext, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoginInterface } from "../interfaces/Login.interface";
-import Loading from "@/app/loading";
 import { SignupInterface } from "../interfaces/Signup.interface";
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { UpdateDataProfileInterface, UpdateDataUserShipmentInterface, UserInterface } from "../interfaces/User.interface";
 import { getAuthHeaders } from '@/modules/user/pages/manager/context/getAuthHeaders';
+import Loading from '@/app/loading';
+
 
 
 
@@ -74,14 +75,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
     const [user, setUser] = useState<UserInterface>(defaultUser);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const router = useRouter();
 
     const checkTokenValidity = (token: string): boolean => {
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
-            const expirationDate = new Date(payload.exp * 1000);
-            return expirationDate > new Date();
+            return new Date(payload.exp * 1000) > new Date();
         } catch {
             return false;
         }
@@ -91,6 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return payload.userId;
     };
     const fetchUser = useCallback(async (token: string) => {
+        setIsLoading(true)
         try {
             const res = await axios.get<UserInterface>(`${API_BACK}/users/${getIdUser(token)}`, {
                 headers: {
@@ -98,13 +99,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 },
             });
             setUser(res.data);
-        } catch (error) {
+        } catch (error) { 
             console.error("Error fetching user:", error);
             setUser(defaultUser);
             setIsAuthenticated(false);
             router.push('/');
+        } finally {
+            setIsLoading(false)
         }
     }, [router]);
+
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const tokenFromUrl = params.get("token");
@@ -128,9 +132,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 router.push('/');
             }
         }
-        setIsLoading(false);
+        
     }, [fetchUser, router]);
-    if (isLoading) return <Loading />;
+
+    
+    if(isLoading) return <Loading/>
+
     const getIsAdmin = (token: string): boolean => {
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
@@ -186,10 +193,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
             setIsAuthenticated(false);
             throw new Error(error instanceof Error ? error.message : "Error interno del servidor");
+        } finally {
+            setIsLoading(false)
         }
     };
     const signup = async (signupForm: SignupInterface) => {
-        await axios.post(`${API_BACK}/auth/signup`, signupForm);
+        try {
+            await axios.post(`${API_BACK}/auth/signup`, signupForm);
+        } catch (error) {
+            console.error("Error al registrarse", error)
+        } finally {
+            setIsLoading(false)
+        }
+        
     };
     const logout = () => {
         localStorage.removeItem("token");
@@ -198,7 +214,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(defaultUser);
         setToken("");
 
-        router.push('/');
+        router.push('/home');
     };
 
     const sendEmailResetPassword = async (email: string) => {

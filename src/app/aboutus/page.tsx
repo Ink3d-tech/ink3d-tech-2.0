@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Map from "../../shared/components/Map/Maps"
 import Maps from "../../shared/components/Map/Maps";
 
 export default function AboutPage() {
