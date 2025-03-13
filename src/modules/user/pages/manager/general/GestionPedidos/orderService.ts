@@ -1,6 +1,9 @@
 import axios from "axios";
 import { API_BACK } from "@/shared/config/api/getEnv";
 
+
+
+
 interface OrderDetail {
   price: string;
   quantity: number;
@@ -10,12 +13,24 @@ interface OrderDetail {
 interface User {
   id: string;
   name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  country: string;
 }
+
 
 export interface OrderResponse {
   id: string;
   status: string;
+  totalPrice: string;   
+  currency: string;
+  createdAt: string;
+  updatedAt: string;
   orderDetails: OrderDetail[];
+  discountCode: string | null;
+  externalReference: string;
   user: User;
 }
 
