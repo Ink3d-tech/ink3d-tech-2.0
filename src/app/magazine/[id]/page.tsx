@@ -157,7 +157,7 @@ const ArticlePage = () => {
                   {/* Panel de comentarios, dentro del contenedor */}
                   {isMobile && showComments2 && (
                     <div className="mt-4 w-full h-auto overflow-hidden">
-                      <CommentPanel2 />
+                      <CommentPanel2 magazineId={Array.isArray(id) ? id[0] : id || ""} />
                     </div>
                   )}
                 </div>
@@ -167,7 +167,7 @@ const ArticlePage = () => {
 
           {/* Panel de comentarios para pantallas grandes */}
           <aside className="hidden lg:block lg:col-span-1 xl:col-span-1">
-            <CommentPanel />
+          <CommentPanel magazineId={Array.isArray(id) ? id[0] : id || ""} />
           </aside>
         </div>
 
