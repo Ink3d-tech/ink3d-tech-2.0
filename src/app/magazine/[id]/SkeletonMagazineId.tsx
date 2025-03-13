@@ -35,9 +35,8 @@ const SkeletonMagazineId = () => {
                 </h1>
               </div>
               <div className="p-8">
-                <p className="text-gray-600">
-                  <div className="h-4 bg-gray-300 rounded w-32"></div>
-                </p>
+                <p className="text-gray-600"></p>
+                <div className="h-4 bg-gray-300 rounded w-32"></div>
                 <div className="prose max-w-none">
                   <div className="h-48 bg-gray-300 rounded-lg mt-4"></div>
                   <div className="h-48 bg-gray-300 rounded-lg mt-4"></div>

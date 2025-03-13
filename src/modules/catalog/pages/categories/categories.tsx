@@ -139,7 +139,7 @@ export default function Categories() {
                   </div>
                 </div>
               </div>
-                <div className="bg-black h-10 relative index-90"></div>
+              <div className="bg-black h-10 relative index-90"></div>
             </Link>
           );
         })}

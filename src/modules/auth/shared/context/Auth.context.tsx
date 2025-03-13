@@ -75,16 +75,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string>("");
     const [user, setUser] = useState<UserInterface>(defaultUser);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const router = useRouter();
-
-    
 
     const checkTokenValidity = (token: string): boolean => {
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
-            const expirationDate = new Date(payload.exp * 1000);
-            return expirationDate > new Date();
+            return new Date(payload.exp * 1000) > new Date();
         } catch {
             return false;
         }
@@ -94,6 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return payload.userId;
     };
     const fetchUser = useCallback(async (token: string) => {
+        setIsLoading(true)
         try {
             const res = await axios.get<UserInterface>(`${API_BACK}/users/${getIdUser(token)}`, {
                 headers: {
@@ -112,7 +110,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, [router]);
 
     useEffect(() => {
-
         const params = new URLSearchParams(window.location.search);
         const tokenFromUrl = params.get("token");
         if (tokenFromUrl && checkTokenValidity(tokenFromUrl)) {
@@ -217,7 +214,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(defaultUser);
         setToken("");
 
-        router.push('/');
+        router.push('/home');
     };
 
     const sendEmailResetPassword = async (email: string) => {
