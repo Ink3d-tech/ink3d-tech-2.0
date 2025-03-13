@@ -41,9 +41,9 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
                 {pathname === "/sales" ? <Gamepad color="#0865F0" size={24} /> : <Gamepad size={24} color="black" />}
                 <p className="font-semibold">Juega y Gana</p>
             </Link>
-            <Link href={"/account"} onClick={handleToggle} className="flex gap-5">
-                {pathname === "/account" ? <User color="#0865F0" size={24} /> : <User size={24} color="black" />}
-                <p className="font-semibold">Mi cuenta</p>
+            <Link href={"/profile"} onClick={handleToggle} className="flex gap-5">
+                {pathname === "/profile" ? <User color="#0865F0" size={24} /> : <User size={24} color="black" />}
+                <p className="font-semibold">Mi perfil</p>
             </Link>
             <Link href={"/help"}>
                 <div onClick={handleToggle} className="flex gap-5">
