@@ -67,7 +67,7 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
 
   return (
     <div className="pb-2">
-      <div className="max-w-7xl mx-auto my-6 bg-gray-100 rounded-lg p-0 border border-gray-300 shadow-md mt-10">
+      <div className="max-w-8xl mx-auto my-6 bg-gray-100 rounded-lg p-0 border border-gray-300 shadow-md mt-10">
         <div className="flex justify-between items-center px-4">
           <h2 className="text-2xl font-semibold text-gray-800 text-left m-3">
             {title}

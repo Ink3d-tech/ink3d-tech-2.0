@@ -79,7 +79,7 @@ const DynamicCarousel = ({ category }: CarouselProps) => {
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8">
-      <div className="container mx-auto max-w-9xl">
+      <div className="container mx-auto max-w-8xl">
         <Swiper
           loop={true}
           autoplay={{ delay: 4000 }}
