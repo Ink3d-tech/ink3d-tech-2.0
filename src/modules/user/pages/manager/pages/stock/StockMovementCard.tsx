@@ -121,7 +121,7 @@ export default function useStockMovements() {
       Object.entries(productData.sizes).map(([size, stockData]: [string, StockData]) => ({
         id: `generated-${productData.product.id}-${size}`, // ID generado si falta
         product: productData.product,
-        size,
+        size: productData.product.size,
         stockInicial: stockData.stockInicial,
         vendidos: stockData.vendidos,
         stockActual: stockData.stockActual,

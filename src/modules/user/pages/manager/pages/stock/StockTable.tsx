@@ -40,7 +40,7 @@ export default function StockTable({ data, type, setSelectedMovement }: StockTab
                         type: prev?.type || "sale",
                         reason: prev?.reason || "default reason",
                         previousStock: prev?.previousStock || stock.stockInicial,
-                        newStock: prev?.newStock || stock.stockActual,
+                        newStock: prev?.newStock || stock.stockActual
                       }))} 
                     >
                       <td className="border p-2">{type === "byProduct" ? stock.size : stock.product.name}</td>
