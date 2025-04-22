@@ -3,10 +3,11 @@
 // Habra que agregar los Links y corregir las rutas que evalua pathname
 // en cuanto sepamos bien las rutas
 
-import { FileText, Gamepad, HelpCircle, Home, List, Search, ShoppingBag, User 
+import { FileText, Gamepad, HelpCircle, Home, List, LogOut, Search, Settings, ShoppingBag, User 
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/modules/auth/shared/context/Auth.context";
 
 interface HamBurgerButtonsProps {
     handleToggle: () => void;
@@ -14,13 +15,21 @@ interface HamBurgerButtonsProps {
 
 export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps) {
     const pathname = usePathname();
+    const { logout, isAuthenticated, getIsAdmin, token } = useAuth()
 
     return (
         <div className="flex flex-col mb-10 pt-5 px-8 gap-5 bg-white">
+            {getIsAdmin(token) && (<Link href={"/manager"}>
+                <div onClick={handleToggle} className="flex gap-5">
+                    {pathname === "/manager" ? <Settings color="#0865F0" size={24} /> : <Settings size={24} color="black" />}
+                    <p className="font-semibold">Panel de administrador</p>      
+                </div>
+            </Link>)}
             <Link href={"/home"} onClick={handleToggle} className="flex gap-5">
                 {pathname === "/home" ? <Home color="#0865F0" size={24} /> : <Home size={24} color="black" />}
                 <p className="font-semibold">Inicio</p>
             </Link>
+        
             <Link href={"/search"} onClick={handleToggle} className="flex gap-5">
                 {pathname === "/search" ? <Search color="#0865F0" size={24} /> : <Search size={24} color="black" />}
                 <p className="font-semibold">Buscar</p>
@@ -51,6 +60,17 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
                     <p className="font-semibold">Ayuda</p>
                 </div>
             </Link>
+            {isAuthenticated ? <Link href={"/home"}>
+                <div onClick={() => {
+                    handleToggle()
+                    logout()
+                    }} 
+                    className="flex gap-5"
+                >
+                    <LogOut size={24} color="black" />
+                    <span className="font-semibold">Cerrar sesión</span>
+                </div>
+            </Link> : null}
             <div className="flex gap-5 border-b-2 border-gray-300"></div>
             {/* <div onClick={handleToggle} className="flex gap-5">
                 {pathname === "/fashion" ? <Shirt color="#0865F0" size={24} /> : <Shirt size={24} color="black" />}
