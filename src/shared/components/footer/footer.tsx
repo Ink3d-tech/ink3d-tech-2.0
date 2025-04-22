@@ -32,9 +32,10 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white w-full py-6 px-4 md:px-8 bottom-0 relative z-50">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-        <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-0">
-          Comprar ropa por internet nunca fue tan fácil
-        </p>
+        
+        <Link href="/team" className="text-gray-400 hover:text-white transition">
+        Equipo de desarrollo
+        </Link>
 
         <div className="flex space-x-6">
           <Link href="/aboutus" className="text-gray-400 hover:text-white transition">
