@@ -6,7 +6,7 @@ export const teamMembers: TeamMemberType[] = [
     id: 1,
     name: 'Matt Carballo',
     role: 'Fundador de INK3D',
-    image: './integrants/matt.jpg',
+    image: 'https://res.cloudinary.com/dnoajwhp4/image/upload/v1745366880/mtrpd2x4xvmdgg5vs9tz.jpg',
     description: '',
     social: {
       instagram: 'https://www.instagram.com/mattcarballo/',
@@ -19,7 +19,7 @@ export const teamMembers: TeamMemberType[] = [
     id: 2,
     name: 'David Alvarez',
     role: 'Desarollador Front-End',
-    image: 'https://ca.slack-edge.com/TPRS7H4PN-U07PB7Z3YDS-46f92ab6c284-512',
+    image: 'https://res.cloudinary.com/dnoajwhp4/image/upload/v1745366879/teurh4vq10urqoyjyve5.png',
     description: '',
     social: {
       instagram: 'https://www.instagram.com/9029_david/',
@@ -32,7 +32,7 @@ export const teamMembers: TeamMemberType[] = [
     id: 3,
     name: 'Gino Espinoza',
     role: 'Desarrollador Back-End',
-    image: './integrants/gino.jpg',
+    image: 'https://res.cloudinary.com/dnoajwhp4/image/upload/v1745366880/mrmnsmp8rs0mzypfyzhv.jpg',
     description: '',
     social: {
       instagram: '',
@@ -45,7 +45,7 @@ export const teamMembers: TeamMemberType[] = [
     id: 4,
     name: 'Facundo Biagion',
     role: 'Desarrollador Front-End',
-    image: './integrants/facu.jpg',
+    image: 'https://res.cloudinary.com/dnoajwhp4/image/upload/v1745366879/tu2tcbyrjcn8bxpnhwvl.jpg',
     description: '',
     social: {
       instagram: '',
@@ -58,7 +58,7 @@ export const teamMembers: TeamMemberType[] = [
     id: 5,
     name: 'Ariel Morales',
     role: 'Desarrollador Back-End',
-    image: 'https://ca.slack-edge.com/TPRS7H4PN-U07LYL2L4D7-61ec110657c2-512',
+    image: 'https://res.cloudinary.com/dnoajwhp4/image/upload/v1745366879/cvywg6xajdvozqxv4zku.jpg',
     description: '',
     social: {
       instagram: '',
@@ -71,7 +71,7 @@ export const teamMembers: TeamMemberType[] = [
     id: 6,
     name: 'Laura Jiménez',
     role: 'Desarrollador Front-End',
-    image: 'https://ca.slack-edge.com/TPRS7H4PN-U075425NMC6-111d4e3d111e-512',
+    image: 'https://res.cloudinary.com/dnoajwhp4/image/upload/v1745366879/fwyzge1615g3shsallja.png',
     description: '',
     social: {
       instagram: '',
@@ -83,7 +83,7 @@ export const teamMembers: TeamMemberType[] = [
     id: 7,
     name: 'Camilo Silva',
     role: 'Desarrollador Back-End',
-    image: 'https://ca.slack-edge.com/TPRS7H4PN-U07M8MSR8LD-02a444ce74ad-512',
+    image: 'https://res.cloudinary.com/dnoajwhp4/image/upload/v1745366879/w4q4aj1loymfkggro6em.png',
     description: '',
     social: {
       instagram: '',
@@ -96,7 +96,7 @@ export const teamMembers: TeamMemberType[] = [
     id: 8,
     name: 'Tomas Alonso',
     role: 'Desarrollador Front-End',
-    image: 'https://ca.slack-edge.com/TPRS7H4PN-U07V5K7EB97-g6eece199547-512',
+    image: 'https://res.cloudinary.com/dnoajwhp4/image/upload/v1745367211/b5dncvrhm5e6wqiymsaj.jpg',
     description: '',
     social: {
       instagram: '',
