@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Instagram, Twitter, Linkedin, ExternalLink } from 'lucide-react';
+import Image from 'next/image';
 
 export interface TeamMemberType {
     id: number;
@@ -32,10 +33,12 @@ export default function TeamMember ({ member }: { member: TeamMemberType}) {
         ${isHovered ? 'translate-y-[-60px] text-white' : ''}
         transition-all duration-500 ease-out
       `}>
-        <img 
+        <Image
           src={member.image} 
           alt={member.name} 
           className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-110"
+          width={500}
+          height={500}
         />
         
         {/* Minimal overlay */}

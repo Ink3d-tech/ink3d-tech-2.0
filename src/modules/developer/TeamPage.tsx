@@ -15,7 +15,7 @@ export default function Page() {
             </div>
             
             <p className="text-xl  mb-12 max-w-4xl text-gray-600">
-            "El código limpio siempre parece escrito por alguien a quien le importa." - Robert C. Martin
+                El código limpio siempre parece escrito por alguien a quien le importa. De Robert C. Martin
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
