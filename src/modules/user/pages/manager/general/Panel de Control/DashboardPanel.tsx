@@ -207,7 +207,7 @@ function DiscountsApp() {
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
     const latestDiscount = sortedDiscounts[0];
-    console.log(amount)
+    // console.log(amount)
     // Contadores de estado
     const totalCreated = discountList.length;
     const expiringSoon = discountList.filter(d => d.expiresAt !== null && d.status === "active").length;

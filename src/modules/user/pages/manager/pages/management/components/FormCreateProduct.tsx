@@ -144,7 +144,7 @@ export default function FormCreateProduct() {
             setCloudinary([]);
             setImages(Array(MAX_IMAGES).fill(null));
 
-            console.log(formData)
+            // console.log(formData)
             Mixin.fire("Producto creado con éxito", "", "success");
         } catch (error) {
             const errorMessage = error instanceof CustomError ? error.message : "Error interno del servidor"

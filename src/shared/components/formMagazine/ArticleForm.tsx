@@ -119,12 +119,12 @@ export default function ArticleForm({ formData, setFormData, selectedId, setSele
         await axios.patch(`${API_BACK}/api/magazine/${selectedId}`, formDataToSend, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("Artículo actualizado:", formDataToSend);
+        // console.log("Artículo actualizado:", formDataToSend);
       } else {
         await axios.post(`${API_BACK}/api/magazine`, formDataToSend, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("Artículo publicado:", formDataToSend);
+        // console.log("Artículo publicado:", formDataToSend);
       }
       setFormData({ category: "", author: "", title: "", description: "", image: "", isActive: true });
       editor?.commands.setContent("");

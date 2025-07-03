@@ -46,7 +46,7 @@ const CheckoutModal = ({ setOnClose, validDiscount, discountAmount}: { setOnClos
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       await updateDataUserShipment(formData)
-      console.log('Form submitted:', formData);
+      // console.log('Form submitted:', formData);
     };
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +143,7 @@ const CheckoutModal = ({ setOnClose, validDiscount, discountAmount}: { setOnClos
                   onClick={async(e) => {
                       e.preventDefault()
                       await updateDataUserShipment(formData)
-                      console.log('Form submitted:', formData);
+                      // console.log('Form submitted:', formData);
                       await handleConfirmPurchase()
                   }}
                   type="submit"

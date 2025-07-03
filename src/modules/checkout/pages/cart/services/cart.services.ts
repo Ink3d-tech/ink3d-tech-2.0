@@ -79,7 +79,7 @@ export const paymentCreateService = async (
         };
 
 
-        console.log("Body de la request MP:", JSON.stringify(body, null, 2));
+        // console.log("Body de la request MP:", JSON.stringify(body, null, 2));
         // console.log(`token ${token}`);
 
         const { data } = await axios.post<IPaymentResponse>(

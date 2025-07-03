@@ -311,7 +311,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
     const fetchNames = async () => {
       const names = await Promise.all(
         order.orderDetails.map(async (detail) => {
-          console.log(detail)
+          // console.log(detail)
           return await fetchProductName(detail.productId); // Llama a la API para obtener el nombre del producto
         })
       );

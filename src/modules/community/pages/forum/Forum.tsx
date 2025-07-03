@@ -27,7 +27,7 @@ export default function ForumPage() {
     fetch("/api/magazine")
       .then((res) => res.json())
       .then((data) => {
-        console.log("Datos recibidos:", data);
+        // console.log("Datos recibidos:", data);
         setArticles(data);
       })
       .catch((err) => console.error("Error al obtener artículos:", err));
@@ -40,7 +40,7 @@ export default function ForumPage() {
       ? `/api/magazine/${editingArticle.id}`
       : "/api/magazine";
 
-    console.log("Enviando a", url, "con datos", newArticle);
+    // console.log("Enviando a", url, "con datos", newArticle);
 
     const response = await fetch(url, {
       method,

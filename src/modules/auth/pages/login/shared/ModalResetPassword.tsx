@@ -12,7 +12,7 @@ export default function ModalResetPassword({ setIsOpen }: { setIsOpen: React.Dis
     e.preventDefault();
     // Enviar el correo para recuperar la contraseña
     await sendEmailResetPassword(formData.email);
-    console.log("Form submitted:", formData);
+    // console.log("Form submitted:", formData);
     Mixin.fire("Correo enviado", "", "success");
     setFormData({ email: "" });
   };

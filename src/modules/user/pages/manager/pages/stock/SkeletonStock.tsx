@@ -56,7 +56,7 @@ export default function StockMovements() {
         const response = await axios.get<StockMovement[]>(`${API_BACK}/stock-movements`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("📦 Movimientos de stock recibidos:", response.data);
+        // console.log("📦 Movimientos de stock recibidos:", response.data);
 
         setStockMovements(response.data);
 
