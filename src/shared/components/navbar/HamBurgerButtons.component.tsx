@@ -17,9 +17,11 @@ export default function HamBurgerButtons({ handleToggle }: HamBurgerButtonsProps
     const pathname = usePathname();
     const { logout, isAuthenticated, getIsAdmin, token } = useAuth()
 
+    const isAdmin = token ? getIsAdmin(token) : false;
+
     return (
         <div className="flex flex-col mb-10 pt-5 px-8 gap-5 bg-white">
-            {getIsAdmin(token) && (<Link href={"/manager"}>
+            {isAdmin && (<Link href={"/manager"}>
                 <div onClick={handleToggle} className="flex gap-5">
                     {pathname === "/manager" ? <Settings color="#0865F0" size={24} /> : <Settings size={24} color="black" />}
                     <p className="font-semibold">Panel de administrador</p>      

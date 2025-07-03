@@ -77,11 +77,11 @@ const OrderDetailsModal = ({ order, onClose }: {order: IOrder, onClose: () => vo
                 Detalles del envío
               </h3>
               <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="text-gray-700">{"PROXIMAMENTE Dirección"}</p>
+                <p className="text-gray-700">Dirección: Calle prueba 1234</p>
                 {/* {order.shippingAddress} */}
                 <div className="mt-2 flex items-center gap-2 text-gray-600">
                   <Calendar className="w-4 h-4" />
-                  <span>Entrega estimada: PROXIMAMENTE tiempo de envio</span>
+                  <span>Entrega estimada: 24hs</span>
                   {/* {order.estimatedDelivery} */}
                 </div>
               </div>

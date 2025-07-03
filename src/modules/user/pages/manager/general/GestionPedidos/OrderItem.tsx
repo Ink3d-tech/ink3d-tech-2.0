@@ -261,6 +261,7 @@ interface OrderDetail {
   price: string;
   quantity: number;
   productId: string;
+  // priceAtPurchase: number;
 }
 
 interface User {
@@ -293,10 +294,24 @@ interface OrderItemProps {
 const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
   const [productNames, setProductNames] = useState<string[]>([]);
 
+  // useEffect(() => {
+  //   const fetchNames = async () => {
+  //     const names = await Promise.all(
+  //       order.orderDetails.map(async (detail) => {
+  //         return await fetchProductName(detail.productId); // Llama a la API para obtener el nombre del producto
+  //       })
+  //     );
+  //     setProductNames(names); // Actualiza el estado con los nombres de los productos
+  //   };
+
+  //   fetchNames();
+  // }, [order.orderDetails]);
+
   useEffect(() => {
     const fetchNames = async () => {
       const names = await Promise.all(
         order.orderDetails.map(async (detail) => {
+          console.log(detail)
           return await fetchProductName(detail.productId); // Llama a la API para obtener el nombre del producto
         })
       );
@@ -305,6 +320,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
 
     fetchNames();
   }, [order.orderDetails]);
+
 
   // Formateo de fechas
   const formatDate = (dateString: string) => {

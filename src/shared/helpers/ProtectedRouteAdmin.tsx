@@ -1,12 +1,22 @@
 "use client";
 
 
-import { useAuth } from "@/modules/auth/shared/context/Auth.context";
+import { isValidJwt, useAuth } from "@/modules/auth/shared/context/Auth.context";
 import { AuthRequiredComponent } from "./AuthRequiredComponent";
 
 const ProtectedRouteAdmin = ({ children }: { children: React.ReactNode }) => {
     const { getIsAdmin, token } = useAuth();
-    return !getIsAdmin(token) ? <AuthRequiredComponent/> : children
+
+    if (!token || !isValidJwt(token)) {
+        // No token válido → muestra pantalla de acceso denegado o login
+        return <AuthRequiredComponent />;
+    }
+
+    if(!getIsAdmin(token)) {
+        return  <AuthRequiredComponent/>
+    } else {
+        return <>{children}</>
+    }
 };
 
 export default ProtectedRouteAdmin;

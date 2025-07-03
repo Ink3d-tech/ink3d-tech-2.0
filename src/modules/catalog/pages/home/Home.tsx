@@ -36,20 +36,20 @@ export default function Home() {
 
   {/* Contenido principal */}
   <div className="relative flex flex-col">
-    <div className="flex flex-col bg-black">
-      <div className="mb-6"></div>
+    <div className="flex flex-col">
+      {/* <div className="mb-6"></div> */}
       <Carousel />
-      <ButtonsMini />
+      {/* <ButtonsMini /> */}
+      
     </div>
     <div className="relative">
-    <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none"></div>
+    {/* <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none"></div> */}
     <ProductList categoryName="Ropa" title="Ropa" />
     <StaticCarousel category="MUNDO ASIAN" />
     <ProductList categoryName="Calzado" title="Calzado" />
     <StaticCarousel category="STREETWEAR" />
     <ProductList categoryName="Accesorios" title="Accesorios" />
     <ScrollToTop />
-    
   </div>
   </div>
 </div>

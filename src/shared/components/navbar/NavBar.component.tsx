@@ -62,29 +62,29 @@ export default function NavBar() {
   }, []);
 
   return (
-    <div>
+    <div className="sticky top-0 z-50">
       {/* Barra de navegación principal */}
-      <div className="bg-black text-white h-20 flex w-full z-50 items-center px-4 md:px-8 justify-between relative">
+      <div className="bg-black/40 backdrop-blur border-b border-white/20 text-white h-14 flex w-full items-center px-4 md:px-8 justify-between relative">
         {/* Botón de menú móvil */}
         <div className="md:hidden cursor-pointer" onClick={handleToggleMenu}>
           {menu ? <X size="24" color="gray" /> : <Menu size="24" color="gray" />}
         </div>
 
         {/* Logo */}
-        <div className="flex-1 flex justify-center md:justify-start">
+        <div className="flex-l flex justify-center md:justify-start">
           <Link href="/home">
             <Image
-              src="/LogoInk3d.webp"
+              src="/logo/logoP.png"
               alt="Logo Ink3d"
-              width={130}
-              height={130}
-              className="object-contain w-auto h-auto max-w-[100px]"
+              width={70}
+              height={70}
+              className="object-contain"
             />
           </Link>
         </div>
 
         {/* Íconos en móviles */}
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-4 md:hidden">
+        <div className="flex items-center gap-4 md:hidden">
           <Link href="/search">
             <Search size="24" color="gray" className="cursor-pointer" />
           </Link>
@@ -105,6 +105,8 @@ export default function NavBar() {
             Juega y Gana
           </Link>
         </div>
+
+         
 
         {/* Menú de usuario y opciones */}
         <div className="hidden md:flex items-center gap-6">
@@ -148,7 +150,7 @@ export default function NavBar() {
 
       {/* Menú en móvil */}
       <div
-        className={`fixed top-20 left-0 min-w-full h-[calc(100vh-56px)] bg-white z-50 overflow-y-auto transform transition-transform duration-300 ${menu ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed top-14 left-0 min-w-full h-[calc(100vh-56px)] bg-white z-50 overflow-y-auto transform transition-transform duration-300 ${menu ? "translate-x-0" : "-translate-x-full"}`}
       >
         <HamburguerMenu handleToggle={handleToggleMenu} />
       </div>

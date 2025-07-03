@@ -30,7 +30,9 @@ export default function Footer() {
   // };
 
   return (
-    <footer className="bg-black text-white w-full py-6 px-4 md:px-8 bottom-0 relative z-50">
+
+
+    <footer className="bg-black text-white w-full py-6 px-4 md:px-8 bottom-0 relative">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         
         <Link href="/team" className="text-gray-400 hover:text-white transition">
@@ -53,13 +55,13 @@ export default function Footer() {
       {/* Contenedor del corazoncito y las redes sociales */}
       <div className="flex flex-col items-center mt-6">
         {/* Corazoncito animado ❤️ */}
-        <motion.div
+        {/* <motion.div
           className="mb-2"
           animate={{ scale: [1, 1.3, 1] }} 
           transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }} 
         >
           <FaHeart className="text-red-500 text-3xl" />
-        </motion.div>
+        </motion.div> */}
 
         {/* Redes sociales centradas */}
         <div className="flex space-x-4">

@@ -3,14 +3,23 @@
 import React, { useState, useContext, createContext, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoginInterface } from "../interfaces/Login.interface";
-import { SignupInterface } from "../interfaces/Signup.interface";
-import axios from "axios";
+import axios from 'axios';
 import { API_BACK } from "@/shared/config/api/getEnv";
 import { UpdateDataProfileInterface, UpdateDataUserShipmentInterface, UserInterface } from "../interfaces/User.interface";
 import { getAuthHeaders } from '@/modules/user/pages/manager/context/getAuthHeaders';
 import Loading from '@/app/loading';
+import { SignupInterface } from '../interfaces/Signup.interface';
+import { jwtDecode } from 'jwt-decode';
 
+function isAxiosError(error: any): error is { response: { data: { message: string } } } {
+  return error && error.response && error.response.data && typeof error.response.data.message === 'string';
+}
 
+export const isValidJwt = (token?: string): boolean => {
+  if (!token) return false;
+  const trimmed = token.trim();
+  return trimmed.split('.').length === 3;
+};
 
 
 interface ResponseInterface {
@@ -22,6 +31,14 @@ export interface ErrorResponse {
     message: string;
     statusCode?: number;  
     error?: string; 
+}
+
+interface JwtPayload {
+  userId: string;
+  email: string;
+  role: string;
+  exp?: number;
+  iat?: number;
 }
 
 const defaultUser: UserInterface = {
@@ -80,14 +97,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const checkTokenValidity = (token: string): boolean => {
         try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            return new Date(payload.exp * 1000) > new Date();
+            // const payload = JSON.parse(atob(token.split(".")[1]));
+            // return new Date(payload.exp * 1000) > new Date();
+            const payload = jwtDecode<JwtPayload>(token);
+            return (payload.exp ?? 0) * 1000 > Date.now();
         } catch {
             return false;
         }
     };
     const getIdUser = (token: string): string => {
-        const payload = JSON.parse(atob(token.split(".")[1]));
+        // const payload = JSON.parse(atob(token.split(".")[1]));
+        // return payload.userId;
+        const payload = jwtDecode<JwtPayload>(token);
         return payload.userId;
     };
     const fetchUser = useCallback(async (token: string) => {
@@ -100,7 +121,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             });
             setUser(res.data);
         } catch (error) { 
-            console.error("Error fetching user:", error);
+            // console.error("Error fetching user:", error);
+            if (isAxiosError(error)) {
+                const mensaje = error.response?.data?.message || "Ocurrió un error";
+                console.error("Error del backend:", mensaje);
+            } else {
+                console.error("Error desconocido:", error);
+            }
             setUser(defaultUser);
             setIsAuthenticated(false);
             router.push('/');
@@ -133,15 +160,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
         }
         
-    }, [fetchUser, router]);
+    }, [router, fetchUser]);
 
     
     if(isLoading) return <Loading/>
 
+
     const getIsAdmin = (token: string): boolean => {
+        if (!token || !isValidJwt(token)) {
+            console.warn("Token inválido o vacío recibido en getIsAdmin:", token);
+            return false;
+        }
+
         try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            return payload.role === "admin";
+            const payload = jwtDecode<JwtPayload>(token);
+            return payload.role === 'admin';
         } catch (error) {
             console.error("Error decoding token:", error);
             return false;

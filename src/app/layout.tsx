@@ -33,15 +33,12 @@ export default function RootLayout({
               <CartProvider>
                 <LocationPathname redirectRoutes={["/login", "/signup"]}>
                   <NavBar />
-                    <main className="bg-[#D9D9D9] min-h-screen">
-                   
-                        <ScrollToTop />
-                        <Chatbot />
-                        {children}
-                      
-                    </main>
-
-                      
+                  <main className="bg-[#D9D9D9] min-h-screen">
+                  
+                      <ScrollToTop />
+                      <Chatbot />
+                      {children}
+                  </main>
                   <Footer/>
                 </LocationPathname>
               </CartProvider>

@@ -25,7 +25,6 @@ const Carousel = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [firstSlide, setFirstSlide] = useState(true);
-
   const router = useRouter();
 
   const handleSlideChange = () => {
@@ -42,7 +41,7 @@ const Carousel = () => {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
         const data: Article[] = await response.json();
-        setArticles(data.slice(-9)); // ⬅️ Solo los últimos 9 artículos
+        setArticles(data.slice(-9));
       } catch (err) {
         console.error("Error fetching articles:", err);
       } finally {
@@ -53,8 +52,7 @@ const Carousel = () => {
     fetchArticles();
   }, []);
 
-  if (loading)
-    return <Loading/>;
+  if (loading) return <Loading />;
 
   const handleImageClick = (id: number) => {
     router.push(`/magazine/${id}`);
@@ -88,21 +86,18 @@ const Carousel = () => {
               className="relative flex items-center justify-center cursor-pointer"
               onClick={() => handleImageClick(article.id)}
             >
-              <figure className="flex justify-center">
+              <figure className="relative w-full max-w-md aspect-[2/3]">
                 <Image
-                  className="object-cover rounded-lg shadow-lg"
                   src={article.image}
                   alt={`imagen-${article.id}`}
                   loading="eager"
-                  width={1920}
-                  height={500}
-                  style={{
-                    maxHeight: "500px",
-                    minWidth: "300px",
-                  }}
+                  fill
+                  className="object-cover rounded-lg shadow-lg"
+                  sizes="(max-width: 768px) 100vw, 300px"
+                  priority
                 />
               </figure>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white rounded-b-lg">
                 <h2 className="text-xl font-semibold">{article.title}</h2>
                 <p>{article.author}</p>
               </div>

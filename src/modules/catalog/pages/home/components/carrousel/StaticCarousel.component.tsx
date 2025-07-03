@@ -80,49 +80,92 @@ const DynamicCarousel = ({ category }: CarouselProps) => {
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-8xl">
-        <Swiper
-          loop={true}
-          autoplay={{ delay: 4000 }}
-          speed={500}
-          pagination={{ clickable: true }}
-          navigation={{ nextEl: ".custom-next", prevEl: ".custom-prev" }}
-          slidesPerView={1}
-          centeredSlides={true}
-          spaceBetween={20}
-          keyboard={{ enabled: true }}
-          modules={[Pagination, Navigation, Autoplay]}
-          observer={true}
-          observeParents={true}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-        >
-          {articles.map((article) => (
-            <SwiperSlide
-              key={article.id}
-              className="relative flex items-center justify-center cursor-pointer"
-              onClick={() => handleImageClick(article.id)}
-            >
-              <figure className="flex justify-center">
-                <Image
-                  className="object-cover rounded-lg shadow-lg"
-                  src={article.image}
-                  alt={`imagen-${article.id}`}
-                  loading="eager"
-                  width={1920}
-                  height={500}
-                  style={{ maxHeight: "500px", minWidth: "300px" }}
-                />
-              </figure>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white">
-                <h2 className="text-xl font-semibold">{article.title}</h2>
-                <p>{article.author}</p>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+       {/* <Swiper
+          //   loop={true}
+          //   autoplay={{ delay: 4000 }}
+          //   speed={500}
+          //   pagination={{ clickable: true }}
+          //   navigation={{ nextEl: ".custom-next", prevEl: ".custom-prev" }}
+          //   slidesPerView={1}
+          //   centeredSlides={true}
+          //   spaceBetween={20}
+          //   keyboard={{ enabled: true }}
+          //   modules={[Pagination, Navigation, Autoplay]}
+          //   observer={true}
+          //   observeParents={true}
+          //   breakpoints={{
+          //     640: { slidesPerView: 1 },
+          //     768: { slidesPerView: 2 },
+          //     1024: { slidesPerView: 3 },
+          //   }}
+          // >
+          //   {articles.map((article) => (
+          //     <SwiperSlide key={article.id}>
+          //       <div
+          //         className="relative flex items-center justify-center cursor-pointer"
+          //         onClick={() => handleImageClick(article.id)}
+          //       >
+          //         <figure className="relative w-full max-w-md aspect-[2/3]">
+          //           <Image
+          //             src={article.image}
+          //             alt={`imagen-${article.id}`}
+          //             loading="eager"
+          //             fill
+          //             className="object-cover rounded-lg shadow-lg"
+          //             sizes="(max-width: 768px) 100vw, 300px"
+          //           />
+          //         </figure>
+          //         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4 text-white rounded-b-lg">
+          //           <h2 className="text-xl font-semibold">{article.title}</h2>
+          //           <p>{article.author}</p>
+          //         </div>
+          //       </div>
+          //     </SwiperSlide>
+          //   ))}
+          // </Swiper> */}
+          <Swiper
+            loop={true}
+            autoplay={{ delay: 4000 }}
+            speed={500}
+            pagination={{ clickable: true }}
+            navigation={{ nextEl: ".custom-next", prevEl: ".custom-prev" }}
+            slidesPerView={1}
+            centeredSlides={true}
+            spaceBetween={20}
+            keyboard={{ enabled: true }}
+            modules={[Pagination, Navigation, Autoplay]}
+            observer={true}
+            observeParents={true}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+          >
+            {articles.map((article) => (
+              <SwiperSlide key={article.id}>
+                <div
+                  className="relative flex items-center justify-center cursor-pointer"
+                  onClick={() => handleImageClick(article.id)}
+                >
+                  <figure className="relative w-full max-w-md aspect-[2/3]">
+                    <Image
+                      src={article.image}
+                      alt={`imagen-${article.id}`}
+                      loading="eager"
+                      fill
+                      className="object-cover rounded-lg shadow-lg"
+                      sizes="(max-width: 768px) 100vw, 300px"
+                    />
+                  </figure>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/75 via-transparent p-4 text-white rounded-b-lg">
+                    <h2 className="text-xl font-semibold">{article.title}</h2>
+                    <p>{article.author}</p>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
         <button className="custom-prev absolute left-4"></button>
         <button className="custom-next absolute right-4"></button>

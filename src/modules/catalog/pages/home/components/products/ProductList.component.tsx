@@ -7,6 +7,7 @@ import VerMas from "@/shared/components/buttons/VerMas.component";
 import { getProductsByCategoryName } from "../../helpers/productService";
 import Loading from "@/app/loading";
 
+
 export interface Product {
   id: string;
   name: string;
@@ -106,6 +107,7 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
                     width={800}
                     height={800}
                     className="w-full h-full object-cover rounded transition duration-500 transform group-hover:opacity-0"
+                    priority
                   />
                   <Image
                     src={product.image[1] ? product.image[1] : product.image[0]}
@@ -113,6 +115,7 @@ export default function ProductList({ categoryName, title }: ProductListProps) {
                     width={800}
                     height={800}
                     className="absolute top-0 left-0 w-full h-full object-cover rounded opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    priority
                   />
                 </div>
 

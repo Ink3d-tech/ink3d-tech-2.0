@@ -86,7 +86,7 @@ export default function OrderList() {
 
   if (loading) return <SkeletonOrdersList />;
   if (error) return <div className="text-center text-red-500">{error}</div>;
-
+  console.log(orders)
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Lista de Órdenes</h1>
