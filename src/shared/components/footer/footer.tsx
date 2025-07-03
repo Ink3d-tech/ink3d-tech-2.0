@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaFacebook, FaInstagram, FaTwitter, FaHeart } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 export default function Footer() {
@@ -21,14 +20,6 @@ export default function Footer() {
       return () => clearTimeout(timer);
     }
   }, [size, y]);
-
-  // const handleClick = () => {
-  //   if (size < maxSize) {
-  //     setSize(size + 10);
-  //     setY(y - 20);
-  //   }
-  // };
-
   return (
 
 
@@ -54,15 +45,6 @@ export default function Footer() {
 
       {/* Contenedor del corazoncito y las redes sociales */}
       <div className="flex flex-col items-center mt-6">
-        {/* Corazoncito animado ❤️ */}
-        {/* <motion.div
-          className="mb-2"
-          animate={{ scale: [1, 1.3, 1] }} 
-          transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }} 
-        >
-          <FaHeart className="text-red-500 text-3xl" />
-        </motion.div> */}
-
         {/* Redes sociales centradas */}
         <div className="flex space-x-4">
           <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-2xl">

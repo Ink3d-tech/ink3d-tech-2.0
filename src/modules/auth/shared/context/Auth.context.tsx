@@ -11,15 +11,16 @@ import Loading from '@/app/loading';
 import { SignupInterface } from '../interfaces/Signup.interface';
 import { jwtDecode } from 'jwt-decode';
 
-function isAxiosError(error: any): error is { response: { data: { message: string } } } {
-  return error && error.response && error.response.data && typeof error.response.data.message === 'string';
-}
+// function isAxiosError(error: ErrorInterface): error is { response: { data: { message: string } } } {
+//   return error && error.response && error.response.data && typeof error.response.data.message === 'string';
+// }
 
 export const isValidJwt = (token?: string): boolean => {
   if (!token) return false;
   const trimmed = token.trim();
   return trimmed.split('.').length === 3;
 };
+
 
 
 interface ResponseInterface {
@@ -121,13 +122,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             });
             setUser(res.data);
         } catch (error) { 
-            // console.error("Error fetching user:", error);
-            if (isAxiosError(error)) {
-                const mensaje = error.response?.data?.message || "Ocurrió un error";
-                console.error("Error del backend:", mensaje);
-            } else {
-                console.error("Error desconocido:", error);
-            }
+            console.error("Error fetching user:", error);
+            // if (isAxiosError(error as ErrorInterface)) {
+            //     const mensaje = error.response?.data?.message as ErrorInterface || "Ocurrió un error";
+            //     console.error("Error del backend:", mensaje);
+            // } else {
+            //     console.error("Error desconocido:", error);
+            // }
             setUser(defaultUser);
             setIsAuthenticated(false);
             router.push('/');
